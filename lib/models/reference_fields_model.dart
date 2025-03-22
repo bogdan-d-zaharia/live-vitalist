@@ -1,0 +1,399 @@
+import '../file_handler.dart';
+
+abstract final class NutrientsHandler {
+  // TODO: Perhaps separate the lowerLimit and upperLimit from the extra data
+  // *Extra Data - The base model
+  // "kcals": {
+  //   "unit": "kcal",
+  //   "translations": {
+  //     "ENG": "Calories",
+  //     "ROU": "Calorii",
+  //   },
+  // }
+
+  // *Perhaps a limit map
+  // "kcals": {
+  //   "lowerLimit":
+  // }
+
+  /// TODO: At launch, set disabled by default.
+  static Map<String, Map<String, dynamic>> model = {
+    "kcals": {
+      "unit": "kcal",
+      "lowerLimit": 3300.0,
+      "translations": {
+        "ENG": "Calories",
+        "ROU": "Calorii",
+      },
+      "tags": [
+        "starred",
+      ]
+    },
+
+    // Main
+    "protein": {
+      "unit": "g",
+      "lowerLimit": 100.0,
+      "translations": {
+        "ENG": "Protein",
+        "ROU": "Proteine",
+      },
+      "tags": [
+        "starred",
+      ]
+    },
+    "fats": {
+      "unit": "g",
+      "lowerLimit": 83.3,
+      "upperLimit": 116.7,
+      "translations": {
+        "ENG": "Fats",
+        "ROU": "Grasimi",
+      }
+    },
+    "satFats": {
+      "unit": "g",
+      "upperLimit": 25.0,
+      "translations": {
+        "ENG": "Saturated fats",
+        "ROU": "Grasimi saturate",
+      }
+    },
+    "carbs": {
+      "unit": "g",
+      "lowerLimit": 375.0,
+      "upperLimit": 525.0,
+      "translations": {
+        "ENG": "Carbohydrates",
+        "ROU": "Carbohidrati",
+      }
+    },
+    "sugars": {
+      "unit": "g",
+      "upperLimit": 56.0,
+      "translations": {
+        "ENG": "Sugars",
+        "ROU": "Zaharuri",
+      },
+      // "tags": [
+      //   "disabled",
+      // ]
+    },
+    "fibers": {
+      "unit": "g",
+      "lowerLimit": 38.0,
+      "translations": {
+        "ENG": "Fibers",
+        "ROU": "Fibre",
+      },
+      // "tags": [
+      //   "disabled",
+      // ]
+    },
+
+    // Important
+    "cholesterol": {
+      "unit": "mg",
+      "lowerLimit": 100.0,
+      "upperLimit": 300.0,
+      "translations": {
+        "ENG": "Cholesterol",
+        "ROU": "Colesterol",
+      },
+    },
+    "omega3": {
+      "unit": "g",
+      "lowerLimit": 2.0,
+      "upperLimit": 4.0,
+      "translations": {
+        "ENG": "Omega-3",
+        "ROU": "Omega-3",
+      },
+      // "tags": [
+      //   "disabled",
+      // ]
+    },
+
+    // Vitamins
+    "vitaminA": {
+      "unit": "mcg",
+      "lowerLimit": 1200.0,
+      "upperLimit": 3000.0,
+      "translations": {
+        "ENG": "Vitamin A (Retinol)",
+        "ROU": "Vitamina A (Retinol)",
+      },
+      // "tags": [
+      //   "disabled",
+      // ]
+    },
+    "vitaminB1": {
+      "unit": "mg",
+      "lowerLimit": 1.2,
+      "translations": {
+        "ENG": "Vitamin B1 (Thiamin)",
+        "ROU": "Vitamina B1 (Tiamina)",
+      },
+      // "tags": [
+      //   "disabled",
+      // ]
+    },
+    "vitaminB2": {
+      "unit": "mg",
+      "lowerLimit": 1.3,
+      "translations": {
+        "ENG": "Vitamin B2 (Riboflavin)",
+        "ROU": "Vitamina B2 (Riboflavină)",
+      },
+      // "tags": [
+      //   "disabled",
+      // ]
+    },
+    "vitaminB3": {
+      "unit": "mg",
+      "lowerLimit": 16.0,
+      "upperLimit": 35.0,
+      "translations": {
+        "ENG": "Vitamin B3 (Niacin)",
+        "ROU": "Vitamina B3 (Niacină)",
+      },
+      // "tags": [
+      //   "disabled",
+      // ]
+    },
+    "vitaminB4": {
+      "unit": "mg",
+      "lowerLimit": 550.0,
+      "upperLimit": 3500.0,
+      "translations": {
+        "ENG": "Vitamin B4 (Choline)",
+        "ROU": "Vitamina B4 (Colină)",
+      },
+      // "tags": [
+      //   "disabled",
+      // ]
+    },
+    "vitaminB5": {
+      "unit": "mg",
+      "lowerLimit": 5.0,
+      "translations": {
+        "ENG": "Vitamin B5 (Pantothenic acid)",
+        "ROU": "Vitamina B5 (Acid pantotenic)",
+      },
+      // "tags": [
+      //   "disabled",
+      // ]
+    },
+    "vitaminB6": {
+      "unit": "mg",
+      "lowerLimit": 1.3,
+      "upperLimit": 100.0,
+      "translations": {
+        "ENG": "Vitamin B6 (Pyridoxine)",
+        "ROU": "Vitamina B6 (Piridoxină)",
+      },
+      // "tags": [
+      //   "disabled",
+      // ]
+    },
+    "vitaminB7": {
+      "unit": "mcg",
+      "lowerLimit": 30.0,
+      "translations": {
+        "ENG": "Vitamin B7 (Biotin)",
+        "ROU": "Vitamina B7 (Biotină)",
+      },
+      // "tags": [
+      //   "disabled",
+      // ]
+    },
+    "vitaminB9": {
+      "unit": "mcg",
+      "lowerLimit": 400.0,
+      "upperLimit": 1000.0,
+      "translations": {
+        "ENG": "Vitamin B9 (Folate)",
+        "ROU": "Vitamina B9 (Folat)",
+      },
+      // "tags": [
+      //   "disabled",
+      // ]
+    },
+    "vitaminB12": {
+      "unit": "mcg",
+      "lowerLimit": 2.4,
+      "translations": {
+        "ENG": "Vitamin B12 (Cobalamin)",
+        "ROU": "Vitamina B12 (Cobalamină)",
+      },
+      // "tags": [
+      //   "disabled",
+      // ]
+    },
+    "vitaminC": {
+      "unit": "mg",
+      "lowerLimit": 300.0,
+      "upperLimit": 2000.0,
+      "translations": {
+        "ENG": "Vitamin C (Ascorbic acid)",
+        "ROU": "Vitamina C (Acid ascorbic)",
+      },
+      // "tags": [
+      //   "disabled",
+      // ]
+    },
+    "vitaminD2": {
+      "unit": "mcg",
+      "lowerLimit": 15.0,
+      "upperLimit": 100.0,
+      "translations": {
+        "ENG": "Vitamin D2 (Ergocalciferol)",
+        "ROU": "Vitamina D2 (Ergocalciferol)",
+      },
+      // "tags": [
+      //   "disabled",
+      // ]
+    },
+    "vitaminD3": {
+      "unit": "mcg",
+      "lowerLimit": 15.0,
+      "upperLimit": 100.0,
+      "translations": {
+        "ENG": "Vitamin D3 (Cholecalciferol)",
+        "ROU": "Vitamina D3 (Colecalciferol)",
+      },
+      // "tags": [
+      //   "disabled",
+      // ]
+    },
+    "vitaminE": {
+      "unit": "mg",
+      "lowerLimit": 15.0,
+      "upperLimit": 1000.0,
+      "translations": {
+        "ENG": "Vitamin E (Alpha-tocopherol)",
+        "ROU": "Vitamina E (Alfa-tocoferol)",
+      },
+      // "tags": [
+      //   "disabled",
+      // ]
+    },
+    "vitaminK1": {
+      "unit": "mcg",
+      "lowerLimit": 120.0,
+      "translations": {
+        "ENG": "Vitamin K1 (Phylloquinone)",
+        "ROU": "Vitamina K1 (Filochinonă)",
+      },
+      // "tags": [
+      //   "disabled",
+      // ]
+    },
+    "vitaminK2": {
+      "unit": "mcg",
+      "lowerLimit": 120.0,
+      "translations": {
+        "ENG": "Vitamin K2 (Menaquinone)",
+        "ROU": "Vitamina K2 (Menachinonă)",
+      },
+      // "tags": [
+      //   "disabled",
+      // ]
+    },
+
+    // Minerals
+    "calcium": {
+      "unit": "mg",
+      "lowerLimit": 1000.0,
+      "upperLimit": 2500.0,
+      "translations": {
+        "ENG": "Calcium",
+        "ROU": "Calciu",
+      },
+      // "tags": [
+      //   "disabled",
+      // ]
+    },
+    "sodium": {
+      "unit": "mg",
+      "lowerLimit": 1500.0,
+      "upperLimit": 2300.0,
+      "translations": {
+        "ENG": "Sodium",
+        "ROU": "Sodiu",
+      },
+      // "tags": [
+      //   "disabled",
+      // ]
+    },
+    "potassium": {
+      "unit": "mg",
+      "lowerLimit": 4700.0,
+      "translations": {
+        "ENG": "Potassium",
+        "ROU": "Potasiu",
+      },
+      // "tags": [
+      //   "disabled",
+      // ]
+    },
+    "iron": {
+      "unit": "mg",
+      "lowerLimit": 8.0,
+      "upperLimit": 45.0,
+      "translations": {
+        "ENG": "Iron",
+        "ROU": "Fier",
+      },
+      // "tags": [
+      //   "disabled",
+      // ]
+    },
+    "zinc": {
+      "unit": "mg",
+      "lowerLimit": 11.0,
+      "upperLimit": 40.0,
+      "translations": {
+        "ENG": "Zinc",
+        "ROU": "Zinc",
+      },
+      // "tags": [
+      //   "disabled",
+      // ]
+    },
+    "magnesium": {
+      "unit": "mg",
+      "lowerLimit": 400.0,
+      "upperLimit": 600.0,
+      "translations": {
+        "ENG": "Magnesium",
+        "ROU": "Magneziu",
+      },
+      // "tags": [
+      //   "disabled",
+      // ]
+    },
+  };
+
+  static Map<String, dynamic> toJson() {
+    return model;
+  }
+
+  static void fromJson(Map<String, dynamic> json) {
+    model = json.map((key, value) => MapEntry(key, value));
+    // <String, Map<String, dynamic>>
+  }
+
+  static Future<void> save() async {
+    return FileHandler.saveJsonAndBackup(toJson(), name: 'nutrients');
+  }
+
+  static Future<void> load() async {
+    try {
+      final json = await FileHandler.loadJson(name: 'nutrients');
+      if (json.isNotEmpty) fromJson(json);
+    } catch (e) {
+      //  ignore: empty_catches
+    }
+  }
+}
