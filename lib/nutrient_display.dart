@@ -288,7 +288,7 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
                         ...topIntakeKeys.entries.map((e) {
                           /// eg. Cheese
                           final String name =
-                              '${AlimentBank.aliments[e.key]?.name}';
+                              AlimentBank.getAliment(e.key).name;
 
                           /// eg. protein
                           final String valueOfLabel =

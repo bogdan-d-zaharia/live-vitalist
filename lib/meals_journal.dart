@@ -405,9 +405,9 @@ class AlimentWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final values = aliment.fields;
     return ElementWidget(
-      title: AlimentBank.aliments[aliment.alimentID]!.name,
+      title: AlimentBank.getAliment(aliment.alimentID).name,
       subTitle:
-          '${values['kcals']?.round() ?? 0.0} kcal, ${aliment.servingSize}',
+          '${values['kcals']?.round() ?? 0.0} kcal, ${aliment.servingSize} ${aliment.unit ?? ''}',
       onTap: onTap,
       onLongPress: onLongPress,
       additional: [
@@ -465,6 +465,109 @@ class ServedAlimentEditor extends StatefulWidget {
 class _ServedAlimentEditorState extends State<ServedAlimentEditor> {
   String searchTerm = '';
 
+  Widget _alimentSelector() {
+    return SizedBox(
+      child: DropdownButton<String>(
+        isExpanded: true,
+        hint: ListView(
+          children: [
+            Text(AlimentBank.aliments[widget.aliment.alimentID]?.name ?? '')
+          ],
+        ),
+        items:
+
+            /// Filter for the search term.
+            AlimentBank.aliments.keys
+
+                /// TODO: Ideea e ca se actualizeaza cand iesi si intri in dropdown...
+                /// .where((element) => false)
+                /// Create the dropdown
+                .map((id) => DropdownMenuItem(
+                    enabled: (searchTerm == '') ||
+                        (AlimentBank.getAliment(id)
+                            .name
+                            .toLowerCase()
+                            .contains(searchTerm.toLowerCase())),
+                    value: id,
+                    child: SizedBox(
+                        width: 300.0,
+                        child: Text(AlimentBank.getAliment(id).name))))
+                .toList()
+
+        /// Add the search box.
+        /// ..insert(
+        ///     0,
+        ///     DropdownMenuItem(
+        ///       value: null,
+        ///       child: SizedBox(
+        ///         width: 300.0,
+        ///         child: StringInput(
+        ///           hint: 'Search',
+        ///           update: (p0) {
+        ///             setState(() {
+        ///               searchTerm = p0;
+        ///             });
+        ///           },
+        ///         ),
+        ///       ),
+        ///     ))
+        ,
+        onChanged: (newID) {
+          if (newID != null) {
+            setState(() {
+              widget.aliment.alimentID = newID;
+
+              final Aliment aliment = AlimentBank.getAliment(newID);
+              widget.aliment.unit = aliment.unitSizes?.keys.first;
+            });
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _inputServed() {
+    return StringInput(
+      hint: 'Served amount',
+      initString: widget.aliment.servingSize.toString(),
+      keyboardType: TextInputType.number,
+      update: (p0) {
+        setState(() {
+          double? value = double.tryParse(p0);
+          if (value != null) {
+            widget.aliment.servingSize = value;
+          }
+        });
+      },
+    );
+  }
+
+  Widget? _unitSelector() {
+    final Aliment aliment = AlimentBank.getAliment(widget.aliment.alimentID);
+    final List<String>? units = aliment.unitSizes?.keys.toList();
+    if (units == null) return null;
+
+    return SizedBox(
+      child: DropdownButton<String>(
+        isExpanded: true,
+        hint: Text(widget.aliment.unit ?? ''),
+
+        //TODO:NOW: Handle the case when there is null unitSizes.
+        items: units
+            .map((unit) => DropdownMenuItem(
+                value: unit, child: SizedBox(width: 300.0, child: Text(unit))))
+            .toList(),
+        onChanged: (unit) {
+          if (unit != null) {
+            setState(() {
+              widget.aliment.unit = unit;
+            });
+          }
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     // final newKeys = AlimentBank.aliments.keys
@@ -472,12 +575,13 @@ class _ServedAlimentEditorState extends State<ServedAlimentEditor> {
     //     .where(
     //       (id) =>
     //           (searchTerm == '') ||
-    //           (AlimentBank.aliments[id]!.name
+    //           (AlimentBank.getAliment(id).name
     //               .toLowerCase()
     //               .contains(searchTerm.toLowerCase())),
     //     )
     //     .toList();
     // print(newKeys);
+    final Widget? unitSelector = _unitSelector();
     return Scaffold(
       appBar: AppBar(
         title: Text('Editor'),
@@ -510,75 +614,9 @@ class _ServedAlimentEditorState extends State<ServedAlimentEditor> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(
-                child: DropdownButton<String>(
-                  isExpanded: true,
-                  hint: ListView(
-                    children: [
-                      Text(AlimentBank
-                              .aliments[widget.aliment.alimentID]?.name ??
-                          '')
-                    ],
-                  ),
-                  items:
-
-                      /// Filter for the search term.
-                      AlimentBank.aliments.keys
-
-                          /// TODO: Ideea e ca se actualizeaza cand iesi si intri in dropdown...
-                          /// .where((element) => false)
-                          /// Create the dropdown
-                          .map((id) => DropdownMenuItem(
-                              enabled: (searchTerm == '') ||
-                                  (AlimentBank.aliments[id]!.name
-                                      .toLowerCase()
-                                      .contains(searchTerm.toLowerCase())),
-                              value: id,
-                              child: SizedBox(
-                                  width: 300.0,
-                                  child: Text(AlimentBank.aliments[id]!.name))))
-                          .toList()
-
-                  /// Add the search box.
-                  /// ..insert(
-                  ///     0,
-                  ///     DropdownMenuItem(
-                  ///       value: null,
-                  ///       child: SizedBox(
-                  ///         width: 300.0,
-                  ///         child: StringInput(
-                  ///           hint: 'Search',
-                  ///           update: (p0) {
-                  ///             setState(() {
-                  ///               searchTerm = p0;
-                  ///             });
-                  ///           },
-                  ///         ),
-                  ///       ),
-                  ///     ))
-                  ,
-                  onChanged: (newID) {
-                    if (newID != null) {
-                      setState(() {
-                        widget.aliment.alimentID = newID;
-                      });
-                    }
-                  },
-                ),
-              ),
-              StringInput(
-                hint: 'Served amount',
-                initString: widget.aliment.servingSize.toString(),
-                keyboardType: TextInputType.number,
-                update: (p0) {
-                  setState(() {
-                    double? value = double.tryParse(p0);
-                    if (value != null) {
-                      widget.aliment.servingSize = value;
-                    }
-                  });
-                },
-              )
+              _alimentSelector(),
+              _inputServed(),
+              if (unitSelector != null) unitSelector,
             ],
           ),
         ),

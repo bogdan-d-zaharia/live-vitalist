@@ -106,21 +106,21 @@ class _ScaffoldPageState extends State<ScaffoldPage> {
       for (final int mMonth in yearMonthDays[mYear]!.keys.toList()..sort()) {
         final List<int> mDays = yearMonthDays[mYear]![mMonth]!..sort();
 
-        /// TODO: Right now, for:
-        /// ....###........#..###..
-        /// We get:
-        /// ....#################..
-        /// And they should be the same.
+        //TODO: Right now, for:
+        // ....###........#..###..
+        // We get:
+        // ....#################..
+        // And they should be the same.
 
-        /// At this point, we went trough each year and month in order
-        /// and we got the list of days, in order.
-        /// We will go trough each possible range to add.
-        /// int first = 0;
-        /// int last = 0;
-        /// for (int i = 1; i <= 31; ++i) {
-        ///   if (first == 0 && mDays.contains(i)) first = i;
-        ///   if (last == 0 && mDays.contains(i)) last = i;
-        /// }
+        /* At this point, we went trough each year and month in order
+         and we got the list of days, in order.
+         We will go trough each possible range to add. */
+        //// int first = 0;
+        //// int last = 0;
+        //// for (int i = 1; i <= 31; ++i) {
+        ////   if (first == 0 && mDays.contains(i)) first = i;
+        ////   if (last == 0 && mDays.contains(i)) last = i;
+        //// }
         addRange(mYear, mMonth, mDays.first, mDays.last);
       }
     }

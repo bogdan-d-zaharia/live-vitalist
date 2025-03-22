@@ -4,33 +4,28 @@ import 'models/reference_fields_model.dart';
 /// This class will search for the aliment in the aliment bank
 /// and scale it to the serving size.
 class ServedAliment {
+  /// There will always be a default unit.
   ServedAliment({
     required this.alimentID,
     required this.servingSize,
-
-    /// String? unit,
-  })
-
-  ///  : unit = unit ?? AlimentBank.aliments[alimentID]!.units.keys.first
-  ;
-
+    this.unit,
+  });
   String alimentID;
   double servingSize;
 
-  /// String unit;
+  String? unit;
 
   Map<String, double> get fields {
-    Aliment? aliment = AlimentBank.aliments[alimentID];
-    if (aliment == null) throw Exception("Aliment not found!");
+    final Aliment aliment = AlimentBank.getAliment(alimentID);
 
     Map<String, double> result = {};
 
     for (final field in NutrientsHandler.model.keys) {
-      /// TODO: Perhaps use .contains()
-      if (aliment.referenceFields[field] != null) {
+      if (aliment.referenceFields.containsKey(field)) {
         result[field] = aliment.referenceFields[field]! *
             servingSize /
-            aliment.referenceSize;
+            aliment.referenceSize *
+            (aliment.unitSizes?[unit] ?? 1.0);
       }
     }
 
@@ -41,6 +36,7 @@ class ServedAliment {
     return {
       'alimentID': alimentID,
       'servingSize': servingSize,
+      if (unit != null) 'unit': unit!,
     };
   }
 
@@ -48,6 +44,7 @@ class ServedAliment {
     return ServedAliment(
       alimentID: json['alimentID'],
       servingSize: json['servingSize'],
+      unit: json['unit'],
     );
   }
 
@@ -60,6 +57,12 @@ class ServedAliment {
 /// This class stores, saves and loads the defined aliments.
 abstract final class AlimentBank {
   static Map<String, Aliment> aliments = {};
+
+  static Aliment getAliment(String alimentID) {
+    Aliment? aliment = AlimentBank.aliments[alimentID];
+    if (aliment == null) throw Exception("Aliment not found!");
+    return aliment;
+  }
 
   static Map<String, dynamic> toJson() {
     return aliments.map(
@@ -95,12 +98,11 @@ class Aliment {
   String name;
   double referenceSize;
 
-  /// Keeping them separated so that they can take default values if not set.
+  /* Keeping them separated so that they can take default values if not set. */
   Map<String, double> referenceFields = {};
+  Map<String, double>? unitSizes;
 
-  /// Map<String, double> units = {'g': 1.0};
-
-  /// TODO: Not used
+  //TODO: Not used
   void setField(String fieldName, double amount) {
     if (!NutrientsHandler.model.containsKey(fieldName)) {
       throw Exception('FIELD DOES NOT EXISTS!');
@@ -114,8 +116,7 @@ class Aliment {
       'name': name,
       'referenceSize': referenceSize,
       'referenceFields': referenceFields,
-
-      /// 'units': units,
+      if (unitSizes != null && unitSizes!.isNotEmpty) 'unitSizes': unitSizes,
     };
   }
 
@@ -128,9 +129,8 @@ class Aliment {
     result.referenceFields = (json['referenceFields'] as Map<String, dynamic>)
         .map((key, value) => MapEntry(key, value as double));
 
-    /// final Map<String, double> units = (json['units'] as Map<String, dynamic>)
-    ///     .map((key, value) => MapEntry(key, value as double));
-    /// if (units.isNotEmpty) result.units = units;
+    result.unitSizes = (json['unitSizes'] as Map<String, dynamic>?)
+        ?.map((key, value) => MapEntry(key, value as double));
 
     return result;
   }

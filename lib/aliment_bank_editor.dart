@@ -126,7 +126,7 @@ class _AlimentBankEditorState extends State<AlimentBankEditor> {
             child: CustomCard(
               // title: '',
               headerSpace: 0.0,
-              child: Text(AlimentBank.aliments[id]!.name),
+              child: Text(AlimentBank.getAliment(id).name),
             ),
           ),
           // (id) => SizedBox(
@@ -185,7 +185,7 @@ class _AlimentBankElementState extends State<AlimentBankElement> {
 
   @override
   Widget build(BuildContext context) {
-    newAlimentJson = AlimentBank.aliments[widget.alimentID]!.toJson();
+    newAlimentJson = AlimentBank.getAliment(widget.alimentID).toJson();
 
     Map<String, double?> expandedFields =
         NutrientsHandler.model.map((key, value) => MapEntry(key, null));

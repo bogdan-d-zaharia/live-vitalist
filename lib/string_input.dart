@@ -109,6 +109,7 @@ class _MultilineStringInputState extends State<MultilineStringInput> {
   }
 }
 
+/// update is actually onSave
 class JsonEditor extends StatefulWidget {
   const JsonEditor({
     required this.initString,
