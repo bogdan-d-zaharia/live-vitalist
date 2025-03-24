@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'aliment.dart';
-import 'aliment_bank_editor.dart';
+import 'aliment_editor.dart';
 import 'custom_card.dart';
 import 'day.dart';
 import 'notification_handler.dart';
-import 'string_input.dart';
 
 class MealsJournal extends StatelessWidget {
   const MealsJournal({
@@ -25,17 +24,17 @@ class MealsJournal extends StatelessWidget {
     final List<Widget> elements = [
       MealElement(
         title: 'Mic Dejun',
-        servedAliments: day.breakfast,
+        aliments: day.breakfast,
         saver: saveDay,
       ),
       MealElement(
         title: 'Pranz',
-        servedAliments: day.lunch,
+        aliments: day.lunch,
         saver: saveDay,
       ),
       MealElement(
         title: 'Cina',
-        servedAliments: day.dinner,
+        aliments: day.dinner,
         saver: saveDay,
       ),
     ];
@@ -57,13 +56,13 @@ class MealsJournal extends StatelessWidget {
 class MealElement extends StatefulWidget {
   const MealElement({
     required this.title,
-    required this.servedAliments,
+    required this.aliments,
     required this.saver,
     super.key,
   });
 
   final String title;
-  final List<ServedAliment> servedAliments;
+  final List<Aliment> aliments;
   final void Function() saver;
 
   @override
@@ -77,7 +76,7 @@ class _MealElementState extends State<MealElement> {
       MaterialPageRoute(
         builder: (context) => MealEditor(
           title: widget.title,
-          servedAliments: widget.servedAliments,
+          aliments: widget.aliments,
         ),
       ),
     );
@@ -90,7 +89,7 @@ class _MealElementState extends State<MealElement> {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, double> values = Day.sumFields(widget.servedAliments);
+    final Map<String, double> values = Day.sumFields(widget.aliments);
     return InkWell(
       onTap: () => openMeal(context),
       child: Row(
@@ -125,47 +124,39 @@ class _MealElementState extends State<MealElement> {
 class MealEditor extends StatefulWidget {
   const MealEditor({
     required this.title,
-    required this.servedAliments,
+    required this.aliments,
     super.key,
   });
 
   final String title;
-  final List<ServedAliment> servedAliments;
+  final List<Aliment> aliments;
 
   @override
   State<MealEditor> createState() => _MealEditorState();
 }
 
 class _MealEditorState extends State<MealEditor> {
-  Future<void> editServedAliment(
-    ServedAliment aliment,
-  ) async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ServedAlimentEditor(aliment: aliment),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final List<Widget> elements = widget.servedAliments
+    final List<Widget> elements = widget.aliments
         .map<Widget>(
-          (servedAliment) => AlimentWidget(
-            aliment: servedAliment,
+          (aliment) => AlimentWidget(
+            aliment: aliment,
             deleteAliment: () {
               setState(() {
-                widget.servedAliments.remove(servedAliment);
+                widget.aliments.remove(aliment);
               });
             },
             onTap: () async {
-              await editServedAliment(servedAliment);
+              if (aliment is InstancedAliment) {
+                await AlimentEditor.editInstancedAliment(aliment, context);
+              } else if (aliment is TemporaryAliment) {
+                await AlimentEditor.editTemporaryAliment(aliment, context);
+              }
               setState(() {});
             },
-            onLongPress: () => AlimentEditor.editAliment(
-                    AlimentBank.getAliment(servedAliment.alimentID), context)
-                .then(
+            onLongPress: () =>
+                AlimentEditor.editAliment(aliment.getAliment, context).then(
               (value) {
                 setState(() {
                   AlimentBank.save();
@@ -180,11 +171,11 @@ class _MealEditorState extends State<MealEditor> {
       title: 'Adaugare aliment',
       subTitle: '',
       onTap: () async {
-        final ServedAliment newAliment =
-            ServedAliment(alimentID: '', servingSize: 1.0);
-        await editServedAliment(newAliment);
+        final InstancedAliment newAliment =
+            InstancedAliment(alimentID: '', servingSize: 1.0);
+        await AlimentEditor.editInstancedAliment(newAliment, context);
         if (AlimentBank.aliments.keys.contains(newAliment.alimentID)) {
-          widget.servedAliments.add(newAliment);
+          widget.aliments.add(newAliment);
         }
         setState(() {});
       },
@@ -194,7 +185,16 @@ class _MealEditorState extends State<MealEditor> {
     elements.add(ElementWidget(
       title: 'Adaugare calorii',
       subTitle: '',
-      onTap: () {},
+      onTap: () async {
+        final TemporaryAliment newAliment = TemporaryAliment(
+            alimentData:
+                AlimentData(name: 'Temporary aliment', referenceSize: 1.0),
+            servingSize: 1.0);
+        if (await AlimentEditor.editTemporaryAliment(newAliment, context)) {
+          widget.aliments.add(newAliment);
+        }
+        setState(() {});
+      },
       additional: [],
     ));
 
@@ -217,7 +217,7 @@ class _MealEditorState extends State<MealEditor> {
         actions: [
           ElevatedButton(
             onPressed: () =>
-                NotificationHandler.showListNotification(widget.servedAliments),
+                NotificationHandler.showListNotification(widget.aliments),
             child: Text('Show Notification'),
           ),
         ],
@@ -392,7 +392,7 @@ class AlimentWidget extends StatelessWidget {
     super.key,
   });
 
-  final ServedAliment aliment;
+  final Aliment aliment;
   final Function() deleteAliment;
   final Function() onTap;
   final Function() onLongPress;
@@ -401,7 +401,7 @@ class AlimentWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final values = aliment.fields;
     return ElementWidget(
-      title: AlimentBank.getAliment(aliment.alimentID).name,
+      title: aliment.getAliment.name,
       subTitle:
           '${values['kcals']?.round() ?? 0.0} kcal, ${aliment.servingSize} ${aliment.unit ?? ''}',
       onTap: onTap,
@@ -443,183 +443,6 @@ class AlimentWidget extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class ServedAlimentEditor extends StatefulWidget {
-  const ServedAlimentEditor({
-    required this.aliment,
-    super.key,
-  });
-  final ServedAliment aliment;
-
-  @override
-  State<ServedAlimentEditor> createState() => _ServedAlimentEditorState();
-}
-
-class _ServedAlimentEditorState extends State<ServedAlimentEditor> {
-  String searchTerm = '';
-
-  Widget _alimentSelector() {
-    return SizedBox(
-      child: DropdownButton<String>(
-        isExpanded: true,
-        hint: ListView(
-          children: [
-            Text(AlimentBank.aliments[widget.aliment.alimentID]?.name ?? '')
-          ],
-        ),
-        items:
-
-            /// Filter for the search term.
-            AlimentBank.aliments.keys
-
-                /// TODO: Ideea e ca se actualizeaza cand iesi si intri in dropdown...
-                /// .where((element) => false)
-                /// Create the dropdown
-                .map((id) => DropdownMenuItem(
-                    enabled: (searchTerm == '') ||
-                        (AlimentBank.getAliment(id)
-                            .name
-                            .toLowerCase()
-                            .contains(searchTerm.toLowerCase())),
-                    value: id,
-                    child: SizedBox(
-                        width: 300.0,
-                        child: Text(AlimentBank.getAliment(id).name))))
-                .toList()
-
-        /// Add the search box.
-        /// ..insert(
-        ///     0,
-        ///     DropdownMenuItem(
-        ///       value: null,
-        ///       child: SizedBox(
-        ///         width: 300.0,
-        ///         child: StringInput(
-        ///           hint: 'Search',
-        ///           update: (p0) {
-        ///             setState(() {
-        ///               searchTerm = p0;
-        ///             });
-        ///           },
-        ///         ),
-        ///       ),
-        ///     ))
-        ,
-        onChanged: (newID) {
-          if (newID != null) {
-            setState(() {
-              widget.aliment.alimentID = newID;
-
-              final Aliment aliment = AlimentBank.getAliment(newID);
-              widget.aliment.unit = aliment.unitSizes?.keys.first;
-            });
-          }
-        },
-      ),
-    );
-  }
-
-  Widget _inputServed() {
-    return StringInput(
-      hint: 'Served amount',
-      initString: widget.aliment.servingSize.toString(),
-      keyboardType: TextInputType.number,
-      update: (p0) {
-        setState(() {
-          double? value = double.tryParse(p0);
-          if (value != null) {
-            widget.aliment.servingSize = value;
-          }
-        });
-      },
-    );
-  }
-
-  Widget? _unitSelector() {
-    if (!AlimentBank.aliments.containsKey(widget.aliment.alimentID)) {
-      return null;
-    }
-    final Aliment aliment = AlimentBank.getAliment(widget.aliment.alimentID);
-    final List<String>? units = aliment.unitSizes?.keys.toList();
-    if (units == null) return null;
-
-    return SizedBox(
-      child: DropdownButton<String>(
-        isExpanded: true,
-        hint: Text(widget.aliment.unit ?? ''),
-
-        //TODO:NOW: Handle the case when there is null unitSizes.
-        items: units
-            .map((unit) => DropdownMenuItem(
-                value: unit, child: SizedBox(width: 300.0, child: Text(unit))))
-            .toList(),
-        onChanged: (unit) {
-          if (unit != null) {
-            setState(() {
-              widget.aliment.unit = unit;
-            });
-          }
-        },
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // final newKeys = AlimentBank.aliments.keys
-    //     // Filter elements in search.
-    //     .where(
-    //       (id) =>
-    //           (searchTerm == '') ||
-    //           (AlimentBank.getAliment(id).name
-    //               .toLowerCase()
-    //               .contains(searchTerm.toLowerCase())),
-    //     )
-    //     .toList();
-    // print(newKeys);
-    final Widget? unitSelector = _unitSelector();
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Editor'),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 24.0),
-            child: SizedBox(
-              width: 32.0,
-              height: 32.0,
-              child: Material(
-                borderRadius: BorderRadius.circular(8.0),
-                clipBehavior: Clip.hardEdge,
-                color: Colors.lightGreen,
-                child: InkWell(
-                  splashColor: Colors.blue,
-                  highlightColor: Colors.blue,
-                  onTap: () => setState(() {
-                    AlimentBankEditor.addNewAliment(context);
-                  }),
-                  child: Icon(Icons.add_rounded, color: Colors.white),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _alimentSelector(),
-              _inputServed(),
-              if (unitSelector != null) unitSelector,
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

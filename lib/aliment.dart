@@ -1,22 +1,94 @@
 import 'file_handler.dart';
 import 'models/reference_fields_model.dart';
 
-/// This class will search for the aliment in the aliment bank
-/// and scale it to the serving size.
-class ServedAliment {
+abstract class Aliment {
   /// There will always be a default unit.
-  ServedAliment({
-    required this.alimentID,
+  Aliment({
     required this.servingSize,
     this.unit,
   });
-  String alimentID;
-  double servingSize;
 
+  double servingSize;
   String? unit;
 
+  AlimentData get getAliment;
+
+  Map<String, double> get fields;
+
+  Map<String, Object> toJson();
+
+  @override
+  String toString() {
+    return toJson().toString();
+  }
+}
+
+class TemporaryAliment extends Aliment {
+  /// There will always be a default unit.
+  TemporaryAliment({
+    required this.alimentData,
+    required super.servingSize,
+    super.unit,
+  });
+
+  AlimentData alimentData;
+
+  @override
+  AlimentData get getAliment => alimentData;
+
+  @override
   Map<String, double> get fields {
-    final Aliment aliment = AlimentBank.getAliment(alimentID);
+    Map<String, double> result = {};
+
+    /* Doesn't output supplimentary fields. */
+    for (final field in NutrientsHandler.model.keys) {
+      if (alimentData.referenceFields.containsKey(field)) {
+        result[field] = alimentData.referenceFields[field]! *
+            servingSize /
+            alimentData.referenceSize *
+            (alimentData.unitSizes?[unit] ?? 1.0);
+      }
+    }
+
+    return result;
+  }
+
+  @override
+  Map<String, Object> toJson() {
+    return {
+      'alimentData': alimentData.toJson(),
+      'servingSize': servingSize,
+      if (unit != null) 'unit': unit!,
+    };
+  }
+
+  factory TemporaryAliment.fromJson(Map<String, dynamic> json) {
+    return TemporaryAliment(
+      alimentData: AlimentData.fromJson(json['alimentData']),
+      servingSize: json['servingSize'],
+      unit: json['unit'],
+    );
+  }
+}
+
+/// This class will search for the aliment in the aliment bank
+/// and scale it to the serving size.
+class InstancedAliment extends Aliment {
+  /// There will always be a default unit.
+  InstancedAliment({
+    required this.alimentID,
+    required super.servingSize,
+    super.unit,
+  });
+
+  String alimentID;
+
+  @override
+  AlimentData get getAliment => AlimentBank.getAliment(alimentID);
+
+  @override
+  Map<String, double> get fields {
+    final AlimentData aliment = AlimentBank.getAliment(alimentID);
 
     Map<String, double> result = {};
 
@@ -32,6 +104,7 @@ class ServedAliment {
     return result;
   }
 
+  @override
   Map<String, Object> toJson() {
     return {
       'alimentID': alimentID,
@@ -40,26 +113,21 @@ class ServedAliment {
     };
   }
 
-  factory ServedAliment.fromJson(Map<String, dynamic> json) {
-    return ServedAliment(
+  factory InstancedAliment.fromJson(Map<String, dynamic> json) {
+    return InstancedAliment(
       alimentID: json['alimentID'],
       servingSize: json['servingSize'],
       unit: json['unit'],
     );
   }
-
-  @override
-  String toString() {
-    return toJson().toString();
-  }
 }
 
 /// This class stores, saves and loads the defined aliments.
 abstract final class AlimentBank {
-  static Map<String, Aliment> aliments = {};
+  static Map<String, AlimentData> aliments = {};
 
-  static Aliment getAliment(String alimentID) {
-    Aliment? aliment = AlimentBank.aliments[alimentID];
+  static AlimentData getAliment(String alimentID) {
+    AlimentData? aliment = AlimentBank.aliments[alimentID];
     if (aliment == null) throw Exception("Aliment not found!");
     return aliment;
   }
@@ -72,7 +140,7 @@ abstract final class AlimentBank {
 
   static void fromJson(Map<String, dynamic> json) {
     aliments = json.map(
-      (id, alimentJson) => MapEntry(id, Aliment.fromJson(alimentJson)),
+      (id, alimentJson) => MapEntry(id, AlimentData.fromJson(alimentJson)),
     );
   }
 
@@ -89,8 +157,8 @@ abstract final class AlimentBank {
   }
 }
 
-class Aliment {
-  Aliment({
+class AlimentData {
+  AlimentData({
     required this.name,
     required this.referenceSize,
   });
@@ -102,15 +170,6 @@ class Aliment {
   Map<String, double> referenceFields = {};
   Map<String, double>? unitSizes;
 
-  //TODO: Not used
-  void setField(String fieldName, double amount) {
-    if (!NutrientsHandler.model.containsKey(fieldName)) {
-      throw Exception('FIELD DOES NOT EXISTS!');
-    }
-
-    referenceFields[fieldName] = amount;
-  }
-
   Map<String, dynamic> toJson() {
     return {
       'name': name,
@@ -120,8 +179,8 @@ class Aliment {
     };
   }
 
-  factory Aliment.fromJson(Map<String, dynamic> json) {
-    Aliment result = Aliment(
+  factory AlimentData.fromJson(Map<String, dynamic> json) {
+    AlimentData result = AlimentData(
       name: json['name'] as String,
       referenceSize: json['referenceSize'] as double,
     );

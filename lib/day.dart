@@ -5,18 +5,18 @@ class Day {
   /// Creates an empty day.
   Day();
 
-  List<ServedAliment> breakfast = [];
-  List<ServedAliment> lunch = [];
-  List<ServedAliment> dinner = [];
+  List<Aliment> breakfast = [];
+  List<Aliment> lunch = [];
+  List<Aliment> dinner = [];
 
   Map<String, double>? _cachedIntake;
 
-  static Map<String, double> sumFields(List<ServedAliment> servedAliments) {
+  static Map<String, double> sumFields(List<Aliment> aliments) {
     final Map<String, double> result = {};
 
-    for (var servedAliment in servedAliments) {
+    for (var aliment in aliments) {
       //! WARNING: Summation happening multiple times.
-      final Map<String, double> servedFields = servedAliment.fields;
+      final Map<String, double> servedFields = aliment.fields;
 
       for (final field in servedFields.keys) {
         result[field] = (result[field] ?? 0.0) + servedFields[field]!;
@@ -42,19 +42,25 @@ class Day {
   void fromJson(Map<String, dynamic> json) {
     if (json['breakfast'] != null) {
       breakfast = (json['breakfast']! as List<dynamic>)
-          .map((e) => ServedAliment.fromJson(e))
+          .map((e) => (e as Map<String, dynamic>).containsKey('alimentID')
+              ? InstancedAliment.fromJson(e)
+              : TemporaryAliment.fromJson(e))
           .toList();
     }
 
     if (json['lunch'] != null) {
       lunch = (json['lunch']! as List<dynamic>)
-          .map((e) => ServedAliment.fromJson(e))
+          .map((e) => (e as Map<String, dynamic>).containsKey('alimentID')
+              ? InstancedAliment.fromJson(e)
+              : TemporaryAliment.fromJson(e))
           .toList();
     }
 
     if (json['dinner'] != null) {
       dinner = (json['dinner']! as List<dynamic>)
-          .map((e) => ServedAliment.fromJson(e))
+          .map((e) => (e as Map<String, dynamic>).containsKey('alimentID')
+              ? InstancedAliment.fromJson(e)
+              : TemporaryAliment.fromJson(e))
           .toList();
     }
   }
@@ -78,30 +84,38 @@ class Day {
     });
   }
 
-  List<ServedAliment> totalServedAliments() {
-    /* We broke the `servedAliment` into its 2 components,
+  List<Aliment> totalAliments() {
+    /* We broke the `instancedAliment` into its 2 components,
      the String `alimentID` and the double `servingSize`. */
 
-    /* `[t]otal[S]erved[A]liment[s]` */
-    final Map<String, double> tsas = {};
+    /* `totalInstancedAliments` */
+    final Map<String, double> tias = {};
+    /* `totalTemporaryAliments` */
+    final List<TemporaryAliment> ttas = [];
 
-    for (final List<ServedAliment> meal in [breakfast, lunch, dinner]) {
-      for (final ServedAliment sa in meal) {
-        tsas[sa.alimentID] = (tsas[sa.alimentID] ?? 0.0) + sa.servingSize;
+    for (final List<Aliment> meal in [breakfast, lunch, dinner]) {
+      for (final Aliment sa in meal) {
+        if (sa is InstancedAliment) {
+          tias[sa.alimentID] = (tias[sa.alimentID] ?? 0.0) + sa.servingSize;
+        } else if (sa is TemporaryAliment) {
+          ttas.add(sa);
+        }
       }
     }
 
-    final List<ServedAliment> totalServedAliments = tsas.entries
-        .map((e) => ServedAliment(alimentID: e.key, servingSize: e.value))
-        .toList();
+    final List<Aliment> totalServedAliments = tias.entries
+        .map<Aliment>(
+            (e) => InstancedAliment(alimentID: e.key, servingSize: e.value))
+        .toList()
+      ..addAll(ttas);
 
     return totalServedAliments;
   }
 
-  Map<ServedAliment, double> topIntakeAliments(String nutrient, {trim = true}) {
+  Map<Aliment, double> topIntakeAliments(String nutrient, {trim = true}) {
     /* Start unsorted. */
     /* ~ {'Egg': 500.0 vitA, 'Potato: 10.0 vitA'}, then sort by value. */
-    final Map<ServedAliment, double> result = totalServedAliments()
+    final Map<Aliment, double> result = totalAliments()
         .asMap()
         .map((key, value) => MapEntry(value, value.fields[nutrient] ?? 0.0))
       ..removeWhere((key, value) => ((trim) && (value == 0.0)));
