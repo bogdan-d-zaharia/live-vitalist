@@ -148,16 +148,6 @@ class _MealEditorState extends State<MealEditor> {
     );
   }
 
-  Future<void> editAliment(String id) async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AlimentBankElement(alimentID: id),
-      ),
-    );
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     final List<Widget> elements = widget.servedAliments
@@ -173,8 +163,14 @@ class _MealEditorState extends State<MealEditor> {
               await editServedAliment(servedAliment);
               setState(() {});
             },
-            onLongPress: () => editAliment(servedAliment.alimentID).then(
-              (value) {},
+            onLongPress: () => AlimentEditor.editAliment(
+                    AlimentBank.getAliment(servedAliment.alimentID), context)
+                .then(
+              (value) {
+                setState(() {
+                  AlimentBank.save();
+                });
+              },
             ),
           ),
         )
@@ -543,6 +539,9 @@ class _ServedAlimentEditorState extends State<ServedAlimentEditor> {
   }
 
   Widget? _unitSelector() {
+    if (!AlimentBank.aliments.containsKey(widget.aliment.alimentID)) {
+      return null;
+    }
     final Aliment aliment = AlimentBank.getAliment(widget.aliment.alimentID);
     final List<String>? units = aliment.unitSizes?.keys.toList();
     if (units == null) return null;

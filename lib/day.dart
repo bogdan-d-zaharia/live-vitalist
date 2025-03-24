@@ -79,9 +79,10 @@ class Day {
   }
 
   List<ServedAliment> totalServedAliments() {
-    /// We broke the `servedAliment` into its 2 components,
-    /// the String `alimentID` and the double `servingSize`.
-    /// `[t]otal[S]erved[A]liment[s]`
+    /* We broke the `servedAliment` into its 2 components,
+     the String `alimentID` and the double `servingSize`. */
+
+    /* `[t]otal[S]erved[A]liment[s]` */
     final Map<String, double> tsas = {};
 
     for (final List<ServedAliment> meal in [breakfast, lunch, dinner]) {
@@ -97,23 +98,17 @@ class Day {
     return totalServedAliments;
   }
 
-  Map<String, double> topIntakeKeys(String nutrient, {trim = true}) {
-    final Map<String, Map<String, double>> pairedIdFields =
-        totalServedAliments()
-            .asMap()
-            .map((key, value) => MapEntry(value.alimentID, value.fields));
+  Map<ServedAliment, double> topIntakeAliments(String nutrient, {trim = true}) {
+    /* Start unsorted. */
+    /* ~ {'Egg': 500.0 vitA, 'Potato: 10.0 vitA'}, then sort by value. */
+    final Map<ServedAliment, double> result = totalServedAliments()
+        .asMap()
+        .map((key, value) => MapEntry(value, value.fields[nutrient] ?? 0.0))
+      ..removeWhere((key, value) => ((trim) && (value == 0.0)));
 
-    /// SORTING BY THE SPECIFIED NUTRIENT
-    final sortedEntries = pairedIdFields.entries.toList()
-      ..sort((a, b) =>
-          (b.value[nutrient] ?? 0.0).compareTo(a.value[nutrient] ?? 0.0));
-
-    final Map<String, double> sortedMap = {
-      for (var entry in sortedEntries) entry.key: entry.value[nutrient] ?? 0.0
-    };
-    sortedMap.removeWhere((key, value) => ((trim) && (value == 0.0)));
-
-    return sortedMap;
+    /* Return sorted. */
+    return Map.fromEntries(result.entries.toList()
+      ..sort((a, b) => (b.value - a.value).sign.toInt()));
   }
 
   factory Day.sumDays(List<Day> days) {
