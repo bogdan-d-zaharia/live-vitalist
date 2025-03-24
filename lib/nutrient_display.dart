@@ -209,8 +209,8 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
       final double? lower = NutrientsHandler.model[key]!['lowerLimit'];
       final double? upper = NutrientsHandler.model[key]!['upperLimit'];
 
-      final Map<ServedAliment, double> topIntakeAliments = day
-          .topIntakeAliments(key)
+      final Map<String, double> topIntakeKeys = day
+          .topIntakeKeys(key)
           .map((key, value) => MapEntry(key, value / (numDays)));
 
       elements.add(
@@ -285,9 +285,10 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
                             ),
                           ),
                         ),
-                        ...topIntakeAliments.entries.map((e) {
+                        ...topIntakeKeys.entries.map((e) {
                           /// eg. Cheese
-                          final String name = e.key.aliment.name;
+                          final String name =
+                              AlimentBank.getAliment(e.key).name;
 
                           /// eg. protein
                           final String valueOfLabel =

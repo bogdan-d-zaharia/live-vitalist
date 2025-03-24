@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'aliment.dart';
@@ -10,20 +9,34 @@ import 'string_input.dart';
 class AlimentBankEditor extends StatefulWidget {
   const AlimentBankEditor({super.key});
 
+  static Future<bool> editAliment(String id, BuildContext context) async {
+    bool didSave = false;
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AlimentBankElement(alimentID: id),
+      ),
+    ).then(
+      (didSave2) {
+        if (didSave2 != null) didSave = didSave2;
+      },
+    );
+    return didSave;
+  }
+
   static Future<bool> addNewAliment(BuildContext context) async {
-    final Map<String, dynamic> alimentJson = {
-      "name": "",
-      "referenceSize": 0.0,
-    };
+    final Aliment newAliment = Aliment(name: '', referenceSize: 0.0);
+    final String id = newAliment.hashCode.toString();
+    AlimentBank.aliments[id] = newAliment;
 
-    if (await AlimentEditor.editAlimentJson(alimentJson, context)) {
-      final Aliment newAliment = Aliment(name: '', referenceSize: 0.0);
-      final String id = newAliment.hashCode.toString();
-      AlimentBank.aliments[id] = newAliment;
+    /// TODO: Try editing the aliment and if it is canceled,
+    /// remove it from the bank.
+    if (await editAliment(id, context)) {
       return true;
+    } else {
+      AlimentBank.aliments.remove(id);
+      return false;
     }
-
-    return false;
   }
 
   @override
@@ -107,11 +120,7 @@ class _AlimentBankEditorState extends State<AlimentBankEditor> {
         .map<Widget>(
           (id) => InkWell(
             onTap: () => setState(() {
-              // final alimentJson = AlimentBank.getAliment(id).toJson();
-              // AlimentJsonEditor.editAlimentJson(alimentJson, context);
-              // AlimentBank.aliments[id] = Aliment.fromJson(alimentJson);
-
-              AlimentEditor.editAliment(AlimentBank.aliments[id]!, context);
+              AlimentBankEditor.editAliment(id, context);
             }),
             onLongPress: () => deleteAtId(id),
             child: CustomCard(
@@ -158,98 +167,49 @@ class _AlimentBankEditorState extends State<AlimentBankEditor> {
   }
 }
 
-abstract final class AlimentEditor {
-  static Future<bool> editAlimentJson(
-      Map<String, dynamic> alimentJson, BuildContext context) async {
-    bool didSave = false;
-
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AlimentJsonEditor(alimentJson: alimentJson),
-      ),
-    ).then(
-      (didSave2) {
-        if (didSave2 != null) didSave = didSave2;
-      },
-    );
-    return didSave;
-  }
-
-  static Future<bool> editAliment(Aliment aliment, BuildContext context) async {
-    bool didSave = false;
-
-    final Map<String, dynamic> alimentJson = aliment.toJson();
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AlimentJsonEditor(alimentJson: alimentJson),
-      ),
-    ).then(
-      (didSave2) {
-        if (didSave2 != null) didSave = didSave2;
-      },
-    );
-
-    /* We need to edit the same instance,
-     and can't replace it with a new one. */
-    if (didSave) {
-      if (alimentJson.containsKey('name')) {
-        aliment.name = alimentJson['name'];
-      }
-      if (alimentJson.containsKey('referenceSize')) {
-        aliment.referenceSize = alimentJson['referenceSize'];
-      }
-      if (alimentJson.containsKey('referenceFields')) {
-        aliment.referenceFields =
-            (alimentJson['referenceFields'] as Map<String, dynamic>)
-                .map<String, double>(
-                    (key, value) => MapEntry(key, value as double));
-      }
-      if (alimentJson.containsKey('unitSizes')) {
-        aliment.unitSizes = alimentJson['unitSizes'];
-      }
-    }
-
-    return didSave;
-  }
-}
-
-class AlimentJsonEditor extends StatelessWidget {
-  const AlimentJsonEditor({
-    required this.alimentJson,
+class AlimentBankElement extends StatefulWidget {
+  const AlimentBankElement({
+    required this.alimentID,
     super.key,
   });
 
-  final Map<String, dynamic> alimentJson;
+  final String alimentID;
+
+  @override
+  State<AlimentBankElement> createState() => _AlimentBankElementState();
+}
+
+class _AlimentBankElementState extends State<AlimentBankElement> {
+  late Map<String, dynamic> newAlimentJson;
+  late String newAlimentJsonString;
 
   @override
   Widget build(BuildContext context) {
+    newAlimentJson = AlimentBank.getAliment(widget.alimentID).toJson();
+
     Map<String, double?> expandedFields =
         NutrientsHandler.model.map((key, value) => MapEntry(key, null));
 
-    for (var entry in alimentJson['referenceFields'].entries) {
+    for (var entry in newAlimentJson['referenceFields'].entries) {
       expandedFields[entry.key] = entry.value;
     }
 
-    alimentJson['referenceFields'] = expandedFields;
-    final String alimentJsonString =
-        JsonEncoder.withIndent('  ').convert(alimentJson);
+    newAlimentJson['referenceFields'] = expandedFields;
+    newAlimentJsonString = JsonEncoder.withIndent('  ').convert(newAlimentJson);
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Aliment Editor'),
       ),
       body: JsonEditor(
-        initString: alimentJsonString,
+        initString: newAlimentJsonString,
         update: (p0) {
-          final Map<String, dynamic> newAlimentJson = jsonDecode(p0);
+          newAlimentJson = jsonDecode(p0);
           (newAlimentJson['referenceFields'] as Map<String, dynamic>)
               .removeWhere((key, value) => (value == null));
-
-          alimentJson.clear();
-          alimentJson.addAll(newAlimentJson);
-
+          AlimentBank.aliments[widget.alimentID] =
+              Aliment.fromJson(newAlimentJson);
+          AlimentBank.save();
           Navigator.pop(context, true);
         },
       ),

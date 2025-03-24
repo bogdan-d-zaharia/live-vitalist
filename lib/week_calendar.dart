@@ -202,7 +202,7 @@ class CalendarItem extends StatelessWidget {
           return wid(snapshot.data!.intake, context);
         } else if (snapshot.hasError) {
           // TODO: Replace with a reload button, perhaps.
-          Error.throwWithStackTrace(snapshot.error!, snapshot.stackTrace!);
+          throw Exception(snapshot.hasError ? snapshot.error.toString() : '');
         } else {
           return Center(child: CircularProgressIndicator());
         }

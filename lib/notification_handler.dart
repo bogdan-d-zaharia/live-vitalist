@@ -18,8 +18,10 @@ class NotificationHandler {
   }
 
   static Future<void> showListNotification(List<ServedAliment> list) async {
-    List<String> lines =
-        list.map((e) => '(${e.servingSize}) ${e.aliment.name}').toList();
+    List<String> lines = list
+        .map((e) =>
+            '(${e.servingSize}) ${AlimentBank.getAliment(e.alimentID).name}')
+        .toList();
 
     final ntf.AndroidNotificationDetails androidPlatformChannelSpecifics =
         ntf.AndroidNotificationDetails(

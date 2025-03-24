@@ -290,7 +290,14 @@ class _ScaffoldPageState extends State<ScaffoldPage> {
             ),
           );
         } else if (snapshot.hasError) {
-          Error.throwWithStackTrace(snapshot.error!, snapshot.stackTrace!);
+          ////return Placeholder();
+          throw Exception(snapshot.hasError ? snapshot.error.toString() : '');
+
+          ////return Scaffold(
+          ////  body: Center(
+          ////    child: Text(snapshot.error.toString()),
+          ////  ),
+          ////);
         } else {
           return Scaffold(
             body: Center(
