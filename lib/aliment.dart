@@ -5,19 +5,38 @@ import 'models/reference_fields_model.dart';
 /// and scale it to the serving size.
 class ServedAliment {
   /// There will always be a default unit.
+  ///
+  /// Priority:
+  /// `aliment` `<` `alimentID`
   ServedAliment({
     required this.alimentID,
+    Aliment? aliment,
     required this.servingSize,
     this.unit,
-  });
-  String alimentID;
-  double servingSize;
+  }) : _aliment = aliment;
 
+  String? alimentID;
+  Aliment? _aliment;
+  double servingSize;
   String? unit;
 
-  Map<String, double> get fields {
-    final Aliment aliment = AlimentBank.getAliment(alimentID);
+  Aliment get aliment {
+    if (alimentID != null) {
+      return AlimentBank.getAliment(alimentID!);
+    } else if (_aliment != null) {
+      return _aliment!;
+    } else {
+      throw Exception(
+          "There must be defined at least one between 'alimentID' and 'aliment'.");
+    }
+  }
 
+  set aliment(Aliment other) {
+    alimentID = null;
+    _aliment = other;
+  }
+
+  Map<String, double> get fields {
     Map<String, double> result = {};
 
     for (final field in NutrientsHandler.model.keys) {
@@ -34,9 +53,10 @@ class ServedAliment {
 
   Map<String, Object> toJson() {
     return {
-      'alimentID': alimentID,
+      if (alimentID != null) 'alimentID': alimentID!,
       'servingSize': servingSize,
       if (unit != null) 'unit': unit!,
+      if (alimentID == null) 'aliment': aliment.toJson(),
     };
   }
 
@@ -45,6 +65,9 @@ class ServedAliment {
       alimentID: json['alimentID'],
       servingSize: json['servingSize'],
       unit: json['unit'],
+      aliment: json.containsKey('aliment')
+          ? Aliment.fromJson(json['aliment'])
+          : null,
     );
   }
 

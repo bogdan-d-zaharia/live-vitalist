@@ -148,16 +148,6 @@ class _MealEditorState extends State<MealEditor> {
     );
   }
 
-  Future<void> editAliment(String id) async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => AlimentBankElement(alimentID: id),
-      ),
-    );
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     final List<Widget> elements = widget.servedAliments
@@ -173,8 +163,11 @@ class _MealEditorState extends State<MealEditor> {
               await editServedAliment(servedAliment);
               setState(() {});
             },
-            onLongPress: () => editAliment(servedAliment.alimentID).then(
-              (value) {},
+            onLongPress: () =>
+                AlimentEditor.editAliment(servedAliment.aliment, context).then(
+              (value) {
+                //TODO: Investigate `setState` or removing the `.then`.
+              },
             ),
           ),
         )
@@ -198,7 +191,17 @@ class _MealEditorState extends State<MealEditor> {
     elements.add(ElementWidget(
       title: 'Adaugare calorii',
       subTitle: '',
-      onTap: () {},
+      onTap: () async {
+        final Aliment aliment =
+            Aliment(name: 'Temporary aliment', referenceSize: 1.0);
+        if (await AlimentEditor.editAliment(aliment, context)) {
+          final ServedAliment newAliment = ServedAliment(
+              alimentID: null, aliment: aliment, servingSize: 1.0);
+          await editServedAliment(newAliment);
+          widget.servedAliments.add(newAliment);
+        }
+        setState(() {});
+      },
       additional: [],
     ));
 
@@ -405,7 +408,7 @@ class AlimentWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final values = aliment.fields;
     return ElementWidget(
-      title: AlimentBank.getAliment(aliment.alimentID).name,
+      title: aliment.aliment.name,
       subTitle:
           '${values['kcals']?.round() ?? 0.0} kcal, ${aliment.servingSize} ${aliment.unit ?? ''}',
       onTap: onTap,
@@ -543,7 +546,11 @@ class _ServedAlimentEditorState extends State<ServedAlimentEditor> {
   }
 
   Widget? _unitSelector() {
-    final Aliment aliment = AlimentBank.getAliment(widget.aliment.alimentID);
+    if (!AlimentBank.aliments.containsKey(widget.aliment.alimentID)) {
+      return null;
+    }
+
+    final Aliment aliment = widget.aliment.aliment;
     final List<String>? units = aliment.unitSizes?.keys.toList();
     if (units == null) return null;
 
@@ -570,17 +577,6 @@ class _ServedAlimentEditorState extends State<ServedAlimentEditor> {
 
   @override
   Widget build(BuildContext context) {
-    // final newKeys = AlimentBank.aliments.keys
-    //     // Filter elements in search.
-    //     .where(
-    //       (id) =>
-    //           (searchTerm == '') ||
-    //           (AlimentBank.getAliment(id).name
-    //               .toLowerCase()
-    //               .contains(searchTerm.toLowerCase())),
-    //     )
-    //     .toList();
-    // print(newKeys);
     final Widget? unitSelector = _unitSelector();
     return Scaffold(
       appBar: AppBar(
