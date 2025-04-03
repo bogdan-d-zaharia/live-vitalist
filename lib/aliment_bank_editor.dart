@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'aliment.dart';
-import 'aliment_editor.dart';
+import 'aliment_editor/aliment_editor.dart';
 import 'custom_card.dart';
 
 class AlimentBankEditor extends StatefulWidget {
@@ -13,9 +13,23 @@ class AlimentBankEditor extends StatefulWidget {
     };
 
     if (await AlimentEditor.editAlimentJson(alimentJson, context)) {
-      final AlimentData newAliment = AlimentData(name: '', referenceSize: 0.0);
+      final AlimentData newAliment = AlimentData.fromJson(alimentJson);
       final String id = newAliment.hashCode.toString();
       AlimentBank.aliments[id] = newAliment;
+      AlimentBank.save();
+      return true;
+    }
+
+    return false;
+  }
+
+  static Future<bool> editAliment(String id, BuildContext context) async {
+    final alimentJson = AlimentBank.getAliment(id).toJson();
+
+    if (await AlimentEditor.editAlimentJson(alimentJson, context)) {
+      final AlimentData aliment = AlimentData.fromJson(alimentJson);
+      AlimentBank.aliments[id] = aliment;
+      AlimentBank.save();
       return true;
     }
 
@@ -72,6 +86,7 @@ class _AlimentBankEditorState extends State<AlimentBankEditor> {
                             AlimentBank.aliments.remove(id);
                           });
                           // TODO: ACTUALLY DELETE IT.
+                          Navigator.pop(context);
                         },
                         icon: Icon(Icons.delete, color: Colors.white),
                         label: Text("Delete"),
@@ -96,20 +111,21 @@ class _AlimentBankEditorState extends State<AlimentBankEditor> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> elements = AlimentBank.aliments.keys
-        .map<Widget>(
-          (id) => InkWell(
-            onTap: () => setState(() {
-              AlimentEditor.editAliment(AlimentBank.aliments[id]!, context);
-            }),
-            onLongPress: () => deleteAtId(id),
-            child: CustomCard(
-              headerSpace: 0.0,
-              child: Text(AlimentBank.getAliment(id).name),
-            ),
+    final List<Widget> elements = AlimentBank.aliments.keys.map<Widget>(
+      (id) {
+        //TODO: Did a little wizzardry.
+        final aliment = InstancedAliment(alimentID: id, servingSize: 0.0);
+        return InkWell(
+          onTap: () => AlimentEditor.editAliment(aliment, context)
+              .then((_) => setState(() {})),
+          onLongPress: () => deleteAtId(id),
+          child: CustomCard(
+            headerSpace: 0.0,
+            child: Text(aliment.getAliment.name),
           ),
-        )
-        .toList();
+        );
+      },
+    ).toList();
     return Scaffold(
       appBar: AppBar(
         title: Text('Aliment Table Editor'),
@@ -118,9 +134,8 @@ class _AlimentBankEditorState extends State<AlimentBankEditor> {
         children: elements,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => setState(() {
-          AlimentBankEditor.addNewAliment(context);
-        }),
+        onPressed: () => AlimentBankEditor.addNewAliment(context)
+            .then((_) => setState(() {})),
         child: Icon(Icons.add_rounded, color: Colors.white, size: 40.0),
       ),
     );

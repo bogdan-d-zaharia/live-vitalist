@@ -9,6 +9,7 @@ class StringInput extends StatefulWidget {
   final Function(String)? update;
   final double? width;
   final TextInputType? keyboardType;
+  final InputDecoration? decoration;
 
   const StringInput({
     super.key,
@@ -17,6 +18,7 @@ class StringInput extends StatefulWidget {
     this.update,
     this.width,
     this.keyboardType,
+    this.decoration,
   });
 
   @override
@@ -53,9 +55,10 @@ class _StringInputState extends State<StringInput> {
               keyboardType: widget.keyboardType,
               style: Theme.of(context).textTheme.bodyMedium,
               controller: _controller,
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
-              ),
+              decoration: widget.decoration ??
+                  const InputDecoration(
+                    border: UnderlineInputBorder(),
+                  ),
               onChanged: widget.update,
             ),
           ),
@@ -147,7 +150,7 @@ class _JsonEditorState extends State<JsonEditor> {
     return Column(
       children: [
         Container(
-          height: 500.0,
+          height: 400.0,
           color: artaTheme['root']!.backgroundColor,
           child: CodeTheme(
             data: CodeThemeData(styles: artaTheme),
@@ -191,6 +194,120 @@ class _JsonEditorState extends State<JsonEditor> {
           ],
         ),
       ],
+    );
+  }
+}
+
+//TODO: Perhaps handle null getValue, so that there might be fields where it is
+// for sure 0.0 and fields where it is assumed that is not specified.
+class NumberInput extends StatefulWidget {
+  const NumberInput({
+    required this.getValue,
+    required this.setValue,
+    this.showHandles = true,
+    super.key,
+  });
+
+  final double Function() getValue;
+  final Function(double) setValue;
+  final bool showHandles;
+
+  @override
+  State<NumberInput> createState() => _NumberInputState();
+}
+
+class _NumberInputState extends State<NumberInput> {
+  late TextEditingController _controller;
+
+  double get number => widget.getValue();
+  set number(double val) => widget.setValue(val);
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Widget divider({double indent = 4.0, Color? color}) {
+    return VerticalDivider(
+      width: 0.0,
+      indent: indent,
+      endIndent: indent,
+      color: color ?? Colors.grey[200],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _controller.text = number.toString();
+    final double height = 42.0;
+
+    return Container(
+      height: height,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(height / 2.0),
+        color: Colors.white,
+      ),
+      clipBehavior: Clip.hardEdge,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (widget.showHandles)
+            SizedBox(
+              width: height,
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  child: Center(child: Icon(Icons.remove_rounded)),
+                  onTap: () => setState(() {
+                    number = number - 1.0;
+                  }),
+                ),
+              ),
+            ),
+          if (widget.showHandles) divider(),
+          SizedBox(
+            width: 2.0 * height,
+            height: height,
+            child: TextField(
+              expands: true,
+              maxLines: null,
+              minLines: null,
+              // style: TextStyle(fontSize: 16),
+              textAlign: TextAlign.center,
+              textAlignVertical: TextAlignVertical.center,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              controller: _controller,
+              decoration: InputDecoration(border: InputBorder.none),
+              onChanged: (value) {
+                final double? v = double.tryParse(value);
+                if (v != null && v.isFinite) number = v;
+              },
+              onEditingComplete: () => setState(() {}),
+            ),
+          ),
+          if (widget.showHandles) divider(),
+          if (widget.showHandles)
+            SizedBox(
+              width: height,
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  child: Center(child: Icon(Icons.add_rounded)),
+                  onTap: () => setState(() {
+                    number = number + 1.0;
+                  }),
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

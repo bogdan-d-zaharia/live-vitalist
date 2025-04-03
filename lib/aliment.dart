@@ -15,7 +15,7 @@ abstract class Aliment {
 
   Map<String, double> get fields;
 
-  Map<String, Object> toJson();
+  Map<String, dynamic> toJson();
 
   @override
   String toString() {
@@ -54,7 +54,7 @@ class TemporaryAliment extends Aliment {
   }
 
   @override
-  Map<String, Object> toJson() {
+  Map<String, dynamic> toJson() {
     return {
       'alimentData': alimentData.toJson(),
       'servingSize': servingSize,
@@ -127,7 +127,7 @@ abstract final class AlimentBank {
   static Map<String, AlimentData> aliments = {};
 
   static AlimentData getAliment(String alimentID) {
-    AlimentData? aliment = AlimentBank.aliments[alimentID];
+    final AlimentData? aliment = AlimentBank.aliments[alimentID];
     if (aliment == null) throw Exception("Aliment not found!");
     return aliment;
   }

@@ -11,6 +11,15 @@ abstract final class Palette {
 
   static const Color selectGreen = Color(0xFF84b8ad);
 
+  //TODO: Make them static and implement, so that we have greyer colors.
+  // final Color red = Color.lerp(Colors.red, Colors.grey, 0.1)!;
+  // final Color blue = Color.lerp(Colors.blue, Colors.grey, 0.1)!;
+  // final Color yellow = Color.lerp(Colors.yellow, Colors.grey, 0.1)!;
+
+  static const Color proteinRed = Colors.red;
+  static const Color carbBlue = Colors.blue;
+  static const Color fatYellow = Colors.yellow;
+
   // Fufillment
   static const greenTransparent = Color(0xCCb9ea93);
   static const green = Color(0xFFa3e673);

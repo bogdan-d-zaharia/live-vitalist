@@ -210,72 +210,6 @@ class CalendarItem extends StatelessWidget {
     );
   }
 
-  double linearMap(
-      double value, double inMin, double inMax, double outMin, double outMax) {
-    final double inLength = inMax - inMin;
-    final double outLength = outMax - outMin;
-    final double inNormalised = (value - inMin) / inLength;
-    return inNormalised * outLength + outMin;
-    // return outMin + ((value - inMin) * (outMax - outMin) / (inMax - inMin));
-  }
-
-  /// TODO: Optimise.
-  ///// [0.0, lower]    -> [-1.0, 0.0]
-  ///// [lower, upper]  -> [0.0, 1.0]
-  ///// [0.0, upper]    -> [0.0, 1.0]
-  ///// [upper, inf]    -> [1.0, inf]
-  ///
-  /// [0.0, lower]    -> [0.0, 1.0]
-  /// [lower, upper]  -> 1.0
-  /// [lower, inf]    -> [1.0, inf]
-  /// [0.0, upper]    -> [0.0, 1.0]
-  /// [upper, inf]    -> [1.0, inf]
-  ///
-  /// ABS:
-  /// [0.0, lower]    -> [0.0, 1.0]
-  /// [lower, inf]    -> 1.0
-  /// [lower, upper]  -> 1.0
-  /// [0.0, upper]    -> 1.0, ( lower in [0.0, upper] )
-  /// [upper, inf]    -> [1.0, inf]
-  double? getRatio(double? amount, double? lower, double? upper, bool abs) {
-    if (amount == null || (lower == null && upper == null)) return null;
-
-    if (!abs) {
-      if (lower != null) {
-        if (amount <= lower) {
-          return amount / lower;
-        }
-        if (upper != null && amount <= upper) {
-          return 1;
-        }
-        return amount / lower;
-      }
-
-      /// (upper != null) surely.
-      return amount / upper!;
-
-      // if (lower != null && amount <= lower) {
-      //   return linearMap(amount, 0.0, lower, -1.0, 0.0);
-      // } else if ((lower != null && amount >= lower) &&
-      //     (upper != null && amount <= upper)) {
-      //   return linearMap(amount, lower, upper, 0.0, 1.0);
-      // } else if (upper != null) {
-      //   return amount / upper;
-      // }
-    } else {
-      if (lower != null && amount <= lower) {
-        return linearMap(amount, 0.0, lower, 0.0, 1.0);
-      } else if (lower != null && upper == null) {
-        return 1.0;
-      } else if (upper != null) {
-        if (amount <= upper) return 1.0;
-        return amount / upper;
-      }
-    }
-
-    return null;
-  }
-
   (double?, double?, double?) calculateMinMaxAverage(
       Map<String, double> values) {
     double min = double.infinity;
@@ -286,7 +220,8 @@ class CalendarItem extends StatelessWidget {
     for (final key in values.keys) {
       final double? lower = NutrientsHandler.model[key]!['lowerLimit'];
       final double? upper = NutrientsHandler.model[key]!['upperLimit'];
-      final double? ratio = getRatio(values[key]!, lower, upper, true);
+      final double? ratio =
+          NutrientsHandler.getRatio(values[key]!, lower, upper, true);
 
       if (ratio != null) {
         if (ratio < min) min = ratio;
@@ -310,10 +245,12 @@ class CalendarItem extends StatelessWidget {
   }
 
   Widget wid(Map<String, double> values, BuildContext context) {
+    values = Map.from(values)
+      ..removeWhere((key, value) => NutrientsHandler.hasTag(key, 'disabled'));
     final (double minim, double maxim, double average) =
         forceMinMaxAverage(values);
 
-    final double? kcalRatio = getRatio(
+    final double? kcalRatio = NutrientsHandler.getRatio(
         values['kcals'],
         NutrientsHandler.model['kcals']?['lowerLimit'],
         NutrientsHandler.model['kcals']?['upperLimit'],
@@ -353,14 +290,18 @@ class CalendarItem extends StatelessWidget {
                 FractionallySizedBox(
                   heightFactor: (minim / 1.5).clamp(0.0, 1.0),
                   child: Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: Palette.greenGradientColors,
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                      ),
-                    ),
+                    color: Colors.green.withValues(alpha: 0.4),
                   ),
+
+                  // child: Container(
+                  //   decoration: const BoxDecoration(
+                  //     gradient: LinearGradient(
+                  //       colors: Palette.greenGradientColors,
+                  //       begin: Alignment.topCenter,
+                  //       end: Alignment.bottomCenter,
+                  //     ),
+                  //   ),
+                  // ),
                 ),
               ],
             ),

@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import '../file_handler.dart';
 
 abstract final class NutrientsHandler {
@@ -396,4 +398,118 @@ abstract final class NutrientsHandler {
       //  ignore: empty_catches
     }
   }
+
+  // #region //* FUNCTIONS FOR HANDLING FIELDS. *//
+
+  static double linearMap(
+      double value, double inMin, double inMax, double outMin, double outMax) {
+    final double inLength = inMax - inMin;
+    final double outLength = outMax - outMin;
+    final double inNormalised = (value - inMin) / inLength;
+    return inNormalised * outLength + outMin;
+    // return outMin + ((value - inMin) * (outMax - outMin) / (inMax - inMin));
+  }
+
+  /// TODO: Optimise.
+  /// [0.0, lower]    -> [0.0, 1.0]
+  /// [lower, upper]  -> 1.0
+  /// [lower, inf]    -> [1.0, inf]
+  /// [0.0, upper]    -> [0.0, 1.0]
+  /// [upper, inf]    -> [1.0, inf]
+  ///
+  /// ABS:
+  /// [0.0, lower]    -> [0.0, 1.0]
+  /// [lower, inf]    -> 1.0
+  /// [lower, upper]  -> 1.0
+  /// [0.0, upper]    -> 1.0, ( lower in [0.0, upper] )
+  /// [upper, inf]    -> [1.0, inf]
+  static double? getRatio(
+      double? amount, double? lower, double? upper, bool abs) {
+    if (amount == null || (lower == null && upper == null)) return null;
+
+    if (!abs) {
+      if (lower != null) {
+        if (amount <= lower) {
+          return amount / lower;
+        }
+        if (upper != null && amount <= upper) {
+          return 1;
+        }
+        return amount / lower;
+      }
+
+      /// (upper != null) surely.
+      return amount / upper!;
+
+      // if (lower != null && amount <= lower) {
+      //   return linearMap(amount, 0.0, lower, -1.0, 0.0);
+      // } else if ((lower != null && amount >= lower) &&
+      //     (upper != null && amount <= upper)) {
+      //   return linearMap(amount, lower, upper, 0.0, 1.0);
+      // } else if (upper != null) {
+      //   return amount / upper;
+      // }
+    } else {
+      if (lower != null && amount <= lower) {
+        return linearMap(amount, 0.0, lower, 0.0, 1.0);
+      } else if (lower != null && upper == null) {
+        return 1.0;
+      } else if (upper != null) {
+        if (amount <= upper) return 1.0;
+        return amount / upper;
+      }
+    }
+
+    return null;
+  }
+
+  static double? getFieldRatio(double amount, String field) {
+    final double? lower = NutrientsHandler.model[field]!['lowerLimit'];
+    final double? upper = NutrientsHandler.model[field]!['upperLimit'];
+    return getRatio(amount, lower, upper, true);
+  }
+
+  //TODO: Imported material for this alone.
+  // Perhaps move, if it's not this function's place.
+  static List<Widget> widMajorMinorLabels(String label) {
+    var x = label.indexOf('(');
+    x = x != -1 ? x : label.length;
+
+    final label1 = label.substring(0, x);
+    final label2 = label.substring(x);
+    return [
+      Text(label1, style: TextStyle(letterSpacing: -0.0)),
+      Text(
+        label2,
+        style: TextStyle(
+          letterSpacing: -0.0,
+          color: Colors.grey,
+          fontSize: 12.0,
+        ),
+      ),
+    ];
+  }
+
+  /* Tags */
+  static List<String> getTags(String field) {
+    final List<dynamic> protoTags =
+        NutrientsHandler.model[field]!['tags'] ?? [];
+    return protoTags.map((e) => e as String).toList();
+  }
+
+  static bool hasTag(String field, String tag) {
+    return getTags(field).contains(tag);
+  }
+
+  static List<Widget> tagsToWidgets(List<String> tags) {
+    final List<Widget> result = [];
+
+    if (tags.contains('starred')) {
+      result.add(Icon(Icons.star_rounded));
+    }
+
+    return result;
+  }
+
+  // #endregion //* FUNCTIONS FOR HANDLING FIELDS. *//
 }

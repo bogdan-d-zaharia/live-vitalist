@@ -9,20 +9,16 @@ import 'meals_journal.dart';
 import 'models/reference_fields_model.dart';
 import 'notification_handler.dart';
 import 'nutrient_display.dart';
-// import 'nutrients_chart.dart';
 import 'permission_handler.dart';
 import 'pie_chart.dart';
 import 'settings.dart';
 import 'string_input.dart';
 import 'week_calendar.dart';
 import 'package:permission_handler/permission_handler.dart';
-// import 'package:intl/intl.dart' as intl;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationHandler.initialize();
-
-  /// Initialize notifications
 
   runApp(MyApp());
 }
@@ -140,9 +136,9 @@ class _ScaffoldPageState extends State<ScaffoldPage> {
           Map<String, double>? distribution;
           Map<String, double>? targetDistribution;
 
-          if (day.intake.containsKey('protein') &&
-              day.intake.containsKey('carbs') &&
-              day.intake.containsKey('fats')) {
+          if ((day.intake['protein'] ?? 0.0) > 0.0 &&
+              (day.intake['carbs'] ?? 0.0) > 0.0 &&
+              (day.intake['fats'] ?? 0.0) > 0.0) {
             final double total = day.intake['protein']! * 4.0 +
                 day.intake['carbs']! * 4.0 +
                 day.intake['fats']! * 9.0;

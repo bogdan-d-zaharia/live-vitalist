@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'aliment.dart';
-import 'aliment_editor.dart';
+import 'aliment_bank_editor.dart';
+import 'aliment_editor/aliment_editor.dart';
 import 'custom_card.dart';
 import 'day.dart';
 import 'notification_handler.dart';
@@ -149,20 +150,14 @@ class _MealEditorState extends State<MealEditor> {
             },
             onTap: () async {
               if (aliment is InstancedAliment) {
-                await AlimentEditor.editInstancedAliment(aliment, context);
+                await AlimentEditor.editInstance(aliment, context);
               } else if (aliment is TemporaryAliment) {
-                await AlimentEditor.editTemporaryAliment(aliment, context);
+                await AlimentEditor.editAliment(aliment, context);
               }
               setState(() {});
             },
-            onLongPress: () =>
-                AlimentEditor.editAliment(aliment.getAliment, context).then(
-              (value) {
-                setState(() {
-                  AlimentBank.save();
-                });
-              },
-            ),
+            onLongPress: () => AlimentEditor.editAliment(aliment, context)
+                .then((_) => setState(() {})),
           ),
         )
         .toList();
@@ -173,7 +168,7 @@ class _MealEditorState extends State<MealEditor> {
       onTap: () async {
         final InstancedAliment newAliment =
             InstancedAliment(alimentID: '', servingSize: 1.0);
-        await AlimentEditor.editInstancedAliment(newAliment, context);
+        await AlimentEditor.editInstance(newAliment, context);
         if (AlimentBank.aliments.keys.contains(newAliment.alimentID)) {
           widget.aliments.add(newAliment);
         }
@@ -190,7 +185,7 @@ class _MealEditorState extends State<MealEditor> {
             alimentData:
                 AlimentData(name: 'Temporary aliment', referenceSize: 1.0),
             servingSize: 1.0);
-        if (await AlimentEditor.editTemporaryAliment(newAliment, context)) {
+        if (await AlimentEditor.editAliment(newAliment, context)) {
           widget.aliments.add(newAliment);
         }
         setState(() {});

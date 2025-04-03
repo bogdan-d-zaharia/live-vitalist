@@ -21,24 +21,12 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
   int category = 0;
   bool isSmartHide = true;
 
-  List<String> getTags(String key) {
-    final List<dynamic> protoTags = NutrientsHandler.model[key]!['tags'] ?? [];
-    return protoTags.map((e) => e as String).toList();
-  }
-
   bool isStarred(String key) {
-    return getTags(key).contains('starred');
+    return NutrientsHandler.hasTag(key, 'starred');
   }
 
-  List<Widget> tagsToWidgets(List<String> tags) {
-    final List<Widget> result = [];
-
-    if (tags.contains('starred')) {
-      result.add(Icon(Icons.star_rounded));
-    }
-
-    return result;
-  }
+  //TODO: Perhaps Above lower limit right before above upper limit,
+  // so that above upper limit is kept at the end.
 
   /// **Categories:**
   ///
@@ -82,13 +70,13 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
     final Day day = Day.sumDays(widget.days);
     final int numDays = widget.days.length;
     List<String> keys = NutrientsHandler.model.keys
-        .where((key) => !getTags(key).contains('disabled'))
+        .where((key) => !NutrientsHandler.hasTag(key, 'disabled'))
         .toList();
 
     /// #region //* SORTING and FILETERING *//
 
     void sortAscending() {
-      /// TODO: Perhaps make something like (ALREADY IN week_calendar `getRatio`)
+      /// TODO: Perhaps make something like (ALREADY IN NutrientsHandler `getRatio`)
       /// [0.0, lower]    -> [-1.0, 0.0]
       /// [lower, upper]  -> [0.0, 1.0]
       /// [0.0, upper]    -> [0.0, 1.0]
@@ -330,7 +318,9 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
                 amount: intake,
                 lowerLimit: lower,
                 upperLimit: upper,
-                icon: tagsToWidgets(getTags(key)).firstOrNull,
+                icon: NutrientsHandler.tagsToWidgets(
+                        NutrientsHandler.getTags(key))
+                    .firstOrNull,
               ),
             ),
           ),
@@ -764,25 +754,13 @@ class NutrientBar extends StatelessWidget {
   }
 
   Widget _var2_5() {
-    var x = label.indexOf('(');
-    x = x != -1 ? x : label.length;
-
-    final label1 = label.substring(0, x);
-    final label2 = label.substring(x);
-
     return Column(
       children: [
         Row(
           children: [
+            ...NutrientsHandler.widMajorMinorLabels(label),
             if (icon != null) icon!,
             if (icon != null) SizedBox(width: 4.0),
-            Text(label1, style: TextStyle(letterSpacing: -0.0)),
-            Text(label2,
-                style: TextStyle(
-                  letterSpacing: -0.0,
-                  color: Colors.grey,
-                  fontSize: 12.0,
-                )),
             Spacer(),
             Center(
               child: Text('${amount.toStringAsFixed(2)} $unit',
