@@ -3,6 +3,38 @@ import 'package:flutter_code_editor/flutter_code_editor.dart';
 import 'package:highlight/languages/json.dart';
 import 'package:flutter_highlight/themes/arta.dart';
 
+//TODO: I don't yet need it but it can be an upgrade.
+// class StringField {
+//   StringField({
+//     required this.string,
+//     required this.label,
+//   });
+
+//   String string;
+//   String label;
+// }
+
+// class FieldsInput extends StatefulWidget {
+//   const FieldsInput({
+//     required this.stringFields,
+//     super.key,
+//   });
+
+//   final List<StringField> stringFields;
+
+//   @override
+//   State<FieldsInput> createState() => _FieldsInputState();
+// }
+
+// class _FieldsInputState extends State<FieldsInput> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return TextField(
+//       style: Theme.of(context).textTheme.bodyMedium,
+//     );
+//   }
+// }
+
 class StringInput extends StatefulWidget {
   final String? hint;
   final String? initString;

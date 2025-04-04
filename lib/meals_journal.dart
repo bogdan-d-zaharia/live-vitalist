@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'aliment.dart';
-import 'aliment_bank_editor.dart';
 import 'aliment_editor/aliment_editor.dart';
 import 'custom_card.dart';
 import 'day.dart';

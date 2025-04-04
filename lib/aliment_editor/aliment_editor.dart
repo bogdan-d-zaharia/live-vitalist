@@ -17,17 +17,23 @@ import 'instance_editor.dart';
 abstract final class AlimentEditor {
   static Future<bool> editInstance(
       InstancedAliment aliment, BuildContext context) async {
-    await Navigator.push(
+    final (bool isModified, bool isAlimentModified) = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => InstanceEditor(aliment: aliment),
       ),
     );
 
-    AlimentBank.save();
+    if (isModified) {
+      if (isAlimentModified) {
+        AlimentBank.moveToFront(aliment.alimentID);
+      }
 
-    //TODO: Actually check for edits.
-    return true;
+      /* The amount or the unit might still have been modified. */
+      AlimentBank.save();
+    }
+
+    return isModified;
   }
 
   static Future<bool> editAliment(Aliment aliment, BuildContext context) async {

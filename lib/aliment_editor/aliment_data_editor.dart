@@ -229,7 +229,9 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Temporary Aliment Editor'),
+          title: Text((widget.aliment is InstancedAliment)
+              ? 'Aliment Editor'
+              : 'Temporary Aliment Editor'),
           actions: [
             Container(
               /* 50.0 by default. */

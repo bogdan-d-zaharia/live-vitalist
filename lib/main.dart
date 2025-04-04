@@ -101,7 +101,7 @@ class _ScaffoldPageState extends State<ScaffoldPage> {
     for (final int mYear in yearMonthDays.keys.toList()..sort()) {
       for (final int mMonth in yearMonthDays[mYear]!.keys.toList()..sort()) {
         final List<int> mDays = yearMonthDays[mYear]![mMonth]!..sort();
-
+        //TODO: Also add visual feedback to the calendar.
         //TODO: Right now, for:
         // ....###........#..###..
         // We get:

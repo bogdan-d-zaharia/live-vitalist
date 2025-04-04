@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'file_handler.dart';
 import 'models/reference_fields_model.dart';
 
@@ -125,6 +127,7 @@ class InstancedAliment extends Aliment {
 /// This class stores, saves and loads the defined aliments.
 abstract final class AlimentBank {
   static Map<String, AlimentData> aliments = {};
+  static Queue<String> mruIDs = Queue<String>();
 
   static AlimentData getAliment(String alimentID) {
     final AlimentData? aliment = AlimentBank.aliments[alimentID];
@@ -132,16 +135,38 @@ abstract final class AlimentBank {
     return aliment;
   }
 
+  static void moveToFront(String alimentID) {
+    if (!aliments.containsKey(alimentID)) return;
+
+    mruIDs.remove(alimentID); /* Remove if existing. */
+    mruIDs.addFirst(alimentID);
+  }
+
+  static List<String> get sortedKeys {
+    return mruIDs.toList()
+      ..addAll(aliments.keys.where((id) => !mruIDs.contains(id)));
+  }
+
   static Map<String, dynamic> toJson() {
-    return aliments.map(
-      (id, aliment) => MapEntry(id, aliment.toJson()),
-    );
+    return {
+      'aliments': aliments.map((id, aliment) => MapEntry(id, aliment.toJson())),
+      'mruIDs': mruIDs.toList(),
+    };
   }
 
   static void fromJson(Map<String, dynamic> json) {
-    aliments = json.map(
-      (id, alimentJson) => MapEntry(id, AlimentData.fromJson(alimentJson)),
-    );
+    if (!json.containsKey('aliments')) {
+      aliments = json.map(
+          (id, alimentJson) => MapEntry(id, AlimentData.fromJson(alimentJson)));
+    } else {
+      aliments = (json['aliments'] as Map<String, dynamic>)
+          .map<String, AlimentData>((id, alimentJson) =>
+              MapEntry(id, AlimentData.fromJson(alimentJson)));
+    }
+
+    if (json.containsKey('mruIDs')) {
+      mruIDs = Queue<String>.from(json['mruIDs']);
+    }
   }
 
   /// [ IO_FUNCTION ]

@@ -15,6 +15,9 @@ class InstanceEditor extends StatefulWidget {
 }
 
 class _InstanceEditorState extends State<InstanceEditor> {
+  bool isAlimentModified = false;
+  bool isModified = false;
+
   String searchTerm = '';
 
   Widget _alimentSelector() {
@@ -29,7 +32,7 @@ class _InstanceEditorState extends State<InstanceEditor> {
         items:
 
             /// Filter for the search term.
-            AlimentBank.aliments.keys
+            AlimentBank.sortedKeys
 
                 /// TODO: Ideea e ca se actualizeaza cand iesi si intri in dropdown...
                 /// .where((element) => false)
@@ -67,6 +70,9 @@ class _InstanceEditorState extends State<InstanceEditor> {
         onChanged: (newID) {
           if (newID != null) {
             setState(() {
+              isModified = true;
+              isAlimentModified = true;
+
               widget.aliment.alimentID = newID;
 
               final AlimentData aliment = AlimentBank.getAliment(newID);
@@ -87,6 +93,7 @@ class _InstanceEditorState extends State<InstanceEditor> {
         setState(() {
           double? value = double.tryParse(p0);
           if (value != null) {
+            isModified = true;
             widget.aliment.servingSize = value;
           }
         });
@@ -115,6 +122,7 @@ class _InstanceEditorState extends State<InstanceEditor> {
         onChanged: (unit) {
           if (unit != null) {
             setState(() {
+              isModified = true;
               widget.aliment.unit = unit;
             });
           }
@@ -137,41 +145,48 @@ class _InstanceEditorState extends State<InstanceEditor> {
     //     .toList();
     // print(newKeys);
     final Widget? unitSelector = _unitSelector();
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Editor'),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 24.0),
-            child: SizedBox(
-              width: 32.0,
-              height: 32.0,
-              child: Material(
-                borderRadius: BorderRadius.circular(8.0),
-                clipBehavior: Clip.hardEdge,
-                color: Colors.lightGreen,
-                child: InkWell(
-                  splashColor: Colors.blue,
-                  highlightColor: Colors.blue,
-                  onTap: () => AlimentBankEditor.addNewAliment(context)
-                      .then((_) => setState(() {})),
-                  child: Icon(Icons.add_rounded, color: Colors.white),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        Navigator.pop(context, (isModified, isAlimentModified));
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Editor'),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 24.0),
+              child: SizedBox(
+                width: 32.0,
+                height: 32.0,
+                child: Material(
+                  borderRadius: BorderRadius.circular(8.0),
+                  clipBehavior: Clip.hardEdge,
+                  color: Colors.lightGreen,
+                  child: InkWell(
+                    splashColor: Colors.blue,
+                    highlightColor: Colors.blue,
+                    onTap: () => AlimentBankEditor.addNewAliment(context)
+                        .then((_) => setState(() {})),
+                    child: Icon(Icons.add_rounded, color: Colors.white),
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _alimentSelector(),
-              _inputServed(),
-              if (unitSelector != null) unitSelector,
-            ],
+          ],
+        ),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _alimentSelector(),
+                _inputServed(),
+                if (unitSelector != null) unitSelector,
+              ],
+            ),
           ),
         ),
       ),
