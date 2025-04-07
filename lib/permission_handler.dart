@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import 'file_handler.dart';
+
 class PermissionHandler {
   static Future<bool> requestPermission(Permission permission) async {
     if (await permission.isGranted) {
@@ -38,9 +40,13 @@ class PermissionHandler {
     final List<Permission> unsatisfiedPermissions = [];
 
     for (int i = 0; i < permissions.length; i++) {
-      if (await permissions[i].isDenied) {
-        unsatisfiedPermissions.add(permissions[i]);
-      }
+      final bool isDenied = await permissions[i].isDenied;
+      // if (isDenied) {
+      unsatisfiedPermissions.add(permissions[i]);
+      // }
+      // if (permissions[i] == Permission.manageExternalStorage && !isDenied) {
+      StorageHandler.isExternal = true;
+      // }
     }
 
     return unsatisfiedPermissions;
@@ -53,7 +59,8 @@ class PermissionHandler {
     final List<Permission> unsatisfiedPermissions =
         await getUnsatisfiedPermissions(permissions);
 
-    if (context.mounted && unsatisfiedPermissions.isNotEmpty) {
+    final bool isMounted = context.mounted;
+    if (isMounted && unsatisfiedPermissions.isNotEmpty) {
       await Navigator.push(
         context,
         MaterialPageRoute(

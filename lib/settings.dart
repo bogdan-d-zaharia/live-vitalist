@@ -4,7 +4,7 @@ import 'file_handler.dart';
 abstract final class SettingsData {
   static bool isMonthDay = false;
 
-  static Map<String, dynamic>? toJson() {
+  static Map<String, dynamic> toJson() {
     return {
       'isMonthDay': isMonthDay,
     };
@@ -15,19 +15,13 @@ abstract final class SettingsData {
   }
 
   /// [ IO_FUNCTION ]
-  ///
-  /// `intl.DateFormat('d_M_y').format(date)` is used internally,
-  /// as such, hours, minutes, seconds etc. don't matter.
   static Future<void> save() async {
-    return FileHandler.saveJson(toJson()!, name: 'settings');
+    return StorageHandler.saveJson('settings', toJson());
   }
 
   /// [ IO_FUNCTION ]
-  ///
-  /// `intl.DateFormat('d_M_y').format(date)` is used internally,
-  /// as such, hours, minutes, seconds etc. don't matter.
-  static Future<void> load(DateTime date) async {
-    await FileHandler.loadJson(date: date).then((json) {
+  static Future<void> load() async {
+    await StorageHandler.loadJson('settings').then((json) {
       fromJson(json);
     });
   }

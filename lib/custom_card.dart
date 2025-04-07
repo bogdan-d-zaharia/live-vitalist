@@ -44,6 +44,8 @@ class CustomCard extends StatelessWidget {
     this.isClosable = false,
     this.headerSpace = 12.0,
     this.action,
+    this.onTap,
+    this.onLongTap,
     this.child,
   });
 
@@ -60,47 +62,60 @@ class CustomCard extends StatelessWidget {
   ///
   /// It does not add the `SizedBox` when 0.0.
   final double headerSpace;
+  final void Function()? onTap;
+  final void Function()? onLongTap;
   final Widget? child;
 
   @override
   Widget build(BuildContext context) {
+    final Widget interior = Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 25.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              if (logo != null) logo!,
+              if (logo != null) const SizedBox(width: 8.0),
+              if (title != null)
+                Text(
+                  title!,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              const Spacer(),
+              if (isClosable) CloseButton(onTap: () {}),
+              if (!isClosable && highlightText != null)
+                InkWell(
+                  onTap: onHighlightTap,
+                  child: Text(
+                    highlightText!,
+                    style: Palette.highlight,
+                  ),
+                ),
+              if (action != null) action!,
+            ],
+          ),
+          if (headerSpace != 0.0) SizedBox(height: headerSpace),
+          if (child != null) child!,
+        ],
+      ),
+    );
+
+    final bool useInkWell = onTap != null || onLongTap != null;
+
     return Card(
+      clipBehavior: Clip.hardEdge,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(24.0),
       ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 25.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                if (logo != null) logo!,
-                if (logo != null) const SizedBox(width: 8.0),
-                if (title != null)
-                  Text(
-                    title!,
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                const Spacer(),
-                if (isClosable) CloseButton(onTap: () {}),
-                if (!isClosable && highlightText != null)
-                  InkWell(
-                    onTap: onHighlightTap,
-                    child: Text(
-                      highlightText!,
-                      style: Palette.highlight,
-                    ),
-                  ),
-                if (action != null) action!,
-              ],
+      child: !useInkWell
+          ? interior
+          : InkWell(
+              onTap: onTap,
+              onLongPress: onLongTap,
+              child: interior,
             ),
-            if (headerSpace != 0.0) SizedBox(height: headerSpace),
-            if (child != null) child!,
-          ],
-        ),
-      ),
     );
   }
 }

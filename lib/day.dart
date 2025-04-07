@@ -1,5 +1,6 @@
 import 'aliment.dart';
 import 'file_handler.dart';
+import 'package:intl/intl.dart' as intl;
 
 class Day {
   /// Creates an empty day.
@@ -67,19 +68,21 @@ class Day {
 
   /// [ IO_FUNCTION ]
   ///
-  /// `intl.DateFormat('d_M_y').format(date)` is used internally,
+  /// `intl.DateFormat('d_M_y').format(date)` is used,
   /// as such, hours, minutes, seconds etc. don't matter.
   Future<void> save(DateTime date) async {
     _cachedIntake = sumFields([...breakfast, ...lunch, ...dinner]);
-    return FileHandler.saveJson(toJson(), date: date);
+    final fileName = intl.DateFormat('d_M_y').format(date);
+    return FileHandler.saveJson(fileName, toJson());
   }
 
   /// [ IO_FUNCTION ]
   ///
-  /// `intl.DateFormat('d_M_y').format(date)` is used internally,
+  /// `intl.DateFormat('d_M_y').format(date)` is used,
   /// as such, hours, minutes, seconds etc. don't matter.
   Future<void> load(DateTime date) async {
-    await FileHandler.loadJson(date: date).then((json) {
+    final fileName = intl.DateFormat('d_M_y').format(date);
+    await FileHandler.loadJson(fileName).then((json) {
       fromJson(json);
     });
   }

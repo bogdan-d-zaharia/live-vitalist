@@ -171,12 +171,12 @@ abstract final class AlimentBank {
 
   /// [ IO_FUNCTION ]
   static Future<void> save() async {
-    return FileHandler.saveJsonAndBackup(toJson(), name: 'alimentBank');
+    return StorageHandler.saveJson('alimentBank', toJson(), doBackup: true);
   }
 
   /// [ IO_FUNCTION ]
   static Future<void> load() async {
-    return FileHandler.loadJson(name: 'alimentBank').then((json) {
+    return FileHandler.loadJson('alimentBank').then((json) {
       fromJson(json);
     });
   }

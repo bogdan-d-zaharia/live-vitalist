@@ -387,12 +387,12 @@ abstract final class NutrientsHandler {
   }
 
   static Future<void> save() async {
-    return FileHandler.saveJsonAndBackup(toJson(), name: 'nutrients');
+    return StorageHandler.saveJson('nutrients', toJson(), doBackup: true);
   }
 
   static Future<void> load() async {
     try {
-      final json = await FileHandler.loadJson(name: 'nutrients');
+      final json = await StorageHandler.loadJson('nutrients');
       if (json.isNotEmpty) fromJson(json);
     } catch (e) {
       //  ignore: empty_catches
