@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_code_editor/flutter_code_editor.dart';
 import 'package:highlight/languages/json.dart';
 import 'package:flutter_highlight/themes/arta.dart';
+
+import 'custom_card.dart';
 
 //TODO: I don't yet need it but it can be an upgrade.
 // class StringField {
@@ -14,26 +18,102 @@ import 'package:flutter_highlight/themes/arta.dart';
 //   String label;
 // }
 
-// class FieldsInput extends StatefulWidget {
-//   const FieldsInput({
-//     required this.stringFields,
-//     super.key,
-//   });
+class FieldsInput extends StatefulWidget {
+  const FieldsInput({
+    required this.fields,
+    super.key,
+  });
 
-//   final List<StringField> stringFields;
+  final Map<String, dynamic> fields;
 
-//   @override
-//   State<FieldsInput> createState() => _FieldsInputState();
-// }
+  @override
+  State<FieldsInput> createState() => _FieldsInputState();
+}
 
-// class _FieldsInputState extends State<FieldsInput> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return TextField(
-//       style: Theme.of(context).textTheme.bodyMedium,
-//     );
-//   }
-// }
+class _FieldsInputState extends State<FieldsInput> {
+  bool isModified = false;
+
+  late List<TextEditingController> controllers;
+  late List<TextInputType?> keyboardTypes;
+
+  String strAtIndex(int i) {
+    return widget.fields[widget.fields.keys.elementAt(i)].toString();
+  }
+
+  void setAtIndex(int i, dynamic val) {
+    widget.fields[widget.fields.keys.elementAt(i)] = val;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    controllers = widget.fields.values
+        .map((e) => TextEditingController(text: e?.toString() ?? ''))
+        .toList();
+    keyboardTypes = widget.fields.values
+        .map((e) =>
+            e is String ? null : TextInputType.numberWithOptions(decimal: true))
+        .toList();
+  }
+
+  @override
+  void dispose() {
+    for (final controller in controllers) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        Navigator.pop(context, isModified);
+      },
+      child: Card(
+        margin: EdgeInsets.all(12.0),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: List.generate(
+              widget.fields.length,
+              (i) => Row(
+                children: [
+                  SizedBox(
+                    width: 100.0,
+                    child: Text(widget.fields.keys.elementAt(i)),
+                  ),
+                  Expanded(
+                    child: TextField(
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      controller: controllers[i],
+                      textInputAction: i < widget.fields.length - 1
+                          ? TextInputAction.next
+                          : TextInputAction.done,
+                      onSubmitted: (newString) {
+                        if (strAtIndex(i) == newString) return;
+
+                        isModified = true;
+                        late dynamic val = keyboardTypes[i] == null
+                            ? (newString != '' ? newString : null)
+                            : double.tryParse(newString);
+                        setAtIndex(i, val);
+                      },
+                      keyboardType: keyboardTypes[i],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class StringInput extends StatefulWidget {
   final String? hint;
@@ -140,6 +220,122 @@ class _MultilineStringInputState extends State<MultilineStringInput> {
         border: OutlineInputBorder(),
       ),
       onChanged: widget.update,
+    );
+  }
+}
+
+class BetterJsonEditor extends StatefulWidget {
+  const BetterJsonEditor({
+    required this.json,
+    super.key,
+  });
+
+  final Map<String, dynamic> json;
+
+  @override
+  State<BetterJsonEditor> createState() => _BetterJsonEditorState();
+}
+
+class _BetterJsonEditorState extends State<BetterJsonEditor> {
+  late CodeController controller;
+  late String originalText;
+
+  @override
+  void initState() {
+    super.initState();
+    originalText = JsonEncoder.withIndent('  ').convert(widget.json);
+    controller = CodeController(language: json, text: originalText);
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            height: 400.0,
+            clipBehavior: Clip.hardEdge,
+            decoration: BoxDecoration(
+              color: artaTheme['root']!.backgroundColor,
+              borderRadius: BorderRadius.circular(24.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.8),
+                  blurRadius: 6.0,
+                  offset: Offset(0.0, 2.0),
+                )
+              ],
+            ),
+            child: CodeTheme(
+              data: CodeThemeData(styles: artaTheme),
+              child: SingleChildScrollView(
+                child: CodeField(
+                  controller: controller,
+                  textStyle: TextStyle(fontSize: 13.5),
+                  gutterStyle: GutterStyle(
+                    showLineNumbers: false,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 12.0),
+          Row(
+            children: [
+              ElevatedButton.icon(
+                icon: Icon(Icons.restore),
+                label: Text('restore'),
+                onPressed: () => setState(() => controller.text = originalText),
+              ),
+              Spacer(),
+              ElevatedButton.icon(
+                icon: Icon(Icons.edit_rounded),
+                label: Text('save'),
+                onPressed: () {
+                  if (controller.text == originalText) {
+                    return Navigator.pop(context, false);
+                  }
+
+                  try {
+                    final Map<String, Map<String, dynamic>> newJson =
+                        jsonDecode(controller.fullText)
+                            .map<String, Map<String, dynamic>>((key, value) =>
+                                MapEntry(key as String,
+                                    value as Map<String, dynamic>));
+                    widget.json.clear();
+                    widget.json.addAll(newJson);
+
+                    Navigator.pop(context, true);
+                    // ignore: empty_catches
+                  } catch (e) {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Dialog(
+                          backgroundColor: Colors.transparent,
+                          child: CustomCard(
+                            headerSpace: 0.0,
+                            child: Text(
+                                '${e.toString()}\n\n\n${widget.json.runtimeType}'),
+                          ),
+                        );
+                      },
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

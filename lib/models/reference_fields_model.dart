@@ -471,18 +471,19 @@ abstract final class NutrientsHandler {
 
   //TODO: Imported material for this alone.
   // Perhaps move, if it's not this function's place.
-  static List<Widget> widMajorMinorLabels(String label) {
+  static List<Widget> widMajorMinorLabels(String label, {TextStyle? style}) {
+    style ??= TextStyle(letterSpacing: -0.0);
+
     var x = label.indexOf('(');
     x = x != -1 ? x : label.length;
 
     final label1 = label.substring(0, x);
     final label2 = label.substring(x);
     return [
-      Text(label1, style: TextStyle(letterSpacing: -0.0)),
+      Text(label1, style: style),
       Text(
         label2,
-        style: TextStyle(
-          letterSpacing: -0.0,
+        style: style.copyWith(
           color: Colors.grey,
           fontSize: 12.0,
         ),
