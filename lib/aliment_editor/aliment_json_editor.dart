@@ -17,7 +17,7 @@ class AlimentJsonEditor extends StatelessWidget {
     final Map<String, double?> expandedFields =
         NutrientsHandler.model.map((key, value) => MapEntry(key, null));
 
-    for (var entry in alimentJson['referenceFields'].entries) {
+    for (var entry in alimentJson['referenceFields']?.entries ?? {}) {
       expandedFields[entry.key] = entry.value;
     }
 

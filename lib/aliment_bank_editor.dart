@@ -115,13 +115,19 @@ class _AlimentBankEditorState extends State<AlimentBankEditor> {
       (id) {
         //TODO: Did a little wizzardry.
         final aliment = InstancedAliment(alimentID: id, servingSize: 0.0);
-        return InkWell(
-          onTap: () => AlimentEditor.editAliment(aliment, context)
-              .then((_) => setState(() {})),
-          onLongPress: () => deleteAtId(id),
-          child: CustomCard(
-            headerSpace: 0.0,
-            child: Text(aliment.getAliment.name),
+
+        return Card(
+          child: InkWell(
+            onTap: () => AlimentEditor.editAliment(aliment, context)
+                .then((_) => setState(() {})),
+            onLongPress: () => deleteAtId(id),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 12.0,
+                vertical: 20.0,
+              ),
+              child: Text(aliment.getAliment.name),
+            ),
           ),
         );
       },
@@ -130,8 +136,11 @@ class _AlimentBankEditorState extends State<AlimentBankEditor> {
       appBar: AppBar(
         title: Text('Aliment Table Editor'),
       ),
-      body: ListView(
-        children: elements,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView(
+          children: elements,
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => AlimentBankEditor.addNewAliment(context)
