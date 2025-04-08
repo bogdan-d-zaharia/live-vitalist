@@ -1,65 +1,63 @@
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
-import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart'; // new
+import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
 
 import 'env.dart';
+import 'file_handler.dart';
 import 'home_screen.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});
+
+  //TODO: isGuest is not persistent.
+  // onGuest is not called every time entering the app. Save it and load it.
+  static bool isGuest = false;
+
+  void onGuest() {
+    isGuest = true;
+  }
+
+  void onGoogle() {
+    StorageHandler.isFirebase = true;
+  }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
+        if (!snapshot.hasData && !isGuest) {
           return SignInScreen(
             providers: [
-              // EmailAuthProvider(),
               GoogleProvider(clientId: Env.firebaseGoogleWebClientId),
             ],
-            // headerBuilder: (context, constraints, shrinkOffset) {
-            //   return Padding(
-            //     padding: const EdgeInsets.all(20),
-            //     child: AspectRatio(
-            //       aspectRatio: 1,
-            //       child: Image.asset('flutterfire_300x.png'),
-            //     ),
-            //   );
-            // },
-            subtitleBuilder: (context, action) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: action == AuthAction.signIn
-                    ? const Text('Welcome to FlutterFire, please sign in!')
-                    : const Text('Welcome to Flutterfire, please sign up!'),
-              );
-            },
+            showAuthActionSwitch: false,
             footerBuilder: (context, action) {
-              return const Padding(
-                padding: EdgeInsets.only(top: 16),
-                child: Text(
-                  'By signing in, you agree to our terms and conditions.',
-                  style: TextStyle(color: Colors.grey),
+              return Padding(
+                padding: const EdgeInsets.only(top: 24.0),
+                child: Column(
+                  children: [
+                    const Text("Or continue without signing in:"),
+                    const SizedBox(height: 12),
+                    ElevatedButton.icon(
+                      icon: const Icon(Icons.person_outline),
+                      label: const Text("Continue as Guest"),
+                      onPressed: () async {
+                        onGuest();
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (_) => const HomeScreen()),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               );
             },
-            // sideBuilder: (context, shrinkOffset) {
-            //   return Padding(
-            //     padding: const EdgeInsets.all(20),
-            //     child: AspectRatio(
-            //       aspectRatio: 1,
-            //       child: Image.asset('flutterfire_300x.png'),
-            //     ),
-            //   );
-            // },
           );
         }
 
-        // StorageHandler.isFirebase = true;
-
+        onGoogle();
         return const HomeScreen();
       },
     );

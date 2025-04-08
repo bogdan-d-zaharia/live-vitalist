@@ -41,12 +41,12 @@ class PermissionHandler {
 
     for (int i = 0; i < permissions.length; i++) {
       final bool isDenied = await permissions[i].isDenied;
-      // if (isDenied) {
-      unsatisfiedPermissions.add(permissions[i]);
-      // }
-      // if (permissions[i] == Permission.manageExternalStorage && !isDenied) {
-      StorageHandler.isExternal = true;
-      // }
+      if (isDenied) {
+        unsatisfiedPermissions.add(permissions[i]);
+      }
+      if (permissions[i] == Permission.manageExternalStorage && !isDenied) {
+        StorageHandler.isExternal = true;
+      }
     }
 
     return unsatisfiedPermissions;
@@ -59,8 +59,7 @@ class PermissionHandler {
     final List<Permission> unsatisfiedPermissions =
         await getUnsatisfiedPermissions(permissions);
 
-    final bool isMounted = context.mounted;
-    if (isMounted && unsatisfiedPermissions.isNotEmpty) {
+    if (context.mounted && unsatisfiedPermissions.isNotEmpty) {
       await Navigator.push(
         context,
         MaterialPageRoute(

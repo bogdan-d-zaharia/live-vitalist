@@ -392,7 +392,7 @@ abstract final class NutrientsHandler {
 
   static Future<void> load() async {
     try {
-      final json = await StorageHandler.loadJson('nutrients');
+      final json = await StorageHandler.loadJson('nutrients') ?? {};
       if (json.isNotEmpty) fromJson(json);
     } catch (e) {
       //  ignore: empty_catches

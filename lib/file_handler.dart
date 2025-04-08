@@ -5,37 +5,64 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:path_provider/path_provider.dart';
 
+///     LOAD                    : local || DOWNLOAD
+///     SAVE                    : local && SYNC
+///
+///     DOWNLOAD  [INTERNET]    : local = cloud
+///     - used to download old information
+///       or after reinstalling.
+///
+///     SYNC      [INTERNET]    : cloud = local
+///     - used to upload to cloud after no internet
+///       or after creating an account.
+///
 abstract final class StorageHandler {
   static bool isFirebase = false;
-  static bool isExternal = true;
+  static bool isExternal = false;
 
   static Future<void> saveJson(String path, Map<String, dynamic> json,
       {bool doBackup = false}) async {
-    final Map<String, dynamic>? old =
-        doBackup ? await StorageHandler.loadJson(path) : null;
-
-    if (!isFirebase || !(await FirebaseHandler.saveJson(path, json))) {
+    if (!doBackup) {
       await FileHandler.saveJson(path, json);
+    } else {
+      await FileHandler.saveJsonAndBackup(path, json);
     }
-
-    /* Save a backup locally. */
-    if (doBackup) FileHandler.saveJson('${path}_backup', old!);
-  }
-
-  static Future<Map<String, dynamic>> loadJson(String path) async {
-    Map<String, dynamic>? json;
 
     if (isFirebase) {
-      json = await FirebaseHandler.loadJson(path);
-      if (json != null) {
-        return json;
+      FirebaseHandler.saveJson(path, json);
+    }
+  }
+
+  /// Check `StorageHandler` doc.
+  static Future<Map<String, dynamic>?> loadJson(String path) async {
+    Map<String, dynamic>? fileJson = await FileHandler.loadJson(path);
+    if (fileJson != null) return fileJson;
+
+    Map<String, dynamic>? firebaseJson = await FirebaseHandler.loadJson(path);
+    if (firebaseJson != null) {
+      bool isADayDataThatIsOlderThanAWeek = false;
+
+      final List<String> x = path.split('_');
+      if (x.length >= 3) {
+        final int? day = int.tryParse(x[0]);
+        final int? month = int.tryParse(x[1]);
+        final int? year = int.tryParse(x[2]);
+
+        if (day != null && month != null && year != null) {
+          isADayDataThatIsOlderThanAWeek =
+              DateTime.now().difference(DateTime(year, month, day)) >
+                  Duration(days: 7);
+        }
       }
+
+      if (!isADayDataThatIsOlderThanAWeek) {
+        FileHandler.saveJson(path, firebaseJson);
+      }
+
+      return firebaseJson;
     }
 
-    /* (!isFirebase || json == null) */
-    json = await FileHandler.loadJson(path);
-
-    return json;
+    return null;
   }
 }
 
@@ -50,7 +77,7 @@ abstract final class FileHandler {
 
     /// final downloadsPath = (await DownloadsPath.downloadsDirectory())!.path;
     /// final downloadsPath = 'C:/users/bogda/desktop';
-    final filePath = '$downloadsPath/MicroHealth_0_0_7/$path';
+    final filePath = '$downloadsPath/MicroHealth_0_0_7/$path.json';
 
     final file = File(filePath);
 
@@ -82,14 +109,14 @@ abstract final class FileHandler {
     await FileHandler.saveJson(path, json);
     final delta = await FileHandler.deltaFile(path, '${path}_backup');
     if (delta == null || delta.inDays >= 1) {
-      await FileHandler.saveJson('${path}_backup', old);
+      await FileHandler.saveJson('${path}_backup', old ?? {});
     }
   }
 
-  static Future<Map<String, dynamic>> loadJson(String path) async {
+  static Future<Map<String, dynamic>?> loadJson(String path) async {
     final File? file = await _getFile(path, doCreate: false);
-    final String str = (await file?.readAsString()) ?? '{}';
-    return jsonDecode(str);
+    final String? str = (await file?.readAsString());
+    return str != null ? jsonDecode(str) : null;
   }
 
   static Future<Duration?> deltaFile(String filename1, String filename2) async {
@@ -113,6 +140,8 @@ abstract final class FirebaseHandler {
   }
 
   static Future<Map<String, dynamic>?> loadJson(String path) async {
+    if (!StorageHandler.isFirebase) return null;
+
     final user = FirebaseAuth.instance.currentUser;
     final uid = user?.uid;
     final db = FirebaseDatabase.instance.ref();
@@ -120,7 +149,9 @@ abstract final class FirebaseHandler {
     final snapshot = await db.child('users/$uid/$path').get();
 
     if (snapshot.exists) {
-      return snapshot.value as Map<String, dynamic>;
+      return (snapshot.value as Map).map<String, dynamic>(
+        (key, value) => MapEntry(key as String, value),
+      );
     }
 
     return null;

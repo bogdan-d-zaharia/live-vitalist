@@ -73,7 +73,7 @@ class Day {
   Future<void> save(DateTime date) async {
     _cachedIntake = sumFields([...breakfast, ...lunch, ...dinner]);
     final fileName = intl.DateFormat('d_M_y').format(date);
-    return FileHandler.saveJson(fileName, toJson());
+    return StorageHandler.saveJson(fileName, toJson());
   }
 
   /// [ IO_FUNCTION ]
@@ -82,8 +82,8 @@ class Day {
   /// as such, hours, minutes, seconds etc. don't matter.
   Future<void> load(DateTime date) async {
     final fileName = intl.DateFormat('d_M_y').format(date);
-    await FileHandler.loadJson(fileName).then((json) {
-      fromJson(json);
+    await StorageHandler.loadJson(fileName).then((json) {
+      fromJson(json ?? {});
     });
   }
 

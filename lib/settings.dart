@@ -22,7 +22,7 @@ abstract final class SettingsData {
   /// [ IO_FUNCTION ]
   static Future<void> load() async {
     await StorageHandler.loadJson('settings').then((json) {
-      fromJson(json);
+      fromJson(json ?? {});
     });
   }
 }

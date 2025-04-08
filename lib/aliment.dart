@@ -177,7 +177,7 @@ abstract final class AlimentBank {
   /// [ IO_FUNCTION ]
   static Future<void> load() async {
     return FileHandler.loadJson('alimentBank').then((json) {
-      fromJson(json);
+      fromJson(json ?? {});
     });
   }
 }
