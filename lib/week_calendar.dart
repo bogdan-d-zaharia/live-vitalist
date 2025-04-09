@@ -57,11 +57,6 @@ class DottedLinePainter extends CustomPainter {
 
     for (double i = 0.0; i < size.width; i += dotDiameter + dotSpacing) {
       canvas.drawCircle(Offset(i, dotDiameter / 2.0), dotDiameter / 2.0, paint);
-
-      /// canvas.drawRect(
-      ///   Rect.fromLTWH(i, 0.0, dotDiameter, dotDiameter),
-      ///   paint,
-      /// );
     }
   }
 
@@ -70,43 +65,6 @@ class DottedLinePainter extends CustomPainter {
     return false;
   }
 }
-
-// class DottedLine extends StatelessWidget {
-//   const DottedLine({
-//     required this.dotDiameter,
-//     required this.dotSpacing,
-//     required this.color,
-//     super.key,
-//   });
-
-//   final double dotDiameter;
-//   final double dotSpacing;
-//   final Color color;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return SizedBox(
-//       height: 10.0,
-//       child: ListView.builder(
-//         controller: ,
-//         scrollDirection: Axis.horizontal,
-//         itemBuilder: (context, index) {
-//           if (index % 2 == 0) {
-//             return Container(
-//               width: dotDiameter,
-//               height: dotDiameter,
-//               // decoration: BoxDecoration(
-//               color: color,
-//               //   borderRadius: BorderRadius.circular(dotDiameter / 2.0),
-//               // ),
-//             );
-//           }
-//           return SizedBox(width: dotSpacing);
-//         },
-//       ),
-//     );
-//   }
-// }
 
 class WeekCalendar extends StatelessWidget {
   const WeekCalendar({
@@ -154,13 +112,7 @@ class WeekCalendar extends StatelessWidget {
                           date: date,
                           title: intl.DateFormat(
                                   SettingsData.isMonthDay ? 'M/d' : 'd/M')
-                              .format(date)
-
-                          // intl.DateFormat('EEE')
-                          //     // .format(day.add(Duration(days: index - 6)))
-                          //     .format(date)
-                          //     .toLowerCase(),
-                          ),
+                              .format(date)),
                     ),
                   ),
                 );

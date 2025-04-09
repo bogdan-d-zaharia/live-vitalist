@@ -410,19 +410,19 @@ abstract final class NutrientsHandler {
     // return outMin + ((value - inMin) * (outMax - outMin) / (inMax - inMin));
   }
 
-  /// TODO: Optimise.
-  /// [0.0, lower]    -> [0.0, 1.0]
-  /// [lower, upper]  -> 1.0
-  /// [lower, inf]    -> [1.0, inf]
-  /// [0.0, upper]    -> [0.0, 1.0]
-  /// [upper, inf]    -> [1.0, inf]
+  //TODO: Optimise.
+  ///     [0.0, lower]    -> [0.0, 1.0]
+  ///     [lower, upper]  -> 1.0
+  ///     [lower, inf]    -> [1.0, inf]
+  ///     [0.0, upper]    -> [0.0, 1.0]
+  ///     [upper, inf]    -> [1.0, inf]
   ///
-  /// ABS:
-  /// [0.0, lower]    -> [0.0, 1.0]
-  /// [lower, inf]    -> 1.0
-  /// [lower, upper]  -> 1.0
-  /// [0.0, upper]    -> 1.0, ( lower in [0.0, upper] )
-  /// [upper, inf]    -> [1.0, inf]
+  ///     ABS:
+  ///     [0.0, lower]    -> [0.0, 1.0]
+  ///     [lower, inf]    -> 1.0
+  ///     [lower, upper]  -> 1.0
+  ///     [0.0, upper]    -> 1.0, ( lower in [0.0, upper] )
+  ///     [upper, inf]    -> [1.0, inf]
   static double? getRatio(
       double? amount, double? lower, double? upper, bool abs) {
     if (amount == null || (lower == null && upper == null)) return null;

@@ -50,7 +50,6 @@ class _AlimentBankEditorState extends State<AlimentBankEditor> {
           child: CustomCard(
             headerSpace: 0.0,
             child: Column(
-              // mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
@@ -69,8 +68,7 @@ class _AlimentBankEditorState extends State<AlimentBankEditor> {
                         },
                         label: Text("Keep"),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              Colors.blue, // Red color for delete action
+                          backgroundColor: Colors.blue,
                           foregroundColor: Colors.white,
                           padding: EdgeInsets.symmetric(
                               horizontal: 16, vertical: 12),
@@ -91,8 +89,7 @@ class _AlimentBankEditorState extends State<AlimentBankEditor> {
                         icon: Icon(Icons.delete, color: Colors.white),
                         label: Text("Delete"),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              Colors.red, // Red color for delete action
+                          backgroundColor: Colors.red,
                           foregroundColor: Colors.white,
                           padding: EdgeInsets.symmetric(
                               horizontal: 16, vertical: 12),

@@ -6,6 +6,7 @@ import 'package:highlight/languages/json.dart';
 import 'package:flutter_highlight/themes/arta.dart';
 
 import 'custom_card.dart';
+import 'json_handler.dart';
 
 //TODO: I don't yet need it but it can be an upgrade.
 // class StringField {
@@ -224,26 +225,30 @@ class _MultilineStringInputState extends State<MultilineStringInput> {
   }
 }
 
-class BetterJsonEditor extends StatefulWidget {
-  const BetterJsonEditor({
+//TODO: Perhaps make it modify a dynamic,
+// so that it can be a list, a map of <dynamic, dynamic>, a primitive.
+class JsonEditor extends StatefulWidget {
+  const JsonEditor({
     required this.json,
+    this.trimNulls = false,
     super.key,
   });
 
   final Map<String, dynamic> json;
+  final bool trimNulls;
 
   @override
-  State<BetterJsonEditor> createState() => _BetterJsonEditorState();
+  State<JsonEditor> createState() => _JsonEditorState();
 }
 
-class _BetterJsonEditorState extends State<BetterJsonEditor> {
+class _JsonEditorState extends State<JsonEditor> {
   late CodeController controller;
   late String originalText;
 
   @override
   void initState() {
     super.initState();
-    originalText = JsonEncoder.withIndent('  ').convert(widget.json);
+    originalText = JsonHandler.decodeIndented(widget.json);
     controller = CodeController(language: json, text: originalText);
   }
 
@@ -305,16 +310,15 @@ class _BetterJsonEditorState extends State<BetterJsonEditor> {
                   }
 
                   try {
-                    final Map<String, Map<String, dynamic>> newJson =
-                        jsonDecode(controller.fullText)
-                            .map<String, Map<String, dynamic>>((key, value) =>
-                                MapEntry(key as String,
-                                    value as Map<String, dynamic>));
                     widget.json.clear();
-                    widget.json.addAll(newJson);
+                    widget.json.addAll(
+                      JsonHandler.processJson(
+                        jsonDecode(controller.fullText),
+                        removeNulls: true,
+                      ),
+                    );
 
                     Navigator.pop(context, true);
-                    // ignore: empty_catches
                   } catch (e) {
                     showDialog(
                       context: context,
@@ -336,92 +340,6 @@ class _BetterJsonEditorState extends State<BetterJsonEditor> {
           ),
         ],
       ),
-    );
-  }
-}
-
-/// update is actually onSave
-class JsonEditor extends StatefulWidget {
-  const JsonEditor({
-    required this.initString,
-    required this.update,
-    super.key,
-  });
-
-  final String initString;
-  final Function(String) update;
-
-  @override
-  State<JsonEditor> createState() => _JsonEditorState();
-}
-
-class _JsonEditorState extends State<JsonEditor> {
-  late CodeController controller;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = CodeController(
-      text: widget.initString,
-      language: json,
-    );
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          height: 400.0,
-          color: artaTheme['root']!.backgroundColor,
-          child: CodeTheme(
-            data: CodeThemeData(styles: artaTheme),
-            child: SingleChildScrollView(
-              child: CodeField(
-                controller: controller,
-                textStyle: TextStyle(fontSize: 13.5),
-                gutterStyle: GutterStyle(
-                  showLineNumbers: false,
-                  // width: 60.0,
-                  // textStyle: ,
-                  // margin: 0.0,
-                ),
-              ),
-            ),
-          ),
-        ),
-        Row(
-          children: [
-            InkWell(
-              onTap: () {
-                setState(() {
-                  controller.text = widget.initString;
-                });
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('cancel'),
-              ),
-            ),
-            Spacer(),
-            InkWell(
-              onTap: () {
-                widget.update(controller.fullText);
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('save'),
-              ),
-            ),
-          ],
-        ),
-      ],
     );
   }
 }

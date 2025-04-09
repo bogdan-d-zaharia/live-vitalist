@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'json_handler.dart';
+
 ///     LOAD                    : local || DOWNLOAD
 ///     SAVE                    : local && SYNC
 ///
@@ -28,6 +30,7 @@ abstract final class StorageHandler {
       await FileHandler.saveJsonAndBackup(path, json);
     }
 
+    /* SYNC */
     if (isFirebase) {
       FirebaseHandler.saveJson(path, json);
     }
@@ -35,10 +38,12 @@ abstract final class StorageHandler {
 
   /// Check `StorageHandler` doc.
   static Future<Map<String, dynamic>?> loadJson(String path) async {
-    Map<String, dynamic>? fileJson = await FileHandler.loadJson(path);
-    if (fileJson != null) return fileJson;
+    final Map<String, dynamic>? fileJson = await FileHandler.loadJson(path);
+    if (fileJson != null) return JsonHandler.convertIntsToDoubles(fileJson);
 
-    Map<String, dynamic>? firebaseJson = await FirebaseHandler.loadJson(path);
+    /* DOWNLOAD */
+    final Map<String, dynamic>? firebaseJson =
+        await FirebaseHandler.loadJson(path);
     if (firebaseJson != null) {
       bool isADayDataThatIsOlderThanAWeek = false;
 
@@ -59,7 +64,7 @@ abstract final class StorageHandler {
         FileHandler.saveJson(path, firebaseJson);
       }
 
-      return firebaseJson;
+      return JsonHandler.convertIntsToDoubles(firebaseJson);
     }
 
     return null;

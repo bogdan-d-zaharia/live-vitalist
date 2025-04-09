@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'json_handler.dart';
 import 'models/reference_fields_model.dart';
 import 'string_input.dart';
 
@@ -28,6 +29,9 @@ class _NutrientsEditorState extends State<NutrientsEditor> {
             ),
             child: IconButton(
                 onPressed: () async {
+                  final Map<String, dynamic> editable =
+                      Map.of(NutrientsHandler.model);
+
                   final bool b = await Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -35,14 +39,17 @@ class _NutrientsEditorState extends State<NutrientsEditor> {
                             appBar: AppBar(
                               title: Text('Nutrients Json Editor'),
                             ),
-                            body:
-                                BetterJsonEditor(json: NutrientsHandler.model),
+                            body: JsonEditor(json: editable),
                           ),
                         ),
                       ) ??
                       false;
 
                   if (b) {
+                    NutrientsHandler.model.clear();
+                    NutrientsHandler.model.addAll(editable.map((key, value) =>
+                        MapEntry(key, JsonHandler.processJson(value))));
+
                     setState(() {});
                   }
                 },
