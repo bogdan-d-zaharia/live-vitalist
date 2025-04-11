@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'auth_gate.dart';
+import 'file_handler.dart';
 import 'notification_handler.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'permission_handler.dart';
+import 'settings.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -10,6 +13,10 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await NotificationHandler.initialize();
+  await SettingsData.load();
+  if (await PermissionHandler.isExternalStorage()) {
+    StorageHandler.isExternal = true;
+  }
 
   runApp(MyApp());
 }

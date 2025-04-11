@@ -1,27 +1,37 @@
 import 'package:flutter/material.dart';
+
+import 'aliment.dart';
+import 'auth_gate.dart';
+import 'cache_handler.dart';
+import 'custom_card.dart';
 import 'file_handler.dart';
+import 'models/reference_fields_model.dart';
+import 'permission_handler.dart';
 
 abstract final class SettingsData {
   static bool isMonthDay = false;
+  static bool isLoggedIn = false;
 
   static Map<String, dynamic> toJson() {
     return {
       'isMonthDay': isMonthDay,
+      'isLoggedIn': isLoggedIn,
     };
   }
 
   static void fromJson(Map<String, dynamic> json) {
     if (json.containsKey('isMonthDay')) isMonthDay = json['isMonthDay'];
+    if (json.containsKey('isLoggedIn')) isLoggedIn = json['isLoggedIn'];
   }
 
   /// [ IO_FUNCTION ]
   static Future<void> save() async {
-    return StorageHandler.saveJson('settings', toJson());
+    return FileHandler.saveJson('settings', toJson());
   }
 
   /// [ IO_FUNCTION ]
   static Future<void> load() async {
-    await StorageHandler.loadJson('settings').then((json) {
+    await FileHandler.loadJson('settings').then((json) {
       fromJson(json ?? {});
     });
   }
@@ -41,21 +51,81 @@ class _SettingsState extends State<Settings> {
       appBar: AppBar(
         title: Text('Settings'),
       ),
-      body: Center(
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView(
           children: [
-            Checkbox(
-              value: SettingsData.isMonthDay,
-              onChanged: (value) {
-                if (value != null) {
-                  setState(() {
-                    SettingsData.isMonthDay = value;
-                  });
-                }
-              },
+            if (!StorageHandler.isFirebase)
+              CustomCard(
+                logo: Icon(Icons.cloud_upload_rounded),
+                title: 'Connect with Google',
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                        'Backup your files to cloud or restore your data by connecting with Google.'),
+                    SizedBox(height: 12.0),
+                    ElevatedButton(
+                      onPressed: () => AuthGate.signInWithGoogle()
+                          .then((_) => setState(() {})),
+                      child: Text('Connect with Google'),
+                    ),
+                  ],
+                ),
+              ),
+            if (!StorageHandler.isExternal)
+              CustomCard(
+                logo: Icon(Icons.file_upload_outlined),
+                title: 'Save in downloads',
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                        'Save your files in downloads to edit it with external tools.'),
+                    SizedBox(height: 12.0),
+                    ElevatedButton(
+                      onPressed: () async {
+                        if (await PermissionHandler.requestExternalStorage()) {
+                          StorageHandler.isExternal = true;
+                          await AlimentBank.load(); //TODO: Merge banks.
+                          await NutrientsHandler.load(); //TODO: Merge.
+                          DayHandler.cache.clear();
+                          setState(() {});
+                        }
+                      },
+                      child: Text('Give permission'),
+                    ),
+                  ],
+                ),
+              ),
+            if (StorageHandler.isFirebase)
+              CustomCard(
+                logo: Icon(Icons.sync_rounded),
+                title: 'Backup to cloud',
+                child: ElevatedButton(
+                  onPressed: () => StorageHandler.syncAll(),
+                  child: Text('Backup all data to cloud'),
+                ),
+              ),
+            Card(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Checkbox(
+                    value: SettingsData.isMonthDay,
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() {
+                          SettingsData.isMonthDay = value;
+                        });
+                      }
+                    },
+                  ),
+                  Text('Use Month / Day'),
+                  Spacer(),
+                ],
+              ),
             ),
-            Text('Use Month / Day'),
           ],
         ),
       ),

@@ -4,6 +4,14 @@ import 'package:permission_handler/permission_handler.dart';
 import 'file_handler.dart';
 
 class PermissionHandler {
+  static Future<bool> requestExternalStorage() {
+    return requestPermission(Permission.manageExternalStorage);
+  }
+
+  static Future<bool> isExternalStorage() {
+    return Permission.manageExternalStorage.isGranted;
+  }
+
   static Future<bool> requestPermission(Permission permission) async {
     if (await permission.isGranted) {
       // print("Already granted.");

@@ -53,6 +53,7 @@ dependencies:
   firebase_ui_auth: ^1.16.1
   firebase_ui_oauth_google: ^1.4.1
   path_provider: ^2.1.5
+  path: ^1.9.0
 
 # flutter_launcher_icons:
 #   android: true

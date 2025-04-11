@@ -7,11 +7,9 @@ import 'meals_journal.dart';
 import 'models/reference_fields_model.dart';
 import 'nutrient_display.dart';
 import 'nutrients_editor.dart';
-import 'permission_handler.dart';
 import 'pie_chart.dart';
 import 'settings.dart';
 import 'week_calendar.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -26,11 +24,6 @@ class _HomeScreenState extends State<HomeScreen> {
   };
 
   Future<List<Day>> fetchData() async {
-    await PermissionHandler.ensurePermissions(
-      [Permission.manageExternalStorage],
-      context,
-    );
-
     await NutrientsHandler.load();
 
     if (AlimentBank.aliments.isEmpty) {

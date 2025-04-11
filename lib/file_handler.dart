@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
 
 import 'json_handler.dart';
 
@@ -69,24 +70,44 @@ abstract final class StorageHandler {
 
     return null;
   }
+
+  static Future<void> syncAll() async {
+    final dir = Directory(await FileHandler.localPath);
+    for (File file in dir.listSync().whereType<File>()) {
+      final fileName = p.basenameWithoutExtension(file.path);
+      if (!file.existsSync() || fileName.contains('_backup')) continue;
+
+      Map<String, dynamic>? json;
+      try {
+        json = JsonHandler.forceStringKeys(jsonDecode(file.readAsStringSync()));
+        // ignore: empty_catches
+      } catch (e) {}
+
+      if (json != null) {
+        await FirebaseHandler.saveJson(fileName, json);
+      }
+    }
+  }
 }
 
 abstract final class FileHandler {
+  static Future<String> get localPath async => StorageHandler.isExternal
+      ? '/storage/emulated/0/Download/MicroHealth_0_0_7'
+      : (await getApplicationSupportDirectory()).path;
+
   static Future<File?> _getFile(
     String path, {
     bool doCreate = true,
   }) async {
-    final downloadsPath = StorageHandler.isExternal
-        ? '/storage/emulated/0/Download'
-        : (await getApplicationSupportDirectory()).path;
+    final localPath = await FileHandler.localPath;
 
     /// final downloadsPath = (await DownloadsPath.downloadsDirectory())!.path;
     /// final downloadsPath = 'C:/users/bogda/desktop';
-    final filePath = '$downloadsPath/MicroHealth_0_0_7/$path.json';
+    final filePath = '$localPath/$path.json';
 
     final file = File(filePath);
 
-    if (Directory(downloadsPath).existsSync() && !file.existsSync()) {
+    if (Directory(localPath).existsSync() && !file.existsSync()) {
       if (!doCreate) return null;
 
       file.createSync(recursive: true);
@@ -135,6 +156,9 @@ abstract final class FileHandler {
 
 abstract final class FirebaseHandler {
   static Future<bool> saveJson(String path, Map<String, dynamic> json) async {
+    final fileName = p.basenameWithoutExtension(path);
+    if (fileName.contains('_backup') || fileName == 'settings') return false;
+
     final user = FirebaseAuth.instance.currentUser;
     final uid = user?.uid;
     final db = FirebaseDatabase.instance.ref();
