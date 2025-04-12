@@ -4,6 +4,7 @@ import 'custom_card.dart';
 import 'day.dart';
 import 'models/reference_fields_model.dart';
 import 'palette.dart';
+import 'settings.dart';
 
 class NutrientDisplay extends StatefulWidget {
   const NutrientDisplay({
@@ -191,7 +192,8 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
     final List<Widget> elements = [];
 
     for (var key in keys) {
-      final String label = NutrientsHandler.model[key]!['translations']['ROU'];
+      final String label =
+          NutrientsHandler.model[key]!['translations'][SettingsData.language];
       final String unit = NutrientsHandler.model[key]!['unit'];
       final double intake = (day.intake[key] ?? 0.0) / (numDays);
       final double? lower = NutrientsHandler.model[key]!['lowerLimit'];

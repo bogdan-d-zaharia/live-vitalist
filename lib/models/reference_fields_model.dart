@@ -3,31 +3,27 @@ import 'package:flutter/material.dart';
 import '../file_handler.dart';
 
 abstract final class NutrientsHandler {
-  /// TODO: At launch, set disabled by default.
   static Map<String, Map<String, dynamic>> model = {
     "kcals": {
       "unit": "kcal",
       "lowerLimit": 3300.0,
       "translations": {
         "ENG": "Calories",
-        "ROU": "Calorii",
+        // "ROU": "Calorii",
       },
       "tags": [
         "starred",
       ]
     },
 
-    // Main
+    /* Main */
     "protein": {
       "unit": "g",
       "lowerLimit": 100.0,
       "translations": {
         "ENG": "Protein",
-        "ROU": "Proteine",
+        // "ROU": "Proteine",
       },
-      "tags": [
-        "starred",
-      ]
     },
     "fats": {
       "unit": "g",
@@ -35,7 +31,7 @@ abstract final class NutrientsHandler {
       "upperLimit": 116.7,
       "translations": {
         "ENG": "Fats",
-        "ROU": "Grasimi",
+        // "ROU": "Grasimi",
       }
     },
     "satFats": {
@@ -43,7 +39,7 @@ abstract final class NutrientsHandler {
       "upperLimit": 25.0,
       "translations": {
         "ENG": "Saturated fats",
-        "ROU": "Grasimi saturate",
+        // "ROU": "Grasimi saturate",
       }
     },
     "carbs": {
@@ -52,7 +48,7 @@ abstract final class NutrientsHandler {
       "upperLimit": 525.0,
       "translations": {
         "ENG": "Carbohydrates",
-        "ROU": "Carbohidrati",
+        // "ROU": "Carbohidrati",
       }
     },
     "sugars": {
@@ -60,32 +56,32 @@ abstract final class NutrientsHandler {
       "upperLimit": 56.0,
       "translations": {
         "ENG": "Sugars",
-        "ROU": "Zaharuri",
+        // "ROU": "Zaharuri",
       },
-      // "tags": [
-      //   "disabled",
-      // ]
+      "tags": [
+        "disabled",
+      ]
     },
     "fibers": {
       "unit": "g",
       "lowerLimit": 38.0,
       "translations": {
         "ENG": "Fibers",
-        "ROU": "Fibre",
+        // "ROU": "Fibre",
       },
-      // "tags": [
-      //   "disabled",
-      // ]
+      "tags": [
+        "disabled",
+      ]
     },
 
-    // Important
+    /* Important */
     "cholesterol": {
       "unit": "mg",
       "lowerLimit": 100.0,
       "upperLimit": 300.0,
       "translations": {
         "ENG": "Cholesterol",
-        "ROU": "Colesterol",
+        // "ROU": "Colesterol",
       },
     },
     "omega3": {
@@ -94,47 +90,47 @@ abstract final class NutrientsHandler {
       "upperLimit": 4.0,
       "translations": {
         "ENG": "Omega-3",
-        "ROU": "Omega-3",
+        // "ROU": "Omega-3",
       },
-      // "tags": [
-      //   "disabled",
-      // ]
+      "tags": [
+        "disabled",
+      ]
     },
 
-    // Vitamins
+    /* Vitamins */
     "vitaminA": {
       "unit": "mcg",
       "lowerLimit": 1200.0,
       "upperLimit": 3000.0,
       "translations": {
         "ENG": "Vitamin A (Retinol)",
-        "ROU": "Vitamina A (Retinol)",
+        // "ROU": "Vitamina A (Retinol)",
       },
-      // "tags": [
-      //   "disabled",
-      // ]
+      "tags": [
+        "disabled",
+      ]
     },
     "vitaminB1": {
       "unit": "mg",
       "lowerLimit": 1.2,
       "translations": {
         "ENG": "Vitamin B1 (Thiamin)",
-        "ROU": "Vitamina B1 (Tiamina)",
+        // "ROU": "Vitamina B1 (Tiamina)",
       },
-      // "tags": [
-      //   "disabled",
-      // ]
+      "tags": [
+        "disabled",
+      ]
     },
     "vitaminB2": {
       "unit": "mg",
       "lowerLimit": 1.3,
       "translations": {
         "ENG": "Vitamin B2 (Riboflavin)",
-        "ROU": "Vitamina B2 (Riboflavină)",
+        // "ROU": "Vitamina B2 (Riboflavină)",
       },
-      // "tags": [
-      //   "disabled",
-      // ]
+      "tags": [
+        "disabled",
+      ]
     },
     "vitaminB3": {
       "unit": "mg",
@@ -142,11 +138,11 @@ abstract final class NutrientsHandler {
       "upperLimit": 35.0,
       "translations": {
         "ENG": "Vitamin B3 (Niacin)",
-        "ROU": "Vitamina B3 (Niacină)",
+        // "ROU": "Vitamina B3 (Niacină)",
       },
-      // "tags": [
-      //   "disabled",
-      // ]
+      "tags": [
+        "disabled",
+      ]
     },
     "vitaminB4": {
       "unit": "mg",
@@ -154,22 +150,22 @@ abstract final class NutrientsHandler {
       "upperLimit": 3500.0,
       "translations": {
         "ENG": "Vitamin B4 (Choline)",
-        "ROU": "Vitamina B4 (Colină)",
+        // "ROU": "Vitamina B4 (Colină)",
       },
-      // "tags": [
-      //   "disabled",
-      // ]
+      "tags": [
+        "disabled",
+      ]
     },
     "vitaminB5": {
       "unit": "mg",
       "lowerLimit": 5.0,
       "translations": {
         "ENG": "Vitamin B5 (Pantothenic acid)",
-        "ROU": "Vitamina B5 (Acid pantotenic)",
+        // "ROU": "Vitamina B5 (Acid pantotenic)",
       },
-      // "tags": [
-      //   "disabled",
-      // ]
+      "tags": [
+        "disabled",
+      ]
     },
     "vitaminB6": {
       "unit": "mg",
@@ -177,22 +173,22 @@ abstract final class NutrientsHandler {
       "upperLimit": 100.0,
       "translations": {
         "ENG": "Vitamin B6 (Pyridoxine)",
-        "ROU": "Vitamina B6 (Piridoxină)",
+        // "ROU": "Vitamina B6 (Piridoxină)",
       },
-      // "tags": [
-      //   "disabled",
-      // ]
+      "tags": [
+        "disabled",
+      ]
     },
     "vitaminB7": {
       "unit": "mcg",
       "lowerLimit": 30.0,
       "translations": {
         "ENG": "Vitamin B7 (Biotin)",
-        "ROU": "Vitamina B7 (Biotină)",
+        // "ROU": "Vitamina B7 (Biotină)",
       },
-      // "tags": [
-      //   "disabled",
-      // ]
+      "tags": [
+        "disabled",
+      ]
     },
     "vitaminB9": {
       "unit": "mcg",
@@ -200,22 +196,22 @@ abstract final class NutrientsHandler {
       "upperLimit": 1000.0,
       "translations": {
         "ENG": "Vitamin B9 (Folate)",
-        "ROU": "Vitamina B9 (Folat)",
+        // "ROU": "Vitamina B9 (Folat)",
       },
-      // "tags": [
-      //   "disabled",
-      // ]
+      "tags": [
+        "disabled",
+      ]
     },
     "vitaminB12": {
       "unit": "mcg",
       "lowerLimit": 2.4,
       "translations": {
         "ENG": "Vitamin B12 (Cobalamin)",
-        "ROU": "Vitamina B12 (Cobalamină)",
+        // "ROU": "Vitamina B12 (Cobalamină)",
       },
-      // "tags": [
-      //   "disabled",
-      // ]
+      "tags": [
+        "disabled",
+      ]
     },
     "vitaminC": {
       "unit": "mg",
@@ -223,11 +219,11 @@ abstract final class NutrientsHandler {
       "upperLimit": 2000.0,
       "translations": {
         "ENG": "Vitamin C (Ascorbic acid)",
-        "ROU": "Vitamina C (Acid ascorbic)",
+        // "ROU": "Vitamina C (Acid ascorbic)",
       },
-      // "tags": [
-      //   "disabled",
-      // ]
+      "tags": [
+        "disabled",
+      ]
     },
     "vitaminD2": {
       "unit": "mcg",
@@ -235,11 +231,11 @@ abstract final class NutrientsHandler {
       "upperLimit": 100.0,
       "translations": {
         "ENG": "Vitamin D2 (Ergocalciferol)",
-        "ROU": "Vitamina D2 (Ergocalciferol)",
+        // "ROU": "Vitamina D2 (Ergocalciferol)",
       },
-      // "tags": [
-      //   "disabled",
-      // ]
+      "tags": [
+        "disabled",
+      ]
     },
     "vitaminD3": {
       "unit": "mcg",
@@ -247,11 +243,11 @@ abstract final class NutrientsHandler {
       "upperLimit": 100.0,
       "translations": {
         "ENG": "Vitamin D3 (Cholecalciferol)",
-        "ROU": "Vitamina D3 (Colecalciferol)",
+        // "ROU": "Vitamina D3 (Colecalciferol)",
       },
-      // "tags": [
-      //   "disabled",
-      // ]
+      "tags": [
+        "disabled",
+      ]
     },
     "vitaminE": {
       "unit": "mg",
@@ -259,47 +255,47 @@ abstract final class NutrientsHandler {
       "upperLimit": 1000.0,
       "translations": {
         "ENG": "Vitamin E (Alpha-tocopherol)",
-        "ROU": "Vitamina E (Alfa-tocoferol)",
+        // "ROU": "Vitamina E (Alfa-tocoferol)",
       },
-      // "tags": [
-      //   "disabled",
-      // ]
+      "tags": [
+        "disabled",
+      ]
     },
     "vitaminK1": {
       "unit": "mcg",
       "lowerLimit": 120.0,
       "translations": {
         "ENG": "Vitamin K1 (Phylloquinone)",
-        "ROU": "Vitamina K1 (Filochinonă)",
+        // "ROU": "Vitamina K1 (Filochinonă)",
       },
-      // "tags": [
-      //   "disabled",
-      // ]
+      "tags": [
+        "disabled",
+      ]
     },
     "vitaminK2": {
       "unit": "mcg",
       "lowerLimit": 120.0,
       "translations": {
         "ENG": "Vitamin K2 (Menaquinone)",
-        "ROU": "Vitamina K2 (Menachinonă)",
+        // "ROU": "Vitamina K2 (Menachinonă)",
       },
-      // "tags": [
-      //   "disabled",
-      // ]
+      "tags": [
+        "disabled",
+      ]
     },
 
-    // Minerals
+    /* Minerals */
     "calcium": {
       "unit": "mg",
       "lowerLimit": 1000.0,
       "upperLimit": 2500.0,
       "translations": {
         "ENG": "Calcium",
-        "ROU": "Calciu",
+        // "ROU": "Calciu",
       },
-      // "tags": [
-      //   "disabled",
-      // ]
+      "tags": [
+        "disabled",
+      ]
     },
     "sodium": {
       "unit": "mg",
@@ -307,22 +303,22 @@ abstract final class NutrientsHandler {
       "upperLimit": 2300.0,
       "translations": {
         "ENG": "Sodium",
-        "ROU": "Sodiu",
+        // "ROU": "Sodiu",
       },
-      // "tags": [
-      //   "disabled",
-      // ]
+      "tags": [
+        "disabled",
+      ]
     },
     "potassium": {
       "unit": "mg",
       "lowerLimit": 4700.0,
       "translations": {
         "ENG": "Potassium",
-        "ROU": "Potasiu",
+        // "ROU": "Potasiu",
       },
-      // "tags": [
-      //   "disabled",
-      // ]
+      "tags": [
+        "disabled",
+      ]
     },
     "iron": {
       "unit": "mg",
@@ -330,11 +326,11 @@ abstract final class NutrientsHandler {
       "upperLimit": 45.0,
       "translations": {
         "ENG": "Iron",
-        "ROU": "Fier",
+        // "ROU": "Fier",
       },
-      // "tags": [
-      //   "disabled",
-      // ]
+      "tags": [
+        "disabled",
+      ]
     },
     "zinc": {
       "unit": "mg",
@@ -342,11 +338,11 @@ abstract final class NutrientsHandler {
       "upperLimit": 40.0,
       "translations": {
         "ENG": "Zinc",
-        "ROU": "Zinc",
+        // "ROU": "Zinc",
       },
-      // "tags": [
-      //   "disabled",
-      // ]
+      "tags": [
+        "disabled",
+      ]
     },
     "magnesium": {
       "unit": "mg",
@@ -354,11 +350,11 @@ abstract final class NutrientsHandler {
       "upperLimit": 600.0,
       "translations": {
         "ENG": "Magnesium",
-        "ROU": "Magneziu",
+        // "ROU": "Magneziu",
       },
-      // "tags": [
-      //   "disabled",
-      // ]
+      "tags": [
+        "disabled",
+      ]
     },
   };
 
@@ -380,7 +376,7 @@ abstract final class NutrientsHandler {
       final json = await StorageHandler.loadJson('nutrients') ?? {};
       if (json.isNotEmpty) fromJson(json);
     } catch (e) {
-      //  ignore: empty_catches
+      /* ignore: empty_catches */
     }
   }
 
@@ -392,7 +388,7 @@ abstract final class NutrientsHandler {
     final double outLength = outMax - outMin;
     final double inNormalised = (value - inMin) / inLength;
     return inNormalised * outLength + outMin;
-    // return outMin + ((value - inMin) * (outMax - outMin) / (inMax - inMin));
+    //// return outMin + ((value - inMin) * (outMax - outMin) / (inMax - inMin));
   }
 
   //TODO: Optimise.

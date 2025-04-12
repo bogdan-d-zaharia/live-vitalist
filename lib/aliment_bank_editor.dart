@@ -7,13 +7,16 @@ class AlimentBankEditor extends StatefulWidget {
   const AlimentBankEditor({super.key});
 
   static Future<bool> addNewAliment(BuildContext context) async {
-    final Map<String, dynamic> alimentJson = {
-      "name": "",
-      "referenceSize": 0.0,
-    };
+    final aliment = TemporaryAliment.fromJson({
+      "alimentData": {
+        'name': '',
+        'referenceSize': 1.0,
+      },
+      "servingSize": 1.0,
+    });
 
-    if (await AlimentEditor.editAlimentJson(alimentJson, context)) {
-      final AlimentData newAliment = AlimentData.fromJson(alimentJson);
+    if (await AlimentEditor.editAliment(aliment, context)) {
+      final AlimentData newAliment = aliment.alimentData;
       final String id = newAliment.hashCode.toString();
       AlimentBank.aliments[id] = newAliment;
       AlimentBank.save();

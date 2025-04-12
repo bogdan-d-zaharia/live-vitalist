@@ -245,6 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   NutrientDisplay(days: days),
                   MealsJournal(date: dates.first, day: days.first),
+                  SizedBox(height: 12.0),
                 ],
               ),
             ),

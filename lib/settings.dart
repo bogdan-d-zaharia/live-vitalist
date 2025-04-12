@@ -10,17 +10,22 @@ import 'models/reference_fields_model.dart';
 abstract final class SettingsData {
   static bool isMonthDay = false;
   static bool isLoggedIn = false;
+  static String language = 'ENG';
+
+  // static Set<String> languages = {'ENG'};
 
   static Map<String, dynamic> toJson() {
     return {
       'isMonthDay': isMonthDay,
       'isLoggedIn': isLoggedIn,
+      'language': language,
     };
   }
 
   static void fromJson(Map<String, dynamic> json) {
     if (json.containsKey('isMonthDay')) isMonthDay = json['isMonthDay'];
     if (json.containsKey('isLoggedIn')) isLoggedIn = json['isLoggedIn'];
+    if (json.containsKey('language')) language = json['language'];
   }
 
   /// [ IO_FUNCTION ]

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'json_handler.dart';
 import 'models/reference_fields_model.dart';
+import 'settings.dart';
 import 'string_input.dart';
 
 class NutrientsEditor extends StatefulWidget {
@@ -63,13 +64,14 @@ class _NutrientsEditorState extends State<NutrientsEditor> {
         child: ListView(
           children: NutrientsHandler.model.keys.map<Widget>((e) {
             final field = NutrientsHandler.model[e]!;
-            final String label = '${field['translations']['ENG']} ("$e")';
+            final String label =
+                '${field['translations'][SettingsData.language]} ("$e")';
 
             return Card(
               child: InkWell(
                 onTap: () async {
                   final Map<String, dynamic> fields = {
-                    'Label': field['translations']['ENG'],
+                    'Label': field['translations'][SettingsData.language],
                     'Upper limit': field['upperLimit'],
                     'Lower limit': field['lowerLimit'],
                     'Unit': field['unit'],
@@ -94,7 +96,8 @@ class _NutrientsEditorState extends State<NutrientsEditor> {
                     field['unit'] = fields['Unit'];
                     field['lowerLimit'] = fields['Lower limit'];
                     field['upperLimit'] = fields['Upper limit'];
-                    field['translations']['ENG'] = fields['Label'];
+                    field['translations'][SettingsData.language] =
+                        fields['Label'];
                   }
                 },
                 child: Padding(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../aliment.dart';
+import '../settings.dart';
 import 'aliment_editor.dart';
 import '../custom_card.dart';
 import '../models/reference_fields_model.dart';
@@ -116,8 +117,8 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
           padding: const EdgeInsets.all(6.0),
           child: Row(
             children: [
-              ...NutrientsHandler.widMajorMinorLabels(
-                  NutrientsHandler.model[field]!["translations"]?["ENG"]),
+              ...NutrientsHandler.widMajorMinorLabels(NutrientsHandler
+                  .model[field]!['translations'][SettingsData.language]),
               Text(': '),
               Spacer(),
               NumberInput(
@@ -226,9 +227,11 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text((widget.aliment is InstancedAliment)
-              ? 'Aliment Editor'
-              : 'Temporary Aliment Editor'),
+          title: Text('Aliment Editor'
+              // (widget.aliment is InstancedAliment)
+              //   ? 'Aliment Editor'
+              //   : 'Temporary Aliment Editor'
+              ),
           actions: [
             Container(
               /* 50.0 by default. */

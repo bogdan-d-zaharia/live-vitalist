@@ -3,7 +3,9 @@ import 'aliment.dart';
 import 'aliment_editor/aliment_editor.dart';
 import 'custom_card.dart';
 import 'day.dart';
+import 'models/reference_fields_model.dart';
 import 'notification_handler.dart';
+import 'settings.dart';
 
 class MealsJournal extends StatelessWidget {
   const MealsJournal({
@@ -23,25 +25,38 @@ class MealsJournal extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Widget> elements = [
       MealElement(
-        title: 'Mic Dejun',
+        title: {
+          'ENG': 'Breakfast',
+          'ROU': 'Mic Dejun',
+        }[SettingsData.language]!,
         aliments: day.breakfast,
         saver: saveDay,
       ),
       MealElement(
-        title: 'Pranz',
+        title: {
+          'ENG': 'Lunch',
+          'ROU': 'Pranz',
+        }[SettingsData.language]!,
         aliments: day.lunch,
         saver: saveDay,
       ),
       MealElement(
-        title: 'Cina',
+        title: {
+          'ENG': 'Dinner',
+          'ROU': 'Cina',
+        }[SettingsData.language]!,
         aliments: day.dinner,
         saver: saveDay,
       ),
     ];
 
-    /// [0.0, 1.0, 2.0]; /// [0.0, n, 1.0, n, 2.0] ///
+    final Widget divider = Divider(
+      color: Colors.black.withValues(alpha: 0.1),
+      thickness: 0.5,
+      height: 0.0,
+    );
     for (int i = elements.length - 1; i > 0; i--) {
-      elements.insert(i, SizedBox(height: 8.0));
+      elements.insert(i, divider);
     }
 
     return CustomCard(
@@ -92,30 +107,23 @@ class _MealElementState extends State<MealElement> {
     final Map<String, double> values = Day.sumFields(widget.aliments);
     return InkWell(
       onTap: () => openMeal(context),
-      child: Row(
-        children: [
-          Container(
-            width: 50.0,
-            height: 50.0,
-            decoration: BoxDecoration(
-              color: Colors.grey,
-              borderRadius: BorderRadius.circular(20.0),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(widget.title),
+                Text(
+                  '${values['kcals']?.round() ?? 0} ${NutrientsHandler.model['kcals']!['translations'][SettingsData.language]}',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 12.0),
+                ),
+              ],
             ),
-            child: values.containsKey('kcals')
-                ? Center(
-                    child: Text(
-                    '${values['kcals']?.round()} kcals',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 12.0),
-                  ))
-                : null,
-          ),
-          Column(
-            children: [
-              Text(widget.title),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -162,7 +170,10 @@ class _MealEditorState extends State<MealEditor> {
         .toList();
 
     elements.add(ElementWidget(
-      title: 'Adaugare aliment',
+      title: {
+        'ENG': 'Add aliment',
+        'ROU': 'Adaugare aliment',
+      }[SettingsData.language]!,
       subTitle: '',
       onTap: () async {
         final InstancedAliment newAliment =
@@ -177,7 +188,10 @@ class _MealEditorState extends State<MealEditor> {
     ));
 
     elements.add(ElementWidget(
-      title: 'Adaugare calorii',
+      title: {
+        'ENG': 'Add temporary',
+        'ROU': 'Adaugare calorii',
+      }[SettingsData.language]!,
       subTitle: '',
       onTap: () async {
         final TemporaryAliment newAliment = TemporaryAliment(
