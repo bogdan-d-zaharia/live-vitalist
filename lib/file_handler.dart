@@ -19,9 +19,11 @@ import 'json_handler.dart';
 ///     - used to upload to cloud after no internet
 ///       or after creating an account.
 ///
+///               [     IMPORTED      ]
+///           [           LOCAL           ]
+///     [                 CLOUD                 ]
 abstract final class StorageHandler {
   static bool isFirebase = false;
-  static bool isExternal = false;
 
   static Future<void> saveJson(String path, Map<String, dynamic> json,
       {bool doBackup = false}) async {
@@ -91,20 +93,15 @@ abstract final class StorageHandler {
 }
 
 abstract final class FileHandler {
-  static Future<String> get localPath async => StorageHandler.isExternal
-      ? '/storage/emulated/0/Download/MicroHealth_0_0_7'
-      : (await getApplicationSupportDirectory()).path;
+  static Future<String> get localPath async =>
+      (await getApplicationSupportDirectory()).path;
 
   static Future<File?> _getFile(
     String path, {
     bool doCreate = true,
   }) async {
     final localPath = await FileHandler.localPath;
-
-    /// final downloadsPath = (await DownloadsPath.downloadsDirectory())!.path;
-    /// final downloadsPath = 'C:/users/bogda/desktop';
     final filePath = '$localPath/$path.json';
-
     final file = File(filePath);
 
     if (Directory(localPath).existsSync() && !file.existsSync()) {
@@ -163,7 +160,8 @@ abstract final class FirebaseHandler {
     final uid = user?.uid;
     final db = FirebaseDatabase.instance.ref();
 
-    await db.child('users/$uid/$path').set(json);
+    await db.child('users/$uid/$path').set(JsonHandler.mapToListRecursive(
+        json)); /* used `mapToListRecursive` to maintain order */
 
     return true;
   }
@@ -177,10 +175,9 @@ abstract final class FirebaseHandler {
 
     final snapshot = await db.child('users/$uid/$path').get();
 
-    if (snapshot.exists) {
-      return (snapshot.value as Map).map<String, dynamic>(
-        (key, value) => MapEntry(key as String, value),
-      );
+    if (snapshot.exists && snapshot.value != null) {
+      return (JsonHandler.reverseMapToListRecursive(snapshot.value) as Map)
+          .map<String, dynamic>((key, value) => MapEntry(key as String, value));
     }
 
     return null;

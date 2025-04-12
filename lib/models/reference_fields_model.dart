@@ -3,21 +3,6 @@ import 'package:flutter/material.dart';
 import '../file_handler.dart';
 
 abstract final class NutrientsHandler {
-  // TODO: Perhaps separate the lowerLimit and upperLimit from the extra data
-  // *Extra Data - The base model
-  // "kcals": {
-  //   "unit": "kcal",
-  //   "translations": {
-  //     "ENG": "Calories",
-  //     "ROU": "Calorii",
-  //   },
-  // }
-
-  // *Perhaps a limit map
-  // "kcals": {
-  //   "lowerLimit":
-  // }
-
   /// TODO: At launch, set disabled by default.
   static Map<String, Map<String, dynamic>> model = {
     "kcals": {
@@ -382,8 +367,8 @@ abstract final class NutrientsHandler {
   }
 
   static void fromJson(Map<String, dynamic> json) {
+    //TODO: Verify and remove.
     model = json.map((key, value) => MapEntry(key, value));
-    // <String, Map<String, dynamic>>
   }
 
   static Future<void> save() async {
@@ -440,15 +425,6 @@ abstract final class NutrientsHandler {
 
       /// (upper != null) surely.
       return amount / upper!;
-
-      // if (lower != null && amount <= lower) {
-      //   return linearMap(amount, 0.0, lower, -1.0, 0.0);
-      // } else if ((lower != null && amount >= lower) &&
-      //     (upper != null && amount <= upper)) {
-      //   return linearMap(amount, lower, upper, 0.0, 1.0);
-      // } else if (upper != null) {
-      //   return amount / upper;
-      // }
     } else {
       if (lower != null && amount <= lower) {
         return linearMap(amount, 0.0, lower, 0.0, 1.0);
@@ -470,7 +446,7 @@ abstract final class NutrientsHandler {
   }
 
   //TODO: Imported material for this alone.
-  // Perhaps move, if it's not this function's place.
+  //Perhaps move, if it's not this function's place.
   static List<Widget> widMajorMinorLabels(String label, {TextStyle? style}) {
     style ??= TextStyle(letterSpacing: -0.0);
 

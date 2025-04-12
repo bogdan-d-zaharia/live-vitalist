@@ -85,8 +85,8 @@ class WeekCalendar extends StatelessWidget {
       logo: const Icon(Icons.view_week),
       title: "Week Calendar",
       child: SizedBox(
-        // Used trial and error to find a good height;
-        // TODO: perhaps use a more programmatical approach.
+        /* Used trial and error to find a good height; */
+        //TODO: perhaps use a more programmatical approach.
         height: itemHeight,
         child: Stack(
           children: [
@@ -106,7 +106,6 @@ class WeekCalendar extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 6.0,
-                        // vertical: 8.0,
                       ),
                       child: CalendarItem(
                           date: date,
@@ -153,7 +152,7 @@ class CalendarItem extends StatelessWidget {
         if (snapshot.hasData) {
           return wid(snapshot.data!.intake, context);
         } else if (snapshot.hasError) {
-          // TODO: Replace with a reload button, perhaps.
+          //TODO: Replace with a reload button, perhaps.
           Error.throwWithStackTrace(snapshot.error!, snapshot.stackTrace!);
         } else {
           return Center(child: CircularProgressIndicator());
@@ -213,7 +212,6 @@ class CalendarItem extends StatelessWidget {
 
     return SizedBox(
       width: 36.0,
-      // height: 54.0,
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
@@ -244,16 +242,6 @@ class CalendarItem extends StatelessWidget {
                   child: Container(
                     color: Colors.green.withValues(alpha: 0.4),
                   ),
-
-                  // child: Container(
-                  //   decoration: const BoxDecoration(
-                  //     gradient: LinearGradient(
-                  //       colors: Palette.greenGradientColors,
-                  //       begin: Alignment.topCenter,
-                  //       end: Alignment.bottomCenter,
-                  //     ),
-                  //   ),
-                  // ),
                 ),
               ],
             ),

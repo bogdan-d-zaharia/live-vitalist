@@ -23,7 +23,7 @@ class NotificationHandler {
 
     final ntf.AndroidNotificationDetails androidPlatformChannelSpecifics =
         ntf.AndroidNotificationDetails(
-      'list_notification', // Unique channel ID
+      'list_notification',
       'List Notification',
       channelDescription: 'A simple text-based notification with a list',
       importance: ntf.Importance.max,
@@ -40,7 +40,7 @@ class NotificationHandler {
         ntf.NotificationDetails(android: androidPlatformChannelSpecifics);
 
     await _notificationsPlugin.show(
-      0, // Notification ID
+      0,
       'Your List Notification',
       'Here are some items:',
       notificationDetails,

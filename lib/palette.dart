@@ -85,8 +85,8 @@ abstract final class Palette {
 
   // #region //* THEMES *//
   static final darkMode = const TextTheme().copyWith(
-    // TODO: Import the fonts as assets directly
-    // in order to be bundled locally.
+    //TODO: Import the fonts as assets directly
+    //in order to be bundled locally.
     bodyLarge: GoogleFonts.sourceSans3(
       color: Colors.white,
       fontSize: 20.0,

@@ -6,7 +6,6 @@ import 'cache_handler.dart';
 import 'custom_card.dart';
 import 'file_handler.dart';
 import 'models/reference_fields_model.dart';
-import 'permission_handler.dart';
 
 abstract final class SettingsData {
   static bool isMonthDay = false;
@@ -66,38 +65,36 @@ class _SettingsState extends State<Settings> {
                         'Backup your files to cloud or restore your data by connecting with Google.'),
                     SizedBox(height: 12.0),
                     ElevatedButton(
-                      onPressed: () => AuthGate.signInWithGoogle()
-                          .then((_) => setState(() {})),
+                      onPressed: () async {
+                        await AuthGate.signInWithGoogle();
+                        if (StorageHandler.isFirebase) {
+                          await AlimentBank.load(); //TODO: Merge banks.
+                          await NutrientsHandler.load(); //TODOL Merge
+                          DayHandler.cache.clear();
+                          setState(() {});
+                        }
+                      },
                       child: Text('Connect with Google'),
                     ),
                   ],
                 ),
               ),
-            if (!StorageHandler.isExternal)
-              CustomCard(
-                logo: Icon(Icons.file_upload_outlined),
-                title: 'Save in downloads',
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                        'Save your files in downloads to edit it with external tools.'),
-                    SizedBox(height: 12.0),
-                    ElevatedButton(
-                      onPressed: () async {
-                        if (await PermissionHandler.requestExternalStorage()) {
-                          StorageHandler.isExternal = true;
-                          await AlimentBank.load(); //TODO: Merge banks.
-                          await NutrientsHandler.load(); //TODO: Merge.
-                          DayHandler.cache.clear();
-                          setState(() {});
-                        }
-                      },
-                      child: Text('Give permission'),
-                    ),
-                  ],
-                ),
-              ),
+            //TODO: Implement
+            //// CustomCard(
+            ////   logo: Icon(Icons.file_upload_outlined),
+            ////   title: 'Export files',
+            ////   child: Column(
+            ////     crossAxisAlignment: CrossAxisAlignment.start,
+            ////     children: [
+            ////       Text('Export your files to process with external tools.'),
+            ////       SizedBox(height: 12.0),
+            ////       ElevatedButton(
+            ////         onPressed: () async {},
+            ////         child: Text('Export'),
+            ////       ),
+            ////     ],
+            ////   ),
+            //// ),
             if (StorageHandler.isFirebase)
               CustomCard(
                 logo: Icon(Icons.sync_rounded),

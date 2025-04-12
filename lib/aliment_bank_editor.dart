@@ -83,7 +83,7 @@ class _AlimentBankEditorState extends State<AlimentBankEditor> {
                           setState(() {
                             AlimentBank.aliments.remove(id);
                           });
-                          // TODO: ACTUALLY DELETE IT.
+                          //TODO: ACTUALLY DELETE IT.
                           Navigator.pop(context);
                         },
                         icon: Icon(Icons.delete, color: Colors.white),

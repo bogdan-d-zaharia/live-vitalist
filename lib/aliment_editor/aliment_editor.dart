@@ -103,8 +103,9 @@ class _PieBarEditorState extends State<PieBarEditor> {
 
   void setValue(int index, double val) {
     normalisedValues[index] = val;
+    /* From calories to grams. */
     widget.fields[info[index]['field']] =
-        val * calories / info[index]['kcalsPerGram']; // From calories to grams.
+        val * calories / info[index]['kcalsPerGram'];
   }
 
   double getValue(int index) {
@@ -142,7 +143,6 @@ class _PieBarEditorState extends State<PieBarEditor> {
     required int dragIndex,
     required double handleX,
     double handleWidth = 16.0,
-    // double handleHeight = 20.0,
   }) {
     return Positioned(
       left: handleX - handleWidth / 2.0 + handleWidth / 2.0,
@@ -167,7 +167,6 @@ class _PieBarEditorState extends State<PieBarEditor> {
                   bottomRight: Radius.circular(8.0),
                 ),
                 color: Colors.grey,
-                // border: Border.all(),
               ),
             ),
           ),
@@ -223,7 +222,6 @@ class _PieBarEditorState extends State<PieBarEditor> {
       width: barWidth + handleWidth,
       height: 70.0,
       child: Stack(
-        // clipBehavior: Clip.none,
         children: [...labels, ...segments, ...handles],
       ),
     );

@@ -148,7 +148,6 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
           child: CustomCard(
             headerSpace: 0.0,
             child: Column(
-              // mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
@@ -165,8 +164,7 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
                         onPressed: () => Navigator.pop(context, true),
                         label: Text("Save"),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              Colors.blue, // Red color for delete action
+                          backgroundColor: Colors.blue,
                           foregroundColor: Colors.white,
                           padding: EdgeInsets.symmetric(
                               horizontal: 16, vertical: 12),
@@ -178,13 +176,12 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
                       width: 120.0,
                       child: ElevatedButton.icon(
                         //TODO: The values are saved when canceled,
-                        // which shouldn't be the case.
+                        //which shouldn't be the case.
                         onPressed: () => Navigator.pop(context, false),
                         icon: Icon(Icons.cancel_outlined, color: Colors.white),
                         label: Text("Cancel"),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              Colors.red, // Red color for delete action
+                          backgroundColor: Colors.red,
                           foregroundColor: Colors.white,
                           padding: EdgeInsets.symmetric(
                               horizontal: 16, vertical: 12),

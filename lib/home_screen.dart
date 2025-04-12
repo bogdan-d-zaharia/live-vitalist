@@ -67,10 +67,10 @@ class _HomeScreenState extends State<HomeScreen> {
         final List<int> mDays = yearMonthDays[mYear]![mMonth]!..sort();
         //TODO: Also add visual feedback to the calendar.
         //TODO: Right now, for:
-        // ....###........#..###..
-        // We get:
-        // ....#################..
-        // And they should be the same.
+        //....###........#..###..
+        //We get:
+        //....#################..
+        //And they should be the same.
 
         /* At this point, we went trough each year and month in order
          and we got the list of days, in order.
