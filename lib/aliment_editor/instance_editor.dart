@@ -106,21 +106,6 @@ class _InstanceEditorState extends State<InstanceEditor> {
         ),
       ],
     );
-
-    // return StringInput(
-    //   hint: 'Served amount',
-    //   initString: widget.aliment.servingSize.toString(),
-    //   keyboardType: TextInputType.number,
-    //   update: (p0) {
-    //     setState(() {
-    //       double? value = double.tryParse(p0);
-    //       if (value != null) {
-    //         isModified = true;
-    //         widget.aliment.servingSize = value;
-    //       }
-    //     });
-    //   },
-    // );
   }
 
   Widget? _unitSelector() {

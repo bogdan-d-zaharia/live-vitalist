@@ -42,11 +42,15 @@ abstract final class StorageHandler {
   /// Check `StorageHandler` doc.
   static Future<Map<String, dynamic>?> loadJson(String path) async {
     final Map<String, dynamic>? fileJson = await FileHandler.loadJson(path);
+    //TODO: I don't think `convertIntsToDoubles` is needed because
+    // it only saves doubles locally.
+    // It could if downloaded directly from internet.
+    // Perhaps `convertIntsToDoubles` after internet.loadJson.
     if (fileJson != null) return JsonHandler.convertIntsToDoubles(fileJson);
 
     /* DOWNLOAD */
     final Map<String, dynamic>? firebaseJson =
-        await FirebaseHandler.loadJson(path);
+        JsonHandler.convertIntsToDoubles(await FirebaseHandler.loadJson(path));
     if (firebaseJson != null) {
       bool isADayDataThatIsOlderThanAWeek = false;
 
@@ -67,7 +71,7 @@ abstract final class StorageHandler {
         FileHandler.saveJson(path, firebaseJson);
       }
 
-      return JsonHandler.convertIntsToDoubles(firebaseJson);
+      return firebaseJson;
     }
 
     return null;
@@ -96,10 +100,7 @@ abstract final class FileHandler {
   static Future<String> get localPath async =>
       (await getApplicationSupportDirectory()).path;
 
-  static Future<File?> _getFile(
-    String path, {
-    bool doCreate = true,
-  }) async {
+  static Future<File?> _getFile(String path, {bool doCreate = false}) async {
     final localPath = await FileHandler.localPath;
     final filePath = '$localPath/$path.json';
     final file = File(filePath);
@@ -115,11 +116,12 @@ abstract final class FileHandler {
   }
 
   static Future<void> saveJson(String path, Map<String, dynamic> json) async {
-    final File file = (await _getFile(path))!;
-    final String str = jsonEncode(json);
+    final File file = (await _getFile(path, doCreate: true))!;
+    if (json.isEmpty) {
+      return file.deleteSync();
+    }
 
-    /// {'':} -> 5 characters /// If too short, don't even create.
-    if (str.length <= 5) return;
+    final String str = jsonEncode(json);
     await file.writeAsString(str);
   }
 
@@ -137,14 +139,17 @@ abstract final class FileHandler {
   }
 
   static Future<Map<String, dynamic>?> loadJson(String path) async {
-    final File? file = await _getFile(path, doCreate: false);
+    final File? file = await _getFile(path);
     final String? str = (await file?.readAsString());
     return str != null ? jsonDecode(str) : null;
+    //TODO:FormatException (FormatException: Unexpected character (at character 3)
+    // {}aliments":{"652656957":{"name":"q","referenceSize":1.0,"referenceFields":...
+    // ^
   }
 
   static Future<Duration?> deltaFile(String filename1, String filename2) async {
-    final File? file1 = await _getFile(filename1, doCreate: false);
-    final File? file2 = await _getFile(filename2, doCreate: false);
+    final File? file1 = await _getFile(filename1);
+    final File? file2 = await _getFile(filename2);
     if (file1 == null || file2 == null) return null;
 
     return file2.lastModifiedSync().difference(file1.lastModifiedSync());

@@ -86,4 +86,50 @@ abstract final class JsonHandler {
       return value;
     }
   }
+
+  ///     MERGE:
+  ///
+  ///     LOCAL = {
+  ///       a: 1
+  ///       b: 2
+  ///       c: [ 1, 2 ]
+  ///       d: { a: 1, b: 2 }
+  ///     }
+  ///     +
+  ///     INTERNET = {
+  ///       a: 3
+  ///       e: 4
+  ///       c: [ 3, 4 ]
+  ///       d: { a: 3, e: 4 }
+  ///     }
+  ///     =
+  ///     {
+  ///       a: 1                    /* LOCAL overrides */
+  ///       b: 2                    /* Left alone */
+  ///       c: [ 1, 2, 3, 4 ]       /* Appended */
+  ///       d: { a: 1, b: 2, e: 4}  /* Recursion */
+  ///       e: 4                    /* Appended */
+  ///     }
+  ///
+  ///     Recursion only for Map + Map, not for List + List
+  static Map mergeBaseAddon(Map base, Map addon) {
+    final result = Map.from(base);
+
+    for (var entry in addon.entries) {
+      final key = entry.key;
+      final baseValue = base[key];
+      final addonValue = entry.value;
+
+      if (baseValue is Map && addonValue is Map) {
+        result[key] = mergeBaseAddon(baseValue, addonValue);
+      } else if (baseValue is List && addonValue is List) {
+        (result[key] as List).addAll(addonValue);
+      } else if (!base.containsKey(key)) {
+        result[key] = addonValue;
+      }
+      /* else: key exists in base, leave as is */
+    }
+
+    return result;
+  }
 }

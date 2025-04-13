@@ -372,6 +372,7 @@ abstract final class NutrientsHandler {
   }
 
   static Future<void> load() async {
+    //TODO: Perhaps init on first app open.
     try {
       final json = await StorageHandler.loadJson('nutrients') ?? {};
       if (json.isNotEmpty) fromJson(json);

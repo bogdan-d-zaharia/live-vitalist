@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'file_handler.dart';
+import 'json_handler.dart';
 import 'models/reference_fields_model.dart';
 
 abstract class Aliment {
@@ -176,9 +177,18 @@ abstract final class AlimentBank {
 
   /// [ IO_FUNCTION ]
   static Future<void> load() async {
-    return StorageHandler.loadJson('alimentBank').then((json) {
-      fromJson(json ?? {});
-    });
+    return StorageHandler.loadJson('alimentBank')
+        .then((json) => fromJson(json ?? {}));
+  }
+
+  /// [ IO_FUNCTION ]
+  static Future<void> loadMerged() async {
+    final local = await FileHandler.loadJson('alimentBank') ?? {};
+    //TODO: Search why internet modifies when merging.
+    final internet = await FirebaseHandler.loadJson('alimentBank') ?? {};
+    final json = JsonHandler.mergeBaseAddon(internet, local);
+    AlimentBank.fromJson(JsonHandler.processJson(json));
+    AlimentBank.save();
   }
 }
 

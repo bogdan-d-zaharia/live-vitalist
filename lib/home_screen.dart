@@ -26,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<List<Day>> fetchData() async {
     await NutrientsHandler.load();
 
+    //TODO: Study if this `if` is needed.
     if (AlimentBank.aliments.isEmpty) {
       await AlimentBank.load();
     }

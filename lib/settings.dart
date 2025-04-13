@@ -73,8 +73,8 @@ class _SettingsState extends State<Settings> {
                       onPressed: () async {
                         await AuthGate.signInWithGoogle();
                         if (StorageHandler.isFirebase) {
-                          await AlimentBank.load(); //TODO: Merge banks.
-                          await NutrientsHandler.load(); //TODOL Merge
+                          await AlimentBank.loadMerged();
+                          await NutrientsHandler.load(); //TODO: Merge
                           DayHandler.cache.clear();
                           setState(() {});
                         }

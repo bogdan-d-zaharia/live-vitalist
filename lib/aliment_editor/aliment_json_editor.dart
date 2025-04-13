@@ -12,10 +12,11 @@ class AlimentJsonEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, double?> expandedFields =
-        NutrientsHandler.model.map((key, value) => MapEntry(key, null));
+    final Map<String, double?> expandedFields = NutrientsHandler.model
+        .map((key, value) => MapEntry(key, null))
+      ..removeWhere((key, value) => NutrientsHandler.hasTag(key, 'disabled'));
 
-    for (var entry in alimentJson['referenceFields']?.entries ?? {}) {
+    for (MapEntry entry in alimentJson['referenceFields']?.entries ?? {}) {
       expandedFields[entry.key] = entry.value;
     }
 
@@ -23,7 +24,7 @@ class AlimentJsonEditor extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Aliment Editor'),
+        title: Text('Aliment Json Editor'),
       ),
       body: JsonEditor(json: alimentJson, trimNulls: true),
     );

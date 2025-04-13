@@ -80,11 +80,12 @@ class Day {
   ///
   /// `intl.DateFormat('d_M_y').format(date)` is used,
   /// as such, hours, minutes, seconds etc. don't matter.
-  Future<void> load(DateTime date) async {
+  Future<bool> load(DateTime date) async {
+    //TODO: Perhaps merge days when logging in to cloud.
     final fileName = intl.DateFormat('d_M_y').format(date);
-    await StorageHandler.loadJson(fileName).then((json) {
-      fromJson(json ?? {});
-    });
+    final json = await StorageHandler.loadJson(fileName);
+    fromJson(json ?? {});
+    return json != null;
   }
 
   List<Aliment> totalAliments() {
