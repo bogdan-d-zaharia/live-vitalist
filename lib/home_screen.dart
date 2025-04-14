@@ -130,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
               title: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Micro Health'),
+                  Text('Live Vitalist'),
                   Text(
                     str,
                     style: TextStyle(fontSize: 14.0),

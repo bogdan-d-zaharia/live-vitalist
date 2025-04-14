@@ -165,6 +165,8 @@ abstract final class FirebaseHandler {
     final uid = user?.uid;
     final db = FirebaseDatabase.instance.ref();
 
+    /* Just waits until it has internet connection and sends. 
+       If there is no internet connection, it waits, no exceptions given. */
     await db.child('users/$uid/$path').set(JsonHandler.mapToListRecursive(
         json)); /* used `mapToListRecursive` to maintain order */
 

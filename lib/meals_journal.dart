@@ -60,7 +60,10 @@ class MealsJournal extends StatelessWidget {
     }
 
     return CustomCard(
-      title: 'Jurnal mese',
+      title: {
+        'ENG': 'Meals jurnal',
+        'ROU': 'Jurnal mese'
+      }[SettingsData.language],
       child: Column(
         children: elements,
       ),
