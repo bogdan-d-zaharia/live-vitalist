@@ -11,14 +11,17 @@ class MealsJournal extends StatelessWidget {
   const MealsJournal({
     required this.date,
     required this.day,
+    required this.refresh,
     super.key,
   });
 
   final DateTime date;
   final Day day;
+  final void Function() refresh;
 
   void saveDay() {
     day.save(date);
+    refresh();
   }
 
   @override
