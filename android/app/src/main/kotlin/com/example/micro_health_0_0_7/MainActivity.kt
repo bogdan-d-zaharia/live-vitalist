@@ -1,4 +1,4 @@
-package com.example.micro_health_0_0_7
+package live.vitalist.app
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,50 +1,43 @@
 {
   "project_info": {
-    "project_number": "146569086035",
-    "firebase_url": "https://micro-health-90016-default-rtdb.europe-west1.firebasedatabase.app",
-    "project_id": "micro-health-90016",
-    "storage_bucket": "micro-health-90016.firebasestorage.app"
+    "project_number": "958879460718",
+    "firebase_url": "https://vitalist-369f7-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "vitalist-369f7",
+    "storage_bucket": "vitalist-369f7.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:146569086035:android:0f846f7a5006a010e432a6",
+        "mobilesdk_app_id": "1:958879460718:android:8f947c49ed80510322a57f",
         "android_client_info": {
-          "package_name": "com.example.micro_health_0_0_7"
+          "package_name": "live.vitalist.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "146569086035-vrlbphacva76pdu0ilv7th9afrb7if2v.apps.googleusercontent.com",
+          "client_id": "958879460718-ono5ovkiki3fea8ehpai4oo5c6gre8t2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.micro_health_0_0_7",
+            "package_name": "live.vitalist.app",
             "certificate_hash": "c79604133a10e7f7aebd6e42d011bdffcc0381b9"
           }
         },
         {
-          "client_id": "146569086035-iscpboscv7kusqm3llpiiisknp2gi6g6.apps.googleusercontent.com",
+          "client_id": "958879460718-0q4etfcijrf5kt74177trm6son216b87.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC9yyMMqFAHUnGiO8AgmsuyzEslliFRzQU"
+          "current_key": "AIzaSyAHHKtKPbJxmDKxkqzadQ2ajWIC1BmSEAQ"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "146569086035-iscpboscv7kusqm3llpiiisknp2gi6g6.apps.googleusercontent.com",
+              "client_id": "958879460718-0q4etfcijrf5kt74177trm6son216b87.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "146569086035-fjcodfja3elgj0aer5lk5jrumnrh6slr.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.microHealth007"
-              }
             }
           ]
         }

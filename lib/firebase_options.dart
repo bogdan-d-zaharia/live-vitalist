@@ -50,12 +50,12 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyC9yyMMqFAHUnGiO8AgmsuyzEslliFRzQU',
-    appId: '1:146569086035:android:0f846f7a5006a010e432a6',
-    messagingSenderId: '146569086035',
-    projectId: 'micro-health-90016',
-    databaseURL: 'https://micro-health-90016-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'micro-health-90016.firebasestorage.app',
+    apiKey: 'AIzaSyAHHKtKPbJxmDKxkqzadQ2ajWIC1BmSEAQ',
+    appId: '1:958879460718:android:8f947c49ed80510322a57f',
+    messagingSenderId: '958879460718',
+    projectId: 'vitalist-369f7',
+    databaseURL: 'https://vitalist-369f7-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'vitalist-369f7.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(

@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.micro_health_0_0_7">
+    package="live.vitalist.app">
 
     <!-- Used to be used for saving and loading data externally. -->
     <!-- <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
