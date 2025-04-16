@@ -26,7 +26,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -54,17 +57,8 @@ class DefaultFirebaseOptions {
     appId: '1:958879460718:android:8f947c49ed80510322a57f',
     messagingSenderId: '958879460718',
     projectId: 'vitalist-369f7',
-    databaseURL: 'https://vitalist-369f7-default-rtdb.europe-west1.firebasedatabase.app',
+    databaseURL:
+        'https://vitalist-369f7-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'vitalist-369f7.firebasestorage.app',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDGl6uq3lkfH2eY_vb5LoepxixgHQJWAx0',
-    appId: '1:146569086035:ios:4466d38cadcf63d5e432a6',
-    messagingSenderId: '146569086035',
-    projectId: 'micro-health-90016',
-    databaseURL: 'https://micro-health-90016-default-rtdb.europe-west1.firebasedatabase.app',
-    storageBucket: 'micro-health-90016.firebasestorage.app',
-    iosBundleId: 'com.example.microHealth007',
   );
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../file_handler.dart';
 
 abstract final class NutrientsHandler {
-  static Map<String, Map<String, dynamic>> model = {
+  static const Map<String, Map<String, dynamic>> _initModel = {
     "kcals": {
       "unit": "kcal",
       "lowerLimit": 3300.0,
@@ -357,6 +357,12 @@ abstract final class NutrientsHandler {
       ]
     },
   };
+
+  static Map<String, Map<String, dynamic>> model = Map.of(_initModel);
+
+  static void reset() {
+    model = Map.of(_initModel);
+  }
 
   static Map<String, dynamic> toJson() {
     return model;

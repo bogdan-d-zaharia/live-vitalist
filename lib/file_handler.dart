@@ -154,6 +154,13 @@ abstract final class FileHandler {
 
     return file2.lastModifiedSync().difference(file1.lastModifiedSync());
   }
+
+  static Future<void> deleteLocal() async {
+    final dir = Directory(await FileHandler.localPath);
+    for (File file in dir.listSync().whereType<File>()) {
+      await file.delete();
+    }
+  }
 }
 
 abstract final class FirebaseHandler {
