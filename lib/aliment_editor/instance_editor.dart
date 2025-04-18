@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '../aliment.dart';
 import '../aliment_bank_editor.dart';
+import '../custom_card.dart';
 import '../string_input.dart';
+import 'package:diacritic/diacritic.dart';
 
 class InstanceEditor extends StatefulWidget {
   const InstanceEditor({
@@ -18,68 +20,51 @@ class _InstanceEditorState extends State<InstanceEditor> {
   bool isAlimentModified = false;
   bool isModified = false;
 
-  String searchTerm = '';
+  Future<void> showSelector() async {
+    final String? id = await showDialog(
+      context: context,
+      builder: (context) => Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Selector(),
+      ),
+    );
+
+    if (id == null) return;
+
+    setState(() {
+      isModified = true;
+      isAlimentModified = true;
+
+      widget.aliment.alimentID = id;
+
+      final AlimentData aliment = AlimentBank.getAliment(id);
+      widget.aliment.unit = aliment.unitSizes?.keys.first;
+    });
+  }
 
   Widget _alimentSelector() {
-    return SizedBox(
-      child: DropdownButton<String>(
-        isExpanded: true,
-        hint: ListView(
+    final String? name = AlimentBank.aliments[widget.aliment.alimentID]?.name;
+    return MiniCard(
+      child: InkWell(
+        onTap: showSelector,
+        child: Row(
           children: [
-            Text(AlimentBank.aliments[widget.aliment.alimentID]?.name ?? '')
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0, vertical: 12.0),
+                child: Text(
+                  name ?? 'Select aliment',
+                  softWrap: true,
+                  style: name != null
+                      ? TextStyle()
+                      : TextStyle().copyWith(color: Colors.grey[700]),
+                ),
+              ),
+            ),
+            Icon(Icons.arrow_drop_down_rounded, size: 42.0),
           ],
         ),
-        items:
-
-            /// Filter for the search term.
-            AlimentBank.sortedKeys
-
-                /// TODO: Ideea e ca se actualizeaza cand iesi si intri in dropdown...
-                /// .where((element) => false)
-                /// Create the dropdown
-                .map((id) => DropdownMenuItem(
-                    enabled: (searchTerm == '') ||
-                        (AlimentBank.getAliment(id)
-                            .name
-                            .toLowerCase()
-                            .contains(searchTerm.toLowerCase())),
-                    value: id,
-                    child: SizedBox(
-                        width: 300.0,
-                        child: Text(AlimentBank.getAliment(id).name))))
-                .toList()
-
-        /// Add the search box.
-        /// ..insert(
-        ///     0,
-        ///     DropdownMenuItem(
-        ///       value: null,
-        ///       child: SizedBox(
-        ///         width: 300.0,
-        ///         child: StringInput(
-        ///           hint: 'Search',
-        ///           update: (p0) {
-        ///             setState(() {
-        ///               searchTerm = p0;
-        ///             });
-        ///           },
-        ///         ),
-        ///       ),
-        ///     ))
-        ,
-        onChanged: (newID) {
-          if (newID != null) {
-            setState(() {
-              isModified = true;
-              isAlimentModified = true;
-
-              widget.aliment.alimentID = newID;
-
-              final AlimentData aliment = AlimentBank.getAliment(newID);
-              widget.aliment.unit = aliment.unitSizes?.keys.first;
-            });
-          }
-        },
       ),
     );
   }
@@ -140,17 +125,6 @@ class _InstanceEditorState extends State<InstanceEditor> {
 
   @override
   Widget build(BuildContext context) {
-    // final newKeys = AlimentBank.aliments.keys
-    //     // Filter elements in search.
-    //     .where(
-    //       (id) =>
-    //           (searchTerm == '') ||
-    //           (AlimentBank.getAliment(id).name
-    //               .toLowerCase()
-    //               .contains(searchTerm.toLowerCase())),
-    //     )
-    //     .toList();
-    // print(newKeys);
     final Widget? unitSelector = _unitSelector();
     return PopScope(
       canPop: false,
@@ -195,6 +169,105 @@ class _InstanceEditorState extends State<InstanceEditor> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class Selector extends StatefulWidget {
+  const Selector({super.key});
+
+  @override
+  State<Selector> createState() => _SelectorState();
+}
+
+class _SelectorState extends State<Selector> {
+  String searchTerm = '';
+  late TextEditingController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final keys = AlimentBank.sortedKeys.where((id) =>
+        removeDiacritics(AlimentBank.getAliment(id).name.toLowerCase())
+            .contains(removeDiacritics(searchTerm.toLowerCase())));
+    return CustomCard(
+      title: 'Aliment Selector',
+      child: Expanded(
+        child: ListView(
+          children: [
+            MiniCard(
+              child: Row(
+                children: [
+                  SizedBox(
+                    //TODO: A more programatical approach
+                    width: 42.0,
+                    height: 42.0,
+                    child: Icon(Icons.search_rounded),
+                  ),
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                          hintText: 'Search aliment', border: InputBorder.none),
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      controller: controller,
+                      onChanged: (newString) {
+                        if (searchTerm == newString) return;
+                        setState(() {
+                          searchTerm = newString;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            MiniCard(
+              child: InkWell(
+                onTap: () =>
+                    AlimentBankEditor.addNewAliment(context, name: searchTerm)
+                        .then((_) => setState(() {})),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 42.0,
+                      height: 42.0,
+                      child: Icon(Icons.add_rounded),
+                    ),
+                    Text('Add Aliment'),
+                  ],
+                ),
+              ),
+            ),
+            Divider(height: 24.0, color: Colors.grey[300]),
+            ...keys.map(
+              (id) => MiniCard(
+                child: InkWell(
+                  onTap: () => Navigator.pop(context, id),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 12.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(AlimentBank.getAliment(id).name),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

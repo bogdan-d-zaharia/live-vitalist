@@ -220,7 +220,7 @@ class AlimentData {
       referenceSize: json['referenceSize'] as double,
     );
 
-    if (json.containsKey('referenceFields')) {
+    if (json['referenceFields'] != null) {
       result.referenceFields = (json['referenceFields'] as Map<String, dynamic>)
           .map((key, value) => MapEntry(key, value as double));
     }

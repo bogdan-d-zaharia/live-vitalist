@@ -140,11 +140,21 @@ abstract final class FileHandler {
 
   static Future<Map<String, dynamic>?> loadJson(String path) async {
     final File? file = await _getFile(path);
-    final String? str = (await file?.readAsString());
-    return str != null ? jsonDecode(str) : null;
-    //TODO:FormatException (FormatException: Unexpected character (at character 3)
-    // {}aliments":{"652656957":{"name":"q","referenceSize":1.0,"referenceFields":...
-    // ^
+    String? str = (await file?.readAsString());
+
+    if (str != null) {
+      //TODO: Investigate and fix real cause.
+      /* This happends rarely but is annoying enough.
+         The first " is replaced with a }.
+         I made a lazy fix.
+
+         FormatException (FormatException: Unexpected character (at character 3)
+         {}aliments":{"652656957":{"name":"q","referenceSize":1.0,"referenceFields":...
+           ^ */
+      if (str.length > 2 && str[1] == "}") str = str.replaceRange(1, 2, '"');
+      return jsonDecode(str);
+    }
+    return null;
   }
 
   static Future<Duration?> deltaFile(String filename1, String filename2) async {

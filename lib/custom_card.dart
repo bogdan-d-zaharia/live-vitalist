@@ -104,11 +104,7 @@ class CustomCard extends StatelessWidget {
 
     final bool useInkWell = onTap != null || onLongTap != null;
 
-    return Card(
-      clipBehavior: Clip.hardEdge,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24.0),
-      ),
+    return MiniCard(
       child: !useInkWell
           ? interior
           : InkWell(
@@ -116,6 +112,26 @@ class CustomCard extends StatelessWidget {
               onLongPress: onLongTap,
               child: interior,
             ),
+    );
+  }
+}
+
+class MiniCard extends StatelessWidget {
+  const MiniCard({
+    this.child,
+    super.key,
+  });
+
+  final Widget? child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      clipBehavior: Clip.hardEdge,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24.0),
+      ),
+      child: child,
     );
   }
 }

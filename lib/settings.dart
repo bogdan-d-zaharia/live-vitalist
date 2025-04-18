@@ -356,7 +356,7 @@ class _SettingsState extends State<Settings> {
                   child: Text('Backup all data to cloud'),
                 ),
               ),
-            Card(
+            MiniCard(
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

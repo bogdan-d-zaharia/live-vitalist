@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'custom_card.dart';
 import 'json_handler.dart';
 import 'models/reference_fields_model.dart';
 import 'settings.dart';
@@ -67,7 +68,7 @@ class _NutrientsEditorState extends State<NutrientsEditor> {
             final String label =
                 '${field['translations'][SettingsData.language]} ("$e")';
 
-            return Card(
+            return MiniCard(
               child: InkWell(
                 onTap: () async {
                   final Map<String, dynamic> fields = {

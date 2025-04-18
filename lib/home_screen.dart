@@ -244,12 +244,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       distribution: distribution,
                       targetDistribution: targetDistribution,
                     ),
-                  NutrientDisplay(days: days),
                   MealsJournal(
                     date: dates.first,
                     day: days.first,
                     refresh: () => setState(() {}),
                   ),
+                  NutrientDisplay(days: days),
                   SizedBox(height: 12.0),
                 ],
               ),

@@ -218,6 +218,7 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) return;
 
+        //TODO: Remove saveAlert if not modified.
         final bool? isSave = await saveAlert();
 
         if (isSave == null) return;
@@ -270,7 +271,7 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
                 isNumber: false,
               ),
               input(
-                label: 'Reference size',
+                label: 'Per amount',
                 getter: () => alimentData.referenceSize,
                 /*  This works even for InstancedAliment because
                     it uses the getter `alimentData` which gives a reference. */
@@ -290,6 +291,7 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
                 ],
               ),
               if (isShowAdvanced) ...advancedFieldsWid,
+              //TODO: Add unit editor
               ElevatedButton(
                 onPressed: () => Navigator.pop(context, true),
                 child: Text('Save'),

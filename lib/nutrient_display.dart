@@ -340,8 +340,8 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
     }
 
     return CustomCard(
-      logo: const Icon(Icons.monitor),
-      title: 'Monitor',
+      logo: const Icon(Icons.bar_chart_rounded),
+      title: 'Nutrients',
       action: DropdownButton<int>(
         value: category,
         items: [

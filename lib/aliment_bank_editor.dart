@@ -6,10 +6,11 @@ import 'custom_card.dart';
 class AlimentBankEditor extends StatefulWidget {
   const AlimentBankEditor({super.key});
 
-  static Future<bool> addNewAliment(BuildContext context) async {
+  static Future<bool> addNewAliment(BuildContext context,
+      {String name = ''}) async {
     final aliment = TemporaryAliment.fromJson({
       "alimentData": {
-        'name': '',
+        'name': name,
         'referenceSize': 1.0,
       },
       "servingSize": 1.0,
@@ -116,7 +117,7 @@ class _AlimentBankEditorState extends State<AlimentBankEditor> {
         //TODO: Did a little wizzardry.
         final aliment = InstancedAliment(alimentID: id, servingSize: 0.0);
 
-        return Card(
+        return MiniCard(
           child: InkWell(
             onTap: () => AlimentEditor.editAliment(aliment, context)
                 .then((_) => setState(() {})),

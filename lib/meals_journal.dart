@@ -54,7 +54,7 @@ class MealsJournal extends StatelessWidget {
     ];
 
     final Widget divider = Divider(
-      color: Colors.black.withValues(alpha: 0.1),
+      color: Colors.grey[300],
       thickness: 0.5,
       height: 0.0,
     );
@@ -111,25 +111,57 @@ class _MealElementState extends State<MealElement> {
   @override
   Widget build(BuildContext context) {
     final Map<String, double> values = Day.sumFields(widget.aliments);
-    return InkWell(
-      onTap: () => openMeal(context),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(widget.title),
-                Text(
-                  '${values['kcals']?.round() ?? 0} ${NutrientsHandler.model['kcals']!['translations'][SettingsData.language]}',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 12.0),
+    return IntrinsicHeight(
+      child: Row(
+        children: [
+          Expanded(
+            child: InkWell(
+              onTap: () => openMeal(context),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(widget.title),
+                        Text(
+                          '${values['kcals']?.round() ?? 0} ${NutrientsHandler.model['kcals']!['translations'][SettingsData.language]}',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 12.0),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ],
-        ),
+          ),
+          VerticalDivider(
+            color: Colors.grey[300],
+            thickness: 0.5,
+            width: 0.0,
+            indent: 8.0,
+            endIndent: 8.0,
+          ),
+          AspectRatio(
+            aspectRatio: 1.0,
+            child: InkWell(
+              //TODO: Copied from `_MealEditorState` to `_MealElementState`
+              onTap: () async {
+                final InstancedAliment newAliment =
+                    InstancedAliment(alimentID: '', servingSize: 1.0);
+                await AlimentEditor.editInstance(newAliment, context);
+                if (AlimentBank.aliments.keys.contains(newAliment.alimentID)) {
+                  widget.aliments.add(newAliment);
+                }
+                setState(() {});
+                widget.saver();
+              },
+              child: Center(child: Icon(Icons.add)),
+            ),
+          )
+        ],
       ),
     );
   }
