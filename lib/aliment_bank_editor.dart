@@ -138,10 +138,8 @@ class _AlimentBankEditorState extends State<AlimentBankEditor> {
         title: Text('Aliment Table Editor'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ListView(
-          children: elements,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: ListView(children: elements..add(SizedBox(height: 12.0))),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => AlimentBankEditor.addNewAliment(context)

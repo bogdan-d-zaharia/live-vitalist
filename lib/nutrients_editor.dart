@@ -61,7 +61,7 @@ class _NutrientsEditorState extends State<NutrientsEditor> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: ListView(
           children: NutrientsHandler.model.keys.map<Widget>((e) {
             final field = NutrientsHandler.model[e]!;
@@ -135,7 +135,8 @@ class _NutrientsEditorState extends State<NutrientsEditor> {
                 ),
               ),
             );
-          }).toList(),
+          }).toList()
+            ..add(SizedBox(height: 12.0)),
         ),
       ),
     );

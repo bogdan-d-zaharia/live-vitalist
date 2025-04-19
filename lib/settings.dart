@@ -301,7 +301,7 @@ class _SettingsState extends State<Settings> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: ListView(
           children: [
             if (!StorageHandler.isFirebase)
@@ -411,6 +411,7 @@ class _SettingsState extends State<Settings> {
                 ],
               ),
             ),
+            SizedBox(height: 12.0),
           ],
         ),
       ),

@@ -224,7 +224,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
             body: Padding(
-              padding: const EdgeInsets.only(right: 8.0, left: 8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: ListView(
                 children: [
                   WeekCalendar(

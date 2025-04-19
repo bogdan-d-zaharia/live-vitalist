@@ -64,7 +64,7 @@ class MealsJournal extends StatelessWidget {
 
     return CustomCard(
       title: {
-        'ENG': 'Meals jurnal',
+        'ENG': 'Meals journal',
         'ROU': 'Jurnal mese'
       }[SettingsData.language],
       child: Column(
@@ -126,9 +126,12 @@ class _MealElementState extends State<MealElement> {
                       children: [
                         Text(widget.title),
                         Text(
-                          '${values['kcals']?.round() ?? 0} ${NutrientsHandler.model['kcals']!['translations'][SettingsData.language]}',
+                          '${values['kcals']?.round() ?? 0} ${NutrientsHandler.model['kcals']?['translations']?[SettingsData.language]?.toLowerCase() ?? ''}',
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 12.0),
+                          style: TextStyle(
+                            fontSize: 12.0,
+                            color: Colors.grey,
+                          ),
                         ),
                       ],
                     ),
@@ -158,9 +161,9 @@ class _MealElementState extends State<MealElement> {
                 setState(() {});
                 widget.saver();
               },
-              child: Center(child: Icon(Icons.add)),
+              child: Center(child: Icon(Icons.add_rounded)),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -244,17 +247,14 @@ class _MealEditorState extends State<MealEditor> {
       additional: [],
     ));
 
+    final Widget divider = Divider(
+      color: Colors.grey[300],
+      thickness: 0.5,
+      height: 0.0,
+    );
+
     for (int i = elements.length - 1; i > 0; i--) {
-      elements.insert(
-        i,
-        Divider(
-          thickness: 1.0,
-          height: 0.0,
-          indent: 16.0,
-          endIndent: 16.0,
-          color: Colors.black.withValues(alpha: 0.1),
-        ),
-      );
+      elements.insert(i, divider);
     }
 
     return Scaffold(
@@ -266,97 +266,20 @@ class _MealEditorState extends State<MealEditor> {
                 widget.aliments, widget.title),
             child: Text('Show Notification'),
           ),
+          SizedBox(width: 12.0),
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: ListView(
           children: [
-            const TitleView(titleTxt: 'Aliments'),
-            Material(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(24.0),
-                side: BorderSide(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  width: 1.0,
-                ),
-              ),
-              clipBehavior: Clip.hardEdge,
+            CustomCard(
+              title: 'Aliments',
               child: Column(children: elements),
             ),
+            SizedBox(height: 12.0),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class TitleView extends StatelessWidget {
-  final String titleTxt;
-  final String subTxt;
-
-  const TitleView({
-    super.key,
-    this.titleTxt = "",
-    this.subTxt = "",
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    const String fontName = 'Roboto';
-    const Color lightText = Color(0xFF4A6572);
-    const Color nearlyDarkBlue = Color(0xFF2633C5);
-    const Color darkText = Color(0xFF253840);
-
-    return Padding(
-      padding: const EdgeInsets.only(left: 24, right: 24),
-      child: Row(
-        children: <Widget>[
-          Text(
-            titleTxt,
-            textAlign: TextAlign.left,
-            style: const TextStyle(
-              fontFamily: fontName,
-              fontWeight: FontWeight.w500,
-              fontSize: 18,
-              letterSpacing: 0.5,
-              color: lightText,
-            ),
-          ),
-          if (subTxt != '')
-            InkWell(
-              highlightColor: Colors.transparent,
-              borderRadius: const BorderRadius.all(Radius.circular(4.0)),
-              onTap: () {},
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      subTxt,
-                      textAlign: TextAlign.left,
-                      style: const TextStyle(
-                        fontFamily: fontName,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 16,
-                        letterSpacing: 0.5,
-                        color: nearlyDarkBlue,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 38,
-                      width: 26,
-                      child: Icon(
-                        Icons.arrow_forward,
-                        color: darkText,
-                        size: 18,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )
-        ],
       ),
     );
   }
@@ -380,50 +303,41 @@ class ElementWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      onLongPress: onLongPress,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontFamily: 'Roboto',
-                      fontSize: 18.0,
-                      letterSpacing: -0.5,
-                    ),
-                  ),
-                  if (subTitle != '')
-                    Row(
-                      children: [
-                        const SizedBox(width: 4.0),
-                        Text(
-                          subTitle,
-                          style: TextStyle(
-                            color: Color.lerp(Colors.black, Colors.white, 0.6),
-
-                            /// 153 = 60/100*255
-                            /// color: Color.fromARGB(255, 153, 153, 153),
-                            fontFamily: 'Roboto',
-                            fontSize: 13.0,
-                            letterSpacing: 0.0,
+    return IntrinsicHeight(
+      child: Row(
+        children: [
+          Expanded(
+            child: InkWell(
+              onTap: onTap,
+              onLongPress: onLongPress,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontSize: 16.0,
+                            letterSpacing: -0.5,
                           ),
+                    ),
+                    if (subTitle != '')
+                      Text(
+                        subTitle,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          color: Colors.grey,
                         ),
-                      ],
-                    )
-                ],
+                      ),
+                  ],
+                ),
               ),
             ),
-            ...additional,
-          ],
-        ),
+          ),
+          ...additional,
+        ],
       ),
     );
   }
@@ -449,43 +363,24 @@ class AlimentWidget extends StatelessWidget {
     return ElementWidget(
       title: aliment.getAliment.name,
       subTitle:
-          '${values['kcals']?.round() ?? 0.0} kcal, ${aliment.servingSize} ${aliment.unit ?? ''}',
+          '${values['kcals']?.round() ?? 0} ${NutrientsHandler.model['kcals']?['translations']?[SettingsData.language]?.toLowerCase() ?? ''}, ${aliment.servingSize} ${aliment.unit ?? ''}',
       onTap: onTap,
       onLongPress: onLongPress,
       additional: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-          child: Container(
-            width: 1.0,
-            height: 24.0,
-            decoration: BoxDecoration(
-              color: const Color(0xffd6d6d8),
-              borderRadius: BorderRadius.circular(1.0),
-            ),
-          ),
+        VerticalDivider(
+          color: Colors.grey[300],
+          thickness: 0.5,
+          width: 0.0,
+          indent: 8.0,
+          endIndent: 8.0,
         ),
-        InkWell(
-          onTap: deleteAliment,
-          child: Container(
-            width: 32.0,
-            height: 32.0,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16.0),
-              border: Border.all(
-                color: Colors.black.withValues(alpha: 0.1),
-                width: 0.8,
-              ),
-            ),
-            child: Center(
-              child: Container(
-                width: 19.0,
-                height: 2.0,
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(1.0),
-                ),
-              ),
-            ),
+        //TODO: Used trial and error to replicate `AspectRatio` without
+        // having the width vary.
+        SizedBox(
+          width: 53.0,
+          child: InkWell(
+            onTap: deleteAliment,
+            child: Center(child: Icon(Icons.remove_rounded)),
           ),
         ),
       ],
