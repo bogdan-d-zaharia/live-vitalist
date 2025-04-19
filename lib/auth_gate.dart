@@ -149,6 +149,7 @@ class _AuthGateState extends State<AuthGate> {
   }
 
   Widget logInScreen() {
+    //TODO: Don't reshow when rebuilt/updating screen.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       showPrivacyPolicyAndTermsOfUsePopup();
     });

@@ -213,95 +213,45 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
               showDialog(
                 context: context,
                 builder: (context) {
-                  return Dialog(
-                    child: ListView(
-                      children: [
-                        SizedBox(height: 12.0),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 6.0,
-                            horizontal: 12.0,
-                          ),
-                          child: Align(
-                            alignment: Alignment.topCenter,
-                            child: Text(
-                              '$label intake: ${intake.toStringAsFixed(3)}',
-                              style: TextStyle(fontSize: 24.0),
-                              textAlign: TextAlign.center,
-                            ),
+                  return GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: MiniCard(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                          child: ListView(
+                            shrinkWrap: true,
+                            children: [
+                              SizedBox(height: 40.0),
+                              Text(
+                                  '$label intake: ${intake.toStringAsFixed(3)}',
+                                  style: TextStyle(fontSize: 24.0)),
+                              if (lower != null)
+                                Text(
+                                    'Lower limit: ${lower.toStringAsFixed(3)}'),
+                              if (upper != null)
+                                Text(
+                                    'Upper limit: ${upper.toStringAsFixed(3)}'),
+                              Divider(height: 36.0),
+                              Text('Top sources of ${label.toLowerCase()}:',
+                                  style: TextStyle(fontSize: 24.0)),
+                              ...topIntakeAliments.entries.map((e) {
+                                /// eg. Cheese
+                                final String name = e.key.getAliment.name;
+
+                                /// eg. protein
+                                final String valueOfLabel =
+                                    '(${e.value.toStringAsFixed(3)} ${label.toLowerCase()})';
+
+                                return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('$name $valueOfLabel'));
+                              }),
+                            ],
                           ),
                         ),
-                        if (lower != null)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 6.0,
-                              horizontal: 12.0,
-                            ),
-                            child: Align(
-                              alignment: Alignment.topCenter,
-                              child: Text(
-                                'Lower limit: ${lower.toStringAsFixed(3)}',
-                                style: TextStyle(fontSize: 24.0),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        if (upper != null)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 6.0,
-                              horizontal: 12.0,
-                            ),
-                            child: Align(
-                              alignment: Alignment.topCenter,
-                              child: Text(
-                                'Upper limit: ${upper.toStringAsFixed(3)}',
-                                style: TextStyle(fontSize: 24.0),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                          ),
-                        Divider(),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 24.0,
-                            horizontal: 12.0,
-                          ),
-                          child: Align(
-                            alignment: Alignment.topCenter,
-                            child: Text(
-                              'Top sources of ${label.toLowerCase()}:',
-                              style: TextStyle(fontSize: 24.0),
-                            ),
-                          ),
-                        ),
-                        ...topIntakeAliments.entries.map((e) {
-                          /// eg. Cheese
-                          final String name = e.key.getAliment.name;
-
-                          /// eg. protein
-                          final String valueOfLabel =
-                              '(${e.value.toStringAsFixed(3)} ${label.toLowerCase()})';
-
-                          /// eg. g for grams
-                          final double amountDouble = day
-                              .totalAliments()
-                              //TODO: Investigate and remove DOWN this comment.
-                              .where(
-                                  (element) => element /*.alimentID*/ == e.key)
-                              .fold(0.0, (a, b) => a + b.servingSize);
-                          final String amountOfProduct =
-                              '(${amountDouble.toStringAsFixed(3)})';
-
-                          return Padding(
-                              padding: const EdgeInsets.all(8.0),
-
-                              /// TODO: Perhaps add 'kcal' (or the unit in general)
-                              /// after the `e.value`.
-                              child: Text(
-                                  '\'$name\' $valueOfLabel $amountOfProduct'));
-                        }),
-                      ],
+                      ),
                     ),
                   );
                 },
