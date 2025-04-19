@@ -38,57 +38,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return days;
   }
 
-  String calculateStr() {
-    /// 29-31 Dec 2024, 1-4 Jan 2025
-    final Map<int, Map<int, List<int>>> yearMonthDays = {};
-    for (final DateTime date in dates) {
-      if (yearMonthDays[date.year] == null) {
-        yearMonthDays[date.year] = {};
-      }
-
-      if (yearMonthDays[date.year]![date.month] == null) {
-        yearMonthDays[date.year]![date.month] = [];
-      }
-
-      yearMonthDays[date.year]![date.month]!.add(date.day);
-    }
-
-    String str = '';
-
-    void addRange(int year, int month, int firstDay, int lastDay) {
-      final String sDays =
-          (firstDay == lastDay) ? '$firstDay' : '$firstDay-$lastDay';
-
-      if (str != '') str = '$str, ';
-      str = '$str$sDays.$month.$year';
-    }
-
-    for (final int mYear in yearMonthDays.keys.toList()..sort()) {
-      for (final int mMonth in yearMonthDays[mYear]!.keys.toList()..sort()) {
-        final List<int> mDays = yearMonthDays[mYear]![mMonth]!..sort();
-        //TODO: Also add visual feedback to the calendar.
-        //TODO: Right now, for:
-        //....###........#..###..
-        //We get:
-        //....#################..
-        //And they should be the same.
-
-        /* At this point, we went trough each year and month in order
-         and we got the list of days, in order.
-         We will go trough each possible range to add. */
-        //// int first = 0;
-        //// int last = 0;
-        //// for (int i = 1; i <= 31; ++i) {
-        ////   if (first == 0 && mDays.contains(i)) first = i;
-        ////   if (last == 0 && mDays.contains(i)) last = i;
-        //// }
-        addRange(mYear, mMonth, mDays.first, mDays.last);
-      }
-    }
-
-    return str;
-  }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -123,20 +72,9 @@ class _HomeScreenState extends State<HomeScreen> {
             };
           }
 
-          final String str = calculateStr();
-
           return Scaffold(
             appBar: AppBar(
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Live Vitalist'),
-                  Text(
-                    str,
-                    style: TextStyle(fontSize: 14.0),
-                  ),
-                ],
-              ),
+              title: Text('Live Vitalist'),
               actions: [
                 Padding(
                   padding: const EdgeInsets.only(right: 24.0),
@@ -228,16 +166,18 @@ class _HomeScreenState extends State<HomeScreen> {
               child: ListView(
                 children: [
                   WeekCalendar(
-                    onDateChanged: (DateTime newDate) {
-                      setState(() {
-                        dates = {newDate};
-                      });
-                    },
-                    onDateSelected: (DateTime newDate) {
-                      setState(() {
-                        dates.add(newDate);
-                      });
-                    },
+                    dates: dates,
+                    refresh: () => setState(() {}),
+                    // onDateChanged: (DateTime newDate) {
+                    //   setState(() {
+                    //     dates = {newDate};
+                    //   });
+                    // },
+                    // onDateSelected: (DateTime newDate) {
+                    //   setState(() {
+                    //     dates.add(newDate);
+                    //   });
+                    // },
                   ),
                   if ((distribution != null) && (targetDistribution != null))
                     PieChart(

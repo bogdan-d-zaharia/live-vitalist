@@ -68,13 +68,13 @@ class DottedLinePainter extends CustomPainter {
 
 class WeekCalendar extends StatelessWidget {
   const WeekCalendar({
-    required this.onDateChanged,
-    required this.onDateSelected,
+    required this.dates,
+    required this.refresh,
     super.key,
   });
 
-  final void Function(DateTime) onDateChanged;
-  final void Function(DateTime) onDateSelected;
+  final Set<DateTime> dates;
+  final void Function() refresh;
 
   @override
   Widget build(BuildContext context) {
@@ -101,17 +101,44 @@ class WeekCalendar extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8.0),
                   clipBehavior: Clip.hardEdge,
                   child: InkWell(
-                    onTap: () => onDateChanged(date),
-                    onLongPress: () => onDateSelected(date),
+                    onTap: () {
+                      dates.clear();
+                      dates.add(date);
+                      refresh();
+                    },
+                    onLongPress: () {
+                      if (!dates.contains(date)) {
+                        dates.add(date);
+                      } else {
+                        dates.remove(date);
+                      }
+                      refresh();
+                    },
+                    //TODO: Is slowing down single tap
+                    // onDoubleTap: () {
+                    //   DateTime latest = dates.first;
+                    //   for (DateTime d in dates) {
+                    //     if (latest.compareTo(d) < 0) {
+                    //       latest = d;
+                    //     }
+                    //   }
+
+                    //   for (var i = 0; i < latest.difference(date).inDays; i++) {
+                    //     dates.add(latest.subtract(Duration(days: i + 1)));
+                    //   }
+                    //   refresh();
+                    // },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 6.0,
                       ),
                       child: CalendarItem(
-                          date: date,
-                          title: intl.DateFormat(
-                                  SettingsData.isMonthDay ? 'M/d' : 'd/M')
-                              .format(date)),
+                        date: date,
+                        title: intl.DateFormat(
+                                SettingsData.isMonthDay ? 'M/d' : 'd/M')
+                            .format(date),
+                        isSelected: dates.contains(date),
+                      ),
                     ),
                   ),
                 );
@@ -139,10 +166,12 @@ class CalendarItem extends StatelessWidget {
     super.key,
     required this.title,
     required this.date,
+    required this.isSelected,
   });
 
   final String title;
   final DateTime date;
+  final bool isSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -261,7 +290,11 @@ class CalendarItem extends StatelessWidget {
                 ),
               ),
             ),
-          Text(title, style: Palette.calendarItem),
+          Text(
+            title,
+            style: Palette.calendarItem
+                .copyWith(color: isSelected ? Colors.black : Colors.grey),
+          ),
         ],
       ),
     );
