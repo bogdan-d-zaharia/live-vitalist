@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart'
     as ntf;
 
@@ -9,7 +10,7 @@ class NotificationHandler {
 
   static Future<void> initialize() async {
     const ntf.AndroidInitializationSettings androidInitSettings =
-        ntf.AndroidInitializationSettings('@mipmap/ic_launcher');
+        ntf.AndroidInitializationSettings('ic_notification');
 
     const ntf.InitializationSettings initSettings =
         ntf.InitializationSettings(android: androidInitSettings);
@@ -17,9 +18,20 @@ class NotificationHandler {
     await _notificationsPlugin.initialize(initSettings);
   }
 
-  static Future<void> showListNotification(List<Aliment> list) async {
+  static String alimentToLine(Aliment e) {
+    final String servingSize = e.servingSize % 1 == 0
+        ? e.servingSize.toInt().toString()
+        : e.servingSize.toStringAsFixed(1);
+
+    final String unit = e.unit != null ? ' ${e.unit}' : '';
+
+    return '($servingSize$unit) ${e.getAliment.name}';
+  }
+
+  static Future<void> showListNotification(
+      List<Aliment> list, String mealName) async {
     List<String> lines = list
-        .map((e) => '(${e.servingSize}) ${e.getAliment.name}')
+        .map(alimentToLine)
         .map((e) => e.length < 54 ? e : e.substring(0, 54))
         .toList();
 
@@ -31,10 +43,12 @@ class NotificationHandler {
       importance: ntf.Importance.max,
       priority: ntf.Priority.high,
       ticker: 'ticker',
+      color: Colors.lightGreen,
+      colorized: true,
       styleInformation: ntf.BigTextStyleInformation(
         lines.join('\n'),
-        contentTitle: 'Your List Title',
-        summaryText: 'Tap to view more',
+        contentTitle: '$mealName aliments',
+        summaryText: 'Meal summary',
       ),
     );
 
@@ -43,8 +57,8 @@ class NotificationHandler {
 
     await _notificationsPlugin.show(
       0,
-      'Your List Notification',
-      'Here are some items:',
+      '$mealName aliments',
+      'Expand to view aliments',
       notificationDetails,
     );
   }

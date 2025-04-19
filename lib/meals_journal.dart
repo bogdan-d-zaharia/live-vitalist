@@ -262,8 +262,8 @@ class _MealEditorState extends State<MealEditor> {
         title: Text(widget.title),
         actions: [
           ElevatedButton(
-            onPressed: () =>
-                NotificationHandler.showListNotification(widget.aliments),
+            onPressed: () => NotificationHandler.showListNotification(
+                widget.aliments, widget.title),
             child: Text('Show Notification'),
           ),
         ],
