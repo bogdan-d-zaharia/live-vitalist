@@ -185,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ).then((value) {
                             NutrientsHandler.save();
-                            setState(() {});
+                            setState(() {}); //TODO: Doesn't work
                           });
                         },
                         child: Icon(Icons.list, color: Colors.white),
