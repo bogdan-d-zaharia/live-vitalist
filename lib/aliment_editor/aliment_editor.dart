@@ -39,13 +39,19 @@ abstract final class AlimentEditor {
   }
 
   static Future<bool> editAliment(Aliment aliment, BuildContext context) async {
-    return await Navigator.push(
+    final bool isSaved = await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => AlimentDataEditor(aliment: aliment),
           ),
         ) ??
         false;
+
+    if (isSaved && aliment is InstancedAliment) {
+      AlimentBank.save();
+    }
+
+    return isSaved;
   }
 
   static Future<bool> editAlimentJson(

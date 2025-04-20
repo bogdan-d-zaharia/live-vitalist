@@ -299,16 +299,19 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
             value: -1,
             child: Row(
               children: [
-                Checkbox(
-                    value: isSmartHide,
-                    onChanged: (value) {
-                      if (value != null) {
-                        setState(() {
-                          isSmartHide = value;
-                        });
-                      }
-                    }),
-                Icon(Icons.deselect_rounded),
+                SizedBox(
+                  width: 24.0,
+                  height: 24.0,
+                  child: Checkbox(
+                      value: isSmartHide,
+                      onChanged: (value) {
+                        if (value != null) {
+                          setState(() {
+                            isSmartHide = value;
+                          });
+                        }
+                      }),
+                ),
                 SizedBox(width: 4.0),
                 Text('Smart Hiding'),
               ],

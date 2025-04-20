@@ -41,7 +41,11 @@ class _NutrientsEditorState extends State<NutrientsEditor> {
                             appBar: AppBar(
                               title: Text('Nutrients Json Editor'),
                             ),
-                            body: JsonEditor(json: editable),
+                            body: Padding(
+                              padding:
+                                  EdgeInsets.all(12.0).copyWith(bottom: 0.0),
+                              child: JsonEditor(json: editable),
+                            ),
                           ),
                         ),
                       ) ??

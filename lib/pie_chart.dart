@@ -21,82 +21,85 @@ class PieChart extends StatelessWidget {
     // final Color blue = Color.lerp(Colors.blue, Colors.grey, 0.1)!;
     // final Color yellow = Color.lerp(Colors.yellow, Colors.grey, 0.1)!;
 
-    return CustomCard(
-      logo: Icon(Icons.pie_chart),
-      title: 'Macro distribution (% calories)',
-      child: Row(
-        children: [
-          MacroLabelsWidget(),
-          Column(
-            children: [
-              SizedBox(
-                width: 100.0,
-                height: 100.0,
-                child: flc.PieChart(
-                  flc.PieChartData(
-                    startDegreeOffset: -90.0,
-                    sections: [
-                      flc.PieChartSectionData(
-                        color: Palette.proteinRed,
-                        value: targetDistribution['Protein'],
-                        title:
-                            '${(targetDistribution['Protein']! * 100.0).toStringAsFixed(numDigits)}%',
+    return SizedBox(
+      width: 500.0,
+      height: 500.0,
+      child: CustomCard(
+        logo: Icon(Icons.pie_chart),
+        title: 'Macro distribution (% calories)',
+        child: Row(
+          children: [
+            Expanded(child: MacroLabelsWidget()),
+            Expanded(
+              child: Column(
+                children: [
+                  SizedBox(
+                    child: flc.PieChart(
+                      flc.PieChartData(
+                        startDegreeOffset: -90.0,
+                        sections: [
+                          flc.PieChartSectionData(
+                            color: Palette.proteinRed,
+                            value: targetDistribution['Protein'],
+                            title:
+                                '${(targetDistribution['Protein']! * 100.0).toStringAsFixed(numDigits)}%',
+                          ),
+                          flc.PieChartSectionData(
+                            color: Palette.fatYellow,
+                            value: targetDistribution['Fats'],
+                            title:
+                                '${(targetDistribution['Fats']! * 100.0).toStringAsFixed(numDigits)}%',
+                          ),
+                          flc.PieChartSectionData(
+                            color: Palette.carbBlue,
+                            value: targetDistribution['Carbs'],
+                            title:
+                                '${(targetDistribution['Carbs']! * 100.0).toStringAsFixed(numDigits)}%',
+                          ),
+                        ],
                       ),
-                      flc.PieChartSectionData(
-                        color: Palette.fatYellow,
-                        value: targetDistribution['Fats'],
-                        title:
-                            '${(targetDistribution['Fats']! * 100.0).toStringAsFixed(numDigits)}%',
-                      ),
-                      flc.PieChartSectionData(
-                        color: Palette.carbBlue,
-                        value: targetDistribution['Carbs'],
-                        title:
-                            '${(targetDistribution['Carbs']! * 100.0).toStringAsFixed(numDigits)}%',
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                  Text('Objective'),
+                ],
               ),
-              Text('Objective'),
-            ],
-          ),
-          Spacer(),
-          Column(
-            children: [
-              SizedBox(
-                width: 100.0,
-                height: 100.0,
-                child: flc.PieChart(
-                  flc.PieChartData(
-                    startDegreeOffset: -90.0,
-                    sections: [
-                      flc.PieChartSectionData(
-                        color: Palette.proteinRed,
-                        value: distribution['Protein'],
-                        title:
-                            '${(distribution['Protein']! * 100.0).toStringAsFixed(numDigits)}%',
+            ),
+            Expanded(
+              child: Column(
+                children: [
+                  SizedBox(
+                    child: flc.PieChart(
+                      flc.PieChartData(
+                        startDegreeOffset: -90.0,
+                        sections: [
+                          flc.PieChartSectionData(
+                            color: Palette.proteinRed,
+                            value: distribution['Protein'],
+                            title:
+                                '${(distribution['Protein']! * 100.0).toStringAsFixed(numDigits)}%',
+                          ),
+                          flc.PieChartSectionData(
+                            color: Palette.fatYellow,
+                            value: distribution['Fats'],
+                            title:
+                                '${(distribution['Fats']! * 100.0).toStringAsFixed(numDigits)}%',
+                          ),
+                          flc.PieChartSectionData(
+                            color: Palette.carbBlue,
+                            value: distribution['Carbs'],
+                            title:
+                                '${(distribution['Carbs']! * 100.0).toStringAsFixed(numDigits)}%',
+                          ),
+                        ],
                       ),
-                      flc.PieChartSectionData(
-                        color: Palette.fatYellow,
-                        value: distribution['Fats'],
-                        title:
-                            '${(distribution['Fats']! * 100.0).toStringAsFixed(numDigits)}%',
-                      ),
-                      flc.PieChartSectionData(
-                        color: Palette.carbBlue,
-                        value: distribution['Carbs'],
-                        title:
-                            '${(distribution['Carbs']! * 100.0).toStringAsFixed(numDigits)}%',
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                  Text('Distribution'),
+                ],
               ),
-              Text('Distribution'),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -150,13 +153,7 @@ class MacroLabelsWidget extends StatelessWidget {
         .toList();
 
     if (!horizontal) {
-      return SizedBox(
-        width: 100.0,
-        height: 100.0,
-        child: Column(
-          children: elements,
-        ),
-      );
+      return Column(children: elements);
     } else {
       for (int i = elements.length - 1; i > 0; i--) {
         elements.insert(i, Spacer());

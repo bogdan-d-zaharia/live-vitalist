@@ -26,7 +26,10 @@ class AlimentJsonEditor extends StatelessWidget {
       appBar: AppBar(
         title: Text('Aliment Json Editor'),
       ),
-      body: JsonEditor(json: alimentJson, trimNulls: true),
+      body: Padding(
+        padding: EdgeInsets.all(12.0).copyWith(bottom: 0.0),
+        child: JsonEditor(json: alimentJson, trimNulls: true),
+      ),
     );
   }
 }

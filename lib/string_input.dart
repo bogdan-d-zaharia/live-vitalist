@@ -260,86 +260,83 @@ class _JsonEditorState extends State<JsonEditor> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(12.0),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            height: 400.0,
-            clipBehavior: Clip.hardEdge,
-            decoration: BoxDecoration(
-              color: artaTheme['root']!.backgroundColor,
-              borderRadius: BorderRadius.circular(24.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.8),
-                  blurRadius: 6.0,
-                  offset: Offset(0.0, 2.0),
-                )
-              ],
-            ),
-            child: CodeTheme(
-              data: CodeThemeData(styles: artaTheme),
-              child: SingleChildScrollView(
-                child: CodeField(
-                  controller: controller,
-                  textStyle: TextStyle(fontSize: 13.5),
-                  gutterStyle: GutterStyle(
-                    showLineNumbers: false,
-                  ),
+    return ListView(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          height: 400.0,
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            color: artaTheme['root']!.backgroundColor,
+            borderRadius: BorderRadius.circular(24.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.8),
+                blurRadius: 6.0,
+                offset: Offset(0.0, 2.0),
+              )
+            ],
+          ),
+          child: CodeTheme(
+            data: CodeThemeData(styles: artaTheme),
+            child: SingleChildScrollView(
+              child: CodeField(
+                controller: controller,
+                textStyle: TextStyle(fontSize: 13.5),
+                gutterStyle: GutterStyle(
+                  showLineNumbers: false,
                 ),
               ),
             ),
           ),
-          SizedBox(height: 12.0),
-          Row(
-            children: [
-              ElevatedButton.icon(
-                icon: Icon(Icons.restore),
-                label: Text('restore'),
-                onPressed: () => setState(() => controller.text = originalText),
-              ),
-              Spacer(),
-              ElevatedButton.icon(
-                icon: Icon(Icons.edit_rounded),
-                label: Text('save'),
-                onPressed: () {
-                  if (controller.text == originalText) {
-                    return Navigator.pop(context, false);
-                  }
+        ),
+        SizedBox(height: 12.0),
+        Row(
+          children: [
+            ElevatedButton.icon(
+              icon: Icon(Icons.restore),
+              label: Text('restore'),
+              onPressed: () => setState(() => controller.text = originalText),
+            ),
+            Spacer(),
+            ElevatedButton.icon(
+              icon: Icon(Icons.edit_rounded),
+              label: Text('save'),
+              onPressed: () {
+                if (controller.text == originalText) {
+                  return Navigator.pop(context, false);
+                }
 
-                  try {
-                    widget.json.clear();
-                    widget.json.addAll(
-                      JsonHandler.processJson(
-                        jsonDecode(controller.fullText),
-                        removeNulls: true,
-                      ),
-                    );
+                try {
+                  widget.json.clear();
+                  widget.json.addAll(
+                    JsonHandler.processJson(
+                      jsonDecode(controller.fullText),
+                      removeNulls: true,
+                    ),
+                  );
 
-                    Navigator.pop(context, true);
-                  } catch (e) {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return Dialog(
-                          backgroundColor: Colors.transparent,
-                          child: CustomCard(
-                            headerSpace: 0.0,
-                            child: Text(
-                                '${e.toString()}\n\n\n${widget.json.runtimeType}'),
-                          ),
-                        );
-                      },
-                    );
-                  }
-                },
-              ),
-            ],
-          ),
-        ],
-      ),
+                  Navigator.pop(context, true);
+                } catch (e) {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return Dialog(
+                        backgroundColor: Colors.transparent,
+                        child: CustomCard(
+                          headerSpace: 0.0,
+                          child: Text(
+                              '${e.toString()}\n\n\n${widget.json.runtimeType}'),
+                        ),
+                      );
+                    },
+                  );
+                }
+              },
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
