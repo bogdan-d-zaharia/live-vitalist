@@ -109,7 +109,7 @@ class WeekCalendar extends StatelessWidget {
                     onLongPress: () {
                       if (!dates.contains(date)) {
                         dates.add(date);
-                      } else {
+                      } else if (dates.length > 1) {
                         dates.remove(date);
                       }
                       refresh();
@@ -290,6 +290,7 @@ class CalendarItem extends StatelessWidget {
                 ),
               ),
             ),
+          //TODO: Add glow for selected.
           Text(
             title,
             style: Palette.calendarItem

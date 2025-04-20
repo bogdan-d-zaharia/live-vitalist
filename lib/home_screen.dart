@@ -168,16 +168,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   WeekCalendar(
                     dates: dates,
                     refresh: () => setState(() {}),
-                    // onDateChanged: (DateTime newDate) {
-                    //   setState(() {
-                    //     dates = {newDate};
-                    //   });
-                    // },
-                    // onDateSelected: (DateTime newDate) {
-                    //   setState(() {
-                    //     dates.add(newDate);
-                    //   });
-                    // },
                   ),
                   if ((distribution != null) && (targetDistribution != null))
                     PieChart(
