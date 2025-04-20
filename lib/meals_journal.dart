@@ -204,8 +204,13 @@ class _MealEditorState extends State<MealEditor> {
               }
               setState(() {});
             },
-            onLongPress: () => AlimentEditor.editAliment(aliment, context)
-                .then((_) => setState(() {})),
+            onLongPress: () async {
+              if (await AlimentEditor.editAliment(aliment, context)) {
+                setState(() {
+                  AlimentBank.save();
+                });
+              }
+            },
           ),
         )
         .toList();

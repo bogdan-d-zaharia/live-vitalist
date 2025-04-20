@@ -119,8 +119,13 @@ class _AlimentBankEditorState extends State<AlimentBankEditor> {
 
         return MiniCard(
           child: InkWell(
-            onTap: () => AlimentEditor.editAliment(aliment, context)
-                .then((_) => setState(() {})),
+            onTap: () async {
+              if (await AlimentEditor.editAliment(aliment, context)) {
+                setState(() {
+                  AlimentBank.save();
+                });
+              }
+            },
             onLongPress: () => deleteAtId(id),
             child: Padding(
               padding: const EdgeInsets.symmetric(

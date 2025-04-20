@@ -29,6 +29,8 @@ abstract final class AlimentEditor {
         AlimentBank.moveToFront(aliment.alimentID);
       }
 
+      //TODO: Investigate if you can move it up and keeping `isAlimentModified`
+      // only, I am thinking it saves for mruIDs only.
       /* The amount or the unit might still have been modified. */
       AlimentBank.save();
     }

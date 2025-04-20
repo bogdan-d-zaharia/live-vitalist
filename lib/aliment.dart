@@ -74,6 +74,7 @@ class TemporaryAliment extends Aliment {
   }
 }
 
+/// Code of conduct: if it is `InstancedAliment`, it is in the `AlimentBank`
 /// This class will search for the aliment in the aliment bank
 /// and scale it to the serving size.
 class InstancedAliment extends Aliment {
@@ -132,6 +133,10 @@ abstract final class AlimentBank {
 
   static AlimentData getAliment(String alimentID) {
     final AlimentData? aliment = AlimentBank.aliments[alimentID];
+
+    //TODO: Perhaps make a popup that forces you to add an error aliment,
+    // empty aliment or debug aliment with very high values to spot usage
+    // or delete it when adding proper aliment deletion functionality.
     if (aliment == null) throw Exception("Aliment not found!");
     return aliment;
   }
