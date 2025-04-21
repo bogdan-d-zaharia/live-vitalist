@@ -49,60 +49,62 @@ class _AlimentBankEditorState extends State<AlimentBankEditor> {
     showDialog(
       context: context,
       builder: (context) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          child: CustomCard(
-            headerSpace: 0.0,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'Are you sure you want to delete this aliment?',
-                  style: TextStyle(fontSize: 16.0),
-                ),
-                SizedBox(height: 12.0),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(
-                      width: 100.0,
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        label: Text("Keep"),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          foregroundColor: Colors.white,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 12),
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: CustomCard(
+              headerSpace: 0.0,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Are you sure you want to delete this aliment?',
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                  SizedBox(height: 12.0),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        width: 100.0,
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          label: Text("Keep"),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            foregroundColor: Colors.white,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 12),
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(width: 12.0),
-                    SizedBox(
-                      width: 100.0,
-                      child: ElevatedButton.icon(
-                        onPressed: () {
-                          setState(() {
-                            AlimentBank.aliments.remove(id);
-                          });
-                          //TODO: ACTUALLY DELETE IT.
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(Icons.delete, color: Colors.white),
-                        label: Text("Delete"),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                          foregroundColor: Colors.white,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 12),
+                      SizedBox(width: 12.0),
+                      SizedBox(
+                        width: 100.0,
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            setState(() {
+                              AlimentBank.aliments.remove(id);
+                            });
+                            //TODO: ACTUALLY DELETE IT.
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(Icons.delete, color: Colors.white),
+                          label: Text("Delete"),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red,
+                            foregroundColor: Colors.white,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 12),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         );

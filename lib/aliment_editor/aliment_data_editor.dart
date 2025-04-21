@@ -261,7 +261,7 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
           ],
         ),
         body: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: ListView(
             children: [
               input(
