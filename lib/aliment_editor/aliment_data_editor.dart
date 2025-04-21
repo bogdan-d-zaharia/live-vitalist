@@ -19,6 +19,9 @@ class AlimentDataEditor extends StatefulWidget {
 }
 
 class _AlimentDataEditorState extends State<AlimentDataEditor> {
+  bool isModified = false;
+  late AlimentData origData;
+
   /// It works because `.getAliment` is a getter as well as this getter,
   /// and it updates when using the `this.` setter `set alimentData`.
   AlimentData get alimentData => widget.aliment is TemporaryAliment
@@ -72,9 +75,7 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
                   hint: '',
                   width: 200.0,
                   initString: getter(),
-                  update: (p0) {
-                    alimentData.name = p0;
-                  },
+                  update: setter,
                 ),
               SizedBox(width: 16.0),
               SizedBox(
@@ -101,8 +102,9 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
     }
 
     void setter(value) {
-      if (value >= 0.0) {
+      if (value >= 0.0 && value != getter()) {
         referenceFields[field] = value;
+        isModified = true;
       }
     }
 
@@ -179,9 +181,7 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
                         SizedBox(
                           width: 100.0,
                           child: ElevatedButton.icon(
-                            //TODO: The values are saved when canceled,
-                            //which shouldn't be the case.
-                            onPressed: () => Navigator.pop(context, false),
+                            onPressed: popCancel,
                             label: Text("Cancel"),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.red,
@@ -203,6 +203,19 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
     );
   }
 
+  Future<void> popCancel() async {
+    if (isModified) {
+      alimentData = origData;
+    }
+    return Navigator.pop(context, false);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    origData = AlimentData.fromJson(alimentData.toJson());
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<String> basicFieldsStr = ['kcals', 'protein', 'carbs', 'fats'];
@@ -221,8 +234,8 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
       canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) return;
+        if (!isModified) return popCancel();
 
-        //TODO: Remove saveAlert if not modified.
         final bool? isSave = await saveAlert();
 
         if (isSave == null) return;
@@ -271,7 +284,10 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
                 getter: () => alimentData.name,
                 /*  This works even for InstancedAliment because
                     it uses the getter `alimentData` which gives a reference. */
-                setter: (p0) => alimentData.name = p0,
+                setter: (p0) {
+                  alimentData.name = p0;
+                  isModified = true;
+                },
                 isNumber: false,
               ),
               input(
@@ -279,7 +295,12 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
                 getter: () => alimentData.referenceSize,
                 /*  This works even for InstancedAliment because
                     it uses the getter `alimentData` which gives a reference. */
-                setter: (p0) => alimentData.referenceSize = p0,
+                setter: (p0) {
+                  if (p0 != alimentData.referenceSize) {
+                    alimentData.referenceSize = p0;
+                    isModified = true;
+                  }
+                },
               ),
               ...basicFieldsWid,
               Row(
