@@ -148,51 +148,53 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
           child: IntrinsicWidth(
             child: CustomCard(
               headerSpace: 0.0,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'Do you want to save this aliment?',
-                    style: TextStyle(fontSize: 16.0),
-                  ),
-                  SizedBox(height: 12.0),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        width: 120.0,
-                        child: ElevatedButton.icon(
-                          onPressed: () => Navigator.pop(context, true),
-                          label: Text("Save"),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            foregroundColor: Colors.white,
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 12),
+              child: SizedBox(
+                width: 212.0,
+                /* 100 button, 12 spacer, 100 button */
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Do you want to save this aliment?',
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+                    SizedBox(height: 12.0),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          width: 100.0,
+                          child: ElevatedButton.icon(
+                            onPressed: () => Navigator.pop(context, true),
+                            label: Text("Save"),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              foregroundColor: Colors.white,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 12),
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(width: 12.0),
-                      SizedBox(
-                        width: 120.0,
-                        child: ElevatedButton.icon(
-                          //TODO: The values are saved when canceled,
-                          //which shouldn't be the case.
-                          onPressed: () => Navigator.pop(context, false),
-                          icon:
-                              Icon(Icons.cancel_outlined, color: Colors.white),
-                          label: Text("Cancel"),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.red,
-                            foregroundColor: Colors.white,
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 12),
+                        Spacer(),
+                        SizedBox(
+                          width: 100.0,
+                          child: ElevatedButton.icon(
+                            //TODO: The values are saved when canceled,
+                            //which shouldn't be the case.
+                            onPressed: () => Navigator.pop(context, false),
+                            label: Text("Cancel"),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              foregroundColor: Colors.white,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 12),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
