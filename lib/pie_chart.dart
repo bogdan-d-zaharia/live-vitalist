@@ -19,30 +19,43 @@ class PieChart extends StatelessWidget {
 
     return AspectRatio(
       aspectRatio: 1.0,
-      child: flc.PieChart(
-        flc.PieChartData(
-          startDegreeOffset: -90.0,
-          sections: [
-            flc.PieChartSectionData(
-              color: Palette.proteinRed,
-              value: distribution['Protein'],
-              title:
-                  '${(distribution['Protein']! * 100.0).toStringAsFixed(numDigits)}%',
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final size = constraints.biggest.shortestSide;
+          final radius = size / 2;
+          final centerSpace = radius * 0.20;
+          final sliceRadius = radius - centerSpace;
+
+          return flc.PieChart(
+            flc.PieChartData(
+              centerSpaceRadius: centerSpace,
+              startDegreeOffset: -90.0,
+              sections: [
+                flc.PieChartSectionData(
+                  radius: sliceRadius,
+                  color: Palette.proteinRed,
+                  value: distribution['Protein'],
+                  title:
+                      '${(distribution['Protein']! * 100.0).toStringAsFixed(numDigits)}%',
+                ),
+                flc.PieChartSectionData(
+                  radius: sliceRadius,
+                  color: Palette.fatYellow,
+                  value: distribution['Fats'],
+                  title:
+                      '${(distribution['Fats']! * 100.0).toStringAsFixed(numDigits)}%',
+                ),
+                flc.PieChartSectionData(
+                  radius: sliceRadius,
+                  color: Palette.carbBlue,
+                  value: distribution['Carbs'],
+                  title:
+                      '${(distribution['Carbs']! * 100.0).toStringAsFixed(numDigits)}%',
+                ),
+              ],
             ),
-            flc.PieChartSectionData(
-              color: Palette.fatYellow,
-              value: distribution['Fats'],
-              title:
-                  '${(distribution['Fats']! * 100.0).toStringAsFixed(numDigits)}%',
-            ),
-            flc.PieChartSectionData(
-              color: Palette.carbBlue,
-              value: distribution['Carbs'],
-              title:
-                  '${(distribution['Carbs']! * 100.0).toStringAsFixed(numDigits)}%',
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
@@ -52,29 +65,27 @@ class PieChart extends StatelessWidget {
     return CustomCard(
       logo: Icon(Icons.pie_chart),
       title: 'Macro distribution (% calories)',
-      child: IntrinsicHeight(
-        child: Row(
-          children: [
-            MacroLabelsWidget(),
-            Expanded(
-              child: Column(
-                children: [
-                  pie(targetDistribution),
-                  Text('Objective'),
-                ],
-              ),
+      child: Row(
+        children: [
+          MacroLabelsWidget(),
+          Expanded(
+            child: Column(
+              children: [
+                pie(targetDistribution),
+                Text('Objective'),
+              ],
             ),
-            SizedBox(width: 18.0),
-            Expanded(
-              child: Column(
-                children: [
-                  pie(distribution),
-                  Text('Distribution'),
-                ],
-              ),
+          ),
+          SizedBox(width: 18.0),
+          Expanded(
+            child: Column(
+              children: [
+                pie(distribution),
+                Text('Distribution'),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
