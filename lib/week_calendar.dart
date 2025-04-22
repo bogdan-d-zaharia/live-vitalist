@@ -293,8 +293,10 @@ class CalendarItem extends StatelessWidget {
           //TODO: Add glow for selected.
           Text(
             title,
-            style: Palette.calendarItem
-                .copyWith(color: isSelected ? Colors.black : Colors.grey),
+            style: Palette.calendarItem.copyWith(
+                color: isSelected
+                    ? (SettingsData.isDarkMode ? Colors.white : Colors.black)
+                    : Colors.grey.withValues(alpha: 0.8)),
           ),
         ],
       ),

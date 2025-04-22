@@ -3,6 +3,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 abstract final class Palette {
   // #region //* COLORS *//
+  static const Color divGrey = Color.fromRGBO(158, 158, 158, 0.25);
+  // static const Color brightLightGray = Color.fromRGBO(224, 224, 224, 1);
+
   static const Color almostWhite = Color.fromRGBO(204, 204, 204, 1);
   static const Color lightGray = Color(0xFFbfbfbf);
   static const Color gray = Color(0xFF999999);

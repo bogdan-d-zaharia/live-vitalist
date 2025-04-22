@@ -7,6 +7,7 @@ import 'package:flutter_highlight/themes/arta.dart';
 
 import 'custom_card.dart';
 import 'json_handler.dart';
+import 'palette.dart';
 
 //TODO: I don't yet need it but it can be an upgrade.
 // class StringField {
@@ -382,7 +383,7 @@ class _NumberInputState extends State<NumberInput> {
       width: 0.0,
       indent: indent,
       endIndent: indent,
-      color: color ?? Colors.grey[200],
+      color: color ?? Palette.divGrey,
     );
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../aliment.dart';
 import '../aliment_bank_editor.dart';
 import '../custom_card.dart';
+import '../palette.dart';
 import '../string_input.dart';
 import 'package:diacritic/diacritic.dart';
 
@@ -251,7 +252,7 @@ class _SelectorState extends State<Selector> {
                 ),
               ),
             ),
-            Divider(height: 24.0, color: Colors.grey[300]),
+            Divider(height: 24.0, color: Palette.divGrey),
             ...keys.map(
               (id) => MiniCard(
                 child: InkWell(

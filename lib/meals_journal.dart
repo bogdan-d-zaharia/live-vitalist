@@ -4,6 +4,7 @@ import 'aliment_editor/aliment_editor.dart';
 import 'custom_card.dart';
 import 'day.dart';
 import 'models/reference_fields_model.dart';
+import 'palette.dart';
 import 'notification_handler.dart';
 import 'settings.dart';
 
@@ -54,7 +55,7 @@ class MealsJournal extends StatelessWidget {
     ];
 
     final Widget divider = Divider(
-      color: Colors.grey[300],
+      color: Palette.divGrey,
       thickness: 0.5,
       height: 0.0,
     );
@@ -141,7 +142,7 @@ class _MealElementState extends State<MealElement> {
             ),
           ),
           VerticalDivider(
-            color: Colors.grey[300],
+            color: Palette.divGrey,
             thickness: 0.5,
             width: 0.0,
             indent: 8.0,
@@ -253,7 +254,7 @@ class _MealEditorState extends State<MealEditor> {
     ));
 
     final Widget divider = Divider(
-      color: Colors.grey[300],
+      color: Palette.divGrey,
       thickness: 0.5,
       height: 0.0,
     );
@@ -373,7 +374,7 @@ class AlimentWidget extends StatelessWidget {
       onLongPress: onLongPress,
       additional: [
         VerticalDivider(
-          color: Colors.grey[300],
+          color: Palette.divGrey,
           thickness: 0.5,
           width: 0.0,
           indent: 8.0,

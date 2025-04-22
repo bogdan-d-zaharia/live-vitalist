@@ -12,6 +12,7 @@ Future<void> main() async {
   );
   await NotificationHandler.initialize();
   await SettingsData.load();
+  SettingsData.isDarkMode = true;
 
   runApp(MyApp());
 }
@@ -27,7 +28,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.green,
-          // brightness: Brightness.dark,
+          brightness:
+              SettingsData.isDarkMode ? Brightness.dark : Brightness.light,
         ),
         useMaterial3: true,
       ),

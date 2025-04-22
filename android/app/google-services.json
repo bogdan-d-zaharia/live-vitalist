@@ -15,11 +15,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "958879460718-ono5ovkiki3fea8ehpai4oo5c6gre8t2.apps.googleusercontent.com",
+          "client_id": "958879460718-imfpvcdupies7ivomleurcg444cnj3aj.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "live.vitalist.app",
-            "certificate_hash": "c79604133a10e7f7aebd6e42d011bdffcc0381b9"
+            "certificate_hash": "11dc304d7e3199c7887990a0a9e3881e58e2523b"
+          }
+        },
+        {
+          "client_id": "958879460718-v5101n3v5ck70qeqc6gcgamhb674kspr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "live.vitalist.app",
+            "certificate_hash": "e54f178d612bb13124447c1bf49e84f1f643cb5f"
           }
         },
         {

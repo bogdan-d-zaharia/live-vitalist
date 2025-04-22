@@ -37,6 +37,7 @@ class PieChart extends StatelessWidget {
                   value: distribution['Protein'],
                   title:
                       '${(distribution['Protein']! * 100.0).toStringAsFixed(numDigits)}%',
+                  titleStyle: TextStyle(color: Colors.black),
                 ),
                 flc.PieChartSectionData(
                   radius: sliceRadius,
@@ -44,6 +45,7 @@ class PieChart extends StatelessWidget {
                   value: distribution['Fats'],
                   title:
                       '${(distribution['Fats']! * 100.0).toStringAsFixed(numDigits)}%',
+                  titleStyle: TextStyle(color: Colors.black),
                 ),
                 flc.PieChartSectionData(
                   radius: sliceRadius,
@@ -51,6 +53,7 @@ class PieChart extends StatelessWidget {
                   value: distribution['Carbs'],
                   title:
                       '${(distribution['Carbs']! * 100.0).toStringAsFixed(numDigits)}%',
+                  titleStyle: TextStyle(color: Colors.black),
                 ),
               ],
             ),

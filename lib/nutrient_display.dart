@@ -289,12 +289,24 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
       elements.insert(i, divider);
     }
 
+    const double space = 12.0;
+
     return CustomCard(
       logo: const Icon(Icons.bar_chart_rounded),
       title: 'Nutrients',
       action: DropdownButton<int>(
         value: category,
         items: [
+          DropdownMenuItem(
+            value: -2,
+            child: Row(
+              children: [
+                Icon(Icons.edit_rounded),
+                SizedBox(width: space),
+                Text('Edit Mode'),
+              ],
+            ),
+          ),
           DropdownMenuItem(
             value: -1,
             child: Row(
@@ -312,7 +324,7 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
                         }
                       }),
                 ),
-                SizedBox(width: 4.0),
+                SizedBox(width: space),
                 Text('Smart Hiding'),
               ],
             ),
@@ -322,7 +334,7 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
               child: Row(
                 children: [
                   Icon(Icons.select_all_rounded),
-                  SizedBox(width: 4.0),
+                  SizedBox(width: space),
                   Text('All'),
                 ],
               )),
@@ -331,7 +343,7 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
             child: Row(
               children: [
                 Icon(Icons.star_rounded),
-                SizedBox(width: 4.0),
+                SizedBox(width: space),
                 Text('Starred'),
               ],
             ),
@@ -341,7 +353,7 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
             child: Row(
               children: [
                 Icon(Icons.keyboard_arrow_down_rounded),
-                SizedBox(width: 4.0),
+                SizedBox(width: space),
                 Text('Descending'),
               ],
             ),
@@ -351,7 +363,7 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
             child: Row(
               children: [
                 Icon(Icons.keyboard_arrow_up_rounded),
-                SizedBox(width: 4.0),
+                SizedBox(width: space),
                 Text('Ascending'),
               ],
             ),
@@ -360,11 +372,11 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
         onChanged: (value) {
           if (value != null) {
             setState(() {
-              if (value != -1) {
+              if (value >= 0) {
                 category = value;
-              } else {
+              } else if (value == -1) {
                 isSmartHide = !isSmartHide;
-              }
+              } else {}
             });
           }
         },
@@ -678,7 +690,9 @@ class NutrientBar extends StatelessWidget {
             FractionallySizedBox(
               alignment: Alignment.topRight,
               widthFactor: 1.0 - (amount.clamp(0.0, top) / top),
-              child: Container(color: Colors.white.withValues(alpha: 0.7)),
+              child: Container(
+                  color: (SettingsData.isDarkMode ? Colors.black : Colors.white)
+                      .withValues(alpha: 0.7)),
             ),
             if (rightText != null)
               Align(

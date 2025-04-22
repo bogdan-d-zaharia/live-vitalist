@@ -10,11 +10,13 @@ import 'cache_handler.dart';
 import 'custom_card.dart';
 import 'file_handler.dart';
 import 'models/reference_fields_model.dart';
+import 'palette.dart';
 
 abstract final class SettingsData {
   static bool isMonthDay = false;
   static bool isLoggedIn = false;
   static String language = 'ENG';
+  static bool isDarkMode = true;
 
   // static Set<String> languages = {'ENG'};
 
@@ -380,7 +382,7 @@ class _SettingsState extends State<Settings> {
               endIndent: 8.0,
               indent: 8.0,
               height: 32.0,
-              color: Colors.grey[200],
+              color: Palette.divGrey,
             ),
             if (StorageHandler.isFirebase)
               CustomCard(
