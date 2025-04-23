@@ -5,6 +5,35 @@ import 'day.dart';
 import 'models/reference_fields_model.dart';
 import 'palette.dart';
 import 'settings.dart';
+import 'string_input.dart';
+
+class IconButton extends StatelessWidget {
+  const IconButton({
+    required this.onTap,
+    required this.icon,
+    super.key,
+  });
+
+  final void Function() onTap;
+  final Widget icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      elevation: 1.0,
+      borderRadius: BorderRadius.circular(8.0),
+      clipBehavior: Clip.hardEdge,
+      child: InkWell(
+        onTap: onTap,
+        child: SizedBox(
+          width: 26.0,
+          height: 26.0,
+          child: icon,
+        ),
+      ),
+    );
+  }
+}
 
 class NutrientDisplay extends StatefulWidget {
   const NutrientDisplay({
@@ -19,11 +48,66 @@ class NutrientDisplay extends StatefulWidget {
 }
 
 class _NutrientDisplayState extends State<NutrientDisplay> {
-  int category = 0;
+  int sort = 0;
   bool isSmartHide = true;
+  bool isEditMode = false;
 
-  bool isStarred(String key) {
-    return NutrientsHandler.hasTag(key, 'starred');
+  Widget actionWid() {
+    final Widget editModeWid = IconButton(
+      onTap: () => setState(() => isEditMode = !isEditMode),
+      icon: Icon(
+        Icons.edit_rounded,
+        color: isEditMode ? Colors.green : null,
+        size: 21.0,
+      ),
+    );
+
+    if (isEditMode) return editModeWid;
+
+    final Widget sortWid = IconButton(
+      onTap: () {
+        setState(() {
+          if (sort == 0) {
+            sort = 1;
+          } else if (sort == 1) {
+            sort = -1;
+          } else {
+            sort = 0;
+          }
+        });
+      },
+      icon: Icon(
+        switch (sort) {
+          -1 => Icons.keyboard_arrow_up_rounded,
+          _ => Icons.keyboard_arrow_down_rounded,
+        },
+        color: sort != 0 ? Colors.green : null,
+        size: 26.0,
+      ),
+    );
+
+    final Widget smartHidingWid = IconButton(
+      onTap: () {
+        setState(() {
+          isSmartHide = !isSmartHide;
+        });
+      },
+      icon: Icon(
+        Icons.select_all,
+        color: isSmartHide ? Colors.green : null,
+        size: 21.0,
+      ),
+    );
+
+    return Row(
+      children: [
+        sortWid,
+        SizedBox(width: 8.0),
+        smartHidingWid,
+        SizedBox(width: 8.0),
+        editModeWid,
+      ],
+    );
   }
 
   //TODO: Perhaps Above lower limit right before above upper limit,
@@ -66,13 +150,12 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
     return catA;
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget viewMode() {
     final Day day = Day.sumDays(widget.days);
     final int numDays = widget.days.length;
-    List<String> keys = NutrientsHandler.model.keys
-        .where((key) => !NutrientsHandler.hasTag(key, 'disabled'))
-        .toList();
+    List<String> keys = NutrientsHandler.model.keys.toList();
+    keys =
+        keys.where((key) => !NutrientsHandler.hasTag(key, 'disabled')).toList();
 
     /// #region //* SORTING and FILETERING *//
 
@@ -165,8 +248,6 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
 
     void smartHide() {
       keys = keys.where((key) {
-        if (isStarred(key)) return true;
-
         final double intake = (day.intake[key] ?? 0.0) / (numDays);
         final double? lower = NutrientsHandler.model[key]!['lowerLimit'];
         final double? upper = NutrientsHandler.model[key]!['upperLimit'];
@@ -181,30 +262,30 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
     /// #endregion //* SORTING and FILETERING *//
 
     if (isSmartHide) smartHide();
-    if (category == 1) {
-      keys = keys.where(isStarred).toList();
-    } else if (category == 2) {
+    if (sort == 1) {
       sortDescending();
-    } else if (category == 3) {
+    } else if (sort == -1) {
       sortAscending();
     }
 
     final List<Widget> elements = [];
 
     for (var key in keys) {
-      final String label =
-          NutrientsHandler.model[key]!['translations'][SettingsData.language];
-      final String unit = NutrientsHandler.model[key]!['unit'];
+      final field = NutrientsHandler.model[key]!;
+
+      final String label = field['translations'][SettingsData.language];
+      final String unit = field['unit'];
       final double intake = (day.intake[key] ?? 0.0) / (numDays);
-      final double? lower = NutrientsHandler.model[key]!['lowerLimit'];
-      final double? upper = NutrientsHandler.model[key]!['upperLimit'];
+      final double? lower = field['lowerLimit'];
+      final double? upper = field['upperLimit'];
 
       final Map<Aliment, double> topIntakeAliments = day
           .topIntakeAliments(key)
           .map((key, value) => MapEntry(key, value / (numDays)));
 
-      elements.add(
-        Material(
+      final Widget wid = Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4.0),
+        child: Material(
           color: Colors.transparent,
           borderRadius: BorderRadius.circular(8.0),
           clipBehavior: Clip.hardEdge,
@@ -270,14 +351,17 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
                 amount: intake,
                 lowerLimit: lower,
                 upperLimit: upper,
-                icon: NutrientsHandler.tagsToWidgets(
-                        NutrientsHandler.getTags(key))
-                    .firstOrNull,
+                //TODO: Remove entirely
+                // icon: NutrientsHandler.tagsToWidgets(
+                //         NutrientsHandler.getTags(key))
+                //     .firstOrNull,
               ),
             ),
           ),
         ),
       );
+
+      elements.add(wid);
     }
 
     final Widget divider = Divider(
@@ -289,108 +373,107 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
       elements.insert(i, divider);
     }
 
-    const double space = 12.0;
+    return CustomCard(
+      logo: const Icon(Icons.bar_chart_rounded),
+      title: 'Nutrients',
+      action: actionWid(),
+      child: Column(children: elements),
+    );
+  }
+
+  Widget editMode() {
+    final List<Widget> elements = [];
+
+    for (var key in NutrientsHandler.model.keys.toList()) {
+      final field = NutrientsHandler.model[key]!;
+
+      final String label = field['translations'][SettingsData.language];
+      final String unit = field['unit'];
+      final double? lower = field['lowerLimit'];
+      final double? upper = field['upperLimit'];
+
+      final Widget wid = InkWell(
+        key: ValueKey(key),
+        onTap: () async {
+          final Map<String, dynamic> fields = {
+            'Label': label,
+            'Upper limit': upper,
+            'Lower limit': lower,
+            'Unit': unit,
+          };
+
+          final bool isModified = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Scaffold(
+                appBar: AppBar(
+                  title: NutrientsHandler.widMajorMinorLabels2(label,
+                      Theme.of(context).textTheme.headlineSmall ?? TextStyle()),
+                ),
+                body: FieldsInput(fields: fields),
+              ),
+            ),
+          );
+
+          if (isModified) {
+            field['unit'] = fields['Unit'];
+            field['lowerLimit'] = fields['Lower limit'];
+            field['upperLimit'] = fields['Upper limit'];
+            field['translations'][SettingsData.language] = fields['Label'];
+
+            NutrientsHandler.save();
+          }
+        },
+        child: Row(
+          children: [
+            Icon(Icons.drag_indicator_rounded),
+            Expanded(
+                child: NutrientsHandler.widMajorMinorLabels2(
+                    label, Theme.of(context).textTheme.bodyMedium!)),
+            Switch(
+              value: !NutrientsHandler.hasTag(key, 'disabled'),
+              onChanged: (value) => setState(() {
+                NutrientsHandler.switchTag(key, 'disabled');
+                NutrientsHandler.save();
+              }),
+            ),
+          ],
+        ),
+      );
+
+      elements.add(wid);
+    }
 
     return CustomCard(
       logo: const Icon(Icons.bar_chart_rounded),
       title: 'Nutrients',
-      action: DropdownButton<int>(
-        value: category,
-        items: [
-          DropdownMenuItem(
-            value: -2,
-            child: Row(
-              children: [
-                Icon(Icons.edit_rounded),
-                SizedBox(width: space),
-                Text('Edit Mode'),
-              ],
-            ),
-          ),
-          DropdownMenuItem(
-            value: -1,
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 24.0,
-                  height: 24.0,
-                  child: Checkbox(
-                      value: isSmartHide,
-                      onChanged: (value) {
-                        if (value != null) {
-                          setState(() {
-                            isSmartHide = value;
-                          });
-                        }
-                      }),
-                ),
-                SizedBox(width: space),
-                Text('Smart Hiding'),
-              ],
-            ),
-          ),
-          DropdownMenuItem(
-              value: 0,
-              child: Row(
-                children: [
-                  Icon(Icons.select_all_rounded),
-                  SizedBox(width: space),
-                  Text('All'),
-                ],
-              )),
-          DropdownMenuItem(
-            value: 1,
-            child: Row(
-              children: [
-                Icon(Icons.star_rounded),
-                SizedBox(width: space),
-                Text('Starred'),
-              ],
-            ),
-          ),
-          DropdownMenuItem(
-            value: 2,
-            child: Row(
-              children: [
-                Icon(Icons.keyboard_arrow_down_rounded),
-                SizedBox(width: space),
-                Text('Descending'),
-              ],
-            ),
-          ),
-          DropdownMenuItem(
-            value: 3,
-            child: Row(
-              children: [
-                Icon(Icons.keyboard_arrow_up_rounded),
-                SizedBox(width: space),
-                Text('Ascending'),
-              ],
-            ),
-          ),
-        ],
-        onChanged: (value) {
-          if (value != null) {
-            setState(() {
-              if (value >= 0) {
-                category = value;
-              } else if (value == -1) {
-                isSmartHide = !isSmartHide;
-              } else {}
-            });
-          }
+      action: actionWid(),
+      child: ReorderableListView(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        onReorder: (oldIndex, newIndex) {
+          setState(() {
+            final List<MapEntry<String, Map<String, dynamic>>> entries =
+                NutrientsHandler.model.entries.toList();
+
+            if (newIndex > oldIndex) newIndex -= 1;
+            final entry = entries.removeAt(oldIndex);
+            entries.insert(newIndex, entry);
+
+            NutrientsHandler.model = Map.fromEntries(entries);
+
+            NutrientsHandler.save();
+          });
         },
-      ),
-      child: Column(
-        children: [
-          const SizedBox(height: 6.0),
-          ...elements.map((e) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
-                child: e,
-              ))
-        ],
+        children: elements,
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!isEditMode) return viewMode();
+    return editMode();
   }
 }
 
@@ -465,192 +548,7 @@ class NutrientBar extends StatelessWidget {
     return output;
   }
 
-  Widget _bar1({double height = 15.0, double radius = 5.0}) {
-    if (lowerLimit == null && upperLimit == null) {
-      return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5.0),
-          color: Colors.grey,
-        ),
-        height: 15.0,
-      );
-    } else {
-      final double top = (upperLimit ?? lowerLimit!) * 1.5;
-      final (String? rightText, String? leftText) = calculateRLExcessTexts();
-
-      /// TODO: Make reach corners round.
-      return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(radius),
-          color: Colors.orange,
-        ),
-        clipBehavior: Clip.antiAlias,
-        height: height,
-        child: Stack(
-          alignment: Alignment.topLeft,
-          fit: StackFit.expand,
-          children: [
-            FractionallySizedBox(
-              alignment: Alignment.topLeft,
-              widthFactor: (upperLimit ?? top) / top,
-              child: Container(color: Colors.green),
-            ),
-            FractionallySizedBox(
-              alignment: Alignment.topLeft,
-              widthFactor: (lowerLimit ?? 0.0) / top,
-              child: Container(color: Colors.lightGreen),
-            ),
-            FractionallySizedBox(
-              alignment: Alignment.topRight,
-              widthFactor: 1.0 - (amount.clamp(0.0, top) / top),
-              child: Container(color: Colors.white.withValues(alpha: 0.7)),
-            ),
-            if (rightText != null)
-              Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  rightText,
-                  style: Palette.dayViewRegular.copyWith(
-                    fontSize: 12.0,
-                    color: Colors.black.withValues(alpha: 0.6),
-                  ),
-                ),
-              ),
-            if (leftText != null)
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  leftText,
-                  style: Palette.dayViewRegular.copyWith(
-                    fontSize: 12.0,
-                    color: Colors.black.withValues(alpha: 0.6),
-                  ),
-                ),
-              ),
-          ],
-        ),
-      );
-    }
-  }
-
-  Widget _bar2() {
-    if (lowerLimit == null && upperLimit == null) {
-      return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5.0),
-          color: Colors.grey,
-        ),
-        height: 15.0,
-      );
-    } else {
-      final double top = (upperLimit ?? lowerLimit!);
-      final (String? rightText, String? leftText) = calculateRLExcessTexts();
-
-      /// TODO: Make reach corners round.
-      return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5.0),
-          color: Colors.green,
-        ),
-        clipBehavior: Clip.antiAlias,
-        height: 15.0,
-        child: Stack(
-          alignment: Alignment.topLeft,
-          fit: StackFit.expand,
-          children: [
-            FractionallySizedBox(
-              alignment: Alignment.topLeft,
-              widthFactor: (lowerLimit ?? 0.0) / top,
-              child: Container(color: Colors.lightGreen),
-            ),
-            FractionallySizedBox(
-              alignment: Alignment.topRight,
-              widthFactor: 1.0 - (amount.clamp(0.0, top) / top),
-              child: Container(color: Colors.white.withValues(alpha: 0.7)),
-            ),
-            if (upperLimit != null)
-              FractionallySizedBox(
-                alignment: Alignment.topLeft,
-                widthFactor: (amount - top).clamp(0.0, top) / top,
-                child: Container(color: Colors.orange),
-              ),
-            if (rightText != null)
-              Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  rightText,
-                  style: Palette.dayViewRegular.copyWith(
-                    fontSize: 12.0,
-                    color: Colors.black.withValues(alpha: 0.6),
-                  ),
-                ),
-              ),
-            if (leftText != null)
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  leftText,
-                  style: Palette.dayViewRegular.copyWith(
-                    fontSize: 12.0,
-                    color: Colors.black.withValues(alpha: 0.6),
-                  ),
-                ),
-              ),
-          ],
-        ),
-      );
-    }
-  }
-
-  Widget _var1() {
-    return Row(
-      children: [
-        SizedBox(
-            width: 100.0,
-            child: Text(label, style: TextStyle(letterSpacing: -0.0))),
-        SizedBox(width: 5.0),
-        Expanded(child: _bar1()),
-        SizedBox(width: 5.0),
-        SizedBox(
-          width: 80.0,
-          child: Text('${amount.toStringAsFixed(2)} $unit',
-              style: TextStyle(letterSpacing: -0.0)),
-        ),
-      ],
-    );
-  }
-
-  Widget _var2() {
-    final String? prefix = lowerLimit?.toStringAsFixed(2);
-    final String? suffix = upperLimit?.toStringAsFixed(2);
-
-    return Column(
-      children: [
-        Text(label, style: TextStyle(letterSpacing: -0.0)),
-        SizedBox(height: 5.0),
-        _bar1(),
-        SizedBox(height: 5.0),
-        Stack(
-          children: [
-            if (prefix != null)
-              Positioned(
-                  left: 10.0,
-                  child: Text(prefix, style: TextStyle(letterSpacing: -0.0))),
-            Center(
-              child: Text('${amount.toStringAsFixed(2)} $unit',
-                  style: TextStyle(letterSpacing: -0.0)),
-            ),
-            if (suffix != null)
-              Positioned(
-                  right: 10.0,
-                  child: Text(suffix, style: TextStyle(letterSpacing: -0.0))),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _bar2_5(
+  Widget bar(BuildContext context,
       {double height = 15.0, double radius = 5.0, double fontSize = 12.0}) {
     if (lowerLimit == null && upperLimit == null) {
       return Container(
@@ -691,7 +589,9 @@ class NutrientBar extends StatelessWidget {
               alignment: Alignment.topRight,
               widthFactor: 1.0 - (amount.clamp(0.0, top) / top),
               child: Container(
-                  color: (SettingsData.isDarkMode ? Colors.black : Colors.white)
+                  color: (SettingsData.isDarkMode(context)
+                          ? Colors.black
+                          : Colors.white)
                       .withValues(alpha: 0.7)),
             ),
             if (rightText != null)
@@ -722,7 +622,8 @@ class NutrientBar extends StatelessWidget {
     }
   }
 
-  Widget _var2_5() {
+  @override
+  Widget build(BuildContext context) {
     return Column(
       children: [
         Row(
@@ -738,13 +639,8 @@ class NutrientBar extends StatelessWidget {
           ],
         ),
         SizedBox(height: 5.0),
-        _bar2_5(height: 12.0, radius: 6.0, fontSize: 11.0),
+        bar(context, height: 12.0, radius: 6.0, fontSize: 11.0),
       ],
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _var2_5();
   }
 }

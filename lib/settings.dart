@@ -16,7 +16,9 @@ abstract final class SettingsData {
   static bool isMonthDay = false;
   static bool isLoggedIn = false;
   static String language = 'ENG';
-  static bool isDarkMode = true;
+
+  static isDarkMode(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark;
 
   // static Set<String> languages = {'ENG'};
 

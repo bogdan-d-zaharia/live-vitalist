@@ -254,6 +254,7 @@ class CalendarItem extends StatelessWidget {
             child: Stack(
               alignment: Alignment.bottomCenter,
               children: [
+                //TODO: Study and implement showing it simplified, by a single field.
                 FractionallySizedBox(
                   heightFactor: (maxim / 1.5).clamp(0.0, 1.0),
                   child: Container(
@@ -295,7 +296,9 @@ class CalendarItem extends StatelessWidget {
             title,
             style: Palette.calendarItem.copyWith(
                 color: isSelected
-                    ? (SettingsData.isDarkMode ? Colors.white : Colors.black)
+                    ? (SettingsData.isDarkMode(context)
+                        ? Colors.white
+                        : Colors.black)
                     : Colors.grey.withValues(alpha: 0.8)),
           ),
         ],

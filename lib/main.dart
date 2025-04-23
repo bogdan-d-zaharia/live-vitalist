@@ -12,7 +12,6 @@ Future<void> main() async {
   );
   await NotificationHandler.initialize();
   await SettingsData.load();
-  SettingsData.isDarkMode = true;
 
   runApp(MyApp());
 }
@@ -28,11 +27,18 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.green,
-          brightness:
-              SettingsData.isDarkMode ? Brightness.dark : Brightness.light,
+          brightness: Brightness.light,
         ),
         useMaterial3: true,
       ),
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.green,
+          brightness: Brightness.dark,
+        ),
+        useMaterial3: true,
+      ),
+      themeMode: ThemeMode.system,
       home: AuthGate(),
     );
   }

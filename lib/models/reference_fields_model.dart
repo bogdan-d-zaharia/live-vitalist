@@ -470,6 +470,42 @@ abstract final class NutrientsHandler {
     ];
   }
 
+  //TODO: Imported material for this alone.
+  //Perhaps move, if it's not this function's place.
+  static RichText widMajorMinorLabels2(String label, TextStyle style) {
+    var x = label.indexOf('(');
+    x = x != -1 ? x : label.length;
+
+    final label1 = label.substring(0, x);
+    final label2 = label.substring(x);
+
+    return RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(text: label1, style: style),
+          TextSpan(
+            text: label2,
+            style: style.copyWith(
+              color: Colors.grey,
+              fontSize: style.fontSize != null ? style.fontSize! - 2.5 : null,
+            ),
+          ),
+        ],
+      ),
+    );
+
+    // return [
+    //   Text(label1, style: style),
+    //   Text(
+    //     label2,
+    //     style: style.copyWith(
+    //       color: Colors.grey,
+    //       fontSize: 12.0,
+    //     ),
+    //   ),
+    // ];
+  }
+
   /* Tags */
   static List<String> getTags(String field) {
     final List<dynamic> protoTags =
@@ -489,6 +525,40 @@ abstract final class NutrientsHandler {
     }
 
     return result;
+  }
+
+  static void addTag(String field, String tag) {
+    final Map<String, dynamic>? fieldMap = model[field];
+    if (fieldMap == null) return;
+    if (!fieldMap.containsKey('tags')) fieldMap['tags'] = [];
+
+    fieldMap['tags'].add('disabled');
+
+    if (fieldMap['tags'].isEmpty) fieldMap.remove('tags');
+  }
+
+  static void removeTag(String field, String tag) {
+    final Map<String, dynamic>? fieldMap = model[field];
+    if (fieldMap == null) return;
+    if (!fieldMap.containsKey('tags')) fieldMap['tags'] = [];
+
+    fieldMap['tags'].remove('disabled');
+
+    if (fieldMap['tags'].isEmpty) fieldMap.remove('tags');
+  }
+
+  static void switchTag(String field, String tag) {
+    final Map<String, dynamic>? fieldMap = model[field];
+    if (fieldMap == null) return;
+    if (!fieldMap.containsKey('tags')) fieldMap['tags'] = [];
+
+    if (hasTag(field, tag)) {
+      fieldMap['tags'].remove('disabled');
+    } else {
+      fieldMap['tags'].add('disabled');
+    }
+
+    if (fieldMap['tags'].isEmpty) fieldMap.remove('tags');
   }
 
   // #endregion //* FUNCTIONS FOR HANDLING FIELDS. *//

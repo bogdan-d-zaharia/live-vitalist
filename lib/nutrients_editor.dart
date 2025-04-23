@@ -87,10 +87,8 @@ class _NutrientsEditorState extends State<NutrientsEditor> {
                     MaterialPageRoute(
                       builder: (context) => Scaffold(
                         appBar: AppBar(
-                          title: Row(
-                            children:
-                                NutrientsHandler.widMajorMinorLabels(label),
-                          ),
+                          title: NutrientsHandler.widMajorMinorLabels2(
+                              label, TextStyle()),
                         ),
                         body: FieldsInput(fields: fields),
                       ),
@@ -112,11 +110,13 @@ class _NutrientsEditorState extends State<NutrientsEditor> {
                   ),
                   child: Row(
                     children: [
-                      ...NutrientsHandler.widMajorMinorLabels(label),
+                      NutrientsHandler.widMajorMinorLabels2(
+                          label, Theme.of(context).textTheme.bodyMedium!),
                       Spacer(),
                       Switch(
                         value: !(field['tags'] ?? []).contains('disabled'),
                         onChanged: (isTrue) {
+                          //TODO: Replace with switch Tag in nutrients editor
                           if (!field.containsKey('tags')) {
                             field['tags'] = [];
                           }
