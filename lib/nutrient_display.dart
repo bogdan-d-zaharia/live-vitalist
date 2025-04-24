@@ -397,8 +397,8 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
 
             NutrientsHandler.save();
 
-            /* Fixes re-entering with old fields */
-            // widget.refresh();
+            //TODO: Fix re-entering with old fields
+            widget.refresh();
           }
         },
         child: Row(

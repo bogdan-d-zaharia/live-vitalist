@@ -97,7 +97,7 @@ class _AuthGateState extends State<AuthGate> {
                     textAlign: TextAlign.start,
                   ),
                   Text(
-                      'You can review the Privacy Policy and Terms of Use at any time from the app\'s Settings.'),
+                      'You can review the Privacy Policy and Terms of Use at any time from the app\'s Settings, accessible via the ⋮ menu in the top-right corner.'),
                   SizedBox(height: 12.0),
                   Row(
                     mainAxisSize: MainAxisSize.min,

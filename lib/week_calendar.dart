@@ -8,7 +8,7 @@ import 'palette.dart';
 import 'settings.dart';
 
 const double itemHeight = 80.0;
-const double labelHeight = 24.0;
+const double labelHeight = 26.0;
 
 class DottedLine extends StatelessWidget {
   const DottedLine({
@@ -260,13 +260,13 @@ class CalendarItem extends StatelessWidget {
                 FractionallySizedBox(
                   heightFactor: (maxim / 1.5).clamp(0.0, 1.0),
                   child: Container(
-                    color: col.withValues(alpha: 0.35),
+                    color: col.withValues(alpha: 0.4),
                   ),
                 ),
                 FractionallySizedBox(
                   heightFactor: (average / 1.5).clamp(0.0, 1.0),
                   child: Container(
-                    color: col.withValues(alpha: 0.35),
+                    color: col.withValues(alpha: 0.4),
                   ),
                 ),
                 FractionallySizedBox(
@@ -293,15 +293,29 @@ class CalendarItem extends StatelessWidget {
                 ),
               ),
             ),
-          //TODO: Add glow for selected.
-          Text(
-            title,
-            style: Palette.calendarItem.copyWith(
-                color: isSelected
-                    ? (Palette.isDarkMode(context)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 6.0),
+            child: Text(
+              title,
+              style: switch (isSelected) {
+                false => Palette.calendarItem
+                    .copyWith(color: Colors.grey.withValues(alpha: 0.8)),
+                true => Palette.calendarItem.copyWith(
+                    color: (Palette.isDarkMode(context)
                         ? Colors.white
-                        : Colors.black)
-                    : Colors.grey.withValues(alpha: 0.8)),
+                        : Colors.black),
+                    shadows: [
+                      Shadow(
+                        offset: Offset(0, 1),
+                        blurRadius: 12.0,
+                        color: (Palette.isDarkMode(context)
+                            ? Colors.white.withValues(alpha: 0.6)
+                            : Colors.black.withValues(alpha: 0.4)),
+                      ),
+                    ],
+                  ),
+              },
+            ),
           ),
         ],
       ),

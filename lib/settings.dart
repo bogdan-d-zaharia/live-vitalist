@@ -282,23 +282,106 @@ class _SettingsState extends State<Settings> {
       appBar: AppBar(
         title: Text('Settings'),
         actions: [
-          TextButton(
-            onPressed: () async {
-              final url = Uri.parse(
-                  'https://live-vitalist.notion.site/Privacy-Policy-Live-Vitalist-1d612e3b9fc280d1be5cd9a718709560');
-              await launchUrl(url, mode: LaunchMode.externalApplication);
-            },
-            child: Text('Privacy Policy'),
+          PopupMenuButton(
+            // icon: Row(
+            //   children: [
+            //     Text('Documents'),
+            //     SizedBox(
+            //       width: 32.0,
+            //       height: 32.0,
+            //       child: Icon(Icons.more_vert_rounded),
+            //     ),
+            //   ],
+            // ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24.0),
+            ),
+            clipBehavior: Clip.hardEdge,
+            color: Palette.isDarkMode(context) ? Colors.grey[800] : null,
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              PopupMenuItem<String>(
+                onTap: () async {
+                  final url = Uri.parse(
+                      'https://live-vitalist.notion.site/Privacy-Policy-Live-Vitalist-1d612e3b9fc280d1be5cd9a718709560');
+                  await launchUrl(url, mode: LaunchMode.externalApplication);
+                },
+                child: Text('Privacy Policy'),
+              ),
+              PopupMenuItem<String>(
+                onTap: () async {
+                  final url = Uri.parse(
+                      'https://live-vitalist.notion.site/Terms-of-Use-Live-Vitalist-1d612e3b9fc28053a196f93d6c739858');
+                  await launchUrl(url, mode: LaunchMode.externalApplication);
+                },
+                child: Text('Terms of Use'),
+              ),
+              PopupMenuItem<String>(
+                onTap: () async {
+                  final Uri emailLaunchUri = Uri(
+                    scheme: 'mailto',
+                    path: 'livevitalist@gmail.com',
+                    query: Uri.encodeFull('subject=Feedback&body=Hello!'),
+                  );
+                  await launchUrl(emailLaunchUri);
+                },
+                child: Text('Send Feedback'),
+              ),
+              PopupMenuItem<String>(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Scaffold(
+                        appBar: AppBar(
+                          title: Text('Account Deletion'),
+                        ),
+                        body: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: ListView(
+                            children: [
+                              if (StorageHandler.isFirebase)
+                                CustomCard(
+                                  logo: Icon(Icons.no_accounts_rounded),
+                                  title: 'Account and data deletion',
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(deleteInternet1),
+                                      ElevatedButton.icon(
+                                        onPressed: deleteInternetPopup,
+                                        label: Text(
+                                            'Permanently delete online data'),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              CustomCard(
+                                logo: Icon(Icons.no_accounts_rounded),
+                                title: 'Account and data deletion',
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(deleteAll1),
+                                    ElevatedButton.icon(
+                                      onPressed: deleteEverythingPopup,
+                                      label:
+                                          Text('Permanently delete all data'),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                child: Text('Data Deletion'),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () async {
-              final url = Uri.parse(
-                  'https://live-vitalist.notion.site/Terms-of-Use-Live-Vitalist-1d612e3b9fc28053a196f93d6c739858');
-              await launchUrl(url, mode: LaunchMode.externalApplication);
-            },
-            child: Text('Terms of Use'),
-          ),
-          // SizedBox(width: 8.0),
         ],
       ),
       body: Padding(
@@ -361,6 +444,7 @@ class _SettingsState extends State<Settings> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  SizedBox(width: 16.0),
                   Checkbox(
                     value: SettingsData.isMonthDay,
                     onChanged: (value) {
@@ -371,47 +455,12 @@ class _SettingsState extends State<Settings> {
                       }
                     },
                   ),
-                  Text('Use Month / Day'),
+                  Text('Use M/D format'),
                   Spacer(),
                 ],
               ),
             ),
-            /* Account deletion */
-            Divider(
-              endIndent: 8.0,
-              indent: 8.0,
-              height: 32.0,
-              color: Palette.divGrey,
-            ),
-            if (StorageHandler.isFirebase)
-              CustomCard(
-                logo: Icon(Icons.no_accounts_rounded),
-                title: 'Account and data deletion',
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(deleteInternet1),
-                    ElevatedButton.icon(
-                      onPressed: deleteInternetPopup,
-                      label: Text('Permanently delete online data'),
-                    ),
-                  ],
-                ),
-              ),
-            CustomCard(
-              logo: Icon(Icons.no_accounts_rounded),
-              title: 'Account and data deletion',
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(deleteAll1),
-                  ElevatedButton.icon(
-                    onPressed: deleteEverythingPopup,
-                    label: Text('Permanently delete all data'),
-                  ),
-                ],
-              ),
-            ),
+
             SizedBox(height: 12.0),
           ],
         ),
