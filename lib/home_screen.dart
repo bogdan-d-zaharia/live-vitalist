@@ -6,7 +6,6 @@ import 'day.dart';
 import 'meals_journal.dart';
 import 'models/reference_fields_model.dart';
 import 'nutrient_display.dart';
-import 'nutrients_editor.dart';
 import 'pie_chart.dart';
 import 'settings.dart';
 import 'week_calendar.dart';
@@ -98,35 +97,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             setState(() {});
                           });
                         },
-                        child: Icon(Icons.table_chart, color: Colors.white),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 24.0),
-                  child: SizedBox(
-                    width: 32.0,
-                    height: 32.0,
-                    child: Material(
-                      borderRadius: BorderRadius.circular(8.0),
-                      clipBehavior: Clip.hardEdge,
-                      color: Colors.lightGreen,
-                      child: InkWell(
-                        splashColor: Colors.blue,
-                        highlightColor: Colors.blue,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => NutrientsEditor(),
-                            ),
-                          ).then((value) {
-                            NutrientsHandler.save();
-                            setState(() {}); //TODO: Doesn't work
-                          });
-                        },
-                        child: Icon(Icons.list, color: Colors.white),
+                        child: Icon(
+                          Icons.menu_book_rounded,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
@@ -179,7 +153,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     day: days.first,
                     refresh: () => setState(() {}),
                   ),
-                  NutrientDisplay(days: days),
+                  NutrientDisplay(
+                    days: days,
+                    refresh: () => setState(() {}),
+                  ),
                   SizedBox(height: 12.0),
                 ],
               ),

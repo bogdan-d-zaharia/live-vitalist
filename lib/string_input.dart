@@ -37,22 +37,20 @@ class _FieldsInputState extends State<FieldsInput> {
 
   late List<TextEditingController> controllers;
   late List<TextInputType?> keyboardTypes;
-
-  String strAtIndex(int i) {
-    return widget.fields[widget.fields.keys.elementAt(i)].toString();
-  }
+  late Map<String, dynamic> editable;
 
   void setAtIndex(int i, dynamic val) {
-    widget.fields[widget.fields.keys.elementAt(i)] = val;
+    editable[editable.keys.elementAt(i)] = val;
   }
 
   @override
   void initState() {
     super.initState();
-    controllers = widget.fields.values
+    editable = Map.of(widget.fields);
+    controllers = editable.values
         .map((e) => TextEditingController(text: e?.toString() ?? ''))
         .toList();
-    keyboardTypes = widget.fields.values
+    keyboardTypes = editable.values
         .map((e) =>
             e is String ? null : TextInputType.numberWithOptions(decimal: true))
         .toList();
@@ -72,6 +70,15 @@ class _FieldsInputState extends State<FieldsInput> {
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
         if (didPop) return;
+
+        for (int i = 0; i < editable.length; ++i) {
+          final val = editable.values.elementAt(i);
+          if (val != widget.fields.values.elementAt(i)) {
+            widget.fields[widget.fields.keys.elementAt(i)] = val;
+            isModified = true;
+          }
+        }
+
         Navigator.pop(context, isModified);
       },
       child: Card(
@@ -81,25 +88,22 @@ class _FieldsInputState extends State<FieldsInput> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: List.generate(
-              widget.fields.length,
+              editable.length,
               (i) => Row(
                 children: [
                   SizedBox(
                     width: 100.0,
-                    child: Text(widget.fields.keys.elementAt(i)),
+                    child: Text(editable.keys.elementAt(i)),
                   ),
                   Expanded(
                     child: TextField(
                       style: Theme.of(context).textTheme.bodyMedium,
                       controller: controllers[i],
-                      textInputAction: i < widget.fields.length - 1
+                      textInputAction: i < editable.length - 1
                           ? TextInputAction.next
                           : TextInputAction.done,
-                      onSubmitted: (newString) {
-                        if (strAtIndex(i) == newString) return;
-
-                        isModified = true;
-                        late dynamic val = keyboardTypes[i] == null
+                      onChanged: (newString) {
+                        final dynamic val = keyboardTypes[i] == null
                             ? (newString != '' ? newString : null)
                             : double.tryParse(newString);
                         setAtIndex(i, val);
@@ -396,7 +400,8 @@ class _NumberInputState extends State<NumberInput> {
       height: height,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(height / 2.0),
-        color: Colors.white,
+        color: (Palette.isDarkMode(context) ? Colors.black : Colors.white)
+            .withValues(alpha: 0.8),
       ),
       clipBehavior: Clip.hardEdge,
       child: Row(

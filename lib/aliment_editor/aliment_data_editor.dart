@@ -4,6 +4,7 @@ import '../settings.dart';
 import 'aliment_editor.dart';
 import '../custom_card.dart';
 import '../models/reference_fields_model.dart';
+import '../palette.dart';
 import '../string_input.dart';
 
 class AlimentDataEditor extends StatefulWidget {
@@ -61,7 +62,8 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
           padding: const EdgeInsets.all(6.0),
           child: Row(
             children: [
-              ...NutrientsHandler.widMajorMinorLabels(label),
+              Palette.dimParentheses(
+                  label, Theme.of(context).textTheme.bodyMedium),
               Text(': '),
               Spacer(),
               if (isNumber)
@@ -119,8 +121,10 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
           padding: const EdgeInsets.all(6.0),
           child: Row(
             children: [
-              ...NutrientsHandler.widMajorMinorLabels(NutrientsHandler
-                  .model[field]!['translations'][SettingsData.language]),
+              Palette.dimParentheses(
+                  NutrientsHandler.model[field]!['translations']
+                      [SettingsData.language],
+                  Theme.of(context).textTheme.bodyMedium),
               Text(': '),
               Spacer(),
               NumberInput(

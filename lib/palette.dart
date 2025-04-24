@@ -2,6 +2,36 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 abstract final class Palette {
+  static isDarkMode(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark;
+
+  static RichText dimParentheses(String label, TextStyle? style) {
+    style = style ?? TextStyle();
+
+    var x = label.indexOf('(');
+    x = x != -1 ? x : label.length;
+
+    final label1 = label.substring(0, x);
+    final label2 = label.substring(x);
+
+    return RichText(
+      overflow: TextOverflow.ellipsis,
+      maxLines: 1,
+      text: TextSpan(
+        children: [
+          TextSpan(text: label1, style: style),
+          TextSpan(
+            text: label2,
+            style: style.copyWith(
+              color: Colors.grey,
+              fontSize: style.fontSize != null ? style.fontSize! - 2.5 : null,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   // #region //* COLORS *//
   static const Color divGrey = Color.fromRGBO(158, 158, 158, 0.25);
   // static const Color brightLightGray = Color.fromRGBO(224, 224, 224, 1);

@@ -239,6 +239,8 @@ class CalendarItem extends StatelessWidget {
     /// kcalIndicatorHeight
     const double kIH = 4.0;
 
+    const Color col = Colors.lightGreen;
+
     return SizedBox(
       width: 36.0,
       child: Stack(
@@ -258,19 +260,19 @@ class CalendarItem extends StatelessWidget {
                 FractionallySizedBox(
                   heightFactor: (maxim / 1.5).clamp(0.0, 1.0),
                   child: Container(
-                    color: Palette.green.withValues(alpha: 0.5),
+                    color: col.withValues(alpha: 0.35),
                   ),
                 ),
                 FractionallySizedBox(
                   heightFactor: (average / 1.5).clamp(0.0, 1.0),
                   child: Container(
-                    color: Palette.green.withValues(alpha: 0.8),
+                    color: col.withValues(alpha: 0.35),
                   ),
                 ),
                 FractionallySizedBox(
                   heightFactor: (minim / 1.5).clamp(0.0, 1.0),
                   child: Container(
-                    color: Colors.green.withValues(alpha: 0.4),
+                    color: col,
                   ),
                 ),
               ],
@@ -296,7 +298,7 @@ class CalendarItem extends StatelessWidget {
             title,
             style: Palette.calendarItem.copyWith(
                 color: isSelected
-                    ? (SettingsData.isDarkMode(context)
+                    ? (Palette.isDarkMode(context)
                         ? Colors.white
                         : Colors.black)
                     : Colors.grey.withValues(alpha: 0.8)),

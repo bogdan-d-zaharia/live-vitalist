@@ -323,10 +323,10 @@ class ElementWidget extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontSize: 16.0,
-                            letterSpacing: -0.5,
-                          ),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontSize: 16.0, letterSpacing: -0.5),
                     ),
                     if (subTitle != '')
                       Text(

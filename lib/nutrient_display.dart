@@ -7,41 +7,15 @@ import 'palette.dart';
 import 'settings.dart';
 import 'string_input.dart';
 
-class IconButton extends StatelessWidget {
-  const IconButton({
-    required this.onTap,
-    required this.icon,
-    super.key,
-  });
-
-  final void Function() onTap;
-  final Widget icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      elevation: 1.0,
-      borderRadius: BorderRadius.circular(8.0),
-      clipBehavior: Clip.hardEdge,
-      child: InkWell(
-        onTap: onTap,
-        child: SizedBox(
-          width: 26.0,
-          height: 26.0,
-          child: icon,
-        ),
-      ),
-    );
-  }
-}
-
 class NutrientDisplay extends StatefulWidget {
   const NutrientDisplay({
     required this.days,
+    required this.refresh,
     super.key,
   });
 
   final List<Day> days;
+  final void Function() refresh;
 
   @override
   State<NutrientDisplay> createState() => _NutrientDisplayState();
@@ -385,7 +359,7 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
     final List<Widget> elements = [];
 
     for (var key in NutrientsHandler.model.keys.toList()) {
-      final field = NutrientsHandler.model[key]!;
+      final Map<String, dynamic> field = NutrientsHandler.model[key]!;
 
       final String label = field['translations'][SettingsData.language];
       final String unit = field['unit'];
@@ -407,8 +381,8 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
             MaterialPageRoute(
               builder: (context) => Scaffold(
                 appBar: AppBar(
-                  title: NutrientsHandler.widMajorMinorLabels2(label,
-                      Theme.of(context).textTheme.headlineSmall ?? TextStyle()),
+                  title: Palette.dimParentheses(
+                      label, Theme.of(context).textTheme.headlineSmall),
                 ),
                 body: FieldsInput(fields: fields),
               ),
@@ -422,14 +396,17 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
             field['translations'][SettingsData.language] = fields['Label'];
 
             NutrientsHandler.save();
+
+            /* Fixes re-entering with old fields */
+            // widget.refresh();
           }
         },
         child: Row(
           children: [
             Icon(Icons.drag_indicator_rounded),
             Expanded(
-                child: NutrientsHandler.widMajorMinorLabels2(
-                    label, Theme.of(context).textTheme.bodyMedium!)),
+                child: Palette.dimParentheses(
+                    label, Theme.of(context).textTheme.bodyMedium)),
             Switch(
               value: !NutrientsHandler.hasTag(key, 'disabled'),
               onChanged: (value) => setState(() {
@@ -444,28 +421,43 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
       elements.add(wid);
     }
 
+    //TODO: Implement adding custom
     return CustomCard(
       logo: const Icon(Icons.bar_chart_rounded),
       title: 'Nutrients',
       action: actionWid(),
-      child: ReorderableListView(
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
-        onReorder: (oldIndex, newIndex) {
-          setState(() {
-            final List<MapEntry<String, Map<String, dynamic>>> entries =
-                NutrientsHandler.model.entries.toList();
+      child: Column(
+        children: [
+          ReorderableListView(
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            onReorder: (oldIndex, newIndex) {
+              setState(() {
+                final List<MapEntry<String, Map<String, dynamic>>> entries =
+                    NutrientsHandler.model.entries.toList();
 
-            if (newIndex > oldIndex) newIndex -= 1;
-            final entry = entries.removeAt(oldIndex);
-            entries.insert(newIndex, entry);
+                if (newIndex > oldIndex) newIndex -= 1;
+                final entry = entries.removeAt(oldIndex);
+                entries.insert(newIndex, entry);
 
-            NutrientsHandler.model = Map.fromEntries(entries);
+                NutrientsHandler.model = Map.fromEntries(entries);
 
-            NutrientsHandler.save();
-          });
-        },
-        children: elements,
+                NutrientsHandler.save();
+              });
+            },
+            children: elements,
+          ),
+          Divider(),
+          SizedBox(
+            width: double.infinity,
+            child: TextButton(
+              onPressed: () {
+                //TODO: Implement
+              },
+              child: Text('Add new nutrient'),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -474,6 +466,34 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
   Widget build(BuildContext context) {
     if (!isEditMode) return viewMode();
     return editMode();
+  }
+}
+
+class IconButton extends StatelessWidget {
+  const IconButton({
+    required this.onTap,
+    required this.icon,
+    super.key,
+  });
+
+  final void Function() onTap;
+  final Widget icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      elevation: 1.0,
+      borderRadius: BorderRadius.circular(8.0),
+      clipBehavior: Clip.hardEdge,
+      child: InkWell(
+        onTap: onTap,
+        child: SizedBox(
+          width: 26.0,
+          height: 26.0,
+          child: icon,
+        ),
+      ),
+    );
   }
 }
 
@@ -589,7 +609,7 @@ class NutrientBar extends StatelessWidget {
               alignment: Alignment.topRight,
               widthFactor: 1.0 - (amount.clamp(0.0, top) / top),
               child: Container(
-                  color: (SettingsData.isDarkMode(context)
+                  color: (Palette.isDarkMode(context)
                           ? Colors.black
                           : Colors.white)
                       .withValues(alpha: 0.7)),
@@ -628,7 +648,8 @@ class NutrientBar extends StatelessWidget {
       children: [
         Row(
           children: [
-            ...NutrientsHandler.widMajorMinorLabels(label),
+            Palette.dimParentheses(
+                label, Theme.of(context).textTheme.bodyMedium),
             if (icon != null) icon!,
             if (icon != null) SizedBox(width: 4.0),
             Spacer(),

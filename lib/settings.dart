@@ -17,9 +17,6 @@ abstract final class SettingsData {
   static bool isLoggedIn = false;
   static String language = 'ENG';
 
-  static isDarkMode(BuildContext context) =>
-      Theme.of(context).brightness == Brightness.dark;
-
   // static Set<String> languages = {'ENG'};
 
   static Map<String, dynamic> toJson() {
