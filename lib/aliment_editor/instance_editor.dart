@@ -136,27 +136,6 @@ class _InstanceEditorState extends State<InstanceEditor> {
       child: Scaffold(
         appBar: AppBar(
           title: Text('Editor'),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 24.0),
-              child: SizedBox(
-                width: 32.0,
-                height: 32.0,
-                child: Material(
-                  borderRadius: BorderRadius.circular(8.0),
-                  clipBehavior: Clip.hardEdge,
-                  color: Colors.lightGreen,
-                  child: InkWell(
-                    splashColor: Colors.blue,
-                    highlightColor: Colors.blue,
-                    onTap: () => AlimentBankEditor.addNewAliment(context)
-                        .then((_) => setState(() {})),
-                    child: Icon(Icons.add_rounded, color: Colors.white),
-                  ),
-                ),
-              ),
-            ),
-          ],
         ),
         body: Center(
           child: Padding(

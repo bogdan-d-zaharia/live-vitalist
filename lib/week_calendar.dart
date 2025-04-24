@@ -239,8 +239,6 @@ class CalendarItem extends StatelessWidget {
     /// kcalIndicatorHeight
     const double kIH = 4.0;
 
-    const Color col = Colors.lightGreen;
-
     return SizedBox(
       width: 36.0,
       child: Stack(
@@ -253,32 +251,37 @@ class CalendarItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(6.0),
             ),
             clipBehavior: Clip.hardEdge,
-            child: Stack(
-              alignment: Alignment.bottomCenter,
-              children: [
-                //TODO: Study and implement showing it simplified, by a single field.
-                FractionallySizedBox(
-                  heightFactor: (maxim / 1.5).clamp(0.0, 1.0),
-                  child: Container(
-                    color: col.withValues(alpha: 0.4),
+            child: !SettingsData.isComplexCalendar
+                ? FractionallySizedBox(
+                    heightFactor: ((kcalRatio ?? 0.0) / 1.5).clamp(0.0, 1.0),
+                    child: Container(color: Colors.lightGreen),
+                  )
+                : Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      //TODO: Study and implement showing it simplified, by a single field.
+                      FractionallySizedBox(
+                        heightFactor: (maxim / 1.5).clamp(0.0, 1.0),
+                        child: Container(
+                          color: Colors.lightGreen.withValues(alpha: 0.4),
+                        ),
+                      ),
+                      FractionallySizedBox(
+                        heightFactor: (average / 1.5).clamp(0.0, 1.0),
+                        child: Container(
+                          color: Colors.lightGreen.withValues(alpha: 0.4),
+                        ),
+                      ),
+                      FractionallySizedBox(
+                        heightFactor: (minim / 1.5).clamp(0.0, 1.0),
+                        child: Container(
+                          color: Colors.lightGreen,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                FractionallySizedBox(
-                  heightFactor: (average / 1.5).clamp(0.0, 1.0),
-                  child: Container(
-                    color: col.withValues(alpha: 0.4),
-                  ),
-                ),
-                FractionallySizedBox(
-                  heightFactor: (minim / 1.5).clamp(0.0, 1.0),
-                  child: Container(
-                    color: col,
-                  ),
-                ),
-              ],
-            ),
           ),
-          if (kcalRatio != null)
+          if (SettingsData.isComplexCalendar && kcalRatio != null)
             Positioned(
               /// Dot position
               bottom: labelHeight +
@@ -322,3 +325,82 @@ class CalendarItem extends StatelessWidget {
     );
   }
 }
+
+//TODO: Implement
+// class DeprecatedCalendarItem extends StatelessWidget {
+//   const DeprecatedCalendarItem({super.key});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Placeholder();
+//   }
+// }
+
+// class ComplexCalendarItem extends StatelessWidget {
+//   const ComplexCalendarItem({
+//     required this.minim,
+//     required this.maxim,
+//     required this.average,
+//     required this.kcalRatio,
+//     super.key,
+//   });
+
+//   final double minim;
+//   final double maxim;
+//   final double average;
+//   final double kcalRatio;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     /// kcalIndicatorHeight
+//     const double kIH = 4.0;
+
+//     return Stack(
+//       alignment: Alignment.bottomCenter,
+//       children: [
+//         ClipRRect(
+//           borderRadius: BorderRadius.circular(6.0),
+//           clipBehavior: Clip.hardEdge,
+//           child: Stack(
+//             alignment: Alignment.bottomCenter,
+//             children: [
+//               //TODO: Study and implement showing it simplified, by a single field.
+//               FractionallySizedBox(
+//                 heightFactor: (maxim / 1.5).clamp(0.0, 1.0),
+//                 child: Container(
+//                   color: Colors.lightGreen.withValues(alpha: 0.4),
+//                 ),
+//               ),
+//               FractionallySizedBox(
+//                 heightFactor: (average / 1.5).clamp(0.0, 1.0),
+//                 child: Container(
+//                   color: Colors.lightGreen.withValues(alpha: 0.4),
+//                 ),
+//               ),
+//               FractionallySizedBox(
+//                 heightFactor: (minim / 1.5).clamp(0.0, 1.0),
+//                 child: Container(
+//                   color: Colors.lightGreen,
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//         Positioned(
+//           /// Dot position
+//           bottom: labelHeight +
+//               kcalRatio / 1.5 * (itemHeight - labelHeight) -
+//               kIH / 2.0,
+//           child: Container(
+//             height: kIH,
+//             width: kIH,
+//             decoration: BoxDecoration(
+//               color: Colors.green,
+//               borderRadius: BorderRadius.circular(kIH / 2.0),
+//             ),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }

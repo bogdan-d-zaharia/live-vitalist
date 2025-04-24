@@ -16,6 +16,15 @@ abstract final class SettingsData {
   static bool isMonthDay = false;
   static bool isLoggedIn = false;
   static String language = 'ENG';
+  static bool isComplexCalendar = false;
+
+//TODO: Use shared preferences.
+  // static bool get isMonthDay => _isMonthDay;
+  // static set isMonthDay(bool val) {
+  //   _isMonthDay = val;
+  //   // Cached final prefs = await SharedPreferences.getInstance();
+  //   prefs.setString('isMonthDay', _isMonthDay);
+  // }
 
   // static Set<String> languages = {'ENG'};
 
@@ -460,6 +469,108 @@ class _SettingsState extends State<Settings> {
                 ],
               ),
             ),
+
+            MiniCard(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(width: 16.0),
+                  Checkbox(
+                    value: SettingsData.isComplexCalendar,
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() {
+                          SettingsData.isComplexCalendar = value;
+                        });
+                      }
+                    },
+                  ),
+                  Text('Use complex calendar view'),
+                  Spacer(),
+                ],
+              ),
+            ),
+
+            //TODO: Implement
+            // CustomCard(
+            //   logo: const Icon(Icons.bar_chart_rounded),
+            //   title: 'Calendar bar type',
+            //   child: Row(
+            //     children: [
+            //       Expanded(
+            //         child: AspectRatio(
+            //           aspectRatio: 1.0,
+            //           child: Card(
+            //             child: Stack(
+            //               alignment: Alignment.bottomCenter,
+            //               children: [
+            //                 Container(
+            //                   width: 12.0,
+            //                   decoration: BoxDecoration(
+            //                     borderRadius: BorderRadius.circular(6.0),
+            //                   ),
+            //                   clipBehavior: Clip.hardEdge,
+            //                   child: Stack(
+            //                     alignment: Alignment.bottomCenter,
+            //                     children: [
+            //                       FractionallySizedBox(
+            //                         heightFactor: (1.3 / 1.5).clamp(0.0, 1.0),
+            //                         child: Container(
+            //                           color: Colors.lightGreen
+            //                               .withValues(alpha: 0.4),
+            //                         ),
+            //                       ),
+            //                       FractionallySizedBox(
+            //                         heightFactor: (1.1 / 1.5).clamp(0.0, 1.0),
+            //                         child: Container(
+            //                           color: Colors.lightGreen
+            //                               .withValues(alpha: 0.4),
+            //                         ),
+            //                       ),
+            //                       FractionallySizedBox(
+            //                         heightFactor: (0.4 / 1.5).clamp(0.0, 1.0),
+            //                         child: Container(
+            //                           color: Colors.lightGreen,
+            //                         ),
+            //                       ),
+            //                     ],
+            //                   ),
+            //                 ),
+            //                 Positioned(
+            //                   /// Dot position
+            //                   bottom: 50.0,
+            //                   child: Container(
+            //                     height: 4,
+            //                     width: 4,
+            //                     decoration: BoxDecoration(
+            //                       color: Colors.green,
+            //                       borderRadius: BorderRadius.circular(4 / 2.0),
+            //                     ),
+            //                   ),
+            //                 ),
+            //               ],
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //       SizedBox(width: 8.0),
+            //       Expanded(
+            //         child: AspectRatio(
+            //           aspectRatio: 1.0,
+            //           child: Placeholder(),
+            //         ),
+            //       ),
+            //       SizedBox(width: 8.0),
+            //       Expanded(
+            //         flex: 2,
+            //         child: Padding(
+            //           padding: const EdgeInsets.all(8.0),
+            //           child: Text('data'),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
 
             SizedBox(height: 12.0),
           ],
