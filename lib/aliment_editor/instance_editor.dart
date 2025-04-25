@@ -25,7 +25,7 @@ class _InstanceEditorState extends State<InstanceEditor> {
     final String? id = await showDialog(
       context: context,
       builder: (context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 36.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 36.0),
         child: Selector(),
       ),
     );
@@ -186,68 +186,84 @@ class _SelectorState extends State<Selector> {
     final keys = AlimentBank.sortedKeys.where((id) =>
         removeDiacritics(AlimentBank.getAliment(id).name.toLowerCase())
             .contains(removeDiacritics(searchTerm.toLowerCase())));
-    return CustomCard(
-      title: 'Aliment Selector',
-      child: Expanded(
-        child: ListView(
+    return MiniCard(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
+        child: Column(
           children: [
-            MiniCard(
-              child: Row(
+            Row(
+              children: [
+                BackButton(),
+                Text(
+                  'Aliment Selector',
+                  style: TextStyle(fontSize: 20.0),
+                ),
+              ],
+            ),
+            Expanded(
+              child: ListView(
                 children: [
-                  SizedBox(
-                    //TODO: A more programatical approach
-                    width: 42.0,
-                    height: 42.0,
-                    child: Icon(Icons.search_rounded),
+                  MiniCard(
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          //TODO: A more programatical approach
+                          width: 42.0,
+                          height: 42.0,
+                          child: Icon(Icons.search_rounded),
+                        ),
+                        Expanded(
+                          child: TextField(
+                            decoration: InputDecoration(
+                                hintText: 'Search aliment',
+                                border: InputBorder.none),
+                            style: Theme.of(context).textTheme.bodyMedium,
+                            controller: controller,
+                            onChanged: (newString) {
+                              if (searchTerm == newString) return;
+                              setState(() {
+                                searchTerm = newString;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                          hintText: 'Search aliment', border: InputBorder.none),
-                      style: Theme.of(context).textTheme.bodyMedium,
-                      controller: controller,
-                      onChanged: (newString) {
-                        if (searchTerm == newString) return;
-                        setState(() {
-                          searchTerm = newString;
-                        });
-                      },
+                  MiniCard(
+                    child: InkWell(
+                      onTap: () => AlimentBankEditor.addNewAliment(context,
+                              name: searchTerm)
+                          .then((_) => setState(() {})),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 42.0,
+                            height: 42.0,
+                            child: Icon(Icons.add_rounded),
+                          ),
+                          Text('Add Aliment'),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Divider(height: 24.0, color: Palette.divGrey),
+                  ...keys.map(
+                    (id) => MiniCard(
+                      child: InkWell(
+                        onTap: () => Navigator.pop(context, id),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 12.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(AlimentBank.getAliment(id).name),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ],
-              ),
-            ),
-            MiniCard(
-              child: InkWell(
-                onTap: () =>
-                    AlimentBankEditor.addNewAliment(context, name: searchTerm)
-                        .then((_) => setState(() {})),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 42.0,
-                      height: 42.0,
-                      child: Icon(Icons.add_rounded),
-                    ),
-                    Text('Add Aliment'),
-                  ],
-                ),
-              ),
-            ),
-            Divider(height: 24.0, color: Palette.divGrey),
-            ...keys.map(
-              (id) => MiniCard(
-                child: InkWell(
-                  onTap: () => Navigator.pop(context, id),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 12.0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(AlimentBank.getAliment(id).name),
-                    ),
-                  ),
-                ),
               ),
             ),
           ],
