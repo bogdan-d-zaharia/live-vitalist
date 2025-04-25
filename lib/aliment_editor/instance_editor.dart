@@ -25,7 +25,7 @@ class _InstanceEditorState extends State<InstanceEditor> {
     final String? id = await showDialog(
       context: context,
       builder: (context) => Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 36.0),
         child: Selector(),
       ),
     );
@@ -43,6 +43,9 @@ class _InstanceEditorState extends State<InstanceEditor> {
     });
   }
 
+  //TODO: Perhaps use this as screen and number input to the right
+  // also perhaps search and at the bottom instead of top, to be
+  // easely accessible, or perhaps reverse everything.
   Widget _alimentSelector() {
     final String? name = AlimentBank.aliments[widget.aliment.alimentID]?.name;
     return MiniCard(

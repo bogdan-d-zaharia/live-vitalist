@@ -357,9 +357,9 @@ class _SettingsState extends State<Settings> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(deleteInternet1),
-                                      ElevatedButton.icon(
+                                      TextButton(
                                         onPressed: deleteInternetPopup,
-                                        label: Text(
+                                        child: Text(
                                             'Permanently delete online data'),
                                       ),
                                     ],
@@ -372,9 +372,9 @@ class _SettingsState extends State<Settings> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(deleteAll1),
-                                    ElevatedButton.icon(
+                                    TextButton(
                                       onPressed: deleteEverythingPopup,
-                                      label:
+                                      child:
                                           Text('Permanently delete all data'),
                                     ),
                                   ],
@@ -407,7 +407,7 @@ class _SettingsState extends State<Settings> {
                     Text(
                         'Backup your files to cloud or restore your data by connecting with Google.'),
                     SizedBox(height: 12.0),
-                    ElevatedButton(
+                    TextButton(
                       onPressed: () async {
                         //TODO: Day data doesn't automatically sync when connecting with Google.
                         await AuthGate.signInWithGoogle();
@@ -444,7 +444,7 @@ class _SettingsState extends State<Settings> {
               CustomCard(
                 logo: Icon(Icons.sync_rounded),
                 title: 'Backup to cloud',
-                child: ElevatedButton(
+                child: TextButton(
                   onPressed: () => StorageHandler.syncAll(),
                   child: Text('Backup all data to cloud'),
                 ),
