@@ -122,19 +122,15 @@ class _FieldsInputState extends State<FieldsInput> {
 }
 
 class StringInput extends StatefulWidget {
-  final String? hint;
   final String? initString;
   final Function(String)? update;
-  final double? width;
   final TextInputType? keyboardType;
   final InputDecoration? decoration;
 
   const StringInput({
     super.key,
-    this.hint,
     this.initString,
     this.update,
-    this.width,
     this.keyboardType,
     this.decoration,
   });
@@ -160,28 +156,15 @@ class _StringInputState extends State<StringInput> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: widget.width,
-      child: Row(
-        children: [
-          Text(
-            '${widget.hint ?? "Value"}:  ',
-            style: Theme.of(context).textTheme.bodyLarge,
+    return TextField(
+      keyboardType: widget.keyboardType,
+      style: Theme.of(context).textTheme.bodyMedium,
+      controller: _controller,
+      decoration: widget.decoration ??
+          const InputDecoration(
+            border: UnderlineInputBorder(),
           ),
-          Expanded(
-            child: TextField(
-              keyboardType: widget.keyboardType,
-              style: Theme.of(context).textTheme.bodyMedium,
-              controller: _controller,
-              decoration: widget.decoration ??
-                  const InputDecoration(
-                    border: UnderlineInputBorder(),
-                  ),
-              onChanged: widget.update,
-            ),
-          ),
-        ],
-      ),
+      onChanged: widget.update,
     );
   }
 }
@@ -353,12 +336,16 @@ class NumberInput extends StatefulWidget {
     required this.getValue,
     required this.setValue,
     this.showHandles = true,
+    this.isEmpty = false,
+    this.isTurnedOff = false,
     super.key,
   });
 
   final double Function() getValue;
   final Function(double) setValue;
   final bool showHandles;
+  final bool isEmpty;
+  final bool isTurnedOff;
 
   @override
   State<NumberInput> createState() => _NumberInputState();
@@ -373,7 +360,8 @@ class _NumberInputState extends State<NumberInput> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController();
+    _controller =
+        TextEditingController(text: widget.isEmpty ? '' : number.toString());
   }
 
   @override
@@ -393,7 +381,6 @@ class _NumberInputState extends State<NumberInput> {
 
   @override
   Widget build(BuildContext context) {
-    _controller.text = number.toString();
     final double height = 42.0;
 
     return Container(
@@ -424,22 +411,25 @@ class _NumberInputState extends State<NumberInput> {
           SizedBox(
             width: 2.0 * height,
             height: height,
-            child: TextField(
-              expands: true,
-              maxLines: null,
-              minLines: null,
-              // style: TextStyle(fontSize: 16),
-              textAlign: TextAlign.center,
-              textAlignVertical: TextAlignVertical.center,
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              controller: _controller,
-              decoration: InputDecoration(border: InputBorder.none),
-              onChanged: (value) {
-                final double? v = double.tryParse(value);
-                if (v != null && v.isFinite) number = v;
-              },
-              onEditingComplete: () => setState(() {}),
-            ),
+            child: !widget.isTurnedOff
+                ? TextField(
+                    expands: true,
+                    maxLines: null,
+                    minLines: null,
+                    // style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                    textAlignVertical: TextAlignVertical.center,
+                    keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
+                    controller: _controller,
+                    decoration: InputDecoration(border: InputBorder.none),
+                    onChanged: (value) {
+                      final double? v = double.tryParse(value);
+                      if (v != null && v.isFinite) number = v;
+                    },
+                    onEditingComplete: () => setState(() {}),
+                  )
+                : null,
           ),
           if (widget.showHandles) divider(),
           if (widget.showHandles)

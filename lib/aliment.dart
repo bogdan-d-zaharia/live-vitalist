@@ -16,7 +16,23 @@ abstract class Aliment {
 
   AlimentData get getAliment;
 
-  Map<String, double> get fields;
+  Map<String, double> get fields {
+    final AlimentData alimentData = getAliment;
+
+    Map<String, double> result = {};
+
+    /* Doesn't output supplementary fields. */
+    for (final field in NutrientsHandler.model.keys) {
+      if (alimentData.referenceFields.containsKey(field)) {
+        result[field] = alimentData.referenceFields[field]! *
+            servingSize /
+            alimentData.referenceSize *
+            (alimentData.unitSizes?[unit] ?? 1.0);
+      }
+    }
+
+    return result;
+  }
 
   Map<String, dynamic> toJson();
 
@@ -38,23 +54,6 @@ class TemporaryAliment extends Aliment {
 
   @override
   AlimentData get getAliment => alimentData;
-
-  @override
-  Map<String, double> get fields {
-    Map<String, double> result = {};
-
-    /* Doesn't output supplimentary fields. */
-    for (final field in NutrientsHandler.model.keys) {
-      if (alimentData.referenceFields.containsKey(field)) {
-        result[field] = alimentData.referenceFields[field]! *
-            servingSize /
-            alimentData.referenceSize *
-            (alimentData.unitSizes?[unit] ?? 1.0);
-      }
-    }
-
-    return result;
-  }
 
   @override
   Map<String, dynamic> toJson() {
@@ -89,24 +88,6 @@ class InstancedAliment extends Aliment {
 
   @override
   AlimentData get getAliment => AlimentBank.getAliment(alimentID);
-
-  @override
-  Map<String, double> get fields {
-    final AlimentData aliment = AlimentBank.getAliment(alimentID);
-
-    Map<String, double> result = {};
-
-    for (final field in NutrientsHandler.model.keys) {
-      if (aliment.referenceFields.containsKey(field)) {
-        result[field] = aliment.referenceFields[field]! *
-            servingSize /
-            aliment.referenceSize *
-            (aliment.unitSizes?[unit] ?? 1.0);
-      }
-    }
-
-    return result;
-  }
 
   @override
   Map<String, Object> toJson() {

@@ -23,6 +23,8 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
   bool isModified = false;
   late AlimentData origData;
 
+  bool isShowAdvanced = false;
+
   /// It works because `.getAliment` is a getter as well as this getter,
   /// and it updates when using the `this.` setter `set alimentData`.
   AlimentData get alimentData => widget.aliment is TemporaryAliment
@@ -41,55 +43,110 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
 
   Map<String, double> get referenceFields => alimentData.referenceFields;
 
-  bool isShowAdvanced = false;
+  String get unit {
+    return (alimentData.unitSizes ?? {})
+        .entries
+        .firstWhere(
+          (element) => element.value == 1.0,
+          orElse: () => MapEntry('portion', 1.0),
+        )
+        .key;
+  }
 
-  Widget input({
+  set unit(String value) {
+    final u = unit;
+    if (u == value) return;
+
+    if (alimentData.unitSizes != null) {
+      if (alimentData.unitSizes!.containsValue(1.0)) {
+        alimentData.unitSizes!.remove(u);
+      }
+      alimentData.unitSizes![value] = 1.0;
+    } else {
+      alimentData.unitSizes = {value: 1.0};
+    }
+  }
+
+  Widget wid({required List<Widget> children}) {
+    return MiniCard(
+      child: Padding(
+        padding: const EdgeInsets.all(6.0),
+        child: Row(
+          children: children,
+        ),
+      ),
+    );
+  }
+
+  Widget inputEntry({
+    required String initString,
+    required Function(String) strUpdate,
+    required dynamic Function() getter,
+    required Function(dynamic) setter,
+    String unit = '',
+    bool isEmpty = true,
+    bool isTurnedOff = true,
+  }) {
+    return wid(
+      children: [
+        Expanded(
+          child: StringInput(
+            initString: initString,
+            update: strUpdate,
+          ),
+        ),
+        SizedBox(width: 16.0),
+        NumberInput(
+          getValue: () => getter(),
+          setValue: setter,
+          showHandles: false,
+          isEmpty: isEmpty,
+          isTurnedOff: isTurnedOff,
+        ),
+        SizedBox(width: 16.0),
+        SizedBox(
+          width: 36.0,
+          child: Text(unit),
+        ),
+      ],
+    );
+  }
+
+  Widget inputWid({required String label, required List<Widget> children}) {
+    return wid(children: [
+      Palette.dimParentheses(label, Theme.of(context).textTheme.bodyMedium),
+      Text(': '),
+      ...children,
+    ]);
+  }
+
+  Widget inputNum({
     required String label,
     required dynamic Function() getter,
     required Function(dynamic) setter,
     String unit = '',
     bool test = true,
-    bool isNumber = true,
+    String errorText = 'Test did not pass!',
   }) {
     if (test) {
-      return Container(
-        margin: EdgeInsets.symmetric(vertical: 4.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24.0),
-          border: Border.all(),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(6.0),
-          child: Row(
-            children: [
-              Palette.dimParentheses(
-                  label, Theme.of(context).textTheme.bodyMedium),
-              Text(': '),
-              Spacer(),
-              if (isNumber)
-                NumberInput(
-                  getValue: () => getter(),
-                  setValue: setter,
-                  showHandles: false,
-                )
-              else
-                StringInput(
-                  hint: '',
-                  width: 200.0,
-                  initString: getter(),
-                  update: setter,
-                ),
-              SizedBox(width: 16.0),
-              SizedBox(
-                width: 36.0,
-                child: Text(unit),
-              ),
-            ],
+      return inputWid(
+        label: label,
+        children: [
+          Spacer(),
+          NumberInput(
+            getValue: () => getter(),
+            setValue: setter,
+            showHandles: false,
           ),
-        ),
+          SizedBox(width: 16.0),
+          SizedBox(
+            width: 36.0,
+            child: Text(unit),
+          ),
+        ],
       );
     } else {
-      return Text('Test did not pass!');
+      return Text(errorText);
     }
   }
 
@@ -110,40 +167,15 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
       }
     }
 
-    if (NutrientsHandler.model.containsKey(field)) {
-      return Container(
-        margin: EdgeInsets.symmetric(vertical: 4.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24.0),
-          border: Border.all(),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(6.0),
-          child: Row(
-            children: [
-              Palette.dimParentheses(
-                  NutrientsHandler.model[field]!['translations']
-                      [SettingsData.language],
-                  Theme.of(context).textTheme.bodyMedium),
-              Text(': '),
-              Spacer(),
-              NumberInput(
-                getValue: getter,
-                setValue: setter,
-                showHandles: false,
-              ),
-              SizedBox(width: 16.0),
-              SizedBox(
-                width: 36.0,
-                child: Text(NutrientsHandler.model[field]!['unit']),
-              ),
-            ],
-          ),
-        ),
-      );
-    } else {
-      return Text('Nutrient "$field" not found!');
-    }
+    return inputNum(
+      label: NutrientsHandler.model[field]!['translations']
+          [SettingsData.language],
+      getter: getter,
+      setter: setter,
+      unit: NutrientsHandler.model[field]!['unit'],
+      test: NutrientsHandler.model.containsKey(field),
+      errorText: 'Nutrient "$field" not found!',
+    );
   }
 
   Future<bool?> saveAlert() {
@@ -283,19 +315,44 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: ListView(
             children: [
-              input(
-                label: 'Name',
-                getter: () => alimentData.name,
-                /*  This works even for InstancedAliment because
+              inputWid(label: 'Name', children: [
+                SizedBox(width: 16.0),
+                Expanded(
+                  child: StringInput(
+                    initString: alimentData.name,
+                    /*  This works even for InstancedAliment because
                     it uses the getter `alimentData` which gives a reference. */
-                setter: (p0) {
-                  alimentData.name = p0;
-                  isModified = true;
-                },
-                isNumber: false,
+                    update: (p0) {
+                      alimentData.name = p0;
+                      isModified = true;
+                    },
+                  ),
+                ),
+                SizedBox(width: 16.0),
+              ]),
+              inputWid(
+                label: 'Unit',
+                children: [
+                  SizedBox(width: 16.0),
+                  Expanded(
+                    child: DropdownButton(
+                      isExpanded: true,
+                      borderRadius: BorderRadius.circular(24.0),
+                      value: unit,
+                      items: ['g', 'ml', 'portion'].map((e) {
+                        return DropdownMenuItem(value: e, child: Text(e));
+                      }).toList(),
+                      onChanged: (value) => setState(() {
+                        if (value != null) unit = value;
+                      }),
+                    ),
+                  ),
+                  SizedBox(width: 16.0),
+                ],
               ),
-              input(
+              inputNum(
                 label: 'Per amount',
+                unit: unit,
                 getter: () => alimentData.referenceSize,
                 /*  This works even for InstancedAliment because
                     it uses the getter `alimentData` which gives a reference. */
@@ -319,7 +376,64 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
                   ),
                 ],
               ),
-              if (isShowAdvanced) ...advancedFieldsWid,
+              if (isShowAdvanced) ...[
+                ...advancedFieldsWid,
+                SizedBox(
+                  height: 48.0,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text("Unit synonyms: "),
+                  ),
+                ),
+                ...(alimentData.unitSizes ?? {})
+                    .entries
+                    .where((element) => element.key != unit)
+                    .map(
+                      (e) => inputEntry(
+                        initString: e.key,
+                        strUpdate: (p0) {
+                          p0 = p0.trim();
+                          if (p0 == e.key) return;
+
+                          alimentData.unitSizes![p0] =
+                              alimentData.unitSizes![e.key]!;
+
+                          alimentData.unitSizes!.remove(e.key);
+                        },
+                        getter: () => alimentData.unitSizes![e.key],
+                        setter: (p0) => setState(() {
+                          if (p0 > 0.0 && p0 != 1.0) {
+                            alimentData.unitSizes![e.key] = p0;
+                          } else {
+                            alimentData.unitSizes?.remove(e.key);
+                          }
+                        }),
+                        //TODO: We have a ghost unit
+                        // when we write to it, we enter with 0.0
+                        // if 0.0, isEmpty should be true
+                        // pop scope filter 0.0
+                        unit: unit,
+                      ),
+                    )
+                    .toList()
+                  ..add(inputEntry(
+                    initString: '',
+                    strUpdate: (p0) {
+                      p0 = p0.trim();
+                      if (p0 == '' || alimentData.unitSizes!.containsKey(p0)) {
+                        return;
+                      }
+
+                      setState(() {});
+                    },
+                    isEmpty: true,
+                    isTurnedOff: true,
+                    getter: () => 0.0,
+                    setter: (_) {},
+                    unit: unit,
+                  )),
+              ],
+
               //TODO: Add unit editor
               ElevatedButton(
                 onPressed: () => Navigator.pop(context, true),

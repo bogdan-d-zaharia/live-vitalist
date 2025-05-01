@@ -100,7 +100,12 @@ class Day {
     for (final List<Aliment> meal in [breakfast, lunch, dinner]) {
       for (final Aliment sa in meal) {
         if (sa is InstancedAliment) {
-          tias[sa.alimentID] = (tias[sa.alimentID] ?? 0.0) + sa.servingSize;
+          //TODO: Persistant unit, if only `medium` is used express in portions,
+          // else in the desired 1.0 unit like grams.
+
+          final double unitScale = sa.getAliment.unitSizes?[sa.unit] ?? 1.0;
+          tias[sa.alimentID] =
+              (tias[sa.alimentID] ?? 0.0) + sa.servingSize * unitScale;
         } else if (sa is TemporaryAliment) {
           ttas.add(sa);
         }

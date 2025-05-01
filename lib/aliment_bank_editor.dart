@@ -11,7 +11,8 @@ class AlimentBankEditor extends StatefulWidget {
     final aliment = TemporaryAliment.fromJson({
       "alimentData": {
         'name': name,
-        'referenceSize': 1.0,
+        'referenceSize': 100.0,
+        "unitSizes": {"g": 1.0},
       },
       "servingSize": 1.0,
     });
