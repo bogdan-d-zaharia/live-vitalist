@@ -76,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
               title: Text('Live Vitalist'),
               actions: [
                 Padding(
-                  padding: const EdgeInsets.only(right: 24.0),
+                  padding: const EdgeInsets.only(right: 12.0),
                   child: SizedBox(
                     width: 32.0,
                     height: 32.0,

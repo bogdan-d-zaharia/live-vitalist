@@ -360,8 +360,7 @@ class _NumberInputState extends State<NumberInput> {
   @override
   void initState() {
     super.initState();
-    _controller =
-        TextEditingController(text: widget.isEmpty ? '' : number.toString());
+    _controller = TextEditingController();
   }
 
   @override
@@ -382,6 +381,8 @@ class _NumberInputState extends State<NumberInput> {
   @override
   Widget build(BuildContext context) {
     final double height = 42.0;
+
+    _controller.text = widget.isEmpty ? '' : number.toString();
 
     return Container(
       height: height,

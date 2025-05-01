@@ -87,7 +87,7 @@ class _InstanceEditorState extends State<InstanceEditor> {
               setValue: (val) {
                 if (val >= 0.0) {
                   isModified = true;
-                  return widget.aliment.servingSize = val;
+                  widget.aliment.servingSize = val;
                 }
               },
             ),

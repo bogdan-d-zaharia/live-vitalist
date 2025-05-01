@@ -25,6 +25,9 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
 
   bool isShowAdvanced = false;
 
+  //TODO: Make a `alimentData` getter and setter in `aliment` so that this might be streight forward
+  // also make it only take a alimentData: making an editableData, editing it, and on save/pop transfering the data.
+
   /// It works because `.getAliment` is a getter as well as this getter,
   /// and it updates when using the `this.` setter `set alimentData`.
   AlimentData get alimentData => widget.aliment is TemporaryAliment
@@ -70,7 +73,7 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
   Widget wid({required List<Widget> children}) {
     return MiniCard(
       child: Padding(
-        padding: const EdgeInsets.all(6.0),
+        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
         child: Row(
           children: children,
         ),
@@ -84,8 +87,8 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
     required dynamic Function() getter,
     required Function(dynamic) setter,
     String unit = '',
-    bool isEmpty = true,
-    bool isTurnedOff = true,
+    bool isEmpty = false,
+    bool isTurnedOff = false,
   }) {
     return wid(
       children: [
@@ -106,7 +109,7 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
         SizedBox(width: 16.0),
         SizedBox(
           width: 36.0,
-          child: Text(unit),
+          child: Text(unit, maxLines: 1, overflow: TextOverflow.ellipsis),
         ),
       ],
     );
@@ -141,7 +144,7 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
           SizedBox(width: 16.0),
           SizedBox(
             width: 36.0,
-            child: Text(unit),
+            child: Text(unit, maxLines: 1, overflow: TextOverflow.ellipsis),
           ),
         ],
       );
@@ -339,7 +342,7 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
                       isExpanded: true,
                       borderRadius: BorderRadius.circular(24.0),
                       value: unit,
-                      items: ['g', 'ml', 'portion'].map((e) {
+                      items: {'g', 'ml', 'portion', unit}.map((e) {
                         return DropdownMenuItem(value: e, child: Text(e));
                       }).toList(),
                       onChanged: (value) => setState(() {
