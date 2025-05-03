@@ -39,7 +39,6 @@ class _AuthGateState extends State<AuthGate> {
 
   Future<void> setLoggedIn() async {
     SettingsData.isLoggedIn = true;
-    await SettingsData.save();
   }
 
   void showPrivacyPolicyAndTermsOfUsePopup() {

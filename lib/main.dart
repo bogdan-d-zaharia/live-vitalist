@@ -11,7 +11,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await NotificationHandler.initialize();
-  await SettingsData.load();
+  await SettingsData.init();
 
   runApp(MyApp());
 }

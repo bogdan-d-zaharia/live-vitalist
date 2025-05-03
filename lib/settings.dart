@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'aliment.dart';
 import 'auth_gate.dart';
@@ -13,46 +14,31 @@ import 'models/reference_fields_model.dart';
 import 'palette.dart';
 
 abstract final class SettingsData {
-  static bool isMonthDay = false;
-  static bool isLoggedIn = false;
-  static String language = 'ENG';
-  static bool isComplexCalendar = false;
+  static late SharedPreferencesWithCache _prefs;
 
-//TODO: Use shared preferences.
-  // static bool get isMonthDay => _isMonthDay;
-  // static set isMonthDay(bool val) {
-  //   _isMonthDay = val;
-  //   // Cached final prefs = await SharedPreferences.getInstance();
-  //   prefs.setString('isMonthDay', _isMonthDay);
-  // }
-
-  // static Set<String> languages = {'ENG'};
-
-  static Map<String, dynamic> toJson() {
-    return {
-      'isMonthDay': isMonthDay,
-      'isLoggedIn': isLoggedIn,
-      'language': language,
-    };
+  static Future<void> init() async {
+    _prefs = await SharedPreferencesWithCache.create(
+        cacheOptions: SharedPreferencesWithCacheOptions());
   }
 
-  static void fromJson(Map<String, dynamic> json) {
-    if (json.containsKey('isMonthDay')) isMonthDay = json['isMonthDay'];
-    if (json.containsKey('isLoggedIn')) isLoggedIn = json['isLoggedIn'];
-    if (json.containsKey('language')) language = json['language'];
-  }
+  /* The set and get work sync
+     because there is a table manipulated under the hood. */
+  static bool get isMonthDay => _prefs.getBool('isMonthDay') ?? false;
+  static set isMonthDay(bool val) => _prefs.setBool('isMonthDay', val);
 
-  /// [ IO_FUNCTION ]
-  static Future<void> save() async {
-    return FileHandler.saveJson('settings', toJson());
-  }
+  static bool get isLoggedIn => _prefs.getBool('isLoggedIn') ?? false;
+  static set isLoggedIn(bool val) => _prefs.setBool('isLoggedIn', val);
 
-  /// [ IO_FUNCTION ]
-  static Future<void> load() async {
-    await FileHandler.loadJson('settings').then((json) {
-      fromJson(json ?? {});
-    });
-  }
+  static String get language => _prefs.getString('language') ?? 'ENG';
+  static set language(String val) => _prefs.setString('language', val);
+
+  static bool get isComplexCalendar =>
+      _prefs.getBool('isComplexCalendar') ?? false;
+  static set isComplexCalendar(bool val) =>
+      _prefs.setBool('isComplexCalendar', val);
+
+  static int get sort => _prefs.getInt('sort') ?? 0;
+  static set sort(int val) => _prefs.setInt('sort', val);
 }
 
 class Settings extends StatefulWidget {
