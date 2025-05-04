@@ -6,6 +6,7 @@ import 'models/reference_fields_model.dart';
 import 'palette.dart';
 import 'settings.dart';
 import 'string_input.dart';
+import 'icon_button.dart';
 
 class NutrientDisplay extends StatefulWidget {
   const NutrientDisplay({
@@ -22,12 +23,10 @@ class NutrientDisplay extends StatefulWidget {
 }
 
 class _NutrientDisplayState extends State<NutrientDisplay> {
-  int sort = 0;
-  bool isSmartHide = true;
   bool isEditMode = false;
 
   Widget actionWid() {
-    final Widget editModeWid = IconButton(
+    final Widget editModeWid = MyIconButton(
       onTap: () => setState(() => isEditMode = !isEditMode),
       icon: Icon(
         Icons.edit_rounded,
@@ -38,37 +37,37 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
 
     if (isEditMode) return editModeWid;
 
-    final Widget sortWid = IconButton(
+    final Widget sortWid = MyIconButton(
       onTap: () {
         setState(() {
-          if (sort == 0) {
-            sort = 1;
-          } else if (sort == 1) {
-            sort = -1;
+          if (SettingsData.sort == 0) {
+            SettingsData.sort = 1;
+          } else if (SettingsData.sort == 1) {
+            SettingsData.sort = -1;
           } else {
-            sort = 0;
+            SettingsData.sort = 0;
           }
         });
       },
       icon: Icon(
-        switch (sort) {
+        switch (SettingsData.sort) {
           -1 => Icons.keyboard_arrow_up_rounded,
           _ => Icons.keyboard_arrow_down_rounded,
         },
-        color: sort != 0 ? Colors.green : null,
+        color: SettingsData.sort != 0 ? Colors.green : null,
         size: 26.0,
       ),
     );
 
-    final Widget smartHidingWid = IconButton(
+    final Widget smartHidingWid = MyIconButton(
       onTap: () {
         setState(() {
-          isSmartHide = !isSmartHide;
+          SettingsData.isSmartHide = !SettingsData.isSmartHide;
         });
       },
       icon: Icon(
         Icons.select_all,
-        color: isSmartHide ? Colors.green : null,
+        color: SettingsData.isSmartHide ? Colors.green : null,
         size: 21.0,
       ),
     );
@@ -141,6 +140,7 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
       /// [upper, inf]    -> [1.0, inf]
       keys.sort(
         (a, b) {
+          //TODO: Perhaps remove the ?? 0.0 s
           final double intakeA = (day.intake[a] ?? 0.0) / (numDays);
           final double? lowerA = NutrientsHandler.model[a]!['lowerLimit'];
           final double? upperA = NutrientsHandler.model[a]!['upperLimit'];
@@ -235,10 +235,10 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
 
     /// #endregion //* SORTING and FILETERING *//
 
-    if (isSmartHide) smartHide();
-    if (sort == 1) {
+    if (SettingsData.isSmartHide) smartHide();
+    if (SettingsData.sort == 1) {
       sortDescending();
-    } else if (sort == -1) {
+    } else if (SettingsData.sort == -1) {
       sortAscending();
     }
 
@@ -466,34 +466,6 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
   Widget build(BuildContext context) {
     if (!isEditMode) return viewMode();
     return editMode();
-  }
-}
-
-class IconButton extends StatelessWidget {
-  const IconButton({
-    required this.onTap,
-    required this.icon,
-    super.key,
-  });
-
-  final void Function() onTap;
-  final Widget icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      elevation: 1.0,
-      borderRadius: BorderRadius.circular(8.0),
-      clipBehavior: Clip.hardEdge,
-      child: InkWell(
-        onTap: onTap,
-        child: SizedBox(
-          width: 26.0,
-          height: 26.0,
-          child: icon,
-        ),
-      ),
-    );
   }
 }
 

@@ -2,6 +2,8 @@ import 'aliment.dart';
 import 'file_handler.dart';
 import 'package:intl/intl.dart' as intl;
 
+import 'models/reference_fields_model.dart';
+
 class Day {
   /// Creates an empty day.
   Day();
@@ -13,14 +15,18 @@ class Day {
   Map<String, double>? _cachedIntake;
 
   static Map<String, double> sumFields(List<Aliment> aliments) {
-    final Map<String, double> result = {};
+    final Map<String, double> result = (Map.of(NutrientsHandler.model)
+          ..removeWhere(
+              (key, value) => NutrientsHandler.hasTag(key, 'disabled')))
+        .map((key, value) => MapEntry(key, 0.0));
 
     for (var aliment in aliments) {
       //! WARNING: Summation happening multiple times.
-      final Map<String, double> servedFields = aliment.fields;
 
-      for (final field in servedFields.keys) {
-        result[field] = (result[field] ?? 0.0) + servedFields[field]!;
+      for (final field in result.keys) {
+        if (aliment.fields[field] != null) {
+          result[field] = result[field]! + aliment.fields[field]!;
+        }
       }
     }
 

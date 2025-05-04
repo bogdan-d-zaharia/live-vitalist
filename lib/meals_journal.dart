@@ -112,6 +112,7 @@ class _MealElementState extends State<MealElement> {
   @override
   Widget build(BuildContext context) {
     final Map<String, double> values = Day.sumFields(widget.aliments);
+    final int kcals = values['kcals']?.round() ?? 0;
     return IntrinsicHeight(
       child: Row(
         children: [
@@ -127,7 +128,7 @@ class _MealElementState extends State<MealElement> {
                       children: [
                         Text(widget.title),
                         Text(
-                          '${values['kcals']?.round() ?? 0} ${NutrientsHandler.model['kcals']?['translations']?[SettingsData.language]?.toLowerCase() ?? ''}',
+                          '$kcals ${NutrientsHandler.model['kcals']?['translations']?[SettingsData.language]?.toLowerCase() ?? ''}',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 12.0,

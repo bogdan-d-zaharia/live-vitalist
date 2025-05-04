@@ -3,6 +3,7 @@ import 'package:intl/intl.dart' as intl;
 
 import 'cache_handler.dart';
 import 'custom_card.dart';
+import 'icon_button.dart';
 import 'models/reference_fields_model.dart';
 import 'palette.dart';
 import 'settings.dart';
@@ -76,6 +77,21 @@ class WeekCalendar extends StatelessWidget {
   final Set<DateTime> dates;
   final void Function() refresh;
 
+  void showHelp(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => Center(
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: CustomCard(
+            title: 'Help',
+            child: Container(color: Colors.blue),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final DateTime tNow = DateTime.now();
@@ -84,6 +100,10 @@ class WeekCalendar extends StatelessWidget {
     return CustomCard(
       logo: const Icon(Icons.view_week),
       title: "Week Calendar",
+      action: MyIconButton(
+        icon: Icon(Icons.help_outline_rounded),
+        onTap: () => showHelp(context),
+      ),
       child: SizedBox(
         /* Used trial and error to find a good height; */
         //TODO: perhaps use a more programmatical approach.
@@ -225,77 +245,57 @@ class CalendarItem extends StatelessWidget {
   }
 
   Widget wid(Map<String, double> values, BuildContext context) {
-    values = Map.from(values)
-      ..removeWhere((key, value) => NutrientsHandler.hasTag(key, 'disabled'));
-    final (double minim, double maxim, double average) =
-        forceMinMaxAverage(values);
+    late Widget? bars;
+    if (values.values.every((element) => element == 0.0)) {
+      bars = null;
+    } else {
+      final (double minim, double maxim, double average) =
+          forceMinMaxAverage(values);
 
-    final double? kcalRatio = NutrientsHandler.getRatio(
-        values['kcals'],
-        NutrientsHandler.model['kcals']?['lowerLimit'],
-        NutrientsHandler.model['kcals']?['upperLimit'],
-        false);
+      final double? kcalRatio = NutrientsHandler.getRatio(
+          values['kcals'],
+          NutrientsHandler.model['kcals']?['lowerLimit'],
+          NutrientsHandler.model['kcals']?['upperLimit'],
+          true);
 
-    /// kcalIndicatorHeight
-    const double kIH = 4.0;
-
-    return SizedBox(
+      bars = Container(
+        margin: EdgeInsets.only(bottom: labelHeight),
+        width: 12.0,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(6.0),
+        ),
+        clipBehavior: Clip.hardEdge,
+        child: !SettingsData.isComplexCalendar
+            ? FractionallySizedBox(
+                heightFactor: (kcalRatio ?? 0 / 1.5).clamp(0.0, 1.0),
+                child: Container(color: Colors.lightGreen),
+              )
+            : Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  FractionallySizedBox(
+                    heightFactor: (maxim / 1.5).clamp(0.0, 1.0),
+                    child: Container(
+                        color: Colors.lightGreen.withValues(alpha: 0.4)),
+                  ),
+                  FractionallySizedBox(
+                    heightFactor: ((kcalRatio ?? 0.0) / 1.5).clamp(0.0, 1.0),
+                    child: Container(color: Colors.lightGreen),
+                  ),
+                  FractionallySizedBox(
+                    heightFactor: (minim / 1.5).clamp(0.0, 1.0),
+                    child: Container(color: Colors.green),
+                  ),
+                ],
+              ),
+      );
+    }
+    Widget wid = SizedBox(
       width: 36.0,
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
-          Container(
-            margin: EdgeInsets.only(bottom: labelHeight),
-            width: 12.0,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6.0),
-            ),
-            clipBehavior: Clip.hardEdge,
-            child: !SettingsData.isComplexCalendar
-                ? FractionallySizedBox(
-                    heightFactor: ((kcalRatio ?? 0.0) / 1.5).clamp(0.0, 1.0),
-                    child: Container(color: Colors.lightGreen),
-                  )
-                : Stack(
-                    alignment: Alignment.bottomCenter,
-                    children: [
-                      //TODO: Study and implement showing it simplified, by a single field.
-                      FractionallySizedBox(
-                        heightFactor: (maxim / 1.5).clamp(0.0, 1.0),
-                        child: Container(
-                          color: Colors.lightGreen.withValues(alpha: 0.4),
-                        ),
-                      ),
-                      FractionallySizedBox(
-                        heightFactor: (average / 1.5).clamp(0.0, 1.0),
-                        child: Container(
-                          color: Colors.lightGreen.withValues(alpha: 0.4),
-                        ),
-                      ),
-                      FractionallySizedBox(
-                        heightFactor: (minim / 1.5).clamp(0.0, 1.0),
-                        child: Container(
-                          color: Colors.lightGreen,
-                        ),
-                      ),
-                    ],
-                  ),
-          ),
-          if (SettingsData.isComplexCalendar && kcalRatio != null)
-            Positioned(
-              /// Dot position
-              bottom: labelHeight +
-                  kcalRatio / 1.5 * (itemHeight - labelHeight) -
-                  kIH / 2.0,
-              child: Container(
-                height: kIH,
-                width: kIH,
-                decoration: BoxDecoration(
-                  color: Colors.green,
-                  borderRadius: BorderRadius.circular(kIH / 2.0),
-                ),
-              ),
-            ),
+          if (bars != null) bars,
           Padding(
             padding: const EdgeInsets.only(bottom: 6.0),
             child: Text(
@@ -323,6 +323,8 @@ class CalendarItem extends StatelessWidget {
         ],
       ),
     );
+
+    return wid;
   }
 }
 

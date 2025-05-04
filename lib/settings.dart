@@ -39,6 +39,9 @@ abstract final class SettingsData {
 
   static int get sort => _prefs.getInt('sort') ?? 0;
   static set sort(int val) => _prefs.setInt('sort', val);
+
+  static bool get isSmartHide => _prefs.getBool('isSmartHide') ?? false;
+  static set isSmartHide(bool val) => _prefs.setBool('isSmartHide', val);
 }
 
 class Settings extends StatefulWidget {
