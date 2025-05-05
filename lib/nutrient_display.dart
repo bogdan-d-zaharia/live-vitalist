@@ -440,7 +440,8 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
                 final entry = entries.removeAt(oldIndex);
                 entries.insert(newIndex, entry);
 
-                NutrientsHandler.model = Map.fromEntries(entries);
+                NutrientsHandler.model.clear();
+                NutrientsHandler.model.addEntries(entries);
 
                 NutrientsHandler.save();
               });
@@ -453,6 +454,12 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
             child: TextButton(
               onPressed: () {
                 //TODO: Implement
+                // showDialog(
+                //   context: context,
+                //   builder: (context) => Center(
+                //     child: StringInput(initString: 'new nutrient key', update: (p0) => ,),
+                //   ),
+                // );
               },
               child: Text('Add new nutrient'),
             ),

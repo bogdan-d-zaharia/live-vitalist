@@ -96,6 +96,17 @@ abstract final class NutrientsHandler {
         "disabled",
       ]
     },
+    "omega6": {
+      "unit": "g",
+      "lowerLimit": 3.0,
+      "upperLimit": 7.0,
+      "translations": {
+        "ENG": "Omega-6",
+      },
+      "tags": [
+        "disabled",
+      ]
+    },
 
     /* Vitamins */
     "vitaminA": {
@@ -358,10 +369,11 @@ abstract final class NutrientsHandler {
     },
   };
 
-  static Map<String, Map<String, dynamic>> model = Map.of(_initModel);
+  static final Map<String, Map<String, dynamic>> model = Map.of(_initModel);
 
   static void reset() {
-    model = Map.of(_initModel);
+    model.clear();
+    model.addAll(_initModel);
   }
 
   static Map<String, dynamic> toJson() {
@@ -369,8 +381,9 @@ abstract final class NutrientsHandler {
   }
 
   static void fromJson(Map<String, dynamic> json) {
-    //TODO: Verify and remove.
-    model = json.map((key, value) => MapEntry(key, value));
+    for (var key in json.keys) {
+      model[key] = json[key];
+    }
   }
 
   static Future<void> save() async {

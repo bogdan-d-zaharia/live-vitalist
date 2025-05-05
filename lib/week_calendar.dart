@@ -4,6 +4,7 @@ import 'package:intl/intl.dart' as intl;
 import 'cache_handler.dart';
 import 'custom_card.dart';
 import 'icon_button.dart';
+import 'labels_widget.dart';
 import 'models/reference_fields_model.dart';
 import 'palette.dart';
 import 'settings.dart';
@@ -78,14 +79,40 @@ class WeekCalendar extends StatelessWidget {
   final void Function() refresh;
 
   void showHelp(BuildContext context) {
+    final simpleWid = SizedBox(
+      height: 100.0,
+      child: SimpleCalendarItem(
+        intake: {
+          'kcals': 3000.0,
+          'satFats': 160.0,
+          'fats': 20.0,
+        },
+        title: '4/5',
+        isSelected: true,
+      ),
+    );
     showDialog(
       context: context,
       builder: (context) => Center(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: CustomCard(
-            title: 'Help',
-            child: Container(color: Colors.blue),
+        child: MiniCard(
+          child: Padding(
+            padding: const EdgeInsets.only(
+                top: 24.0, left: 24.0, right: 24.0, bottom: 12.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                LabelsWidget(
+                  map: {
+                    'Maximum': Colors.lightGreen.withValues(alpha: 0.4),
+                    'Calories': Colors.lightGreen,
+                    'Minimum': Colors.green,
+                  },
+                ),
+                SizedBox(width: 24.0),
+                simpleWid,
+              ],
+            ),
           ),
         ),
       ),
@@ -101,7 +128,10 @@ class WeekCalendar extends StatelessWidget {
       logo: const Icon(Icons.view_week),
       title: "Week Calendar",
       action: MyIconButton(
-        icon: Icon(Icons.help_outline_rounded),
+        icon: Icon(
+          Icons.help_outline_rounded,
+          size: 22.0,
+        ),
         onTap: () => showHelp(context),
       ),
       child: SizedBox(
@@ -180,35 +210,17 @@ class WeekCalendar extends StatelessWidget {
   }
 }
 
-class CalendarItem extends StatelessWidget {
-  /// Date guarded by extension.
-  const CalendarItem({
-    super.key,
+class SimpleCalendarItem extends StatelessWidget {
+  const SimpleCalendarItem({
+    required this.intake,
     required this.title,
-    required this.date,
     required this.isSelected,
+    super.key,
   });
 
+  final Map<String, double> intake;
   final String title;
-  final DateTime date;
   final bool isSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: DayHandler.getDay(date),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return wid(snapshot.data!.intake, context);
-        } else if (snapshot.hasError) {
-          //TODO: Replace with a reload button, perhaps.
-          Error.throwWithStackTrace(snapshot.error!, snapshot.stackTrace!);
-        } else {
-          return Center(child: CircularProgressIndicator());
-        }
-      },
-    );
-  }
 
   (double?, double?, double?) calculateMinMaxAverage(
       Map<String, double> values) {
@@ -244,16 +256,17 @@ class CalendarItem extends StatelessWidget {
     return (minim ?? 0.0, maxim ?? 0.0, average ?? 0.0);
   }
 
-  Widget wid(Map<String, double> values, BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     late Widget? bars;
-    if (values.values.every((element) => element == 0.0)) {
+    if (intake.values.every((element) => element == 0.0)) {
       bars = null;
     } else {
       final (double minim, double maxim, double average) =
-          forceMinMaxAverage(values);
+          forceMinMaxAverage(intake);
 
       final double? kcalRatio = NutrientsHandler.getRatio(
-          values['kcals'],
+          intake['kcals'],
           NutrientsHandler.model['kcals']?['lowerLimit'],
           NutrientsHandler.model['kcals']?['upperLimit'],
           true);
@@ -268,7 +281,7 @@ class CalendarItem extends StatelessWidget {
         child: !SettingsData.isComplexCalendar
             ? FractionallySizedBox(
                 heightFactor: (kcalRatio ?? 0 / 1.5).clamp(0.0, 1.0),
-                child: Container(color: Colors.lightGreen),
+                child: Container(color: Colors.white),
               )
             : Stack(
                 alignment: Alignment.bottomCenter,
@@ -290,7 +303,7 @@ class CalendarItem extends StatelessWidget {
               ),
       );
     }
-    Widget wid = SizedBox(
+    return SizedBox(
       width: 36.0,
       child: Stack(
         alignment: Alignment.bottomCenter,
@@ -323,8 +336,42 @@ class CalendarItem extends StatelessWidget {
         ],
       ),
     );
+  }
+}
 
-    return wid;
+class CalendarItem extends StatelessWidget {
+  /// Date guarded by extension.
+  const CalendarItem({
+    super.key,
+    required this.title,
+    required this.date,
+    required this.isSelected,
+  });
+
+  final String title;
+  final DateTime date;
+  final bool isSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: DayHandler.getDay(date),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return SimpleCalendarItem(
+            intake: snapshot.data!.intake,
+            title: title,
+            isSelected: isSelected,
+          );
+        } else if (snapshot.hasError) {
+          //TODO: Replace with a reload button, perhaps.
+          Error.throwWithStackTrace(snapshot.error!, snapshot.stackTrace!);
+        } else {
+          return Center(
+              child: CircularProgressIndicator(strokeCap: StrokeCap.round));
+        }
+      },
+    );
   }
 }
 
