@@ -1,34 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/custom_card.dart';
+// import 'package:fl_chart/fl_chart.dart' as flc;
+
 import 'aliment.dart';
 import 'aliment_bank_editor.dart';
 import 'cache_handler.dart';
 import 'day.dart';
 import 'labels_widget.dart';
 import 'meals_journal.dart';
-import 'models/reference_fields_model.dart';
+import 'nutrient/nutrient_provider.dart';
 import 'nutrient_display.dart';
 import 'palette.dart';
 import 'pie_chart.dart';
 import 'settings.dart';
 import 'week_calendar.dart';
-// import 'package:fl_chart/fl_chart.dart' as flc;
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   Set<DateTime> dates = {
     DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day)
   };
 
-  Future<List<Day>> fetchData() async {
-    await NutrientsHandler.load();
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => ref.read(nutrientStateProvider.notifier).load());
+  }
 
+  Future<List<Day>> fetchData() async {
     //TODO: Study if this `if` is needed.
     if (AlimentBank.aliments.isEmpty) {
       await AlimentBank.load();
