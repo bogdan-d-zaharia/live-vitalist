@@ -338,18 +338,24 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
                 children: [
                   SizedBox(width: 16.0),
                   Expanded(
-                    child: DropdownButton(
-                      isExpanded: true,
-                      borderRadius: BorderRadius.circular(24.0),
-                      value: unit,
-                      items: {'g', 'ml', 'portion', unit}.map((e) {
-                        return DropdownMenuItem(value: e, child: Text(e));
-                      }).toList(),
-                      onChanged: (value) => setState(() {
-                        if (value != null) unit = value;
-                      }),
+                    child: StringInput(
+                      initString: unit,
+                      update: (value) => setState(() => unit = value),
                     ),
                   ),
+                  // Expanded(
+                  //   child: DropdownButton(
+                  //     isExpanded: true,
+                  //     borderRadius: BorderRadius.circular(24.0),
+                  //     value: unit,
+                  //     items: {'g', 'ml', 'portion', unit}.map((e) {
+                  //       return DropdownMenuItem(value: e, child: Text(e));
+                  //     }).toList(),
+                  //     onChanged: (value) => setState(() {
+                  //       if (value != null) unit = value;
+                  //     }),
+                  //   ),
+                  // ),
                   SizedBox(width: 16.0),
                 ],
               ),
