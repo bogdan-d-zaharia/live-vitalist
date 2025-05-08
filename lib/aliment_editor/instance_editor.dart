@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../aliment.dart';
+import '../aliment/aliment.dart';
 import '../aliment_bank_editor.dart';
 import '../custom_card.dart';
 import '../palette.dart';
@@ -39,7 +39,7 @@ class _InstanceEditorState extends State<InstanceEditor> {
       widget.aliment.alimentID = id;
 
       final AlimentData aliment = AlimentBank.getAliment(id);
-      widget.aliment.unit = aliment.unitSizes?.keys.first;
+      widget.aliment.unit = aliment.unitSynonyms?.keys.first;
     });
   }
 
@@ -102,7 +102,7 @@ class _InstanceEditorState extends State<InstanceEditor> {
       return null;
     }
     final AlimentData aliment = widget.aliment.getAliment;
-    final List<String>? units = aliment.unitSizes?.keys.toList();
+    final List<String>? units = aliment.unitSynonyms?.keys.toList();
     if (units == null) return null;
 
     return SizedBox(

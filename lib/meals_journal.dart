@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'aliment.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'aliment/aliment.dart';
 import 'aliment_editor/aliment_editor.dart';
 import 'custom_card.dart';
-import 'day.dart';
-import 'models/reference_fields_model.dart';
+import 'day/day.dart';
+import 'nutrient/nutrient_provider.dart';
 import 'palette.dart';
 import 'notification_handler.dart';
 import 'settings.dart';
@@ -12,17 +13,14 @@ class MealsJournal extends StatelessWidget {
   const MealsJournal({
     required this.date,
     required this.day,
-    required this.refresh,
     super.key,
   });
 
   final DateTime date;
   final Day day;
-  final void Function() refresh;
 
   void saveDay() {
     day.save(date);
-    refresh();
   }
 
   @override
@@ -75,7 +73,7 @@ class MealsJournal extends StatelessWidget {
   }
 }
 
-class MealElement extends StatefulWidget {
+class MealElement extends ConsumerStatefulWidget {
   const MealElement({
     required this.title,
     required this.aliments,
@@ -88,10 +86,10 @@ class MealElement extends StatefulWidget {
   final void Function() saver;
 
   @override
-  State<MealElement> createState() => _MealElementState();
+  ConsumerState<MealElement> createState() => _MealElementState();
 }
 
-class _MealElementState extends State<MealElement> {
+class _MealElementState extends ConsumerState<MealElement> {
   Future<void> openMeal(BuildContext context) async {
     await Navigator.push(
       context,
@@ -111,8 +109,11 @@ class _MealElementState extends State<MealElement> {
 
   @override
   Widget build(BuildContext context) {
+    final model = ref.watch(nutrientStateProvider).data;
+
     final Map<String, double> values = Day.sumFields(widget.aliments);
     final int kcals = values['kcals']?.round() ?? 0;
+
     return IntrinsicHeight(
       child: Row(
         children: [
@@ -128,7 +129,7 @@ class _MealElementState extends State<MealElement> {
                       children: [
                         Text(widget.title),
                         Text(
-                          '$kcals ${NutrientsHandler.model['kcals']?['translations']?[SettingsData.language]?.toLowerCase() ?? ''}',
+                          '$kcals ${model['kcals']?.translations[SettingsData.language]?.toLowerCase() ?? ''}',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 12.0,
@@ -350,7 +351,7 @@ class ElementWidget extends StatelessWidget {
   }
 }
 
-class AlimentWidget extends StatelessWidget {
+class AlimentWidget extends ConsumerWidget {
   const AlimentWidget({
     required this.aliment,
     required this.deleteAliment,
@@ -365,12 +366,14 @@ class AlimentWidget extends StatelessWidget {
   final Function() onLongPress;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final model = ref.watch(nutrientStateProvider).data;
+
     final values = aliment.fields;
     return ElementWidget(
       title: aliment.getAliment.name,
       subTitle:
-          '${values['kcals']?.round() ?? 0} ${NutrientsHandler.model['kcals']?['translations']?[SettingsData.language]?.toLowerCase() ?? ''}, ${aliment.servingSize} ${aliment.unit ?? ''}',
+          '${values['kcals']?.round() ?? 0} ${model['kcals']?.translations[SettingsData.language]?.toLowerCase() ?? ''}, ${aliment.servingSize} ${aliment.unit ?? ''}',
       onTap: onTap,
       onLongPress: onLongPress,
       additional: [

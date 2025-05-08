@@ -5,7 +5,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'aliment.dart';
+import 'aliment/aliment.dart';
 import 'auth_gate.dart';
 import 'cache_handler.dart';
 import 'custom_card.dart';
@@ -201,7 +201,6 @@ class _SettingsState extends State<Settings> {
     DayHandler.cache.clear();
     AlimentBank.aliments.clear();
     AlimentBank.mruIDs.clear();
-    NutrientsHandler.reset();
     SettingsData.isLoggedIn = false;
 
     if (mounted) {
@@ -403,7 +402,7 @@ class _SettingsState extends State<Settings> {
                         if (StorageHandler.isFirebase) {
                           //TODO: Perhaps show a pop up and ask upon conflict.
                           await AlimentBank.loadMerged();
-                          await NutrientsHandler.load(); //TODO: Merge
+                          // await NutrientsHandler.load(); //TODO: Verify
                           DayHandler.cache.clear();
                           setState(() {});
                         }

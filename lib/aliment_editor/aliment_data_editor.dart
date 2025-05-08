@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../aliment.dart';
+import '../aliment/aliment.dart';
 import '../settings.dart';
 import 'aliment_editor.dart';
 import '../custom_card.dart';
@@ -47,7 +47,7 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
   Map<String, double> get referenceFields => alimentData.referenceFields;
 
   String get unit {
-    return (alimentData.unitSizes ?? {})
+    return (alimentData.unitSynonyms ?? {})
         .entries
         .firstWhere(
           (element) => element.value == 1.0,
@@ -60,13 +60,13 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
     final u = unit;
     if (u == value) return;
 
-    if (alimentData.unitSizes != null) {
-      if (alimentData.unitSizes!.containsValue(1.0)) {
-        alimentData.unitSizes!.remove(u);
+    if (alimentData.unitSynonyms != null) {
+      if (alimentData.unitSynonyms!.containsValue(1.0)) {
+        alimentData.unitSynonyms!.remove(u);
       }
-      alimentData.unitSizes![value] = 1.0;
+      alimentData.unitSynonyms![value] = 1.0;
     } else {
-      alimentData.unitSizes = {value: 1.0};
+      alimentData.unitSynonyms = {value: 1.0};
     }
   }
 
@@ -394,7 +394,7 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
                     child: Text("Unit synonyms: "),
                   ),
                 ),
-                ...(alimentData.unitSizes ?? {})
+                ...(alimentData.unitSynonyms ?? {})
                     .entries
                     .where((element) => element.key != unit)
                     .map(
@@ -404,17 +404,17 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
                           p0 = p0.trim();
                           if (p0 == e.key) return;
 
-                          alimentData.unitSizes![p0] =
-                              alimentData.unitSizes![e.key]!;
+                          alimentData.unitSynonyms![p0] =
+                              alimentData.unitSynonyms![e.key]!;
 
-                          alimentData.unitSizes!.remove(e.key);
+                          alimentData.unitSynonyms!.remove(e.key);
                         },
-                        getter: () => alimentData.unitSizes![e.key],
+                        getter: () => alimentData.unitSynonyms![e.key],
                         setter: (p0) => setState(() {
                           if (p0 > 0.0 && p0 != 1.0) {
-                            alimentData.unitSizes![e.key] = p0;
+                            alimentData.unitSynonyms![e.key] = p0;
                           } else {
-                            alimentData.unitSizes?.remove(e.key);
+                            alimentData.unitSynonyms?.remove(e.key);
                           }
                         }),
                         //TODO: We have a ghost unit
@@ -429,7 +429,8 @@ class _AlimentDataEditorState extends State<AlimentDataEditor> {
                     initString: '',
                     strUpdate: (p0) {
                       p0 = p0.trim();
-                      if (p0 == '' || alimentData.unitSizes!.containsKey(p0)) {
+                      if (p0 == '' ||
+                          alimentData.unitSynonyms!.containsKey(p0)) {
                         return;
                       }
 

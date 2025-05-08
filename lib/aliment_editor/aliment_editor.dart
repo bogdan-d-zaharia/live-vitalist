@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import '../aliment.dart';
+import '../aliment/aliment.dart';
 import '../palette.dart';
 import 'aliment_data_editor.dart';
 import 'aliment_json_editor.dart';

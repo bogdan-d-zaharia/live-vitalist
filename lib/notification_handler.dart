@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart'
     as ntf;
 
-import 'aliment.dart';
+import 'aliment/aliment.dart';
 
 class NotificationHandler {
   static final ntf.FlutterLocalNotificationsPlugin _notificationsPlugin =
@@ -23,9 +23,7 @@ class NotificationHandler {
         ? e.servingSize.toInt().toString()
         : e.servingSize.toStringAsFixed(1);
 
-    final String unit = e.unit != null ? ' ${e.unit}' : '';
-
-    return '($servingSize$unit) ${e.getAliment.name}';
+    return '($servingSize${e.unit}) ${e.getAliment.name}';
   }
 
   static Future<void> showListNotification(

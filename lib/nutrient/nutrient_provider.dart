@@ -4,19 +4,6 @@ import '../../file_handler.dart';
 import 'nutrient.dart';
 import 'nutrient_initial_data.dart';
 
-extension NutrientUtils on Nutrient {
-  double? getRatio(double? amount) {
-    if (amount == null) return null;
-    final lower = lowerLimit ?? 0.0;
-    final upper = upperLimit ?? double.infinity;
-
-    if (lower <= amount && amount <= upper) return 1.0;
-    if (amount < lower) return amount / lower;
-    if (amount > upper) return amount / upper;
-    return null;
-  }
-}
-
 class NutrientState {
   final Map<String, Nutrient> data;
   final List<String> order;
@@ -30,7 +17,7 @@ class NutrientStateNotifier extends StateNotifier<NutrientState> {
   NutrientStateNotifier()
       : super(NutrientState(
           data: initialNutrientMap,
-          order: ['protein', 'carbs'],
+          order: initialNutrientMap.keys.toList(),
         ));
 
   void reorder(int oldIndex, int newIndex) {
@@ -58,7 +45,7 @@ class NutrientStateNotifier extends StateNotifier<NutrientState> {
   }
 
   void loadFromJson(Map<String, dynamic> json) {
-    final rawData = Map<String, dynamic>.from(json['data']);
+    final rawData = Map<String, dynamic>.from(json['data'] ?? {});
     final newData = rawData.map((key, value) =>
         MapEntry(key, Nutrient.fromJson(Map<String, dynamic>.from(value))));
 
@@ -76,8 +63,9 @@ class NutrientStateNotifier extends StateNotifier<NutrientState> {
 
   Map<String, dynamic> toJson() {
     return {
-      'data': state.data.map((key, value) => MapEntry(key, value.toJson())),
-      'order': state.order,
+      if (state.data.isNotEmpty)
+        'data': state.data.map((key, value) => MapEntry(key, value.toJson())),
+      if (state.order.isNotEmpty) 'order': state.order,
     };
   }
 

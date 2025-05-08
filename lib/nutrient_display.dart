@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
-import 'aliment.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'aliment/aliment.dart';
 import 'custom_card.dart';
-import 'day.dart';
-import 'models/reference_fields_model.dart';
+import 'day/day.dart';
+import 'nutrient/nutrient.dart';
+import 'nutrient/nutrient_provider.dart';
 import 'palette.dart';
 import 'settings.dart';
 import 'string_input.dart';
 import 'icon_button.dart';
 
-class NutrientDisplay extends StatefulWidget {
+class NutrientDisplay extends ConsumerStatefulWidget {
   const NutrientDisplay({
     required this.days,
     required this.refresh,
@@ -19,10 +21,10 @@ class NutrientDisplay extends StatefulWidget {
   final void Function() refresh;
 
   @override
-  State<NutrientDisplay> createState() => _NutrientDisplayState();
+  ConsumerState<NutrientDisplay> createState() => _NutrientDisplayState();
 }
 
-class _NutrientDisplayState extends State<NutrientDisplay> {
+class _NutrientDisplayState extends ConsumerState<NutrientDisplay> {
   bool isEditMode = false;
 
   Widget actionWid() {
@@ -123,12 +125,11 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
     return catA;
   }
 
-  Widget viewMode() {
+  Widget viewMode(nutrientState state) {
     final Day day = Day.sumDays(widget.days);
     final int numDays = widget.days.length;
-    List<String> keys = NutrientsHandler.model.keys.toList();
-    keys =
-        keys.where((key) => !NutrientsHandler.hasTag(key, 'disabled')).toList();
+    List<String> keys = model.keys.toList();
+    keys = keys.where((key) => !model[key]!.tags.contains('disabled')).toList();
 
     /// #region //* SORTING and FILETERING *//
 
@@ -355,14 +356,14 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
     );
   }
 
-  Widget editMode() {
+  Widget editMode(NutrientState state) {
     final List<Widget> elements = [];
 
-    for (var key in NutrientsHandler.model.keys.toList()) {
-      final Map<String, dynamic> field = NutrientsHandler.model[key]!;
+    for (var key in state.order) {
+      final field = state.data[key]!;
 
-      final String label = field['translations'][SettingsData.language];
-      final String unit = field['unit'];
+      final String label = field.translations[SettingsData.language]!;
+      final String unit = field.unit;
       final double? lower = field['lowerLimit'];
       final double? upper = field['upperLimit'];
 
@@ -471,8 +472,10 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    if (!isEditMode) return viewMode();
-    return editMode();
+    final NutrientState nutrientState = ref.watch(nutrientStateProvider);
+
+    if (!isEditMode) return viewMode(nutrientState);
+    return editMode(nutrientState);
   }
 }
 
