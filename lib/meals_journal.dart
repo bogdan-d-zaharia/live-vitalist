@@ -149,7 +149,7 @@ class MealEditor extends ConsumerWidget {
         actions: [
           ElevatedButton(
             onPressed: () => NotificationHandler.showListNotification(
-                meal.aliments, mealName),
+                meal.aliments, bank, mealName),
             child: Text('Show Notification'),
           ),
           SizedBox(width: 12.0),

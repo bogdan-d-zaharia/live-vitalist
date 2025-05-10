@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../aliment/aliment.dart';
 import '../aliment/aliment_bank_provider.dart';
-import '../aliment_bank_editor.dart';
 import '../custom_card.dart';
 import '../palette.dart';
 import '../string_input.dart';
@@ -225,23 +224,6 @@ class _SelectorState extends State<Selector> {
                           ),
                         ),
                       ],
-                    ),
-                  ),
-                  MiniCard(
-                    child: InkWell(
-                      onTap: () => AlimentBankEditor.addNewAliment(context,
-                              name: searchTerm)
-                          .then((_) => setState(() {})),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 42.0,
-                            height: 42.0,
-                            child: Icon(Icons.add_rounded),
-                          ),
-                          Text('Add Aliment'),
-                        ],
-                      ),
                     ),
                   ),
                   Divider(height: 24.0, color: Palette.divGrey),
