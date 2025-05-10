@@ -5,6 +5,7 @@ import 'aliment/aliment_bank_provider.dart';
 import 'meals_journal.dart';
 import 'nutrient/nutrient_provider.dart';
 import 'nutrient_display.dart';
+import 'settings.dart';
 import 'week_calendar.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -27,6 +28,35 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Live Vitalist'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 24.0),
+            child: SizedBox(
+              width: 32.0,
+              height: 32.0,
+              child: Material(
+                borderRadius: BorderRadius.circular(8.0),
+                clipBehavior: Clip.hardEdge,
+                color: Colors.lightGreen,
+                child: InkWell(
+                  splashColor: Colors.blue,
+                  highlightColor: Colors.blue,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Settings(),
+                      ),
+                    ).then((value) {
+                      setState(() {});
+                    });
+                  },
+                  child: Icon(Icons.settings_rounded, color: Colors.white),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),

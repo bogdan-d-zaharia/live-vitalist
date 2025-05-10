@@ -11,7 +11,7 @@ import 'labels_widget.dart';
 import 'nutrient/nutrient.dart';
 import 'nutrient/nutrient_provider.dart';
 import 'palette.dart';
-import 'settings.dart';
+import 'settings_data.dart';
 
 const double itemHeight = 80.0;
 const double labelHeight = 26.0;

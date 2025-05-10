@@ -11,7 +11,7 @@ import 'day/day_provider.dart';
 import 'notification_handler.dart';
 import 'nutrient/nutrient_provider.dart';
 import 'palette.dart';
-import 'settings.dart';
+import 'settings_data.dart';
 
 class MealsJournal extends ConsumerWidget {
   const MealsJournal({super.key});

@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'custom_card.dart';
 import 'file_handler.dart';
 import 'home_screen.dart';
-import 'settings.dart';
+import 'settings_data.dart';
 
 class AuthGate extends StatefulWidget {
   const AuthGate({super.key});

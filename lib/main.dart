@@ -4,7 +4,7 @@ import 'home_screen.dart';
 import 'notification_handler.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'settings.dart';
+import 'settings_data.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

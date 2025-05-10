@@ -8,7 +8,7 @@ import 'day/day.dart';
 import 'nutrient/nutrient.dart';
 import 'nutrient/nutrient_provider.dart';
 import 'palette.dart';
-import 'settings.dart';
+import 'settings_data.dart';
 import 'string_input.dart';
 import 'icon_button.dart';
 
