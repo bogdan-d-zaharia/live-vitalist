@@ -298,10 +298,10 @@ class SimpleCalendarItem extends ConsumerWidget {
 
 class DottedLine extends StatelessWidget {
   const DottedLine({
-    super.key,
     required this.dotDiameter,
     required this.dotSpacing,
     required this.color,
+    super.key,
   });
 
   final double dotDiameter;
@@ -313,7 +313,8 @@ class DottedLine extends StatelessWidget {
     return SizedBox(
       height: dotDiameter,
       child: CustomPaint(
-        painter: _DottedLinePainter(
+        size: Size(1000.0, 100.0),
+        painter: DottedLinePainter(
           dotDiameter: dotDiameter,
           dotSpacing: dotSpacing,
           color: color,
@@ -323,8 +324,8 @@ class DottedLine extends StatelessWidget {
   }
 }
 
-class _DottedLinePainter extends CustomPainter {
-  const _DottedLinePainter({
+class DottedLinePainter extends CustomPainter {
+  const DottedLinePainter({
     required this.dotDiameter,
     required this.dotSpacing,
     required this.color,
@@ -336,12 +337,17 @@ class _DottedLinePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = color;
-    for (double x = 0; x < size.width; x += dotDiameter + dotSpacing) {
-      canvas.drawCircle(Offset(x, dotDiameter / 2), dotDiameter / 2, paint);
+    final Paint paint = Paint()
+      ..style = PaintingStyle.fill
+      ..color = color;
+
+    for (double i = 0.0; i < size.width; i += dotDiameter + dotSpacing) {
+      canvas.drawCircle(Offset(i, dotDiameter / 2.0), dotDiameter / 2.0, paint);
     }
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
 }
