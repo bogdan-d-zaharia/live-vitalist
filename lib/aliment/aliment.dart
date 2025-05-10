@@ -120,3 +120,18 @@ extension AlimentDataReadUtils on Aliment {
         key, value * servingSize * readUnitSize(bank) / data.referenceSize));
   }
 }
+
+extension AlimentsAnalysis on List<Aliment> {
+  Map<String, double> summedFields(AlimentBankState bank) {
+    final Map<String, double> result = {};
+
+    for (var aliment in this) {
+      for (final entry in aliment.readFields(bank).entries) {
+        result.update(entry.key, (v) => v + entry.value,
+            ifAbsent: () => entry.value);
+      }
+    }
+
+    return result;
+  }
+}

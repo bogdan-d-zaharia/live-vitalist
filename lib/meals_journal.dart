@@ -26,19 +26,63 @@ class MealsJournal extends ConsumerWidget {
         );
     final date = ref.watch(selectedDatesProvider).first;
 
-    final List<Widget> elements = day.meals.map<Widget>((meal) {
-      return ListTile(
-        title: Text(meal.name),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => MealEditor(mealName: meal.name, date: date),
-            ),
-          );
-        },
-      );
-    }).toList();
+    final bank = ref.watch(alimentBankProvider);
+    final model = ref.watch(nutrientStateProvider).data;
+    final List<Widget> elements = day.meals.map<Widget>(
+      (meal) {
+        final Map<String, double> values = meal.aliments.summedFields(bank);
+        final int kcals = values['kcals']?.round() ?? 0;
+        return MealElement(
+          title: meal.name,
+          subtitle:
+              '$kcals ${model['kcals']?.translations[SettingsData.language]?.toLowerCase() ?? ''}',
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => MealEditor(
+                  mealName: meal.name,
+                  date: date,
+                ),
+              ),
+            );
+          },
+          onAdd: () async {
+            //TODO: Copied tom `MealEditor`
+            final InstancedAliment newAliment =
+                InstancedAliment(alimentID: '', servingSize: 1.0, unit: 'g');
+
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => InstanceEditor(
+                  aliment: newAliment,
+                ),
+              ),
+            );
+
+            if (newAliment.alimentID != '') {
+              meal.aliments.add(newAliment);
+              ref.read(dayCacheProvider.notifier).setDay(date, day);
+            }
+          },
+        );
+      },
+    ).toList();
+
+    // final List<Widget> elements = day.meals.map((meal) {
+    //   return ListTile(
+    //     title: Text(meal.name),
+    //     onTap: () {
+    //       Navigator.push(
+    //         context,
+    //         MaterialPageRoute(
+    //           builder: (_) => MealEditor(mealName: meal.name, date: date),
+    //         ),
+    //       );
+    //     },
+    //   );
+    // }).toList();
 
     final Widget divider = Divider(
       color: Palette.divGrey,
@@ -56,6 +100,71 @@ class MealsJournal extends ConsumerWidget {
       }[SettingsData.language],
       child: Column(
         children: elements,
+      ),
+    );
+  }
+}
+
+class MealElement extends StatelessWidget {
+  const MealElement({
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+    required this.onAdd,
+    super.key,
+  });
+
+  final String title;
+  final String subtitle;
+  final void Function() onTap;
+  final void Function() onAdd;
+
+  @override
+  Widget build(BuildContext context) {
+    return IntrinsicHeight(
+      child: Row(
+        children: [
+          Expanded(
+            child: InkWell(
+              onTap: onTap,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(title),
+                        Text(
+                          subtitle,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 12.0,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          VerticalDivider(
+            color: Palette.divGrey,
+            thickness: 0.5,
+            width: 0.0,
+            indent: 8.0,
+            endIndent: 8.0,
+          ),
+          AspectRatio(
+            aspectRatio: 1.0,
+            child: InkWell(
+              onTap: onAdd,
+              child: Center(child: Icon(Icons.add_rounded)),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -158,7 +267,7 @@ class MealEditor extends ConsumerWidget {
       appBar: AppBar(
         title: Text(mealName),
         actions: [
-          ElevatedButton(
+          TextButton(
             onPressed: () => NotificationHandler.showListNotification(
                 meal.aliments, bank, mealName),
             child: Text('Show Notification'),

@@ -233,18 +233,21 @@ class _SelectorState extends ConsumerState<Selector> {
       child: InkWell(
         onTap: () async {
           final aliment = AlimentData(
-            name: 'test ',
+            name: '',
             unit: 'g',
             referenceSize: 100.0,
             referenceFields: {},
             unitSynonyms: {},
           );
-          await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AlimentDataEditor(data: aliment),
-            ),
-          );
+          final bool isSaved = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AlimentDataEditor(data: aliment),
+                ),
+              ) ??
+              false;
+          if (!isSaved) return;
+
           final id = aliment.hashCode.toString();
           notifier.setAliment(id, aliment);
           setState(() {});
