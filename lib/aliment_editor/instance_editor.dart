@@ -1,55 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:diacritic/diacritic.dart';
+
 import '../aliment/aliment.dart';
 import '../aliment/aliment_bank_provider.dart';
 import '../custom_card.dart';
 import '../palette.dart';
 import '../string_input.dart';
-import 'package:diacritic/diacritic.dart';
 
-class InstanceEditor extends StatefulWidget {
-  const InstanceEditor({
-    required this.aliment,
-    required this.bank,
-    super.key,
-  });
-
+class InstanceEditor extends ConsumerStatefulWidget {
+  const InstanceEditor({required this.aliment, super.key});
   final InstancedAliment aliment;
-  final AlimentBankState bank;
 
   @override
-  State<InstanceEditor> createState() => _InstanceEditorState();
+  ConsumerState<InstanceEditor> createState() => _InstanceEditorState();
 }
 
-class _InstanceEditorState extends State<InstanceEditor> {
-  AlimentData? getAliment() => widget.bank.aliments[widget.aliment.alimentID];
+class _InstanceEditorState extends ConsumerState<InstanceEditor> {
+  AlimentData? get selectedAliment =>
+      ref.watch(alimentBankProvider).aliments[widget.aliment.alimentID];
 
-  Future<void> showSelector() async {
-    final String? id = await showDialog(
+  Future<void> _selectAliment() async {
+    final selectedId = await showDialog<String>(
       context: context,
-      builder: (context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 36.0),
-        child: Selector(bank: widget.bank),
+      builder: (_) => const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 36.0),
+        child: Selector(),
       ),
     );
 
-    if (id == null) return;
+    if (selectedId == null) return;
+
+    final selected = ref.read(alimentBankProvider).aliments[selectedId];
+    if (selected == null) return;
 
     setState(() {
-      widget.aliment.alimentID = id;
-
-      final AlimentData aliment = widget.bank.aliments[id]!;
-      widget.aliment.unit = aliment.unit;
+      widget.aliment.alimentID = selectedId;
+      widget.aliment.unit = selected.unit;
     });
   }
 
-  //TODO: Perhaps use this as screen and number input to the right
-  // also perhaps search and at the bottom instead of top, to be
-  // easely accessible, or perhaps reverse everything.
-  Widget _alimentSelector() {
-    final String? name = getAliment()?.name;
+  Widget _buildAlimentSelector() {
+    final name = selectedAliment?.name ?? 'Select aliment';
+
     return MiniCard(
       child: InkWell(
-        onTap: showSelector,
+        onTap: _selectAliment,
         child: Row(
           children: [
             Expanded(
@@ -57,36 +53,31 @@ class _InstanceEditorState extends State<InstanceEditor> {
                 padding: const EdgeInsets.symmetric(
                     horizontal: 16.0, vertical: 12.0),
                 child: Text(
-                  name ?? 'Select aliment',
+                  name,
                   softWrap: true,
-                  style: name != null
-                      ? TextStyle()
-                      : TextStyle().copyWith(color: Colors.grey[700]),
+                  style: TextStyle(
+                    color: selectedAliment != null ? null : Colors.grey[700],
+                  ),
                 ),
               ),
             ),
-            Icon(Icons.arrow_drop_down_rounded, size: 42.0),
+            const Icon(Icons.arrow_drop_down_rounded, size: 42.0),
           ],
         ),
       ),
     );
   }
 
-  Widget _inputServed() {
+  Widget _buildServedInput() {
     return Row(
       children: [
-        Text(
-          'Served amount: ',
-          style: Theme.of(context).textTheme.bodyLarge,
-        ),
+        Text('Served amount:', style: Theme.of(context).textTheme.bodyLarge),
         Expanded(
           child: Center(
             child: NumberInput(
               getValue: () => widget.aliment.servingSize,
               setValue: (val) {
-                if (val >= 0.0) {
-                  widget.aliment.servingSize = val;
-                }
+                if (val >= 0.0) widget.aliment.servingSize = val;
               },
             ),
           ),
@@ -95,49 +86,43 @@ class _InstanceEditorState extends State<InstanceEditor> {
     );
   }
 
-  Widget? _unitSelector() {
-    if (!widget.bank.aliments.containsKey(widget.aliment.alimentID)) {
-      return null;
-    }
-    final AlimentData aliment = getAliment()!;
-    final List<String> units = [aliment.unit, ...aliment.unitSynonyms.keys];
+  Widget? _buildUnitSelector() {
+    final aliment = selectedAliment;
+    if (aliment == null) return null;
 
-    return SizedBox(
-      child: DropdownButton<String>(
-        isExpanded: true,
-        hint: Text(widget.aliment.unit),
+    final units = [aliment.unit, ...aliment.unitSynonyms.keys];
 
-        //TODO:NOW: Handle the case when there is null unitSizes.
-        items: units
-            .map((unit) => DropdownMenuItem(
-                value: unit, child: SizedBox(width: 300.0, child: Text(unit))))
-            .toList(),
-        onChanged: (unit) {
-          if (unit != null) {
-            setState(() {
-              widget.aliment.unit = unit;
-            });
-          }
-        },
-      ),
+    return DropdownButton<String>(
+      isExpanded: true,
+      value: widget.aliment.unit,
+      items: units.map((unit) {
+        return DropdownMenuItem(
+          value: unit,
+          child: SizedBox(width: 300.0, child: Text(unit)),
+        );
+      }).toList(),
+      onChanged: (unit) {
+        if (unit != null) {
+          setState(() => widget.aliment.unit = unit);
+        }
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final Widget? unitSelector = _unitSelector();
+    final unitSelector = _buildUnitSelector();
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Editor'),
-      ),
+      appBar: AppBar(title: const Text('Editor')),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _alimentSelector(),
-              _inputServed(),
+              _buildAlimentSelector(),
+              _buildServedInput(),
               if (unitSelector != null) unitSelector,
             ],
           ),
@@ -147,29 +132,15 @@ class _InstanceEditorState extends State<InstanceEditor> {
   }
 }
 
-class Selector extends StatefulWidget {
-  const Selector({
-    required this.bank,
-    super.key,
-  });
-
-  final AlimentBankState bank;
-
+class Selector extends ConsumerStatefulWidget {
+  const Selector({super.key});
   @override
-  State<Selector> createState() => _SelectorState();
+  ConsumerState<Selector> createState() => _SelectorState();
 }
 
-class _SelectorState extends State<Selector> {
+class _SelectorState extends ConsumerState<Selector> {
+  final TextEditingController controller = TextEditingController();
   String searchTerm = '';
-  late TextEditingController controller;
-
-  String getName(String id) => widget.bank.aliments[id]!.name;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = TextEditingController();
-  }
 
   @override
   void dispose() {
@@ -179,72 +150,103 @@ class _SelectorState extends State<Selector> {
 
   @override
   Widget build(BuildContext context) {
-    final keys = widget.bank.order.where((id) =>
-        removeDiacritics(getName(id).toLowerCase())
-            .contains(removeDiacritics(searchTerm.toLowerCase())));
+    final bank = ref.watch(alimentBankProvider);
+    final notifier = ref.read(alimentBankProvider.notifier);
+
+    List<String> filteredKeys = bank.order.where((id) {
+      final name = bank.aliments[id]!.name;
+      return removeDiacritics(name.toLowerCase())
+          .contains(removeDiacritics(searchTerm.toLowerCase()));
+    }).toList();
+
     return MiniCard(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
         child: Column(
           children: [
             Row(
-              children: [
+              children: const [
                 BackButton(),
-                Text(
-                  'Aliment Selector',
-                  style: TextStyle(fontSize: 20.0),
-                ),
+                Text('Aliment Selector', style: TextStyle(fontSize: 20.0)),
               ],
             ),
+            _buildSearchBar(),
+            _buildAddButton(notifier),
+            const Divider(height: 24.0, color: Palette.divGrey),
             Expanded(
               child: ListView(
-                children: [
-                  MiniCard(
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          //TODO: A more programatical approach
-                          width: 42.0,
-                          height: 42.0,
-                          child: Icon(Icons.search_rounded),
-                        ),
-                        Expanded(
-                          child: TextField(
-                            decoration: InputDecoration(
-                                hintText: 'Search aliment',
-                                border: InputBorder.none),
-                            style: Theme.of(context).textTheme.bodyMedium,
-                            controller: controller,
-                            onChanged: (newString) {
-                              if (searchTerm == newString) return;
-                              setState(() {
-                                searchTerm = newString;
-                              });
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Divider(height: 24.0, color: Palette.divGrey),
-                  ...keys.map(
-                    (id) => MiniCard(
-                      child: InkWell(
-                        onTap: () => Navigator.pop(context, id),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 12.0),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(getName(id)),
-                          ),
+                children: filteredKeys.map((id) {
+                  final name = bank.aliments[id]!.name;
+                  return MiniCard(
+                    child: InkWell(
+                      onTap: () => Navigator.pop(context, id),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 12.0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(name),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  );
+                }).toList(),
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSearchBar() {
+    return MiniCard(
+      child: Row(
+        children: [
+          const SizedBox(
+            width: 42.0,
+            height: 42.0,
+            child: Icon(Icons.search_rounded),
+          ),
+          Expanded(
+            child: TextField(
+              controller: controller,
+              decoration: const InputDecoration(
+                hintText: 'Search aliment',
+                border: InputBorder.none,
+              ),
+              onChanged: (text) {
+                if (text != searchTerm) {
+                  setState(() => searchTerm = text);
+                }
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAddButton(AlimentBank notifier) {
+    return MiniCard(
+      child: InkWell(
+        onTap: () {
+          final aliment = AlimentData(
+            name: 'test ',
+            unit: 'g',
+            referenceSize: 100.0,
+            referenceFields: {},
+            unitSynonyms: {},
+          );
+          final id = aliment.hashCode.toString();
+          aliment.name += id.substring(0, 5);
+          notifier.setAliment(id, aliment);
+          setState(() {});
+        },
+        child: Row(
+          children: const [
+            SizedBox(width: 42.0, height: 42.0, child: Icon(Icons.add_rounded)),
+            Text('Add Aliment'),
           ],
         ),
       ),

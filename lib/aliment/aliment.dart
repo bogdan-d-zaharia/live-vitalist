@@ -28,9 +28,9 @@ class AlimentData {
       name: json['name'],
       unit: json['unit'],
       referenceSize: (json['referenceSize'] as num).toDouble(),
-      referenceFields: ((json['referenceFields'] ?? {}) as Map<String, dynamic>)
+      referenceFields: ((json['referenceFields'] ?? {}) as Map)
           .map((k, v) => MapEntry(k, (v as num).toDouble())),
-      unitSynonyms: ((json['unitSynonyms'] ?? {}) as Map<String, dynamic>)
+      unitSynonyms: ((json['unitSynonyms'] ?? {}) as Map)
           .map((k, v) => MapEntry(k, (v as num).toDouble())),
     );
   }

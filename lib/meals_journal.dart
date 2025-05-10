@@ -25,7 +25,7 @@ class MealsJournal extends ConsumerWidget {
         );
     final date = ref.watch(selectedDatesProvider).first;
 
-    final List<Widget> elements = day.meals.map((meal) {
+    final List<Widget> elements = day.meals.map<Widget>((meal) {
       return ListTile(
         title: Text(meal.name),
         onTap: () {
@@ -93,7 +93,6 @@ class MealEditor extends ConsumerWidget {
                   MaterialPageRoute(
                     builder: (context) => InstanceEditor(
                       aliment: aliment,
-                      bank: bank,
                     ),
                   ),
                 );
@@ -120,7 +119,6 @@ class MealEditor extends ConsumerWidget {
           MaterialPageRoute(
             builder: (context) => InstanceEditor(
               aliment: newAliment,
-              bank: bank,
             ),
           ),
         );
