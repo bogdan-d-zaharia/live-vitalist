@@ -35,33 +35,27 @@ class _NutrientDisplayState extends ConsumerState<NutrientDisplay> {
   }
 
   Widget _buildViewMode(BuildContext context, NutrientState state) {
-    final daysAsync = ref.watch(selectedDaysProvider);
+    final days = ref.watch(cachedSelectedDaysProvider);
     final bank = ref.watch(alimentBankProvider);
 
-    return daysAsync.when(
-      loading: () => const CircularProgressIndicator(),
-      error: (e, _) => Center(child: Text('Error: $e')),
-      data: (days) {
-        final avgDay = Day.sumDays(days);
-        final intake = avgDay.readIntake(bank);
-        final numDays = days.length;
+    final avgDay = Day.sumDays(days);
+    final intake = avgDay.readIntake(bank);
+    final numDays = days.length;
 
-        final keys = _filteredAndSortedKeys(state, intake, numDays);
-        final widgets = keys.map((key) {
-          final field = state.data[key]!;
-          final value = (intake[key] ?? 0.0) / numDays;
-          return _buildNutrientTile(context, field, key, value, bank, numDays);
-        }).toList();
+    final keys = _filteredAndSortedKeys(state, intake, numDays);
+    final widgets = keys.map((key) {
+      final field = state.data[key]!;
+      final value = (intake[key] ?? 0.0) / numDays;
+      return _buildNutrientTile(context, field, key, value, bank, numDays);
+    }).toList();
 
-        return CustomCard(
-          logo: const Icon(Icons.bar_chart_rounded),
-          title: 'Nutrients',
-          action: _buildActionButtons(),
-          child: Column(
-            children: _insertDividers(widgets),
-          ),
-        );
-      },
+    return CustomCard(
+      logo: const Icon(Icons.bar_chart_rounded),
+      title: 'Nutrients',
+      action: _buildActionButtons(),
+      child: Column(
+        children: _insertDividers(widgets),
+      ),
     );
   }
 
@@ -449,10 +443,10 @@ class NutrientBar extends StatelessWidget {
     if (lowerLimit == null && upperLimit == null) {
       return Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5.0),
+          borderRadius: BorderRadius.circular(radius),
           color: Colors.grey,
         ),
-        height: 15.0,
+        height: height,
       );
     } else {
       final double top = (upperLimit ?? lowerLimit!) * 1.5;

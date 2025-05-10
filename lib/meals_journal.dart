@@ -18,12 +18,7 @@ class MealsJournal extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final day = ref.watch(selectedDaysProvider).when(
-          data: (data) => data.first,
-          error: (error, stackTrace) =>
-              Error.throwWithStackTrace(error, stackTrace),
-          loading: () => Day(),
-        );
+    final day = ref.watch(cachedSelectedDaysProvider).firstOrNull ?? Day();
     final date = ref.watch(selectedDatesProvider).first;
 
     final bank = ref.watch(alimentBankProvider);

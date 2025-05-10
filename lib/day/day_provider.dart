@@ -59,3 +59,28 @@ final selectedDaysProvider = FutureProvider<List<Day>>((ref) async {
       .whereType<Day>()
       .toList();
 });
+
+class CachedSelectedDaysNotifier extends StateNotifier<List<Day>> {
+  CachedSelectedDaysNotifier(this.ref) : super([]) {
+    _subscribe();
+  }
+
+  final Ref ref;
+
+  void _subscribe() {
+    ref.listen<AsyncValue<List<Day>>>(
+      selectedDaysProvider,
+      (previous, next) {
+        next.whenData((days) {
+          if (days.isNotEmpty) {
+            state = days;
+          }
+        });
+      },
+    );
+  }
+}
+
+final cachedSelectedDaysProvider =
+    StateNotifierProvider<CachedSelectedDaysNotifier, List<Day>>(
+        (ref) => CachedSelectedDaysNotifier(ref));
