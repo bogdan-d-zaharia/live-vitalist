@@ -97,7 +97,8 @@ class InstancedAliment extends Aliment {
 }
 
 extension AlimentDataReadUtils on Aliment {
-  AlimentData readData(AlimentBankState bank) {
+  /// Returns the actual `AlimentData` reference.
+  AlimentData readDataRef(AlimentBankState bank) {
     if (this is InstancedAliment) {
       return bank.aliments[(this as InstancedAliment).alimentID]!;
     } else /* if (this is TemporaryAliment) */ {
@@ -108,11 +109,14 @@ extension AlimentDataReadUtils on Aliment {
   /// Tolerable to errors,
   /// if no unit synonym found, returns 1.0 even if not the basic unit.
   double readUnitSize(AlimentBankState bank) {
-    return readData(bank).unitSynonyms[unit] ?? 1.0;
+    return readDataRef(bank).unitSynonyms[unit] ?? 1.0;
   }
 
+  /// Returns a processed copy of the referencedFields,
+  /// taking into account the servingSize and unit size.
   Map<String, double> readFields(AlimentBankState bank) {
-    return readData(bank).referenceFields.map((key, value) =>
-        MapEntry(key, value * servingSize * readUnitSize(bank)));
+    final data = readDataRef(bank);
+    return data.referenceFields.map((key, value) => MapEntry(
+        key, value * servingSize * readUnitSize(bank) / data.referenceSize));
   }
 }

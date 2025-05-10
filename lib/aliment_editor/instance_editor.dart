@@ -7,6 +7,7 @@ import '../aliment/aliment_bank_provider.dart';
 import '../custom_card.dart';
 import '../palette.dart';
 import '../string_input.dart';
+import 'aliment_data_editor.dart';
 
 class InstanceEditor extends ConsumerStatefulWidget {
   const InstanceEditor({required this.aliment, super.key});
@@ -230,7 +231,7 @@ class _SelectorState extends ConsumerState<Selector> {
   Widget _buildAddButton(AlimentBank notifier) {
     return MiniCard(
       child: InkWell(
-        onTap: () {
+        onTap: () async {
           final aliment = AlimentData(
             name: 'test ',
             unit: 'g',
@@ -238,8 +239,13 @@ class _SelectorState extends ConsumerState<Selector> {
             referenceFields: {},
             unitSynonyms: {},
           );
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AlimentDataEditor(data: aliment),
+            ),
+          );
           final id = aliment.hashCode.toString();
-          aliment.name += id.substring(0, 5);
           notifier.setAliment(id, aliment);
           setState(() {});
         },

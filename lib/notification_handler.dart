@@ -23,7 +23,7 @@ class NotificationHandler {
       List<Aliment> list, AlimentBankState bank, String mealName) async {
     List<String> lines = list.map(
       (e) {
-        final String name = e.readData(bank).name;
+        final String name = e.readDataRef(bank).name;
         final String servingSize = e.servingSize % 1 == 0
             ? e.servingSize.toInt().toString()
             : e.servingSize.toStringAsFixed(1);

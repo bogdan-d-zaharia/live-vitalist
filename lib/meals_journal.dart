@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'aliment/aliment.dart';
 import 'aliment/aliment_bank_provider.dart';
+import 'aliment_editor/aliment_data_editor.dart';
 import 'aliment_editor/instance_editor.dart';
 import 'custom_card.dart';
 import 'day/day.dart';
@@ -99,7 +100,19 @@ class MealEditor extends ConsumerWidget {
               }
               updateDay();
             },
-            onLongPress: () {},
+            onLongPress: () async {
+              if (aliment is InstancedAliment) {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AlimentDataEditor(
+                      data: aliment.readDataRef(bank),
+                    ),
+                  ),
+                );
+              }
+              updateDay();
+            },
           ),
         )
         .toList();
@@ -248,7 +261,7 @@ class AlimentWidget extends ConsumerWidget {
 
     final values = aliment.readFields(bank);
     return ElementWidget(
-      title: aliment.readData(bank).name,
+      title: aliment.readDataRef(bank).name,
       subTitle:
           '${values['kcals']?.round() ?? 0} ${model['kcals']?.translations[SettingsData.language]?.toLowerCase() ?? ''}, ${aliment.servingSize} ${aliment.unit}',
       onTap: onTap,
