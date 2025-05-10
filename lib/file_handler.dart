@@ -142,7 +142,7 @@ abstract final class FileHandler {
     final File? file = await _getFile(path);
     String? str = (await file?.readAsString());
 
-    if (str != null) {
+    if (str != null && str.length > 2) {
       //TODO: Investigate and fix real cause.
       /* This happends rarely but is annoying enough.
          The first " is replaced with a }.
@@ -151,7 +151,7 @@ abstract final class FileHandler {
          FormatException (FormatException: Unexpected character (at character 3)
          {}aliments":{"652656957":{"name":"q","referenceSize":1.0,"referenceFields":...
            ^ */
-      if (str.length > 2 && str[1] == "}") str = str.replaceRange(1, 2, '"');
+      if (str[1] == "}") str = str.replaceRange(1, 2, '"');
       return jsonDecode(str);
     }
     return null;
@@ -184,8 +184,9 @@ abstract final class FirebaseHandler {
 
     /* Just waits until it has internet connection and sends. 
        If there is no internet connection, it waits, no exceptions given. */
-    await db.child('users/$uid/$path').set(JsonHandler.mapToListRecursive(
-        json)); /* used `mapToListRecursive` to maintain order */
+    await db
+        .child('users/$uid/$path')
+        .set(json); /* used `mapToListRecursive` to maintain order */
 
     return true;
   }
@@ -200,7 +201,7 @@ abstract final class FirebaseHandler {
     final snapshot = await db.child('users/$uid/$path').get();
 
     if (snapshot.exists && snapshot.value != null) {
-      return (JsonHandler.reverseMapToListRecursive(snapshot.value) as Map)
+      return (snapshot.value as Map)
           .map<String, dynamic>((key, value) => MapEntry(key as String, value));
     }
 

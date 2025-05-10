@@ -54,39 +54,6 @@ abstract final class JsonHandler {
     return forceStringKeys(result);
   }
 
-  /// Converts maps to lists from nested structures.
-  static dynamic mapToListRecursive(dynamic value) {
-    if (value is Map) {
-      return value.entries.map((entry) {
-        return {'k': entry.key, 'v': mapToListRecursive(entry.value)};
-      }).toList();
-    } else if (value is List) {
-      return value.map((e) {
-        return mapToListRecursive(e);
-      }).toList();
-    } else {
-      return value;
-    }
-  }
-
-  static dynamic reverseMapToListRecursive(dynamic value) {
-    /// 'v' might not exist because firebase doesn't store empty maps or lists.
-    bool isValidMap(dynamic e) {
-      return (e is Map) && e.containsKey('k') && (e.length <= 2);
-    }
-
-    if (value is List) {
-      if (value.isNotEmpty && value.every(isValidMap)) {
-        return Map.fromEntries(value
-            .map((e) => MapEntry(e['k']!, reverseMapToListRecursive(e['v']))));
-      } else {
-        return value.map(reverseMapToListRecursive).toList();
-      }
-    } else {
-      return value;
-    }
-  }
-
   ///     MERGE:
   ///
   ///     LOCAL = {

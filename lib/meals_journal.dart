@@ -180,6 +180,7 @@ class MealEditor extends ConsumerWidget {
     final day = ref.watch(dayCacheProvider)[date]!;
     final meal = day.meals.firstWhere((m) => m.name == mealName);
     final bank = ref.watch(alimentBankProvider);
+    final bankNotifier = ref.watch(alimentBankProvider.notifier);
 
     void updateDay() => ref.read(dayCacheProvider.notifier).setDay(date, day);
 
@@ -206,16 +207,17 @@ class MealEditor extends ConsumerWidget {
             },
             onLongPress: () async {
               if (aliment is InstancedAliment) {
+                final data = aliment.readDataRef(bank);
                 await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => AlimentDataEditor(
-                      data: aliment.readDataRef(bank),
+                      data: data,
                     ),
                   ),
                 );
+                bankNotifier.setAliment(aliment.alimentID, data);
               }
-              updateDay();
             },
           ),
         )

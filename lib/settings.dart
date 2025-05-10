@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'auth_gate.dart';
 import 'custom_card.dart';
 import 'file_handler.dart';
 import 'palette.dart';
@@ -163,21 +163,19 @@ class _SettingsState extends State<Settings> {
   Future<void> deleteEverything() async {
     if (StorageHandler.isFirebase && !await deleteInternet()) return;
     await FileHandler.deleteLocal();
-
-    // DayHandler.cache.clear();
-    // AlimentBank.aliments.clear();
-    // AlimentBank.mruIDs.clear();
-    SettingsData.isLoggedIn = false;
+    await SettingsData.deleteAll();
 
     if (mounted) {
-      await Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AuthGate(),
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Closing the app...'),
+          duration: Duration(seconds: 2),
         ),
-        (route) => false,
       );
     }
+
+    await Future.delayed(Duration(seconds: 3));
+    SystemNavigator.pop();
   }
 
   void deleteEverythingPopup() {
