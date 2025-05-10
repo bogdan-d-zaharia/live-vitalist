@@ -294,7 +294,7 @@ class _NutrientDisplayState extends ConsumerState<NutrientDisplay> {
                                   style: TextStyle(fontSize: 24.0)),
                               ...topIntakeAliments.entries.map((e) {
                                 /// eg. Cheese
-                                final String name = e.key.getAliment.name;
+                                final String name = e.key.readData.name;
 
                                 /// eg. protein
                                 final String valueOfLabel =

@@ -23,7 +23,7 @@ class NotificationHandler {
         ? e.servingSize.toInt().toString()
         : e.servingSize.toStringAsFixed(1);
 
-    return '($servingSize${e.unit}) ${e.getAliment.name}';
+    return '($servingSize${e.unit}) ${e.readData.name}';
   }
 
   static Future<void> showListNotification(

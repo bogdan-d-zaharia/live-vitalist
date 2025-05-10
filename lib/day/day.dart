@@ -85,7 +85,7 @@ extension DayAnalysis on Day {
 
     for (final Aliment sa in aliments) {
       if (sa is InstancedAliment) {
-        final data = sa.getAliment;
+        final data = sa.readData;
         if (tias[sa.alimentID] == null) {
           tias[sa.alimentID] = InstancedAliment(
             alimentID: sa.alimentID,
@@ -105,7 +105,7 @@ extension DayAnalysis on Day {
   Map<Aliment, double> topIntakeAliments(String nutrient) {
     final Map<Aliment, double> result = Map.fromEntries(totalAliments().map(
         (aliment) => MapEntry(
-            aliment, aliment.getAliment.referenceFields[nutrient] ?? 0.0)))
+            aliment, aliment.readData.referenceFields[nutrient] ?? 0.0)))
       ..removeWhere((_, value) => value == 0.0);
 
     return Map.fromEntries(result.entries.toList()

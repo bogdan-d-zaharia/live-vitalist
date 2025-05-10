@@ -141,7 +141,7 @@ class _AlimentBankEditorState extends State<AlimentBankEditor> {
                 horizontal: 12.0,
                 vertical: 20.0,
               ),
-              child: Text(aliment.getAliment.name),
+              child: Text(aliment.readData.name),
             ),
           ),
         );

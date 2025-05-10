@@ -1,3 +1,5 @@
+import 'aliment_bank_provider.dart';
+
 class AlimentData {
   AlimentData({
     required this.name,
@@ -92,4 +94,25 @@ class InstancedAliment extends Aliment {
         servingSize: (json['servingSize'] as num).toDouble(),
         unit: json['unit'],
       );
+}
+
+extension AlimentDataReadUtils on Aliment {
+  AlimentData readData(AlimentBankState bank) {
+    if (this is InstancedAliment) {
+      return bank.aliments[(this as InstancedAliment).alimentID]!;
+    } else /* if (this is TemporaryAliment) */ {
+      return (this as TemporaryAliment).alimentData;
+    }
+  }
+
+  /// Tolerable to errors,
+  /// if no unit synonym found, returns 1.0 even if not the basic unit.
+  double readUnitSize(AlimentBankState bank) {
+    return readData(bank).unitSynonyms[unit] ?? 1.0;
+  }
+
+  Map<String, double> readFields(AlimentBankState bank) {
+    return readData(bank).referenceFields.map((key, value) =>
+        MapEntry(key, value * servingSize * readUnitSize(bank)));
+  }
 }
