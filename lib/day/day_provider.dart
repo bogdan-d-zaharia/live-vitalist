@@ -4,17 +4,17 @@ import 'package:intl/intl.dart' as intl;
 import '../file_handler.dart';
 import 'day.dart';
 
+/// Normalize to date-only.
+DateTime _normalize(DateTime date) => DateTime(date.year, date.month, date.day);
+
 String _fileNameFor(DateTime date) => intl.DateFormat('d_M_y').format(date);
 
-final selectedDatesProvider = StateProvider<List<DateTime>>((ref) => []);
+final selectedDatesProvider =
+    StateProvider<List<DateTime>>((ref) => [_normalize(DateTime.now())]);
 
 /// Reactive `Map<DateTime, Day>`, loaded on demand, auto-saved on edit.
 class DayCacheNotifier extends StateNotifier<Map<DateTime, Day>> {
   DayCacheNotifier() : super({});
-
-  /// Normalize to date-only.
-  DateTime _normalize(DateTime date) =>
-      DateTime(date.year, date.month, date.day);
 
   /// Access a Day for the given date. Loads from disk if needed.
   Future<bool> load(DateTime date) async {
@@ -42,12 +42,18 @@ final dayCacheProvider =
 );
 
 /// Returns the list of Day objects for currently selected dates
-final selectedDaysProvider = Provider<List<Day>>((ref) {
+final selectedDaysProvider = FutureProvider<List<Day>>((ref) async {
   final selectedDates = ref.watch(selectedDatesProvider);
+  final notifier = ref.read(dayCacheProvider.notifier);
+
+  for (var date in selectedDates) {
+    await notifier.load(date);
+  }
+
   final dayCache = ref.watch(dayCacheProvider);
 
   return selectedDates
-      .map((d) => dayCache[DateTime(d.year, d.month, d.day)])
+      .map((d) => dayCache[_normalize(d)])
       .whereType<Day>()
       .toList();
 });

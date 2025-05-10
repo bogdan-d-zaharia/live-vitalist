@@ -115,16 +115,12 @@ extension DayAnalysis on Day {
 
 extension AlimentsAnalysis on List<Aliment> {
   Map<String, double> get summedFields {
-    final Map<String, double> result = (Map.of(NutrientsHandler.model)
-          ..removeWhere((key, _) => NutrientsHandler.hasTag(key, 'disabled')))
-        .map((key, _) => MapEntry(key, 0.0));
+    final Map<String, double> result = {};
 
     for (var aliment in this) {
-      for (final field in result.keys) {
-        final value = aliment.fields[field];
-        if (value != null) {
-          result[field] = result[field]! + value;
-        }
+      for (final entry in aliment.fields.entries) {
+        result.update(entry.key, (v) => v + entry.value,
+            ifAbsent: () => entry.value);
       }
     }
 

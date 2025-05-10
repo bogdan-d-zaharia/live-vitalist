@@ -1,10 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../file_handler.dart';
-import '../json_handler.dart';
-
-// --- Core Data Model --- //
-
 class AlimentData {
   AlimentData({
     required this.name,
@@ -24,8 +17,8 @@ class AlimentData {
         'name': name,
         'unit': unit,
         'referenceSize': referenceSize,
-        'referenceFields': referenceFields,
-        'unitSynonyms': unitSynonyms,
+        if (referenceFields.isNotEmpty) 'referenceFields': referenceFields,
+        if (unitSynonyms.isNotEmpty) 'unitSynonyms': unitSynonyms,
       };
 
   factory AlimentData.fromJson(Map<String, dynamic> json) {
@@ -33,9 +26,9 @@ class AlimentData {
       name: json['name'],
       unit: json['unit'],
       referenceSize: (json['referenceSize'] as num).toDouble(),
-      referenceFields: (json['referenceFields'] as Map<String, dynamic>)
+      referenceFields: ((json['referenceFields'] ?? {}) as Map<String, dynamic>)
           .map((k, v) => MapEntry(k, (v as num).toDouble())),
-      unitSynonyms: (json['unitSynonyms'] as Map<String, dynamic>)
+      unitSynonyms: ((json['unitSynonyms'] ?? {}) as Map<String, dynamic>)
           .map((k, v) => MapEntry(k, (v as num).toDouble())),
     );
   }
@@ -50,17 +43,7 @@ abstract class Aliment {
   double servingSize;
   String unit;
 
-  AlimentData get getAliment;
-
   Map<String, dynamic> toJson();
-}
-
-extension AlimentUtils on Aliment {
-  /// Tolerant to errors,
-  /// should throw an error if not in synonyms and not the default unit.
-  double getUnitSize() {
-    return getAliment.unitSynonyms[unit] ?? 1.0;
-  }
 }
 
 class TemporaryAliment extends Aliment {
@@ -71,9 +54,6 @@ class TemporaryAliment extends Aliment {
   });
 
   AlimentData alimentData;
-
-  @override
-  AlimentData get getAliment => alimentData;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -98,10 +78,6 @@ class InstancedAliment extends Aliment {
   });
 
   String alimentID;
-
-  @override
-  AlimentData get getAliment =>
-      AlimentBank.instance.read().aliments[alimentID]!;
 
   @override
   Map<String, dynamic> toJson() => {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../aliment/aliment.dart';
+import '../aliment/aliment_bank_provider.dart';
 import '../aliment_bank_editor.dart';
 import '../custom_card.dart';
 import '../palette.dart';
@@ -9,37 +10,36 @@ import 'package:diacritic/diacritic.dart';
 class InstanceEditor extends StatefulWidget {
   const InstanceEditor({
     required this.aliment,
+    required this.bank,
     super.key,
   });
+
   final InstancedAliment aliment;
+  final AlimentBankState bank;
 
   @override
   State<InstanceEditor> createState() => _InstanceEditorState();
 }
 
 class _InstanceEditorState extends State<InstanceEditor> {
-  bool isAlimentModified = false;
-  bool isModified = false;
+  AlimentData? getAliment() => widget.bank.aliments[widget.aliment.alimentID];
 
   Future<void> showSelector() async {
     final String? id = await showDialog(
       context: context,
       builder: (context) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 36.0),
-        child: Selector(),
+        child: Selector(bank: widget.bank),
       ),
     );
 
     if (id == null) return;
 
     setState(() {
-      isModified = true;
-      isAlimentModified = true;
-
       widget.aliment.alimentID = id;
 
-      final AlimentData aliment = AlimentBank.getAliment(id);
-      widget.aliment.unit = aliment.unitSynonyms?.keys.first;
+      final AlimentData aliment = widget.bank.aliments[id]!;
+      widget.aliment.unit = aliment.unit;
     });
   }
 
@@ -47,7 +47,7 @@ class _InstanceEditorState extends State<InstanceEditor> {
   // also perhaps search and at the bottom instead of top, to be
   // easely accessible, or perhaps reverse everything.
   Widget _alimentSelector() {
-    final String? name = AlimentBank.aliments[widget.aliment.alimentID]?.name;
+    final String? name = getAliment()?.name;
     return MiniCard(
       child: InkWell(
         onTap: showSelector,
@@ -86,7 +86,6 @@ class _InstanceEditorState extends State<InstanceEditor> {
               getValue: () => widget.aliment.servingSize,
               setValue: (val) {
                 if (val >= 0.0) {
-                  isModified = true;
                   widget.aliment.servingSize = val;
                 }
               },
@@ -98,17 +97,16 @@ class _InstanceEditorState extends State<InstanceEditor> {
   }
 
   Widget? _unitSelector() {
-    if (!AlimentBank.aliments.containsKey(widget.aliment.alimentID)) {
+    if (!widget.bank.aliments.containsKey(widget.aliment.alimentID)) {
       return null;
     }
-    final AlimentData aliment = widget.aliment.getAliment;
-    final List<String>? units = aliment.unitSynonyms?.keys.toList();
-    if (units == null) return null;
+    final AlimentData aliment = getAliment()!;
+    final List<String> units = [aliment.unit, ...aliment.unitSynonyms.keys];
 
     return SizedBox(
       child: DropdownButton<String>(
         isExpanded: true,
-        hint: Text(widget.aliment.unit ?? ''),
+        hint: Text(widget.aliment.unit),
 
         //TODO:NOW: Handle the case when there is null unitSizes.
         items: units
@@ -118,7 +116,6 @@ class _InstanceEditorState extends State<InstanceEditor> {
         onChanged: (unit) {
           if (unit != null) {
             setState(() {
-              isModified = true;
               widget.aliment.unit = unit;
             });
           }
@@ -130,27 +127,20 @@ class _InstanceEditorState extends State<InstanceEditor> {
   @override
   Widget build(BuildContext context) {
     final Widget? unitSelector = _unitSelector();
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, result) {
-        if (didPop) return;
-        Navigator.pop(context, (isModified, isAlimentModified));
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Editor'),
-        ),
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _alimentSelector(),
-                _inputServed(),
-                if (unitSelector != null) unitSelector,
-              ],
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Editor'),
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _alimentSelector(),
+              _inputServed(),
+              if (unitSelector != null) unitSelector,
+            ],
           ),
         ),
       ),
@@ -159,7 +149,12 @@ class _InstanceEditorState extends State<InstanceEditor> {
 }
 
 class Selector extends StatefulWidget {
-  const Selector({super.key});
+  const Selector({
+    required this.bank,
+    super.key,
+  });
+
+  final AlimentBankState bank;
 
   @override
   State<Selector> createState() => _SelectorState();
@@ -168,6 +163,8 @@ class Selector extends StatefulWidget {
 class _SelectorState extends State<Selector> {
   String searchTerm = '';
   late TextEditingController controller;
+
+  String getName(String id) => widget.bank.aliments[id]!.name;
 
   @override
   void initState() {
@@ -183,8 +180,8 @@ class _SelectorState extends State<Selector> {
 
   @override
   Widget build(BuildContext context) {
-    final keys = AlimentBank.sortedKeys.where((id) =>
-        removeDiacritics(AlimentBank.getAliment(id).name.toLowerCase())
+    final keys = widget.bank.order.where((id) =>
+        removeDiacritics(getName(id).toLowerCase())
             .contains(removeDiacritics(searchTerm.toLowerCase())));
     return MiniCard(
       child: Padding(
@@ -257,7 +254,7 @@ class _SelectorState extends State<Selector> {
                               horizontal: 16.0, vertical: 12.0),
                           child: Align(
                             alignment: Alignment.centerLeft,
-                            child: Text(AlimentBank.getAliment(id).name),
+                            child: Text(getName(id)),
                           ),
                         ),
                       ),

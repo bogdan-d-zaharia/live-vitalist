@@ -17,7 +17,7 @@ class AlimentBankEditor extends StatefulWidget {
       "servingSize": 1.0,
     });
 
-    if (await AlimentEditor.editAliment(aliment, context)) {
+    if (await AlimentEditor.editAlimentData(aliment, context)) {
       final AlimentData newAliment = aliment.alimentData;
       final String id = newAliment.hashCode.toString();
       AlimentBank.aliments[id] = newAliment;
@@ -129,7 +129,7 @@ class _AlimentBankEditorState extends State<AlimentBankEditor> {
         return MiniCard(
           child: InkWell(
             onTap: () async {
-              if (await AlimentEditor.editAliment(aliment, context)) {
+              if (await AlimentEditor.editAlimentData(aliment, context)) {
                 setState(() {
                   AlimentBank.save();
                 });

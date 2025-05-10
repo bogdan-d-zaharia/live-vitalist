@@ -39,12 +39,12 @@ class AlimentBank extends StateNotifier<AlimentBankState> {
 
   static final instance = Provider<AlimentBank>((ref) => AlimentBank());
 
-  void moveToFront(String alimentID) {
-    if (!state.aliments.containsKey(alimentID)) return;
-    final updatedOrder = [...state.order]
-      ..remove(alimentID)
-      ..insert(0, alimentID);
-    state = AlimentBankState(aliments: state.aliments, order: updatedOrder);
+  void setAliment(String id, AlimentData data) {
+    state = AlimentBankState(
+      aliments: {...state.aliments, id: data},
+      order: state.order.contains(id) ? state.order : [id, ...state.order],
+    );
+    save();
   }
 
   Future<void> save() {
@@ -66,15 +66,8 @@ class AlimentBank extends StateNotifier<AlimentBankState> {
     state = AlimentBankState.fromJson(JsonHandler.processJson(merged));
     await save();
   }
-
-  AlimentData getAliment(String id) {
-    final aliment = state.aliments[id];
-    if (aliment == null) throw Exception('Aliment not found: $id');
-    return aliment;
-  }
 }
 
 final alimentBankProvider =
-    StateNotifierProvider<AlimentBank, AlimentBankState>((ref) {
-  return AlimentBank();
-});
+    StateNotifierProvider<AlimentBank, AlimentBankState>(
+        (ref) => AlimentBank());
