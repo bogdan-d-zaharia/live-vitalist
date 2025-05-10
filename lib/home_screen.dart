@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'aliment/aliment_bank_provider.dart';
-import 'day/day.dart';
-import 'day/day_provider.dart';
 import 'meals_journal.dart';
 import 'nutrient/nutrient_provider.dart';
 import 'nutrient_display.dart';
+import 'week_calendar.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -23,7 +22,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     Future.microtask(() => ref.read(alimentBankProvider.notifier).load());
   }
 
-  Widget _build(List<Day> days) {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Live Vitalist'),
@@ -32,6 +32,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: ListView(
           children: [
+            WeekCalendar(),
             MealsJournal(),
             NutrientDisplay(),
             SizedBox(height: 12.0),
@@ -39,19 +40,5 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
       ),
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ref.watch(selectedDaysProvider).when(
-          data: _build,
-          error: (error, stackTrace) =>
-              Error.throwWithStackTrace(error, stackTrace),
-          loading: () => Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(strokeCap: StrokeCap.round),
-            ),
-          ),
-        );
   }
 }
