@@ -21,6 +21,8 @@ class NutrientStateNotifier extends StateNotifier<NutrientState> {
         ));
 
   void reorder(int oldIndex, int newIndex) {
+    if (newIndex > oldIndex) newIndex--;
+
     final updated = [...state.order];
     final item = updated.removeAt(oldIndex);
     updated.insert(newIndex, item);

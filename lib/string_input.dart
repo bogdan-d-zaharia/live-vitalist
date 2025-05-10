@@ -122,18 +122,20 @@ class _FieldsInputState extends State<FieldsInput> {
 }
 
 class StringInput extends StatefulWidget {
-  final String? initString;
-  final Function(String)? update;
-  final TextInputType? keyboardType;
-  final InputDecoration? decoration;
-
   const StringInput({
     super.key,
     this.initString,
     this.update,
+    this.submit,
     this.keyboardType,
     this.decoration,
   });
+
+  final String? initString;
+  final Function(String)? update;
+  final Function(String)? submit;
+  final TextInputType? keyboardType;
+  final InputDecoration? decoration;
 
   @override
   State<StringInput> createState() => _StringInputState();
@@ -165,6 +167,7 @@ class _StringInputState extends State<StringInput> {
             border: UnderlineInputBorder(),
           ),
       onChanged: widget.update,
+      onSubmitted: widget.submit,
     );
   }
 }

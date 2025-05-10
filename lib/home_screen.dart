@@ -6,6 +6,7 @@ import 'day/day.dart';
 import 'day/day_provider.dart';
 import 'meals_journal.dart';
 import 'nutrient/nutrient_provider.dart';
+import 'nutrient_display.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -32,6 +33,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         child: ListView(
           children: [
             MealsJournal(),
+            NutrientDisplay(),
             SizedBox(height: 12.0),
           ],
         ),

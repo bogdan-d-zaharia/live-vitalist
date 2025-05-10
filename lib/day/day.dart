@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart' as intl;
 
 import '../aliment/aliment.dart';
+import '../aliment/aliment_bank_provider.dart';
 import '../file_handler.dart';
 
 class Meal {
@@ -71,5 +72,47 @@ class Day {
     }
 
     return Day(meals: merged.values.toList());
+  }
+}
+
+extension DayAnalysis on Day {
+  List<Aliment> get aliments => meals.expand((meal) => meal.aliments).toList();
+
+  Map<String, double> readIntake(AlimentBankState bank) =>
+      aliments.summedFields(bank);
+
+  List<Aliment> totalAliments(AlimentBankState bank) {
+    final Map<String, InstancedAliment> tias = {};
+    final List<TemporaryAliment> ttas = [];
+
+    for (final Aliment sa in aliments) {
+      if (sa is InstancedAliment) {
+        final data = sa.readDataRef(bank);
+        if (tias[sa.alimentID] == null) {
+          tias[sa.alimentID] = InstancedAliment(
+            alimentID: sa.alimentID,
+            servingSize: 0.0,
+            unit: data.unit,
+          );
+        }
+        tias[sa.alimentID]!.servingSize +=
+            sa.servingSize * sa.readUnitSize(bank);
+      } else if (sa is TemporaryAliment) {
+        ttas.add(sa);
+      }
+    }
+
+    return [...tias.values, ...ttas];
+  }
+
+  Map<Aliment, double> topIntakeAliments(
+      String nutrient, AlimentBankState bank) {
+    final Map<Aliment, double> result = Map.fromEntries(totalAliments(bank).map(
+        (aliment) => MapEntry(aliment,
+            aliment.readDataRef(bank).referenceFields[nutrient] ?? 0.0)))
+      ..removeWhere((_, value) => value == 0.0);
+
+    return Map.fromEntries(result.entries.toList()
+      ..sort((a, b) => (b.value - a.value).sign.toInt()));
   }
 }
