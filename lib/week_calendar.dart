@@ -50,9 +50,10 @@ class WeekCalendar extends ConsumerWidget {
               children: [
                 LabelsWidget(
                   map: {
-                    'Maximum': Colors.lightGreen.withOpacity(0.4),
+                    if (SettingsData.isComplexCalendar)
+                      'Maximum': Colors.lightGreen.withValues(alpha: 0.4),
                     'Calories': Colors.lightGreen,
-                    'Minimum': Colors.green,
+                    if (SettingsData.isComplexCalendar) 'Minimum': Colors.green,
                   },
                 ),
                 const SizedBox(width: 24.0),
@@ -159,7 +160,7 @@ class CalendarItem extends ConsumerWidget {
 
       for (final entry in intakeById.entries) {
         final nutrient = nutrientMap[entry.key];
-        if (nutrient != null) {
+        if (nutrient != null && !nutrient.tags.contains('disabled')) {
           intakeByNutrient[nutrient] = entry.value;
         }
       }
@@ -234,29 +235,26 @@ class SimpleCalendarItem extends ConsumerWidget {
         width: 12.0,
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(6.0)),
         clipBehavior: Clip.hardEdge,
-        child: !SettingsData.isComplexCalendar
-            ? FractionallySizedBox(
-                heightFactor: (kcalRatio ?? 0.0 / 1.5).clamp(0.0, 1.0),
-                child: Container(color: Colors.lightGreen),
-              )
-            : Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  FractionallySizedBox(
-                    heightFactor: (maxim / 1.5).clamp(0.0, 1.0),
-                    child: Container(
-                        color: Colors.lightGreen.withValues(alpha: 0.4)),
-                  ),
-                  FractionallySizedBox(
-                    heightFactor: ((kcalRatio ?? 0.0) / 1.5).clamp(0.0, 1.0),
-                    child: Container(color: Colors.lightGreen),
-                  ),
-                  FractionallySizedBox(
-                    heightFactor: (minim / 1.5).clamp(0.0, 1.0),
-                    child: Container(color: Colors.green),
-                  ),
-                ],
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            if (SettingsData.isComplexCalendar)
+              FractionallySizedBox(
+                heightFactor: (maxim / 1.5).clamp(0.0, 1.0),
+                child:
+                    Container(color: Colors.lightGreen.withValues(alpha: 0.4)),
               ),
+            FractionallySizedBox(
+              heightFactor: ((kcalRatio ?? 0.0) / 1.5).clamp(0.0, 1.0),
+              child: Container(color: Colors.lightGreen),
+            ),
+            if (SettingsData.isComplexCalendar)
+              FractionallySizedBox(
+                heightFactor: (minim / 1.5).clamp(0.0, 1.0),
+                child: Container(color: Colors.green),
+              ),
+          ],
+        ),
       );
     }
 

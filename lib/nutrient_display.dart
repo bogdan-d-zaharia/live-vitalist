@@ -314,6 +314,7 @@ class _NutrientDisplayState extends ConsumerState<NutrientDisplay> {
           title: Text('$label Intake'),
           content: ListView(
             shrinkWrap: true,
+            //TODO: Error, not showing intrinsec sizes.
             children: [
               Text('Amount: ${intake.toStringAsFixed(2)}'),
               if (lower != null)

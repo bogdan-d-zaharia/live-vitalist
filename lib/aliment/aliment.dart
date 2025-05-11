@@ -89,7 +89,7 @@ class TemporaryAliment extends Aliment {
       TemporaryAliment(
         alimentData: AlimentData.fromJson(json['alimentData']),
         servingSize: (json['servingSize'] as num).toDouble(),
-        unit: json['unit'],
+        unit: json['unit'] ?? '',
       );
 }
 
