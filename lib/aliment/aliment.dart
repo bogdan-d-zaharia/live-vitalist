@@ -24,15 +24,36 @@ class AlimentData {
       };
 
   factory AlimentData.fromJson(Map<String, dynamic> json) {
-    return AlimentData(
-      name: json['name'],
-      unit: json['unit'],
-      referenceSize: (json['referenceSize'] as num).toDouble(),
-      referenceFields: ((json['referenceFields'] ?? {}) as Map)
-          .map((k, v) => MapEntry(k, (v as num).toDouble())),
-      unitSynonyms: ((json['unitSynonyms'] ?? {}) as Map)
-          .map((k, v) => MapEntry(k, (v as num).toDouble())),
-    );
+    if (!json.containsKey('unitSizes')) {
+      return AlimentData(
+        name: json['name'] ?? '',
+        unit: json['unit'] ?? '',
+        referenceSize: (json['referenceSize'] as num? ?? 0.0).toDouble(),
+        referenceFields: ((json['referenceFields'] ?? {}) as Map)
+            .map((k, v) => MapEntry(k, (v as num).toDouble())),
+        unitSynonyms: ((json['unitSynonyms'] ?? {}) as Map)
+            .map((k, v) => MapEntry(k, (v as num).toDouble())),
+      );
+    } else {
+      final String unit = (json['unitSizes'] as Map? ?? {})
+          .entries
+          .firstWhere(
+            (element) => element.value == 1.0,
+            orElse: () => MapEntry<String, dynamic>('', 1.0),
+          )
+          .key as String;
+
+      return AlimentData(
+        name: json['name'] ?? '',
+        unit: unit,
+        referenceSize: (json['referenceSize'] as num? ?? 0.0).toDouble(),
+        referenceFields: ((json['referenceFields'] ?? {}) as Map)
+            .map((k, v) => MapEntry(k, (v as num).toDouble())),
+        unitSynonyms: ((json['unitSizes'] ?? {}) as Map)
+            .map((k, v) => MapEntry(k, (v as num).toDouble()))
+          ..remove(unit),
+      );
+    }
   }
 }
 
@@ -92,7 +113,7 @@ class InstancedAliment extends Aliment {
       InstancedAliment(
         alimentID: json['alimentID'],
         servingSize: (json['servingSize'] as num).toDouble(),
-        unit: json['unit'],
+        unit: json['unit'] ?? '',
       );
 }
 

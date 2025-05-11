@@ -47,20 +47,27 @@ class NutrientStateNotifier extends StateNotifier<NutrientState> {
   }
 
   void loadFromJson(Map<String, dynamic> json) {
-    final rawData = Map<String, dynamic>.from(json['data'] ?? {});
-    final newData = rawData.map((key, value) =>
-        MapEntry(key, Nutrient.fromJson(Map<String, dynamic>.from(value))));
+    if (json.containsKey('data')) {
+      final rawData = Map<String, dynamic>.from(json['data'] ?? {});
+      final newData = rawData.map((key, value) =>
+          MapEntry(key, Nutrient.fromJson(Map<String, dynamic>.from(value))));
 
-    final rawOrder = List<String>.from(json['order'] ?? []);
-    final fullOrder = {
-      ...rawOrder,
-      ...newData.keys,
-    }.toList();
+      final rawOrder = List<String>.from(json['order'] ?? []);
+      final fullOrder = {
+        ...rawOrder,
+        ...newData.keys,
+      }.toList();
 
-    state = NutrientState(
-      data: newData,
-      order: fullOrder,
-    );
+      state = NutrientState(
+        data: newData,
+        order: fullOrder,
+      );
+    } else {
+      final data =
+          json.map((key, value) => MapEntry(key, Nutrient.fromJson(value)));
+      final order = json.keys.toList();
+      state = NutrientState(data: data, order: order);
+    }
   }
 
   Map<String, dynamic> toJson() {

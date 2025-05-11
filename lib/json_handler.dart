@@ -54,6 +54,24 @@ abstract final class JsonHandler {
     return forceStringKeys(result);
   }
 
+  static dynamic reverseMapToListRecursive(dynamic value) {
+    /// 'v' might not exist because firebase doesn't store empty maps or lists.
+    bool isValidMap(dynamic e) {
+      return (e is Map) && e.containsKey('k') && (e.length <= 2);
+    }
+
+    if (value is List) {
+      if (value.isNotEmpty && value.every(isValidMap)) {
+        return Map.fromEntries(value
+            .map((e) => MapEntry(e['k']!, reverseMapToListRecursive(e['v']))));
+      } else {
+        return value.map(reverseMapToListRecursive).toList();
+      }
+    } else {
+      return value;
+    }
+  }
+
   ///     MERGE:
   ///
   ///     LOCAL = {

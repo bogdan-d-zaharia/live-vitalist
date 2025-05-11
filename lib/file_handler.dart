@@ -201,7 +201,7 @@ abstract final class FirebaseHandler {
     final snapshot = await db.child('users/$uid/$path').get();
 
     if (snapshot.exists && snapshot.value != null) {
-      return (snapshot.value as Map)
+      return (JsonHandler.reverseMapToListRecursive(snapshot.value) as Map)
           .map<String, dynamic>((key, value) => MapEntry(key as String, value));
     }
 

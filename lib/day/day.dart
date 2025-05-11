@@ -46,6 +46,26 @@ class Day {
         ..clear()
         ..addAll((json['meals'] as List<dynamic>)
             .map((e) => Meal.fromJson(e as Map<String, dynamic>)));
+    } else if (json.containsKey('breakfast')) {
+      meals
+        ..clear()
+        ..addAll(([
+          {
+            'name': 'breakfast',
+            'aliments': json['breakfast'] ?? [],
+          },
+          {
+            'name': 'lunch',
+            'aliments': json['lunch'] ?? [],
+          },
+          {
+            'name': 'dinner',
+            'aliments': json['dinner'] ?? [],
+          },
+        ]).map((e) => Meal.fromJson(e)));
+
+      //             'name': name,
+      // 'aliments': aliments.map((a) => a.toJson()).toList(),
     }
   }
 

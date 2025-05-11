@@ -191,7 +191,7 @@ class SimpleCalendarItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final kcals = ref.watch(nutrientStateProvider).data['kcals']!;
+    final kcals = ref.watch(nutrientStateProvider).data['kcals'];
 
     (double?, double?, double?) calculateMinMaxAverage(
         Map<Nutrient, double> values) {
@@ -227,7 +227,7 @@ class SimpleCalendarItem extends ConsumerWidget {
       bars = null;
     } else {
       final (minim, maxim, _) = forceMinMaxAverage(intake);
-      final kcalRatio = kcals.getRatio(intake[kcals]);
+      final kcalRatio = kcals?.getRatio(intake[kcals]);
 
       bars = Container(
         margin: const EdgeInsets.only(bottom: labelHeight),
