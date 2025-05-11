@@ -2,22 +2,25 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'aliment/aliment_bank_provider.dart';
 import 'custom_card.dart';
+import 'day/day_provider.dart';
 import 'file_handler.dart';
 import 'palette.dart';
 import 'settings_data.dart';
 
-class Settings extends StatefulWidget {
+class Settings extends ConsumerStatefulWidget {
   const Settings({super.key});
 
   @override
-  State<Settings> createState() => _SettingsState();
+  ConsumerState<Settings> createState() => _SettingsState();
 }
 
-class _SettingsState extends State<Settings> {
+class _SettingsState extends ConsumerState<Settings> {
   // #region //* ACCOUNT DELETION *//
   final String deleteAll1 =
       'You can delete your account and all data stored both online and on your device by using the button below. This will permanently remove everything linked to your account and reset the app.';
@@ -239,6 +242,9 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
+    final bankNotifier = ref.read(alimentBankProvider.notifier);
+    final dayCacheNotifier = ref.read(dayCacheProvider.notifier);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings'),
@@ -349,6 +355,71 @@ class _SettingsState extends State<Settings> {
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: ListView(
           children: [
+            if (!StorageHandler.isFirebase)
+              CustomCard(
+                logo: Icon(Icons.cloud_upload_rounded),
+                title: 'Connect with Google',
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                        'Backup your files to cloud or restore your data by connecting with Google.'),
+                    SizedBox(height: 12.0),
+                    TextButton(
+                      onPressed: () async {
+                        /* From AuthGate */
+                        final googleUser = await GoogleSignIn().signIn();
+                        if (googleUser == null) return; /* user canceled */
+
+                        final googleAuth = await googleUser.authentication;
+
+                        final credential = GoogleAuthProvider.credential(
+                          accessToken: googleAuth.accessToken,
+                          idToken: googleAuth.idToken,
+                        );
+
+                        await FirebaseAuth.instance
+                            .signInWithCredential(credential);
+
+                        StorageHandler.isFirebase = true;
+
+                        //TODO: Perhaps show a pop up and ask upon conflict.
+
+                        await bankNotifier.loadMerged();
+                        // await NutrientsHandler.load(); //TODO: Verify
+                        dayCacheNotifier.clear();
+                        setState(() {});
+                      },
+                      child: Text('Connect with Google'),
+                    ),
+                  ],
+                ),
+              ),
+            //TODO: Implement
+            //// CustomCard(
+            ////   logo: Icon(Icons.file_upload_outlined),
+            ////   title: 'Export files',
+            ////   child: Column(
+            ////     crossAxisAlignment: CrossAxisAlignment.start,
+            ////     children: [
+            ////       Text('Export your files to process with external tools.'),
+            ////       SizedBox(height: 12.0),
+            ////       ElevatedButton(
+            ////         onPressed: () async {},
+            ////         child: Text('Export'),
+            ////       ),
+            ////     ],
+            ////   ),
+            //// ),
+            if (StorageHandler.isFirebase)
+              CustomCard(
+                logo: Icon(Icons.sync_rounded),
+                title: 'Backup to cloud',
+                child: TextButton(
+                  onPressed: () => StorageHandler.syncAll(),
+                  child: Text('Backup all data to cloud'),
+                ),
+              ),
             MiniCard(
               child: Row(
                 mainAxisSize: MainAxisSize.min,

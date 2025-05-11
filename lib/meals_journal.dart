@@ -180,7 +180,7 @@ class MealEditor extends ConsumerWidget {
     final day = ref.watch(dayCacheProvider)[date]!;
     final meal = day.meals.firstWhere((m) => m.name == mealName);
     final bank = ref.watch(alimentBankProvider);
-    final bankNotifier = ref.watch(alimentBankProvider.notifier);
+    final bankNotifier = ref.read(alimentBankProvider.notifier);
 
     void updateDay() => ref.read(dayCacheProvider.notifier).setDay(date, day);
 

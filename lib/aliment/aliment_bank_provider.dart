@@ -20,8 +20,8 @@ class AlimentBankState {
 
   factory AlimentBankState.fromJson(Map<String, dynamic> json) {
     final Map<String, AlimentData> parsedAliments =
-        (json['aliments'] as Map<String, dynamic>).map((id, d) =>
-            MapEntry(id, AlimentData.fromJson(Map<String, dynamic>.from(d))));
+        ((json['aliments'] ?? {}) as Map).map((id, d) => MapEntry(
+            id as String, AlimentData.fromJson(Map<String, dynamic>.from(d))));
 
     final List<String> parsedOrder = List<String>.from(json['order'] ?? []);
 
@@ -62,8 +62,13 @@ class AlimentBank extends StateNotifier<AlimentBankState> {
   Future<void> loadMerged() async {
     final local = await FileHandler.loadJson('alimentBank') ?? {};
     final internet = await FirebaseHandler.loadJson('alimentBank') ?? {};
-    final merged = JsonHandler.mergeBaseAddon(internet, local);
-    state = AlimentBankState.fromJson(JsonHandler.processJson(merged));
+    final mergedData =
+        JsonHandler.mergeBaseAddon(internet['aliments'], local['aliments']);
+    final mergedOrder = [...local['order'], ...internet['order']];
+    state = AlimentBankState.fromJson(JsonHandler.processJson({
+      'aliments': mergedData,
+      'order': mergedOrder,
+    }));
     await save();
   }
 }

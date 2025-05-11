@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'aliment/aliment_bank_provider.dart';
 import 'meals_journal.dart';
-import 'nutrient/nutrient_provider.dart';
 import 'nutrient_display.dart';
 import 'settings.dart';
 import 'week_calendar.dart';
@@ -19,8 +17,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => ref.read(nutrientStateProvider.notifier).load());
-    Future.microtask(() => ref.read(alimentBankProvider.notifier).load());
   }
 
   @override

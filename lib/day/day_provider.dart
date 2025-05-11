@@ -36,6 +36,10 @@ class DayCacheNotifier extends StateNotifier<Map<DateTime, Day>> {
     state = {...state, normalized: day};
     await day.save(normalized);
   }
+
+  void clear() {
+    state = {};
+  }
 }
 
 final dayCacheProvider =
