@@ -62,8 +62,8 @@ class AlimentBank extends StateNotifier<AlimentBankState> {
   Future<void> loadMerged() async {
     final local = await FileHandler.loadJson('alimentBank') ?? {};
     final internet = await FirebaseHandler.loadJson('alimentBank') ?? {};
-    final mergedData =
-        JsonHandler.mergeBaseAddon(internet['aliments'], local['aliments']);
+    final mergedData = JsonHandler.mergeBaseAddon(
+        internet['aliments'] ?? {}, local['aliments'] ?? {});
     final mergedOrder = [...local['order'], ...internet['order']];
     state = AlimentBankState.fromJson(JsonHandler.processJson({
       'aliments': mergedData,

@@ -46,7 +46,8 @@ class _NutrientDisplayState extends ConsumerState<NutrientDisplay> {
     final widgets = keys.map((key) {
       final field = state.data[key]!;
       final value = (intake[key] ?? 0.0) / numDays;
-      return _buildNutrientTile(context, field, key, value, bank, numDays);
+      return _buildNutrientTile(
+          context, field, key, value, bank, days, numDays);
     }).toList();
 
     return CustomCard(
@@ -91,8 +92,16 @@ class _NutrientDisplayState extends ConsumerState<NutrientDisplay> {
             ),
           );
 
+          if (fields['Lower limit'] is double && fields['Lower limit'] == 0.0) {
+            fields['Lower limit'] = null;
+          }
+
+          if (fields['Upper limit'] is double && fields['Upper limit'] == 0.0) {
+            fields['Upper limit'] = null;
+          }
+
           if (isModified) {
-            final updated = field.copyWith(
+            final updated = Nutrient(
               unit: fields['Unit'] as String,
               lowerLimit: fields['Lower limit'] as double?,
               upperLimit: fields['Upper limit'] as double?,
@@ -255,13 +264,13 @@ class _NutrientDisplayState extends ConsumerState<NutrientDisplay> {
   }
 
   Widget _buildNutrientTile(BuildContext context, Nutrient field, String key,
-      double intake, AlimentBankState bank, int numDays) {
+      double intake, AlimentBankState bank, List<Day> days, int numDays) {
     final label = field.translations[SettingsData.language]!;
     final unit = field.unit;
     final lower = field.lowerLimit;
     final upper = field.upperLimit;
 
-    final topAliments = Day.sumDays([Day()]) // Placeholder fallback
+    final topAliments = Day.sumDays(days)
         .topIntakeAliments(key, bank)
         .map((a, v) => MapEntry(a, v / numDays));
 
@@ -299,21 +308,28 @@ class _NutrientDisplayState extends ConsumerState<NutrientDisplay> {
   ) {
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Text('$label Intake'),
-        content: ListView(
-          shrinkWrap: true,
-          children: [
-            Text('Amount: ${intake.toStringAsFixed(2)}'),
-            if (lower != null) Text('Lower Limit: ${lower.toStringAsFixed(2)}'),
-            if (upper != null) Text('Upper Limit: ${upper.toStringAsFixed(2)}'),
-            const Divider(),
-            const Text('Top Sources:'),
-            for (final entry in topSources.entries)
-              Text(
-                  '${entry.key.readDataRef(ref.read(alimentBankProvider)).name}: '
-                  '${entry.value.toStringAsFixed(2)}'),
-          ],
+      builder: (_) => GestureDetector(
+        onTap: () => Navigator.pop(context),
+        child: AlertDialog(
+          title: Text('$label Intake'),
+          content: ListView(
+            shrinkWrap: true,
+            children: [
+              Text('Amount: ${intake.toStringAsFixed(2)}'),
+              if (lower != null)
+                Text('Lower Limit: ${lower.toStringAsFixed(2)}'),
+              if (upper != null)
+                Text('Upper Limit: ${upper.toStringAsFixed(2)}'),
+              if (topSources.isNotEmpty) ...[
+                const Divider(),
+                const Text('Top Sources:'),
+                for (final entry in topSources.entries)
+                  Text(
+                      '${entry.key.readDataRef(ref.read(alimentBankProvider)).name}: '
+                      '${entry.value.toStringAsFixed(2)}'),
+              ]
+            ],
+          ),
         ),
       ),
     );
@@ -440,7 +456,8 @@ class NutrientBar extends StatelessWidget {
 
   Widget bar(BuildContext context,
       {double height = 15.0, double radius = 5.0, double fontSize = 12.0}) {
-    if (lowerLimit == null && upperLimit == null) {
+    if ((lowerLimit == null || lowerLimit == 0.0) &&
+        (upperLimit == null || upperLimit == 0.0)) {
       return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(radius),

@@ -18,7 +18,7 @@ class Meal {
 
   factory Meal.fromJson(Map<String, dynamic> json) => Meal(
         name: json['name'],
-        aliments: (json['aliments'] as List<dynamic>)
+        aliments: ((json['aliments'] ?? []) as List<dynamic>)
             .map((e) => (e as Map<String, dynamic>).containsKey('alimentID')
                 ? InstancedAliment.fromJson(e)
                 : TemporaryAliment.fromJson(e))
