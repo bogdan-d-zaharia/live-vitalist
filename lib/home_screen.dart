@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'meals_journal.dart';
 import 'nutrient_display.dart';
+import 'ratio_bars.dart';
 import 'settings.dart';
 import 'week_calendar.dart';
 
@@ -59,6 +60,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         child: ListView(
           children: [
             WeekCalendar(),
+            ConsumerRatioBars(),
             MealsJournal(),
             NutrientDisplay(),
             SizedBox(height: 12.0),

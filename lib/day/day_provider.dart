@@ -88,3 +88,8 @@ class CachedSelectedDaysNotifier extends StateNotifier<List<Day>> {
 final cachedSelectedDaysProvider =
     StateNotifierProvider<CachedSelectedDaysNotifier, List<Day>>(
         (ref) => CachedSelectedDaysNotifier(ref));
+
+final averageDayCachedProvider = StateProvider<Day>((ref) {
+  final days = ref.watch(cachedSelectedDaysProvider);
+  return Day.averageDays(days);
+});

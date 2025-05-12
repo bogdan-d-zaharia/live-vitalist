@@ -35,19 +35,16 @@ class _NutrientDisplayState extends ConsumerState<NutrientDisplay> {
   }
 
   Widget _buildViewMode(BuildContext context, NutrientState state) {
-    final days = ref.watch(cachedSelectedDaysProvider);
+    final avgDay = ref.watch(averageDayCachedProvider);
     final bank = ref.watch(alimentBankProvider);
 
-    final avgDay = Day.sumDays(days);
     final intake = avgDay.readIntake(bank);
-    final numDays = days.length;
 
-    final keys = _filteredAndSortedKeys(state, intake, numDays);
+    final keys = _filteredAndSortedKeys(state, intake);
     final widgets = keys.map((key) {
       final field = state.data[key]!;
-      final value = (intake[key] ?? 0.0) / numDays;
-      return _buildNutrientTile(
-          context, field, key, value, bank, days, numDays);
+      final value = (intake[key] ?? 0.0);
+      return _buildNutrientTile(context, field, key, value, bank, avgDay);
     }).toList();
 
     return CustomCard(
@@ -164,14 +161,14 @@ class _NutrientDisplayState extends ConsumerState<NutrientDisplay> {
   }
 
   List<String> _filteredAndSortedKeys(
-      NutrientState state, Map<String, double> intake, int numDays) {
+      NutrientState state, Map<String, double> intake) {
     List<String> keys = state.order
         .where((key) => !state.data[key]!.tags.contains('disabled'))
         .toList();
 
     if (SettingsData.isSmartHide) {
       keys = keys.where((key) {
-        final value = (intake[key] ?? 0.0) / numDays;
+        final value = (intake[key] ?? 0.0);
         final lower = state.data[key]!.lowerLimit;
         final upper = state.data[key]!.upperLimit;
         return (lower != null && value < lower) ||
@@ -181,8 +178,8 @@ class _NutrientDisplayState extends ConsumerState<NutrientDisplay> {
 
     if (SettingsData.sort != 0) {
       keys.sort((a, b) {
-        final aValue = (intake[a] ?? 0.0) / numDays;
-        final bValue = (intake[b] ?? 0.0) / numDays;
+        final aValue = (intake[a] ?? 0.0);
+        final bValue = (intake[b] ?? 0.0);
         final aCat = _aCat(aValue, state.data[a]!);
         final bCat = _aCat(bValue, state.data[b]!);
         return SettingsData.sort == 1
@@ -264,16 +261,13 @@ class _NutrientDisplayState extends ConsumerState<NutrientDisplay> {
   }
 
   Widget _buildNutrientTile(BuildContext context, Nutrient field, String key,
-      double intake, AlimentBankState bank, List<Day> days, int numDays) {
+      double intake, AlimentBankState bank, Day day) {
     final label = field.translations[SettingsData.language]!;
     final unit = field.unit;
     final lower = field.lowerLimit;
     final upper = field.upperLimit;
 
-    final topAliments = Day.sumDays(days)
-        .topIntakeAliments(key, bank)
-        .map((a, v) => MapEntry(a, v / numDays));
-
+    final topAliments = day.topIntakeAliments(key, bank);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Material(

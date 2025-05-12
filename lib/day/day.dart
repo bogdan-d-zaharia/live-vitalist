@@ -93,6 +93,18 @@ class Day {
 
     return Day(meals: merged.values.toList());
   }
+
+  static Day averageDays(List<Day> days) {
+    final Day sum = sumDays(days);
+
+    for (var meal in sum.meals) {
+      for (var aliment in meal.aliments) {
+        aliment.servingSize = aliment.servingSize / days.length;
+      }
+    }
+
+    return sum;
+  }
 }
 
 extension DayAnalysis on Day {

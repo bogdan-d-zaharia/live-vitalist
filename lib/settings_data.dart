@@ -30,6 +30,11 @@ abstract final class SettingsData {
   static bool get isSmartHide => _prefs.getBool('isSmartHide') ?? false;
   static set isSmartHide(bool val) => _prefs.setBool('isSmartHide', val);
 
+  static bool get isShowOmegaBalance =>
+      _prefs.getBool('isShowOmegaBalance') ?? false;
+  static set isShowOmegaBalance(bool val) =>
+      _prefs.setBool('isShowOmegaBalance', val);
+
   static Future<void> deleteAll() async {
     await _prefs.clear();
   }

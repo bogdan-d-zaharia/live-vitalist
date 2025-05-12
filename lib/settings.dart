@@ -420,6 +420,7 @@ class _SettingsState extends ConsumerState<Settings> {
                   child: Text('Backup all data to cloud'),
                 ),
               ),
+
             MiniCard(
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -457,6 +458,27 @@ class _SettingsState extends ConsumerState<Settings> {
                     },
                   ),
                   Text('Use complex calendar view'),
+                  Spacer(),
+                ],
+              ),
+            ),
+
+            MiniCard(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(width: 16.0),
+                  Checkbox(
+                    value: SettingsData.isShowOmegaBalance,
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() {
+                          SettingsData.isShowOmegaBalance = value;
+                        });
+                      }
+                    },
+                  ),
+                  Text('Show Omega-3 to Omega-6 balance'),
                   Spacer(),
                 ],
               ),
