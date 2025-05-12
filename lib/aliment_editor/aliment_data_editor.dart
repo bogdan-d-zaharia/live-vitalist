@@ -7,6 +7,7 @@ import '../aliment/aliment.dart';
 import '../custom_card.dart';
 import '../nutrient/nutrient_provider.dart';
 import '../string_input.dart';
+import 'aliment_json_editor.dart';
 
 class AlimentDataEditor extends ConsumerStatefulWidget {
   const AlimentDataEditor({
@@ -30,6 +31,8 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
   final Map<String, TextEditingController> _valueControllers = {};
   late final TextEditingController _newSynonymNameController;
   late final TextEditingController _newSynonymValueController;
+  late final TextEditingController _nameController;
+  late final TextEditingController _unitController;
 
   @override
   void initState() {
@@ -39,15 +42,21 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
     _newSynonymNameController = TextEditingController();
     _newSynonymValueController = TextEditingController();
 
+    _nameController = TextEditingController();
+    _unitController = TextEditingController();
+
     for (var entry in editableData.unitSynonyms.entries) {
-      _nameControllers[entry.key] = TextEditingController(text: entry.key);
-      _valueControllers[entry.key] =
-          TextEditingController(text: entry.value.toString());
+      _nameControllers[entry.key] = TextEditingController();
+      _valueControllers[entry.key] = TextEditingController();
     }
+
+    updateControllers();
   }
 
   @override
   void dispose() {
+    _nameController.dispose();
+    _unitController.dispose();
     _newSynonymNameController.dispose();
     _newSynonymValueController.dispose();
     for (final ctrl in _nameControllers.values) {
@@ -59,16 +68,36 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
     super.dispose();
   }
 
+  void updateControllers() {
+    _nameController.text = editableData.name;
+    _unitController.text = editableData.unit;
+
+    for (var x in List.from(_nameControllers.keys)) {
+      if (!editableData.unitSynonyms.containsKey(x)) {
+        _nameControllers[x]?.dispose();
+        _valueControllers[x]?.dispose();
+        _nameControllers.remove(x);
+        _valueControllers.remove(x);
+      }
+    }
+
+    for (var entry in editableData.unitSynonyms.entries) {
+      if (_nameControllers[entry.key] != null) {
+        _nameControllers[entry.key]!.text = entry.key;
+        _valueControllers[entry.key]!.text = entry.value.toString();
+      } else {
+        _nameControllers[entry.key] = TextEditingController(text: entry.key);
+        _valueControllers[entry.key] =
+            TextEditingController(text: entry.value.toString());
+      }
+    }
+  }
+
   bool get isModified =>
       jsonEncode(editableData.toJson()) != jsonEncode(widget.data.toJson());
 
   void _popSave() {
-    widget.data.name = editableData.name;
-    widget.data.unit = editableData.unit;
-    widget.data.referenceSize = editableData.referenceSize;
-    widget.data.referenceFields = Map.from(editableData.referenceFields);
-    widget.data.unitSynonyms = Map.from(editableData.unitSynonyms);
-
+    widget.data.mutateByJson(editableData.toJson());
     Navigator.pop(context, true);
   }
 
@@ -115,15 +144,40 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Aliment Editor'),
+          actions: [
+            IconButton(
+              onPressed: () async {
+                final isMutate = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AlimentJsonEditor(
+                          alimentData: editableData,
+                        ),
+                      ),
+                    ) ??
+                    false;
+                if (isMutate) setState(() => updateControllers());
+              },
+              icon: Icon(Icons.code_rounded),
+            ),
+          ],
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: ListView(
             children: [
-              _stringInput('Name', editableData.name,
-                  (val) => setState(() => editableData.name = val)),
-              _stringInput('Unit', editableData.unit,
-                  (val) => setState(() => editableData.unit = val)),
+              _stringInput(
+                'Name',
+                editableData.name,
+                (val) => setState(() => editableData.name = val),
+                _nameController,
+              ),
+              _stringInput(
+                'Unit',
+                editableData.unit,
+                (val) => setState(() => editableData.unit = val),
+                _unitController,
+              ),
               _numberInput(
                 'Per amount',
                 () => editableData.referenceSize,
@@ -161,8 +215,8 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
     );
   }
 
-  Widget _stringInput(
-      String label, String value, void Function(String) onChanged) {
+  Widget _stringInput(String label, String value,
+      void Function(String) onChanged, TextEditingController controller) {
     return MiniCard(
       child: Padding(
         padding: const EdgeInsets.all(12),
@@ -171,9 +225,10 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
             Text('$label:'),
             const SizedBox(width: 12),
             Expanded(
-              child: StringInput(
-                initString: value,
-                update: onChanged,
+              child: TextField(
+                style: Theme.of(context).textTheme.bodyMedium,
+                controller: controller,
+                onChanged: onChanged,
               ),
             )
           ],

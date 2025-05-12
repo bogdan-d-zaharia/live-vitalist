@@ -95,7 +95,7 @@ class _InstanceEditorState extends ConsumerState<InstanceEditor> {
 
     return DropdownButton<String>(
       isExpanded: true,
-      value: widget.aliment.unit,
+      value: units.contains(widget.aliment.unit) ? widget.aliment.unit : null,
       items: units.map((unit) {
         return DropdownMenuItem(
           value: unit,
