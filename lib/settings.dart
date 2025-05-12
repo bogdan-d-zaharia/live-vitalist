@@ -1,57 +1,26 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import 'aliment.dart';
-import 'auth_gate.dart';
-import 'cache_handler.dart';
+import 'aliment/aliment_bank_provider.dart';
 import 'custom_card.dart';
+import 'day/day_provider.dart';
 import 'file_handler.dart';
-import 'models/reference_fields_model.dart';
 import 'palette.dart';
+import 'settings_data.dart';
 
-abstract final class SettingsData {
-  static late SharedPreferencesWithCache _prefs;
-
-  static Future<void> init() async {
-    _prefs = await SharedPreferencesWithCache.create(
-        cacheOptions: SharedPreferencesWithCacheOptions());
-  }
-
-  /* The set and get work sync
-     because there is a table manipulated under the hood. */
-  static bool get isMonthDay => _prefs.getBool('isMonthDay') ?? false;
-  static set isMonthDay(bool val) => _prefs.setBool('isMonthDay', val);
-
-  static bool get isLoggedIn => _prefs.getBool('isLoggedIn') ?? false;
-  static set isLoggedIn(bool val) => _prefs.setBool('isLoggedIn', val);
-
-  static String get language => _prefs.getString('language') ?? 'ENG';
-  static set language(String val) => _prefs.setString('language', val);
-
-  static bool get isComplexCalendar =>
-      _prefs.getBool('isComplexCalendar') ?? false;
-  static set isComplexCalendar(bool val) =>
-      _prefs.setBool('isComplexCalendar', val);
-
-  static int get sort => _prefs.getInt('sort') ?? 0;
-  static set sort(int val) => _prefs.setInt('sort', val);
-
-  static bool get isSmartHide => _prefs.getBool('isSmartHide') ?? false;
-  static set isSmartHide(bool val) => _prefs.setBool('isSmartHide', val);
-}
-
-class Settings extends StatefulWidget {
+class Settings extends ConsumerStatefulWidget {
   const Settings({super.key});
 
   @override
-  State<Settings> createState() => _SettingsState();
+  ConsumerState<Settings> createState() => _SettingsState();
 }
 
-class _SettingsState extends State<Settings> {
+class _SettingsState extends ConsumerState<Settings> {
   // #region //* ACCOUNT DELETION *//
   final String deleteAll1 =
       'You can delete your account and all data stored both online and on your device by using the button below. This will permanently remove everything linked to your account and reset the app.';
@@ -197,22 +166,19 @@ class _SettingsState extends State<Settings> {
   Future<void> deleteEverything() async {
     if (StorageHandler.isFirebase && !await deleteInternet()) return;
     await FileHandler.deleteLocal();
-
-    DayHandler.cache.clear();
-    AlimentBank.aliments.clear();
-    AlimentBank.mruIDs.clear();
-    NutrientsHandler.reset();
-    SettingsData.isLoggedIn = false;
+    await SettingsData.deleteAll();
 
     if (mounted) {
-      await Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AuthGate(),
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Closing the app...'),
+          duration: Duration(seconds: 2),
         ),
-        (route) => false,
       );
     }
+
+    await Future.delayed(Duration(seconds: 3));
+    SystemNavigator.pop();
   }
 
   void deleteEverythingPopup() {
@@ -276,6 +242,9 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
+    final bankNotifier = ref.read(alimentBankProvider.notifier);
+    final dayCacheNotifier = ref.read(dayCacheProvider.notifier);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings'),
@@ -398,15 +367,28 @@ class _SettingsState extends State<Settings> {
                     SizedBox(height: 12.0),
                     TextButton(
                       onPressed: () async {
-                        //TODO: Day data doesn't automatically sync when connecting with Google.
-                        await AuthGate.signInWithGoogle();
-                        if (StorageHandler.isFirebase) {
-                          //TODO: Perhaps show a pop up and ask upon conflict.
-                          await AlimentBank.loadMerged();
-                          await NutrientsHandler.load(); //TODO: Merge
-                          DayHandler.cache.clear();
-                          setState(() {});
-                        }
+                        /* From AuthGate */
+                        final googleUser = await GoogleSignIn().signIn();
+                        if (googleUser == null) return; /* user canceled */
+
+                        final googleAuth = await googleUser.authentication;
+
+                        final credential = GoogleAuthProvider.credential(
+                          accessToken: googleAuth.accessToken,
+                          idToken: googleAuth.idToken,
+                        );
+
+                        await FirebaseAuth.instance
+                            .signInWithCredential(credential);
+
+                        StorageHandler.isFirebase = true;
+
+                        //TODO: Perhaps show a pop up and ask upon conflict.
+
+                        await bankNotifier.loadMerged();
+                        // await NutrientsHandler.load(); //TODO: Verify
+                        dayCacheNotifier.clear();
+                        setState(() {});
                       },
                       child: Text('Connect with Google'),
                     ),

@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
-import '../models/reference_fields_model.dart';
+import '../nutrient/nutrient_provider.dart';
 import '../string_input.dart';
 
 class AlimentJsonEditor extends StatelessWidget {
   const AlimentJsonEditor({
     required this.alimentJson,
+    required this.nutrients,
     super.key,
   });
 
   final Map<String, dynamic> alimentJson;
+  final NutrientState nutrients;
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, double?> expandedFields = NutrientsHandler.model
-        .map((key, value) => MapEntry(key, null))
-      ..removeWhere((key, value) => NutrientsHandler.hasTag(key, 'disabled'));
+    final Map<String, double?> expandedFields =
+        Map.fromEntries(nutrients.order.map((key) => MapEntry(key, null)))
+          ..removeWhere(
+              (key, value) => nutrients.data[key]!.tags.contains('disabled'));
 
     for (MapEntry entry in alimentJson['referenceFields']?.entries ?? {}) {
       expandedFields[entry.key] = entry.value;

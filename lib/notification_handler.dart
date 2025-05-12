@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart'
     as ntf;
 
-import 'aliment.dart';
+import 'aliment/aliment.dart';
+import 'aliment/aliment_bank_provider.dart';
 
 class NotificationHandler {
   static final ntf.FlutterLocalNotificationsPlugin _notificationsPlugin =
@@ -18,22 +19,19 @@ class NotificationHandler {
     await _notificationsPlugin.initialize(initSettings);
   }
 
-  static String alimentToLine(Aliment e) {
-    final String servingSize = e.servingSize % 1 == 0
-        ? e.servingSize.toInt().toString()
-        : e.servingSize.toStringAsFixed(1);
-
-    final String unit = e.unit != null ? ' ${e.unit}' : '';
-
-    return '($servingSize$unit) ${e.getAliment.name}';
-  }
-
   static Future<void> showListNotification(
-      List<Aliment> list, String mealName) async {
-    List<String> lines = list
-        .map(alimentToLine)
-        .map((e) => e.length < 54 ? e : e.substring(0, 54))
-        .toList();
+      List<Aliment> list, AlimentBankState bank, String mealName) async {
+    List<String> lines = list.map(
+      (e) {
+        final String name = e.readDataRef(bank).name;
+        final String servingSize = e.servingSize % 1 == 0
+            ? e.servingSize.toInt().toString()
+            : e.servingSize.toStringAsFixed(1);
+
+        final String s = '($servingSize${e.unit}) $name';
+        return s.length < 54 ? s : s.substring(0, 54);
+      },
+    ).toList();
 
     final ntf.AndroidNotificationDetails androidPlatformChannelSpecifics =
         ntf.AndroidNotificationDetails(

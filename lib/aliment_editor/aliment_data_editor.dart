@@ -1,455 +1,346 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import '../aliment.dart';
-import '../settings.dart';
-import 'aliment_editor.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../aliment/aliment.dart';
 import '../custom_card.dart';
-import '../models/reference_fields_model.dart';
-import '../palette.dart';
+import '../nutrient/nutrient_provider.dart';
 import '../string_input.dart';
 
-class AlimentDataEditor extends StatefulWidget {
+class AlimentDataEditor extends ConsumerStatefulWidget {
   const AlimentDataEditor({
-    required this.aliment,
+    required this.data,
     super.key,
   });
 
-  final Aliment aliment;
+  final AlimentData data;
 
   @override
-  State<AlimentDataEditor> createState() => _AlimentDataEditorState();
+  ConsumerState<AlimentDataEditor> createState() => _AlimentDataEditorState();
 }
 
-class _AlimentDataEditorState extends State<AlimentDataEditor> {
-  bool isModified = false;
-  late AlimentData origData;
+class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
+  NutrientState get nutrients => ref.watch(nutrientStateProvider);
 
+  late AlimentData editableData;
   bool isShowAdvanced = false;
 
-  //TODO: Make a `alimentData` getter and setter in `aliment` so that this might be streight forward
-  // also make it only take a alimentData: making an editableData, editing it, and on save/pop transfering the data.
+  final Map<String, TextEditingController> _nameControllers = {};
+  final Map<String, TextEditingController> _valueControllers = {};
+  late final TextEditingController _newSynonymNameController;
+  late final TextEditingController _newSynonymValueController;
 
-  /// It works because `.getAliment` is a getter as well as this getter,
-  /// and it updates when using the `this.` setter `set alimentData`.
-  AlimentData get alimentData => widget.aliment is TemporaryAliment
-      ? (widget.aliment as TemporaryAliment).alimentData
-      : (widget.aliment as InstancedAliment).getAliment;
+  @override
+  void initState() {
+    super.initState();
+    editableData = AlimentData.fromJson(widget.data.toJson());
 
-  set alimentData(AlimentData val) {
-    if (widget.aliment is TemporaryAliment) {
-      (widget.aliment as TemporaryAliment).alimentData = val;
-    } else if (widget.aliment is InstancedAliment) {
-      final id = (widget.aliment as InstancedAliment).alimentID;
-      AlimentBank.aliments[id] = val;
-      AlimentBank.save();
+    _newSynonymNameController = TextEditingController();
+    _newSynonymValueController = TextEditingController();
+
+    for (var entry in editableData.unitSynonyms.entries) {
+      _nameControllers[entry.key] = TextEditingController(text: entry.key);
+      _valueControllers[entry.key] =
+          TextEditingController(text: entry.value.toString());
     }
   }
 
-  Map<String, double> get referenceFields => alimentData.referenceFields;
-
-  String get unit {
-    return (alimentData.unitSizes ?? {})
-        .entries
-        .firstWhere(
-          (element) => element.value == 1.0,
-          orElse: () => MapEntry('portion', 1.0),
-        )
-        .key;
-  }
-
-  set unit(String value) {
-    final u = unit;
-    if (u == value) return;
-
-    if (alimentData.unitSizes != null) {
-      if (alimentData.unitSizes!.containsValue(1.0)) {
-        alimentData.unitSizes!.remove(u);
-      }
-      alimentData.unitSizes![value] = 1.0;
-    } else {
-      alimentData.unitSizes = {value: 1.0};
+  @override
+  void dispose() {
+    _newSynonymNameController.dispose();
+    _newSynonymValueController.dispose();
+    for (final ctrl in _nameControllers.values) {
+      ctrl.dispose();
     }
+    for (final ctrl in _valueControllers.values) {
+      ctrl.dispose();
+    }
+    super.dispose();
   }
 
-  Widget wid({required List<Widget> children}) {
-    return MiniCard(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
-        child: Row(
-          children: children,
+  bool get isModified =>
+      jsonEncode(editableData.toJson()) != jsonEncode(widget.data.toJson());
+
+  void _popSave() {
+    widget.data.name = editableData.name;
+    widget.data.unit = editableData.unit;
+    widget.data.referenceSize = editableData.referenceSize;
+    widget.data.referenceFields = Map.from(editableData.referenceFields);
+    widget.data.unitSynonyms = Map.from(editableData.unitSynonyms);
+
+    Navigator.pop(context, true);
+  }
+
+  void _popCancel() {
+    Navigator.pop(context, false);
+  }
+
+  Future<bool?> _showSaveAlert() {
+    return showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Save changes?'),
+        content: const Text('Do you want to save this aliment?'),
+        actions: [
+          TextButton(onPressed: _popCancel, child: const Text('Cancel')),
+          ElevatedButton(onPressed: _popSave, child: const Text('Save')),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final basicFields = ['kcals', 'protein', 'carbs', 'fats'];
+    final advancedFields = nutrients.order
+        .where((k) =>
+            !basicFields.contains(k) &&
+            !nutrients.data[k]!.tags.contains('disabled'))
+        .toList();
+
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) async {
+        if (didPop) return;
+        if (!isModified) return _popCancel();
+
+        final shouldSave = await _showSaveAlert();
+        if (shouldSave == true) {
+          _popSave();
+        } else if (shouldSave == false) {
+          _popCancel();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Aliment Editor'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: ListView(
+            children: [
+              _stringInput('Name', editableData.name,
+                  (val) => setState(() => editableData.name = val)),
+              _stringInput('Unit', editableData.unit,
+                  (val) => setState(() => editableData.unit = val)),
+              _numberInput(
+                'Per amount',
+                () => editableData.referenceSize,
+                (val) => setState(() => editableData.referenceSize = val),
+                unit: editableData.unit,
+              ),
+              ...basicFields.map(_nutrientInput),
+              Row(
+                children: [
+                  const Text('Show advanced'),
+                  const Spacer(),
+                  Switch(
+                    value: isShowAdvanced,
+                    onChanged: (v) => setState(() => isShowAdvanced = v),
+                  ),
+                ],
+              ),
+              if (isShowAdvanced) ...[
+                ...advancedFields.map(_nutrientInput),
+                const SizedBox(height: 12),
+                const Text('Unit synonyms:'),
+                ...editableData.unitSynonyms.entries
+                    .map((entry) => _unitSynonymInput(entry.key)),
+                _addSynonymInput(),
+              ],
+              const SizedBox(height: 24),
+              ElevatedButton(
+                onPressed: _popSave,
+                child: const Text('Save'),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget inputEntry({
-    required String initString,
-    required Function(String) strUpdate,
-    required dynamic Function() getter,
-    required Function(dynamic) setter,
-    String unit = '',
-    bool isEmpty = false,
-    bool isTurnedOff = false,
-  }) {
-    return wid(
-      children: [
-        Expanded(
-          child: StringInput(
-            initString: initString,
-            update: strUpdate,
-          ),
-        ),
-        SizedBox(width: 16.0),
-        NumberInput(
-          getValue: () => getter(),
-          setValue: setter,
-          showHandles: false,
-          isEmpty: isEmpty,
-          isTurnedOff: isTurnedOff,
-        ),
-        SizedBox(width: 16.0),
-        SizedBox(
-          width: 36.0,
-          child: Text(unit, maxLines: 1, overflow: TextOverflow.ellipsis),
-        ),
-      ],
-    );
-  }
-
-  Widget inputWid({required String label, required List<Widget> children}) {
-    return wid(children: [
-      Palette.dimParentheses(label, Theme.of(context).textTheme.bodyMedium),
-      Text(': '),
-      ...children,
-    ]);
-  }
-
-  Widget inputNum({
-    required String label,
-    required dynamic Function() getter,
-    required Function(dynamic) setter,
-    String unit = '',
-    bool test = true,
-    String errorText = 'Test did not pass!',
-  }) {
-    if (test) {
-      return inputWid(
-        label: label,
-        children: [
-          Spacer(),
-          NumberInput(
-            getValue: () => getter(),
-            setValue: setter,
-            showHandles: false,
-          ),
-          SizedBox(width: 16.0),
-          SizedBox(
-            width: 36.0,
-            child: Text(unit, maxLines: 1, overflow: TextOverflow.ellipsis),
-          ),
-        ],
-      );
-    } else {
-      return Text(errorText);
-    }
-  }
-
-  Widget inputField(String field) {
-    double getter() {
-      /* Added unecessary zeros where */
-      //// if (!referenceFields.containsKey(field)) {
-      ////   referenceFields[field] = 0.0;
-      //// }
-
-      return referenceFields[field] ?? 0.0;
-    }
-
-    void setter(value) {
-      if (value >= 0.0 && value != getter()) {
-        referenceFields[field] = value;
-        isModified = true;
-      }
-    }
-
-    return inputNum(
-      label: NutrientsHandler.model[field]!['translations']
-          [SettingsData.language],
-      getter: getter,
-      setter: setter,
-      unit: NutrientsHandler.model[field]!['unit'],
-      test: NutrientsHandler.model.containsKey(field),
-      errorText: 'Nutrient "$field" not found!',
-    );
-  }
-
-  Future<bool?> saveAlert() {
-    return showDialog<bool>(
-      context: context,
-      builder: (context) {
-        return Center(
-          child: IntrinsicWidth(
-            child: CustomCard(
-              headerSpace: 0.0,
-              child: SizedBox(
-                width: 212.0,
-                /* 100 button, 12 spacer, 100 button */
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Do you want to save this aliment?',
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                    SizedBox(height: 12.0),
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SizedBox(
-                          width: 100.0,
-                          child: ElevatedButton.icon(
-                            onPressed: () => Navigator.pop(context, true),
-                            label: Text("Save"),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue,
-                              foregroundColor: Colors.white,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 12),
-                            ),
-                          ),
-                        ),
-                        Spacer(),
-                        SizedBox(
-                          width: 100.0,
-                          child: ElevatedButton.icon(
-                            onPressed: popCancel,
-                            label: Text("Cancel"),
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
-                              foregroundColor: Colors.white,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 12),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+  Widget _stringInput(
+      String label, String value, void Function(String) onChanged) {
+    return MiniCard(
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            Text('$label:'),
+            const SizedBox(width: 12),
+            Expanded(
+              child: StringInput(
+                initString: value,
+                update: onChanged,
               ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Future<void> popCancel() async {
-    if (isModified) {
-      alimentData = origData;
-    }
-    return Navigator.pop(context, false);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    origData = AlimentData.fromJson(alimentData.toJson());
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final List<String> basicFieldsStr = ['kcals', 'protein', 'carbs', 'fats'];
-    final List<Widget> basicFieldsWid =
-        basicFieldsStr.map((e) => inputField(e)).toList();
-
-    final List<String> advancedFieldsStr = NutrientsHandler.model.keys
-        .where((k) =>
-            !basicFieldsStr.contains(k) &&
-            !NutrientsHandler.hasTag(k, 'disabled'))
-        .toList();
-    final List<Widget> advancedFieldsWid =
-        advancedFieldsStr.map((e) => inputField(e)).toList();
-
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, result) async {
-        if (didPop) return;
-        if (!isModified) return popCancel();
-
-        final bool? isSave = await saveAlert();
-
-        if (isSave == null) return;
-        if (context.mounted) {
-          Navigator.pop(context, isSave);
-        }
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('Aliment Editor'
-              // (widget.aliment is InstancedAliment)
-              //   ? 'Aliment Editor'
-              //   : 'Temporary Aliment Editor'
-              ),
-          actions: [
-            Container(
-              /* 50.0 by default. */
-              width: 42.0,
-              height: 42.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(21.0),
-                border: Border.all(
-                    width: 1.0, strokeAlign: BorderSide.strokeAlignInside),
-              ),
-              child: IconButton(
-                  onPressed: () async {
-                    final alimentJson = alimentData.toJson();
-
-                    if (await AlimentEditor.editAlimentJson(
-                        alimentJson, context)) {
-                      alimentData = AlimentData.fromJson(alimentJson);
-                      setState(() {});
-                    }
-                  },
-                  icon: Icon(Icons.code)),
-            ),
-            SizedBox(width: 12.0),
+            )
           ],
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: ListView(
-            children: [
-              inputWid(label: 'Name', children: [
-                SizedBox(width: 16.0),
-                Expanded(
-                  child: StringInput(
-                    initString: alimentData.name,
-                    /*  This works even for InstancedAliment because
-                    it uses the getter `alimentData` which gives a reference. */
-                    update: (p0) {
-                      alimentData.name = p0;
-                      isModified = true;
-                    },
-                  ),
-                ),
-                SizedBox(width: 16.0),
-              ]),
-              inputWid(
-                label: 'Unit',
-                children: [
-                  SizedBox(width: 16.0),
-                  Expanded(
-                    child: StringInput(
-                      initString: unit,
-                      update: (value) => setState(() => unit = value),
-                    ),
-                  ),
-                  // Expanded(
-                  //   child: DropdownButton(
-                  //     isExpanded: true,
-                  //     borderRadius: BorderRadius.circular(24.0),
-                  //     value: unit,
-                  //     items: {'g', 'ml', 'portion', unit}.map((e) {
-                  //       return DropdownMenuItem(value: e, child: Text(e));
-                  //     }).toList(),
-                  //     onChanged: (value) => setState(() {
-                  //       if (value != null) unit = value;
-                  //     }),
-                  //   ),
-                  // ),
-                  SizedBox(width: 16.0),
-                ],
-              ),
-              inputNum(
-                label: 'Per amount',
-                unit: unit,
-                getter: () => alimentData.referenceSize,
-                /*  This works even for InstancedAliment because
-                    it uses the getter `alimentData` which gives a reference. */
-                setter: (p0) {
-                  if (p0 != alimentData.referenceSize) {
-                    alimentData.referenceSize = p0;
-                    isModified = true;
-                  }
+      ),
+    );
+  }
+
+  Widget _numberInput(
+    String label,
+    double Function() getValue,
+    void Function(double) setValue, {
+    String? unit,
+  }) {
+    return MiniCard(
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            Text('$label:'),
+            const Spacer(),
+            NumberInput(
+              getValue: getValue,
+              setValue: setValue,
+              showHandles: false,
+            ),
+            if (unit != null) ...[
+              const SizedBox(width: 12),
+              Text(unit),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _nutrientInput(String key) {
+    final model = nutrients.data[key];
+    if (model == null) return const SizedBox();
+
+    final label = model.translations['ENG']!;
+    final unit = model.unit;
+
+    return _numberInput(
+      label,
+      () => editableData.referenceFields[key] ?? 0.0,
+      (val) => editableData.referenceFields[key] = val,
+      unit: unit,
+    );
+  }
+
+  Widget _unitSynonymInput(String key) {
+    final nameCtrl = _nameControllers[key]!;
+    final valueCtrl = _valueControllers[key]!;
+
+    return MiniCard(
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: TextField(
+                controller: nameCtrl,
+                decoration: const InputDecoration(hintText: 'Name'),
+                onSubmitted: (newKey) {
+                  newKey = newKey.trim();
+                  if (newKey.isEmpty || newKey == key) return;
+
+                  final newMap =
+                      Map<String, double>.from(editableData.unitSynonyms);
+                  final oldValue = newMap.remove(key)!;
+                  newMap[newKey] = oldValue;
+
+                  _nameControllers[newKey] = nameCtrl;
+                  _valueControllers[newKey] = valueCtrl;
+                  _nameControllers.remove(key);
+                  _valueControllers.remove(key);
+
+                  setState(() {
+                    editableData.unitSynonyms = newMap;
+                  });
                 },
               ),
-              ...basicFieldsWid,
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text("Show advanced: "),
-                  Spacer(),
-                  Switch(
-                    value: isShowAdvanced,
-                    onChanged: (value) =>
-                        setState(() => isShowAdvanced = value),
-                  ),
-                ],
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              flex: 1,
+              child: TextField(
+                controller: valueCtrl,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(hintText: 'Value'),
+                onSubmitted: (val) {
+                  final parsed = double.tryParse(val.trim());
+                  if (parsed == null || parsed <= 0) return;
+
+                  setState(() {
+                    editableData.unitSynonyms[key] = parsed;
+                  });
+                },
               ),
-              if (isShowAdvanced) ...[
-                ...advancedFieldsWid,
-                SizedBox(
-                  height: 48.0,
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text("Unit synonyms: "),
-                  ),
-                ),
-                ...(alimentData.unitSizes ?? {})
-                    .entries
-                    .where((element) => element.key != unit)
-                    .map(
-                      (e) => inputEntry(
-                        initString: e.key,
-                        strUpdate: (p0) {
-                          p0 = p0.trim();
-                          if (p0 == e.key) return;
+            ),
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () {
+                _nameControllers[key]?.dispose();
+                _valueControllers[key]?.dispose();
+                _nameControllers.remove(key);
+                _valueControllers.remove(key);
 
-                          alimentData.unitSizes![p0] =
-                              alimentData.unitSizes![e.key]!;
+                setState(() {
+                  editableData.unitSynonyms.remove(key);
+                });
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-                          alimentData.unitSizes!.remove(e.key);
-                        },
-                        getter: () => alimentData.unitSizes![e.key],
-                        setter: (p0) => setState(() {
-                          if (p0 > 0.0 && p0 != 1.0) {
-                            alimentData.unitSizes![e.key] = p0;
-                          } else {
-                            alimentData.unitSizes?.remove(e.key);
-                          }
-                        }),
-                        //TODO: We have a ghost unit
-                        // when we write to it, we enter with 0.0
-                        // if 0.0, isEmpty should be true
-                        // pop scope filter 0.0
-                        unit: unit,
-                      ),
-                    )
-                    .toList()
-                  ..add(inputEntry(
-                    initString: '',
-                    strUpdate: (p0) {
-                      p0 = p0.trim();
-                      if (p0 == '' || alimentData.unitSizes!.containsKey(p0)) {
-                        return;
-                      }
+  Widget _addSynonymInput() {
+    return MiniCard(
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: TextField(
+                controller: _newSynonymNameController,
+                decoration: const InputDecoration(hintText: 'New unit name'),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              flex: 1,
+              child: TextField(
+                controller: _newSynonymValueController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(hintText: 'Value'),
+              ),
+            ),
+            IconButton(
+              icon: const Icon(Icons.add),
+              onPressed: () {
+                final key = _newSynonymNameController.text.trim();
+                final val =
+                    double.tryParse(_newSynonymValueController.text.trim());
 
-                      setState(() {});
-                    },
-                    isEmpty: true,
-                    isTurnedOff: true,
-                    getter: () => 0.0,
-                    setter: (_) {},
-                    unit: unit,
-                  )),
-              ],
+                if (key.isNotEmpty &&
+                    val != null &&
+                    val > 0 &&
+                    !editableData.unitSynonyms.containsKey(key)) {
+                  setState(() {
+                    editableData.unitSynonyms[key] = val;
+                    _nameControllers[key] = TextEditingController(text: key);
+                    _valueControllers[key] =
+                        TextEditingController(text: val.toString());
 
-              //TODO: Add unit editor
-              ElevatedButton(
-                onPressed: () => Navigator.pop(context, true),
-                child: Text('Save'),
-              )
-            ],
-          ),
+                    _newSynonymNameController.clear();
+                    _newSynonymValueController.clear();
+                  });
+                }
+              },
+            )
+          ],
         ),
       ),
     );

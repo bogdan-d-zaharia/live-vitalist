@@ -1,382 +1,85 @@
 import 'package:flutter/material.dart';
-import 'aliment.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/aliment/aliment_bank_provider.dart';
+import 'package:live_vitalist/day/day_provider.dart';
+import 'aliment/aliment.dart';
 import 'custom_card.dart';
-import 'day.dart';
-import 'models/reference_fields_model.dart';
+import 'day/day.dart';
+import 'nutrient/nutrient.dart';
+import 'nutrient/nutrient_provider.dart';
 import 'palette.dart';
-import 'settings.dart';
+import 'settings_data.dart';
 import 'string_input.dart';
 import 'icon_button.dart';
 
-class NutrientDisplay extends StatefulWidget {
-  const NutrientDisplay({
-    required this.days,
-    required this.refresh,
-    super.key,
-  });
-
-  final List<Day> days;
-  final void Function() refresh;
+class NutrientDisplay extends ConsumerStatefulWidget {
+  const NutrientDisplay({super.key});
 
   @override
-  State<NutrientDisplay> createState() => _NutrientDisplayState();
+  ConsumerState<NutrientDisplay> createState() => _NutrientDisplayState();
 }
 
-class _NutrientDisplayState extends State<NutrientDisplay> {
+class _NutrientDisplayState extends ConsumerState<NutrientDisplay> {
   bool isEditMode = false;
+  String newNutriKey = '';
 
-  Widget actionWid() {
-    final Widget editModeWid = MyIconButton(
-      onTap: () => setState(() => isEditMode = !isEditMode),
-      icon: Icon(
-        Icons.edit_rounded,
-        color: isEditMode ? Colors.green : null,
-        size: 21.0,
-      ),
-    );
+  @override
+  Widget build(BuildContext context) {
+    final nutrientState = ref.watch(nutrientStateProvider);
+    final NutrientStateNotifier nutrientNotifier =
+        ref.read(nutrientStateProvider.notifier);
 
-    if (isEditMode) return editModeWid;
-
-    final Widget sortWid = MyIconButton(
-      onTap: () {
-        setState(() {
-          if (SettingsData.sort == 0) {
-            SettingsData.sort = 1;
-          } else if (SettingsData.sort == 1) {
-            SettingsData.sort = -1;
-          } else {
-            SettingsData.sort = 0;
-          }
-        });
-      },
-      icon: Icon(
-        switch (SettingsData.sort) {
-          -1 => Icons.keyboard_arrow_up_rounded,
-          _ => Icons.keyboard_arrow_down_rounded,
-        },
-        color: SettingsData.sort != 0 ? Colors.green : null,
-        size: 26.0,
-      ),
-    );
-
-    final Widget smartHidingWid = MyIconButton(
-      onTap: () {
-        setState(() {
-          SettingsData.isSmartHide = !SettingsData.isSmartHide;
-        });
-      },
-      icon: Icon(
-        Icons.select_all,
-        color: SettingsData.isSmartHide ? Colors.green : null,
-        size: 21.0,
-      ),
-    );
-
-    return Row(
-      children: [
-        sortWid,
-        SizedBox(width: 8.0),
-        smartHidingWid,
-        SizedBox(width: 8.0),
-        editModeWid,
-      ],
-    );
+    return isEditMode
+        ? _buildEditMode(context, nutrientState, nutrientNotifier)
+        : _buildViewMode(context, nutrientState);
   }
 
-  //TODO: Perhaps Above lower limit right before above upper limit,
-  // so that above upper limit is kept at the end.
+  Widget _buildViewMode(BuildContext context, NutrientState state) {
+    final days = ref.watch(cachedSelectedDaysProvider);
+    final bank = ref.watch(alimentBankProvider);
 
-  /// **Categories:**
-  ///
-  /// 0 => Bellow lower limit
-  ///
-  /// [ DISABLED ] 1 => In-between lower limit and upper limit
-  ///
-  /// 2 => Bellow upper limit ( there is no lower limit )
-  ///
-  /// 3 => Above upper limit
-  ///
-  /// 4 OR -1 => Above lower limit
-  ///
-  /// 5 OR -2 => There is neither a lower limit nor an upper limit
-  int aCat(double intakeA, double? lowerA, double? upperA,
-      {bool ascending = false}) {
-    int catA = 5;
-    if (lowerA != null && intakeA < lowerA) {
-      catA = 0;
-    } else if (upperA != null) {
-      if (intakeA < upperA) {
-        /// if (lowerA != null) { catA = 1; } else { catA = 2; }
-        catA = 2;
-      } else {
-        catA = 3;
-      }
-    } else if (lowerA != null) {
-      catA = 4;
-    }
+    final avgDay = Day.sumDays(days);
+    final intake = avgDay.readIntake(bank);
+    final numDays = days.length;
 
-    if (ascending) {
-      if (catA == 4) catA = -1;
-      if (catA == 5) catA = -2;
-    }
-
-    return catA;
-  }
-
-  Widget viewMode() {
-    final Day day = Day.sumDays(widget.days);
-    final int numDays = widget.days.length;
-    List<String> keys = NutrientsHandler.model.keys.toList();
-    keys =
-        keys.where((key) => !NutrientsHandler.hasTag(key, 'disabled')).toList();
-
-    /// #region //* SORTING and FILETERING *//
-
-    void sortAscending() {
-      /// TODO: Perhaps make something like (ALREADY IN NutrientsHandler `getRatio`)
-      /// [0.0, lower]    -> [-1.0, 0.0]
-      /// [lower, upper]  -> [0.0, 1.0]
-      /// [0.0, upper]    -> [0.0, 1.0]
-      /// [upper, inf]    -> [1.0, inf]
-      keys.sort(
-        (a, b) {
-          //TODO: Perhaps remove the ?? 0.0 s
-          final double intakeA = (day.intake[a] ?? 0.0) / (numDays);
-          final double? lowerA = NutrientsHandler.model[a]!['lowerLimit'];
-          final double? upperA = NutrientsHandler.model[a]!['upperLimit'];
-
-          final double intakeB = (day.intake[b] ?? 0.0) / (numDays);
-          final double? lowerB = NutrientsHandler.model[b]!['lowerLimit'];
-          final double? upperB = NutrientsHandler.model[b]!['upperLimit'];
-
-          final int catA = aCat(intakeA, lowerA, upperA);
-          final int catB = aCat(intakeB, lowerB, upperB);
-
-          if (catA != catB) {
-            return catA - catB;
-          }
-
-          if (catA == 0) {
-            final double rA = intakeA / lowerA!;
-            final double rB = intakeB / lowerB!;
-            return (rA - rB).sign.toInt();
-          } else if (catA == 2) {
-            final double relativeA = lowerA ?? 0.0;
-            final double relativeB = lowerB ?? 0.0;
-
-            final double rA = (intakeA - relativeA) / (upperA! - relativeA);
-            final double rB = (intakeB - relativeB) / (upperB! - relativeB);
-
-            return (rA - rB).sign.toInt();
-          } else if (catA == 3) {
-            final double rA = intakeA / upperA!;
-            final double rB = intakeB / upperB!;
-            return (rA - rB).sign.toInt();
-          } else {
-            return 0;
-          }
-        },
-      );
-    }
-
-    void sortDescending() {
-      keys.sort(
-        (a, b) {
-          final double intakeA = (day.intake[a] ?? 0.0) / (numDays);
-          final double? lowerA = NutrientsHandler.model[a]!['lowerLimit'];
-          final double? upperA = NutrientsHandler.model[a]!['upperLimit'];
-
-          final double intakeB = (day.intake[b] ?? 0.0) / (numDays);
-          final double? lowerB = NutrientsHandler.model[b]!['lowerLimit'];
-          final double? upperB = NutrientsHandler.model[b]!['upperLimit'];
-
-          final int catA = aCat(intakeA, lowerA, upperA, ascending: true);
-          final int catB = aCat(intakeB, lowerB, upperB, ascending: true);
-
-          if (catA != catB) {
-            return -(catA - catB);
-          }
-
-          if (catA == 3) {
-            final double rA = intakeA / upperA!;
-            final double rB = intakeB / upperB!;
-            return -(rA - rB).sign.toInt();
-          } else if (catA == 2) {
-            final double relativeA = lowerA ?? 0.0;
-            final double relativeB = lowerB ?? 0.0;
-
-            final double rA = (intakeA - relativeA) / (upperA! - relativeA);
-            final double rB = (intakeB - relativeB) / (upperB! - relativeB);
-
-            return -(rA - rB).sign.toInt();
-          } else if (catA == 0 || catA == -1) {
-            final double rA = intakeA / lowerA!;
-            final double rB = intakeB / lowerB!;
-            return -(rA - rB).sign.toInt();
-          } else {
-            return 0;
-          }
-        },
-      );
-    }
-
-    void smartHide() {
-      keys = keys.where((key) {
-        final double intake = (day.intake[key] ?? 0.0) / (numDays);
-        final double? lower = NutrientsHandler.model[key]!['lowerLimit'];
-        final double? upper = NutrientsHandler.model[key]!['upperLimit'];
-
-        final bool isDeficit = (lower != null && intake < lower);
-        final bool isSurplus = (upper != null && intake > 0.9 * upper);
-
-        return isDeficit || isSurplus;
-      }).toList();
-    }
-
-    /// #endregion //* SORTING and FILETERING *//
-
-    if (SettingsData.isSmartHide) smartHide();
-    if (SettingsData.sort == 1) {
-      sortDescending();
-    } else if (SettingsData.sort == -1) {
-      sortAscending();
-    }
-
-    final List<Widget> elements = [];
-
-    for (var key in keys) {
-      final field = NutrientsHandler.model[key]!;
-
-      final String label = field['translations'][SettingsData.language];
-      final String unit = field['unit'];
-      final double intake = (day.intake[key] ?? 0.0) / (numDays);
-      final double? lower = field['lowerLimit'];
-      final double? upper = field['upperLimit'];
-
-      final Map<Aliment, double> topIntakeAliments = day
-          .topIntakeAliments(key)
-          .map((key, value) => MapEntry(key, value / (numDays)));
-
-      final Widget wid = Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4.0),
-        child: Material(
-          color: Colors.transparent,
-          borderRadius: BorderRadius.circular(8.0),
-          clipBehavior: Clip.hardEdge,
-          child: InkWell(
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return GestureDetector(
-                    onTap: () => Navigator.pop(context),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: MiniCard(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                          child: ListView(
-                            shrinkWrap: true,
-                            children: [
-                              SizedBox(height: 40.0),
-                              Text(
-                                  '$label intake: ${intake.toStringAsFixed(3)}',
-                                  style: TextStyle(fontSize: 24.0)),
-                              if (lower != null)
-                                Text(
-                                    'Lower limit: ${lower.toStringAsFixed(3)}'),
-                              if (upper != null)
-                                Text(
-                                    'Upper limit: ${upper.toStringAsFixed(3)}'),
-                              Divider(height: 36.0),
-                              Text('Top sources of ${label.toLowerCase()}:',
-                                  style: TextStyle(fontSize: 24.0)),
-                              ...topIntakeAliments.entries.map((e) {
-                                /// eg. Cheese
-                                final String name = e.key.getAliment.name;
-
-                                /// eg. protein
-                                final String valueOfLabel =
-                                    '(${e.value.toStringAsFixed(3)} ${label.toLowerCase()})';
-
-                                return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text('$name $valueOfLabel'));
-                              }),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(
-                left: 8.0,
-                right: 2.0,
-                bottom: 6.0,
-                top: 6.0,
-              ),
-              child: NutrientBar(
-                label: label,
-                unit: unit,
-                amount: intake,
-                lowerLimit: lower,
-                upperLimit: upper,
-                //TODO: Remove entirely
-                // icon: NutrientsHandler.tagsToWidgets(
-                //         NutrientsHandler.getTags(key))
-                //     .firstOrNull,
-              ),
-            ),
-          ),
-        ),
-      );
-
-      elements.add(wid);
-    }
-
-    final Widget divider = Divider(
-      color: Colors.black.withValues(alpha: 0.1),
-      thickness: 0.5,
-      height: 0.0,
-    );
-    for (int i = elements.length - 1; i > 0; i--) {
-      elements.insert(i, divider);
-    }
+    final keys = _filteredAndSortedKeys(state, intake, numDays);
+    final widgets = keys.map((key) {
+      final field = state.data[key]!;
+      final value = (intake[key] ?? 0.0) / numDays;
+      return _buildNutrientTile(
+          context, field, key, value, bank, days, numDays);
+    }).toList();
 
     return CustomCard(
       logo: const Icon(Icons.bar_chart_rounded),
       title: 'Nutrients',
-      action: actionWid(),
-      child: Column(children: elements),
+      action: _buildActionButtons(),
+      child: Column(
+        children: _insertDividers(widgets),
+      ),
     );
   }
 
-  Widget editMode() {
-    final List<Widget> elements = [];
+  Widget _buildEditMode(BuildContext context, NutrientState state,
+      NutrientStateNotifier nutrientNotifier) {
+    final widgets = state.order.map((key) {
+      final field = state.data[key]!;
+      final label = field.translations[SettingsData.language]!;
+      final unit = field.unit;
+      final lower = field.lowerLimit;
+      final upper = field.upperLimit;
 
-    for (var key in NutrientsHandler.model.keys.toList()) {
-      final Map<String, dynamic> field = NutrientsHandler.model[key]!;
-
-      final String label = field['translations'][SettingsData.language];
-      final String unit = field['unit'];
-      final double? lower = field['lowerLimit'];
-      final double? upper = field['upperLimit'];
-
-      final Widget wid = InkWell(
+      return InkWell(
         key: ValueKey(key),
         onTap: () async {
-          final Map<String, dynamic> fields = {
+          final fields = {
             'Label': label,
             'Upper limit': upper,
             'Lower limit': lower,
             'Unit': unit,
           };
 
-          final bool isModified = await Navigator.push(
+          final isModified = await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => Scaffold(
@@ -389,90 +92,314 @@ class _NutrientDisplayState extends State<NutrientDisplay> {
             ),
           );
 
+          if (fields['Lower limit'] is double && fields['Lower limit'] == 0.0) {
+            fields['Lower limit'] = null;
+          }
+
+          if (fields['Upper limit'] is double && fields['Upper limit'] == 0.0) {
+            fields['Upper limit'] = null;
+          }
+
           if (isModified) {
-            field['unit'] = fields['Unit'];
-            field['lowerLimit'] = fields['Lower limit'];
-            field['upperLimit'] = fields['Upper limit'];
-            field['translations'][SettingsData.language] = fields['Label'];
+            final updated = Nutrient(
+              unit: fields['Unit'] as String,
+              lowerLimit: fields['Lower limit'] as double?,
+              upperLimit: fields['Upper limit'] as double?,
+              translations: {
+                ...field.translations,
+                SettingsData.language: fields['Label'] as String,
+              },
+            );
 
-            NutrientsHandler.save();
-
-            //TODO: Fix re-entering with old fields
-            widget.refresh();
+            nutrientNotifier.update(key, updated);
           }
         },
         child: Row(
           children: [
-            Icon(Icons.drag_indicator_rounded),
+            const Icon(Icons.drag_indicator_rounded),
             Expanded(
-                child: Palette.dimParentheses(
-                    label, Theme.of(context).textTheme.bodyMedium)),
+              child: Palette.dimParentheses(
+                  label, Theme.of(context).textTheme.bodyMedium),
+            ),
             Switch(
-              value: !NutrientsHandler.hasTag(key, 'disabled'),
-              onChanged: (value) => setState(() {
-                NutrientsHandler.switchTag(key, 'disabled');
-                NutrientsHandler.save();
-              }),
+              value: !field.tags.contains('disabled'),
+              onChanged: (val) {
+                nutrientNotifier.toggleTag(key, 'disabled');
+              },
             ),
           ],
         ),
       );
+    }).toList();
 
-      elements.add(wid);
-    }
-
-    //TODO: Implement adding custom
     return CustomCard(
       logo: const Icon(Icons.bar_chart_rounded),
       title: 'Nutrients',
-      action: actionWid(),
+      action: _buildActionButtons(),
       child: Column(
         children: [
           ReorderableListView(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             onReorder: (oldIndex, newIndex) {
               setState(() {
-                final List<MapEntry<String, Map<String, dynamic>>> entries =
-                    NutrientsHandler.model.entries.toList();
-
-                if (newIndex > oldIndex) newIndex -= 1;
-                final entry = entries.removeAt(oldIndex);
-                entries.insert(newIndex, entry);
-
-                NutrientsHandler.model.clear();
-                NutrientsHandler.model.addEntries(entries);
-
-                NutrientsHandler.save();
+                nutrientNotifier.reorder(oldIndex, newIndex);
               });
             },
-            children: elements,
+            children: widgets,
           ),
-          Divider(),
+          const Divider(),
           SizedBox(
             width: double.infinity,
             child: TextButton(
               onPressed: () {
-                //TODO: Implement
-                // showDialog(
-                //   context: context,
-                //   builder: (context) => Center(
-                //     child: StringInput(initString: 'new nutrient key', update: (p0) => ,),
-                //   ),
-                // );
+                _showNewNutrientDialog(context, nutrientNotifier);
               },
-              child: Text('Add new nutrient'),
+              child: const Text('Add new nutrient'),
             ),
-          )
+          ),
         ],
       ),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (!isEditMode) return viewMode();
-    return editMode();
+  List<String> _filteredAndSortedKeys(
+      NutrientState state, Map<String, double> intake, int numDays) {
+    List<String> keys = state.order
+        .where((key) => !state.data[key]!.tags.contains('disabled'))
+        .toList();
+
+    if (SettingsData.isSmartHide) {
+      keys = keys.where((key) {
+        final value = (intake[key] ?? 0.0) / numDays;
+        final lower = state.data[key]!.lowerLimit;
+        final upper = state.data[key]!.upperLimit;
+        return (lower != null && value < lower) ||
+            (upper != null && value > upper * 0.9);
+      }).toList();
+    }
+
+    if (SettingsData.sort != 0) {
+      keys.sort((a, b) {
+        final aValue = (intake[a] ?? 0.0) / numDays;
+        final bValue = (intake[b] ?? 0.0) / numDays;
+        final aCat = _aCat(aValue, state.data[a]!);
+        final bCat = _aCat(bValue, state.data[b]!);
+        return SettingsData.sort == 1
+            ? _compareDescending(
+                aCat, aValue, state.data[a]!, bCat, bValue, state.data[b]!)
+            : _compareAscending(
+                aCat, aValue, state.data[a]!, bCat, bValue, state.data[b]!);
+      });
+    }
+
+    return keys;
+  }
+
+  int _aCat(double intake, Nutrient field) {
+    final lower = field.lowerLimit;
+    final upper = field.upperLimit;
+
+    if (lower != null && intake < lower) return 0;
+    if (upper != null && intake < upper) return 2;
+    if (upper != null && intake >= upper) return 3;
+    if (lower != null) return 4;
+    return 5;
+  }
+
+  int _compareAscending(int catA, double intakeA, Nutrient fieldA, int catB,
+      double intakeB, Nutrient fieldB) {
+    if (catA != catB) return catA - catB;
+    return intakeA.compareTo(intakeB);
+  }
+
+  int _compareDescending(int catA, double intakeA, Nutrient fieldA, int catB,
+      double intakeB, Nutrient fieldB) {
+    if (catA != catB) return catB - catA;
+    return intakeB.compareTo(intakeA);
+  }
+
+  Widget _buildActionButtons() {
+    return Row(
+      children: [
+        MyIconButton(
+          onTap: () {
+            setState(() {
+              SettingsData.sort = SettingsData.sort == 1
+                  ? -1
+                  : (SettingsData.sort == -1 ? 0 : 1);
+            });
+          },
+          icon: Icon(
+            SettingsData.sort == -1
+                ? Icons.keyboard_arrow_up
+                : Icons.keyboard_arrow_down,
+            color: SettingsData.sort != 0 ? Colors.green : null,
+            size: 26.0,
+          ),
+        ),
+        const SizedBox(width: 8),
+        MyIconButton(
+          onTap: () {
+            setState(
+                () => SettingsData.isSmartHide = !SettingsData.isSmartHide);
+          },
+          icon: Icon(
+            Icons.select_all,
+            color: SettingsData.isSmartHide ? Colors.green : null,
+            size: 21.0,
+          ),
+        ),
+        const SizedBox(width: 8),
+        MyIconButton(
+          onTap: () => setState(() => isEditMode = !isEditMode),
+          icon: Icon(
+            Icons.edit,
+            color: isEditMode ? Colors.green : null,
+            size: 21.0,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNutrientTile(BuildContext context, Nutrient field, String key,
+      double intake, AlimentBankState bank, List<Day> days, int numDays) {
+    final label = field.translations[SettingsData.language]!;
+    final unit = field.unit;
+    final lower = field.lowerLimit;
+    final upper = field.upperLimit;
+
+    final topAliments = Day.sumDays(days)
+        .topIntakeAliments(key, bank)
+        .map((a, v) => MapEntry(a, v / numDays));
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(8.0),
+        clipBehavior: Clip.hardEdge,
+        child: InkWell(
+          onTap: () => _showDetailDialog(
+              context, label, intake, lower, upper, topAliments),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
+            child: NutrientBar(
+              label: label,
+              unit: unit,
+              amount: intake,
+              lowerLimit: lower,
+              upperLimit: upper,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _showDetailDialog(
+    BuildContext context,
+    String label,
+    double intake,
+    double? lower,
+    double? upper,
+    Map<Aliment, double> topSources,
+  ) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return GestureDetector(
+          onTap: () => Navigator.pop(context),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: MiniCard(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 24.0),
+                        Text('$label intake', style: TextStyle(fontSize: 24.0)),
+                        Text('Amount: ${intake.toStringAsFixed(2)}'),
+                        if (lower != null)
+                          Text('Lower Limit: ${lower.toStringAsFixed(2)}'),
+                        if (upper != null)
+                          Text('Upper Limit: ${upper.toStringAsFixed(2)}'),
+                        if (topSources.isNotEmpty) ...[
+                          const Divider(height: 24.0),
+                          const Text('Top Sources',
+                              style: TextStyle(fontSize: 20.0)),
+                          for (final entry in topSources.entries)
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 4.0),
+                              child: Text(
+                                  '${entry.key.readDataRef(ref.read(alimentBankProvider)).name}: '
+                                  '${entry.value.toStringAsFixed(2)}'),
+                            ),
+                        ],
+                        const SizedBox(height: 24.0),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  List<Widget> _insertDividers(List<Widget> widgets) {
+    final divided = <Widget>[];
+    for (int i = 0; i < widgets.length; i++) {
+      divided.add(widgets[i]);
+      if (i < widgets.length - 1) {
+        divided.add(Divider(
+          color: Colors.black.withOpacity(0.1),
+          thickness: 0.5,
+          height: 0.0,
+        ));
+      }
+    }
+    return divided;
+  }
+
+  void _showNewNutrientDialog(
+      BuildContext context, NutrientStateNotifier notifier) {
+    showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+          child: Expanded(
+            child: StringInput(
+              initString: 'new_nutrient_key',
+              submit: (newKey) {
+                final key = newKey.trim();
+                if (key.isEmpty) return;
+
+                final newNutrient = Nutrient(
+                  unit: 'g',
+                  lowerLimit: null,
+                  upperLimit: null,
+                  tags: [],
+                  translations: {SettingsData.language: key},
+                );
+
+                notifier.addNutrient(key, newNutrient);
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -549,13 +476,14 @@ class NutrientBar extends StatelessWidget {
 
   Widget bar(BuildContext context,
       {double height = 15.0, double radius = 5.0, double fontSize = 12.0}) {
-    if (lowerLimit == null && upperLimit == null) {
+    if ((lowerLimit == null || lowerLimit == 0.0) &&
+        (upperLimit == null || upperLimit == 0.0)) {
       return Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5.0),
+          borderRadius: BorderRadius.circular(radius),
           color: Colors.grey,
         ),
-        height: 15.0,
+        height: height,
       );
     } else {
       final double top = (upperLimit ?? lowerLimit!) * 1.5;

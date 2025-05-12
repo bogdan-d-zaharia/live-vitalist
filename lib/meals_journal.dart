@@ -1,58 +1,83 @@
 import 'package:flutter/material.dart';
-import 'aliment.dart';
-import 'aliment_editor/aliment_editor.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'aliment/aliment.dart';
+import 'aliment/aliment_bank_provider.dart';
+import 'aliment_editor/aliment_data_editor.dart';
+import 'aliment_editor/instance_editor.dart';
 import 'custom_card.dart';
-import 'day.dart';
-import 'models/reference_fields_model.dart';
-import 'palette.dart';
+import 'day/day.dart';
+import 'day/day_provider.dart';
 import 'notification_handler.dart';
-import 'settings.dart';
+import 'nutrient/nutrient_provider.dart';
+import 'palette.dart';
+import 'settings_data.dart';
 
-class MealsJournal extends StatelessWidget {
-  const MealsJournal({
-    required this.date,
-    required this.day,
-    required this.refresh,
-    super.key,
-  });
-
-  final DateTime date;
-  final Day day;
-  final void Function() refresh;
-
-  void saveDay() {
-    day.save(date);
-    refresh();
-  }
+class MealsJournal extends ConsumerWidget {
+  const MealsJournal({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final List<Widget> elements = [
-      MealElement(
-        title: {
-          'ENG': 'Breakfast',
-          'ROU': 'Mic Dejun',
-        }[SettingsData.language]!,
-        aliments: day.breakfast,
-        saver: saveDay,
-      ),
-      MealElement(
-        title: {
-          'ENG': 'Lunch',
-          'ROU': 'Pranz',
-        }[SettingsData.language]!,
-        aliments: day.lunch,
-        saver: saveDay,
-      ),
-      MealElement(
-        title: {
-          'ENG': 'Dinner',
-          'ROU': 'Cina',
-        }[SettingsData.language]!,
-        aliments: day.dinner,
-        saver: saveDay,
-      ),
-    ];
+  Widget build(BuildContext context, WidgetRef ref) {
+    final day = ref.watch(cachedSelectedDaysProvider).firstOrNull ?? Day();
+    final date = ref.watch(selectedDatesProvider).first;
+
+    final bank = ref.watch(alimentBankProvider);
+    final model = ref.watch(nutrientStateProvider).data;
+    final List<Widget> elements = day.meals.map<Widget>(
+      (meal) {
+        final Map<String, double> values = meal.aliments.summedFields(bank);
+        final int kcals = values['kcals']?.round() ?? 0;
+        return MealElement(
+          title: meal.name,
+          subtitle:
+              '$kcals ${model['kcals']?.translations[SettingsData.language]?.toLowerCase() ?? ''}',
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => MealEditor(
+                  mealName: meal.name,
+                  date: date,
+                ),
+              ),
+            );
+          },
+          onAdd: () async {
+            //TODO: Copied tom `MealEditor`
+            final InstancedAliment newAliment =
+                InstancedAliment(alimentID: '', servingSize: 1.0, unit: 'g');
+
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => InstanceEditor(
+                  aliment: newAliment,
+                ),
+              ),
+            );
+
+            if (newAliment.alimentID != '') {
+              meal.aliments.add(newAliment);
+              ref.read(dayCacheProvider.notifier).setDay(date, day);
+            }
+          },
+        );
+      },
+    ).toList();
+
+    // final List<Widget> elements = day.meals.map((meal) {
+    //   return ListTile(
+    //     title: Text(meal.name),
+    //     onTap: () {
+    //       Navigator.push(
+    //         context,
+    //         MaterialPageRoute(
+    //           builder: (_) => MealEditor(mealName: meal.name, date: date),
+    //         ),
+    //       );
+    //     },
+    //   );
+    // }).toList();
 
     final Widget divider = Divider(
       color: Palette.divGrey,
@@ -75,50 +100,28 @@ class MealsJournal extends StatelessWidget {
   }
 }
 
-class MealElement extends StatefulWidget {
+class MealElement extends StatelessWidget {
   const MealElement({
     required this.title,
-    required this.aliments,
-    required this.saver,
+    required this.subtitle,
+    required this.onTap,
+    required this.onAdd,
     super.key,
   });
 
   final String title;
-  final List<Aliment> aliments;
-  final void Function() saver;
-
-  @override
-  State<MealElement> createState() => _MealElementState();
-}
-
-class _MealElementState extends State<MealElement> {
-  Future<void> openMeal(BuildContext context) async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MealEditor(
-          title: widget.title,
-          aliments: widget.aliments,
-        ),
-      ),
-    );
-
-    setState(() {
-      /// Exited the `MealEditor` and the values updated.
-    });
-    widget.saver();
-  }
+  final String subtitle;
+  final void Function() onTap;
+  final void Function() onAdd;
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, double> values = Day.sumFields(widget.aliments);
-    final int kcals = values['kcals']?.round() ?? 0;
     return IntrinsicHeight(
       child: Row(
         children: [
           Expanded(
             child: InkWell(
-              onTap: () => openMeal(context),
+              onTap: onTap,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -126,9 +129,9 @@ class _MealElementState extends State<MealElement> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(widget.title),
+                        Text(title),
                         Text(
-                          '$kcals ${NutrientsHandler.model['kcals']?['translations']?[SettingsData.language]?.toLowerCase() ?? ''}',
+                          subtitle,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 12.0,
@@ -152,17 +155,7 @@ class _MealElementState extends State<MealElement> {
           AspectRatio(
             aspectRatio: 1.0,
             child: InkWell(
-              //TODO: Copied from `_MealEditorState` to `_MealElementState`
-              onTap: () async {
-                final InstancedAliment newAliment =
-                    InstancedAliment(alimentID: '', servingSize: 1.0);
-                await AlimentEditor.editInstance(newAliment, context);
-                if (AlimentBank.aliments.keys.contains(newAliment.alimentID)) {
-                  widget.aliments.add(newAliment);
-                }
-                setState(() {});
-                widget.saver();
-              },
+              onTap: onAdd,
               child: Center(child: Icon(Icons.add_rounded)),
             ),
           ),
@@ -172,45 +165,58 @@ class _MealElementState extends State<MealElement> {
   }
 }
 
-class MealEditor extends StatefulWidget {
+class MealEditor extends ConsumerWidget {
   const MealEditor({
-    required this.title,
-    required this.aliments,
+    required this.mealName,
+    required this.date,
     super.key,
   });
 
-  final String title;
-  final List<Aliment> aliments;
+  final String mealName;
+  final DateTime date;
 
   @override
-  State<MealEditor> createState() => _MealEditorState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final day = ref.watch(dayCacheProvider)[date]!;
+    final meal = day.meals.firstWhere((m) => m.name == mealName);
+    final bank = ref.watch(alimentBankProvider);
+    final bankNotifier = ref.read(alimentBankProvider.notifier);
 
-class _MealEditorState extends State<MealEditor> {
-  @override
-  Widget build(BuildContext context) {
-    final List<Widget> elements = widget.aliments
+    void updateDay() => ref.read(dayCacheProvider.notifier).setDay(date, day);
+
+    final List<Widget> elements = meal.aliments
         .map<Widget>(
           (aliment) => AlimentWidget(
             aliment: aliment,
             deleteAliment: () {
-              setState(() {
-                widget.aliments.remove(aliment);
-              });
+              meal.aliments.remove(aliment);
+              updateDay();
             },
             onTap: () async {
               if (aliment is InstancedAliment) {
-                await AlimentEditor.editInstance(aliment, context);
-              } else if (aliment is TemporaryAliment) {
-                await AlimentEditor.editAliment(aliment, context);
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => InstanceEditor(
+                      aliment: aliment,
+                    ),
+                  ),
+                );
               }
-              setState(() {});
+              updateDay();
             },
             onLongPress: () async {
-              if (await AlimentEditor.editAliment(aliment, context)) {
-                setState(() {
-                  AlimentBank.save();
-                });
+              if (aliment is InstancedAliment) {
+                final data = aliment.readDataRef(bank);
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AlimentDataEditor(
+                      data: data,
+                    ),
+                  ),
+                );
+                bankNotifier.setAliment(aliment.alimentID, data);
               }
             },
           ),
@@ -225,31 +231,21 @@ class _MealEditorState extends State<MealEditor> {
       subTitle: '',
       onTap: () async {
         final InstancedAliment newAliment =
-            InstancedAliment(alimentID: '', servingSize: 1.0);
-        await AlimentEditor.editInstance(newAliment, context);
-        if (AlimentBank.aliments.keys.contains(newAliment.alimentID)) {
-          widget.aliments.add(newAliment);
-        }
-        setState(() {});
-      },
-      additional: [],
-    ));
+            InstancedAliment(alimentID: '', servingSize: 1.0, unit: 'g');
 
-    elements.add(ElementWidget(
-      title: {
-        'ENG': 'Add temporary',
-        'ROU': 'Adaugare calorii',
-      }[SettingsData.language]!,
-      subTitle: '',
-      onTap: () async {
-        final TemporaryAliment newAliment = TemporaryAliment(
-            alimentData:
-                AlimentData(name: 'Temporary aliment', referenceSize: 1.0),
-            servingSize: 1.0);
-        if (await AlimentEditor.editAliment(newAliment, context)) {
-          widget.aliments.add(newAliment);
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => InstanceEditor(
+              aliment: newAliment,
+            ),
+          ),
+        );
+
+        if (newAliment.alimentID != '') {
+          meal.aliments.add(newAliment);
+          ref.read(dayCacheProvider.notifier).setDay(date, day);
         }
-        setState(() {});
       },
       additional: [],
     ));
@@ -266,11 +262,11 @@ class _MealEditorState extends State<MealEditor> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(mealName),
         actions: [
-          ElevatedButton(
+          TextButton(
             onPressed: () => NotificationHandler.showListNotification(
-                widget.aliments, widget.title),
+                meal.aliments, bank, mealName),
             child: Text('Show Notification'),
           ),
           SizedBox(width: 12.0),
@@ -350,7 +346,7 @@ class ElementWidget extends StatelessWidget {
   }
 }
 
-class AlimentWidget extends StatelessWidget {
+class AlimentWidget extends ConsumerWidget {
   const AlimentWidget({
     required this.aliment,
     required this.deleteAliment,
@@ -365,12 +361,15 @@ class AlimentWidget extends StatelessWidget {
   final Function() onLongPress;
 
   @override
-  Widget build(BuildContext context) {
-    final values = aliment.fields;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final model = ref.watch(nutrientStateProvider).data;
+    final bank = ref.watch(alimentBankProvider);
+
+    final values = aliment.readFields(bank);
     return ElementWidget(
-      title: aliment.getAliment.name,
+      title: aliment.readDataRef(bank).name,
       subTitle:
-          '${values['kcals']?.round() ?? 0} ${NutrientsHandler.model['kcals']?['translations']?[SettingsData.language]?.toLowerCase() ?? ''}, ${aliment.servingSize} ${aliment.unit ?? ''}',
+          '${values['kcals']?.round() ?? 0} ${model['kcals']?.translations[SettingsData.language]?.toLowerCase() ?? ''}, ${aliment.servingSize} ${aliment.unit}',
       onTap: onTap,
       onLongPress: onLongPress,
       additional: [

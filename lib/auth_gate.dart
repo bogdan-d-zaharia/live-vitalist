@@ -2,43 +2,38 @@ import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'aliment/aliment_bank_provider.dart';
 import 'custom_card.dart';
 import 'file_handler.dart';
 import 'home_screen.dart';
-import 'settings.dart';
+import 'nutrient/nutrient_provider.dart';
+import 'settings_data.dart';
 
-class AuthGate extends StatefulWidget {
+class AuthGate extends ConsumerStatefulWidget {
   const AuthGate({super.key});
 
-  static Future<void> signInWithGoogle() async {
-    final googleUser = await GoogleSignIn().signIn();
-    if (googleUser == null) return; /* user canceled */
-
-    final googleAuth = await googleUser.authentication;
-
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-
-    await FirebaseAuth.instance.signInWithCredential(credential);
-
-    StorageHandler.isFirebase = true;
-  }
-
   @override
-  State<AuthGate> createState() => _AuthGateState();
+  ConsumerState<AuthGate> createState() => _AuthGateState();
 }
 
-class _AuthGateState extends State<AuthGate> {
+class _AuthGateState extends ConsumerState<AuthGate> {
   bool get isGoogle => FirebaseAuth.instance.currentUser != null;
   bool get isLogged => SettingsData.isLoggedIn;
 
-  Future<void> setLoggedIn() async {
+  Future<void> onEnter() async {
     SettingsData.isLoggedIn = true;
+    StorageHandler.isFirebase = isGoogle;
+    await Future.microtask(
+        () => ref.read(nutrientStateProvider.notifier).load());
+    await Future.microtask(() => ref.read(alimentBankProvider.notifier).load());
+
+    if (mounted) {
+      await Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => HomeScreen()));
+    }
   }
 
   void showPrivacyPolicyAndTermsOfUsePopup() {
@@ -129,7 +124,7 @@ class _AuthGateState extends State<AuthGate> {
                       SizedBox(
                         width: 120.0,
                         child: ElevatedButton.icon(
-                          onPressed: () => Navigator.pop(context, true),
+                          onPressed: onEnter,
                           label: Text("I Agree"),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue,
@@ -151,67 +146,21 @@ class _AuthGateState extends State<AuthGate> {
     );
   }
 
-  Widget logInScreen() {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Authentication'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              /* Google */
-              Text('Backup your data to cloud by signing with Google.'),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: () async {
-                    await AuthGate.signInWithGoogle();
-                    if (StorageHandler.isFirebase) {
-                      await setLoggedIn();
-                      setState(() {});
-                    }
-                  },
-                  label: Text('Sign in with Google'),
-                ),
-              ),
-              SizedBox(height: 16.0),
-              /* Local */
-              Text('Or continue by only saving it locally.'),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: () async {
-                    await setLoggedIn();
-                    setState(() {});
-                  },
-                  label: Text('Continue locally as guest'),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   void initState() {
     super.initState();
 
-    if (isLogged) return;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      showPrivacyPolicyAndTermsOfUsePopup();
+      if (isLogged) {
+        onEnter();
+      } else {
+        showPrivacyPolicyAndTermsOfUsePopup();
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!isLogged) return logInScreen();
-    if (isGoogle) StorageHandler.isFirebase = true;
-
-    return const HomeScreen();
+    return Scaffold();
   }
 }
