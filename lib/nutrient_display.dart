@@ -308,31 +308,50 @@ class _NutrientDisplayState extends ConsumerState<NutrientDisplay> {
   ) {
     showDialog(
       context: context,
-      builder: (_) => GestureDetector(
-        onTap: () => Navigator.pop(context),
-        child: AlertDialog(
-          title: Text('$label Intake'),
-          content: ListView(
-            shrinkWrap: true,
-            //TODO: Error, not showing intrinsec sizes.
-            children: [
-              Text('Amount: ${intake.toStringAsFixed(2)}'),
-              if (lower != null)
-                Text('Lower Limit: ${lower.toStringAsFixed(2)}'),
-              if (upper != null)
-                Text('Upper Limit: ${upper.toStringAsFixed(2)}'),
-              if (topSources.isNotEmpty) ...[
-                const Divider(),
-                const Text('Top Sources:'),
-                for (final entry in topSources.entries)
-                  Text(
-                      '${entry.key.readDataRef(ref.read(alimentBankProvider)).name}: '
-                      '${entry.value.toStringAsFixed(2)}'),
-              ]
-            ],
+      barrierDismissible: true,
+      builder: (context) {
+        return GestureDetector(
+          onTap: () => Navigator.pop(context),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: MiniCard(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 24.0),
+                        Text('$label intake', style: TextStyle(fontSize: 24.0)),
+                        Text('Amount: ${intake.toStringAsFixed(2)}'),
+                        if (lower != null)
+                          Text('Lower Limit: ${lower.toStringAsFixed(2)}'),
+                        if (upper != null)
+                          Text('Upper Limit: ${upper.toStringAsFixed(2)}'),
+                        if (topSources.isNotEmpty) ...[
+                          const Divider(height: 24.0),
+                          const Text('Top Sources',
+                              style: TextStyle(fontSize: 20.0)),
+                          for (final entry in topSources.entries)
+                            Padding(
+                              padding: EdgeInsets.symmetric(vertical: 4.0),
+                              child: Text(
+                                  '${entry.key.readDataRef(ref.read(alimentBankProvider)).name}: '
+                                  '${entry.value.toStringAsFixed(2)}'),
+                            ),
+                        ],
+                        const SizedBox(height: 24.0),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
