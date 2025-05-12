@@ -63,25 +63,29 @@ class Bar extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         height: height,
         child: Row(
-          children: elements
-              .map(
-                (e) => Expanded(
-                  flex: (e.amount * 1000.0).round(),
-                  child: Container(
-                    color: e.color,
-                    child: Center(
-                      child: Text(
-                        '${(e.amount * 100.0 / total).toStringAsFixed(0)}%',
-                        style: Palette.dayViewRegular.copyWith(
-                          fontSize: fontSize,
-                          color: Colors.black.withValues(alpha: 0.6),
+          children: elements.map(
+            (e) {
+              final s = '${(e.amount * 100.0 / total).toStringAsFixed(0)}%';
+              return Expanded(
+                flex: (e.amount * 1000.0).round(),
+                child: Container(
+                  color: e.color,
+                  child: switch (s != '0%') {
+                    true => Center(
+                        child: Text(
+                          s,
+                          style: Palette.dayViewRegular.copyWith(
+                            fontSize: fontSize,
+                            color: Colors.black.withValues(alpha: 0.6),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
+                    false => null,
+                  },
                 ),
-              )
-              .toList(),
+              );
+            },
+          ).toList(),
         ),
       );
     }
@@ -135,10 +139,23 @@ class RatioBars extends StatelessWidget {
 class ConsumerRatioBars extends ConsumerWidget {
   const ConsumerRatioBars({super.key});
 
+  String formatNumber(double value) {
+    return value.toStringAsFixed(2).replaceAll(RegExp(r'([.]*0+)(?!.*\d)'), '');
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bank = ref.watch(alimentBankProvider);
     final intake = ref.watch(averageDayCachedProvider).readIntake(bank);
+
+    final omega6 = intake['omega6'] ?? 0.0;
+    final omega3 = intake['omega3'] ?? 0.0;
+    String omegaBalance = 'Omega-6 to Omega-3 balance';
+    final balance = omega6 / omega3;
+    if (balance.isFinite) {
+      omegaBalance = "$omegaBalance: ${formatNumber(balance)} / 1";
+    }
+
     return RatioBars(
       bars: [
         RatioBar(
@@ -163,18 +180,11 @@ class ConsumerRatioBars extends ConsumerWidget {
         ),
         if (SettingsData.isShowOmegaBalance)
           RatioBar(
-            'Omega-3 to Omega-6 balance',
+            omegaBalance,
             [
               RatioBarElement(
-                'Omega-3',
-                intake['omega3'] ?? 0.0,
-                Colors.orange,
-              ),
-              RatioBarElement(
-                'Omega-6',
-                intake['omega6'] ?? 0.0,
-                Colors.purple,
-              ),
+                  'Omega-6', omega6, Colors.purple.withValues(alpha: 0.8)),
+              RatioBarElement('Omega-3', omega3, Colors.orange),
             ],
           ),
       ],
