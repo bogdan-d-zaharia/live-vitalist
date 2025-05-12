@@ -29,16 +29,15 @@ class _InstanceEditorState extends ConsumerState<InstanceEditor> {
         child: Selector(),
       ),
     );
-
     if (selectedId == null) return;
 
     final selected = ref.read(alimentBankProvider).aliments[selectedId];
     if (selected == null) return;
 
-    setState(() {
-      widget.aliment.alimentID = selectedId;
-      widget.aliment.unit = selected.unit;
-    });
+    widget.aliment.alimentID = selectedId;
+    widget.aliment.unit = selected.unit;
+
+    ref.read(alimentBankProvider.notifier).setFirst(selectedId);
   }
 
   Widget _buildAlimentSelector() {

@@ -47,6 +47,16 @@ class AlimentBank extends StateNotifier<AlimentBankState> {
     save();
   }
 
+  void setFirst(String id) {
+    if (state.aliments.keys.contains(id)) {
+      state = AlimentBankState(
+        aliments: state.aliments,
+        order: [id, ...state.order..removeWhere((otherId) => otherId == id)],
+      );
+    }
+    save();
+  }
+
   Future<void> save() {
     return StorageHandler.saveJson('alimentBank', state.toJson(),
         doBackup: true);
