@@ -19,14 +19,26 @@ const double labelHeight = 26.0;
 class WeekCalendar extends ConsumerWidget {
   const WeekCalendar({super.key});
 
-  void showHelp(BuildContext context, WidgetRef ref) {
-    final kcals = ref.watch(nutrientStateProvider).data['kcals']!;
-    final fats = ref.watch(nutrientStateProvider).data['fats']!;
-    final satFats = ref.watch(nutrientStateProvider).data['satFats']!;
+  void showHelp(BuildContext context) {
     final intake = {
-      kcals: 3000.0,
-      fats: 20.0,
-      satFats: 160.0,
+      Nutrient(
+        translations: {'ENG': 'Calories'},
+        unit: 'kcal',
+        lowerLimit: 2000.0,
+        upperLimit: 2500.0,
+      ): 2600.0,
+      Nutrient(
+        translations: {'ENG': 'Fats'},
+        unit: 'g',
+        lowerLimit: 70.0,
+        upperLimit: 100.0,
+      ): 30.0,
+      Nutrient(
+        translations: {'ENG': 'Saturated fats'},
+        unit: 'g',
+        lowerLimit: 16.0,
+        upperLimit: 25.0,
+      ): 120.0,
     };
 
     final simpleWid = SizedBox(
@@ -43,21 +55,24 @@ class WeekCalendar extends ConsumerWidget {
       builder: (context) => Center(
         child: MiniCard(
           child: Padding(
-            padding: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
                 LabelsWidget(
                   map: {
                     if (SettingsData.isComplexCalendar)
                       'Maximum': Colors.lightGreen.withValues(alpha: 0.4),
-                    'Calories': Colors.lightGreen,
+                    'Leading nutrient': Colors.lightGreen,
                     if (SettingsData.isComplexCalendar) 'Minimum': Colors.green,
                   },
                 ),
                 const SizedBox(width: 24.0),
-                simpleWid,
+                Padding(
+                  padding: const EdgeInsets.only(top: 24.0, bottom: 12.0),
+                  child: simpleWid,
+                ),
               ],
             ),
           ),
@@ -79,7 +94,7 @@ class WeekCalendar extends ConsumerWidget {
       title: "Calendar",
       action: MyIconButton(
         icon: const Icon(Icons.help_outline_rounded, size: 22.0),
-        onTap: () => showHelp(context, ref),
+        onTap: () => showHelp(context),
       ),
       child: SizedBox(
         height: itemHeight,
@@ -151,15 +166,19 @@ class CalendarItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final dayMap = ref.watch(dayCacheProvider);
     final bank = ref.watch(alimentBankProvider);
-    final nutrientMap = ref.watch(nutrientStateProvider).data;
+    final nutrients = ref.watch(nutrientStateProvider);
 
     final day = dayMap[date];
     if (day != null) {
       final intakeById = day.readIntake(bank);
-      final intakeByNutrient = <Nutrient, double>{};
+      final intakeByNutrient = <Nutrient, double>{
+        /* Makes sure the leading nutrient is first
+           to show it specially. */
+        nutrients.data[nutrients.order.first]!: 0.0,
+      };
 
       for (final entry in intakeById.entries) {
-        final nutrient = nutrientMap[entry.key];
+        final nutrient = nutrients.data[entry.key];
         if (nutrient != null && !nutrient.tags.contains('disabled')) {
           intakeByNutrient[nutrient] = entry.value;
         }
@@ -178,7 +197,7 @@ class CalendarItem extends ConsumerWidget {
   }
 }
 
-class SimpleCalendarItem extends ConsumerWidget {
+class SimpleCalendarItem extends StatelessWidget {
   const SimpleCalendarItem({
     required this.intake,
     required this.title,
@@ -191,8 +210,8 @@ class SimpleCalendarItem extends ConsumerWidget {
   final bool isSelected;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final kcals = ref.watch(nutrientStateProvider).data['kcals'];
+  Widget build(BuildContext context) {
+    final Nutrient? kcals = intake.keys.firstOrNull;
 
     (double?, double?, double?) calculateMinMaxAverage(
         Map<Nutrient, double> values) {
@@ -202,7 +221,7 @@ class SimpleCalendarItem extends ConsumerWidget {
       int num = 0;
 
       for (final nutrient in values.keys) {
-        final double? ratio = nutrient.getRatio(values[nutrient]!);
+        final double? ratio = nutrient.getRatio(values[nutrient]);
         if (ratio != null) {
           min = ratio < min ? ratio : min;
           max = ratio > max ? ratio : max;
