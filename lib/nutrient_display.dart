@@ -180,40 +180,50 @@ class _NutrientDisplayState extends ConsumerState<NutrientDisplay> {
       keys.sort((a, b) {
         final aValue = (intake[a] ?? 0.0);
         final bValue = (intake[b] ?? 0.0);
-        final aCat = _aCat(aValue, state.data[a]!);
-        final bCat = _aCat(bValue, state.data[b]!);
         return SettingsData.sort == 1
-            ? _compareDescending(
-                aCat, aValue, state.data[a]!, bCat, bValue, state.data[b]!)
-            : _compareAscending(
-                aCat, aValue, state.data[a]!, bCat, bValue, state.data[b]!);
+            ? _compareDescending(aValue, state.data[a]!, bValue, state.data[b]!)
+            : _compareAscending(aValue, state.data[a]!, bValue, state.data[b]!);
       });
     }
 
     return keys;
   }
 
-  int _aCat(double intake, Nutrient field) {
-    final lower = field.lowerLimit;
-    final upper = field.upperLimit;
-
-    if (lower != null && intake < lower) return 0;
-    if (upper != null && intake < upper) return 2;
-    if (upper != null && intake >= upper) return 3;
-    if (lower != null) return 4;
-    return 5;
+  double _mapRange(
+      double value, double inMin, double inMax, double outMin, double outMax) {
+    return (value - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
   }
 
-  int _compareAscending(int catA, double intakeA, Nutrient fieldA, int catB,
-      double intakeB, Nutrient fieldB) {
-    if (catA != catB) return catA - catB;
-    return intakeA.compareTo(intakeB);
+  int _compareAscending(
+      double intakeA, Nutrient fieldA, double intakeB, Nutrient fieldB) {
+    // final debugNA = fieldA.translations['ENG'];
+    // final debugNB = fieldB.translations['ENG'];
+
+    final ratioA = fieldA.getRatio(intakeA)!;
+    final ratioB = fieldB.getRatio(intakeB)!;
+    if (ratioA != ratioB) return ratioA.compareTo(ratioB);
+
+    final rA = _mapRange(intakeA, fieldA.lowerLimit ?? 0.0,
+        fieldA.upperLimit ?? double.infinity, 0.0, 1.0);
+    final rB = _mapRange(intakeB, fieldB.lowerLimit ?? 0.0,
+        fieldB.upperLimit ?? double.infinity, 0.0, 1.0);
+    return rA.compareTo(rB);
   }
 
-  int _compareDescending(int catA, double intakeA, Nutrient fieldA, int catB,
-      double intakeB, Nutrient fieldB) {
-    if (catA != catB) return catB - catA;
-    return intakeB.compareTo(intakeA);
+  int _compareDescending(
+      double intakeA, Nutrient fieldA, double intakeB, Nutrient fieldB) {
+    // final debugNA = fieldA.translations['ENG'];
+    // final debugNB = fieldB.translations['ENG'];
+
+    final ratioA = fieldA.getRatio(intakeA)!;
+    final ratioB = fieldB.getRatio(intakeB)!;
+    if (ratioA != ratioB) return ratioB.compareTo(ratioA);
+
+    final rA = _mapRange(intakeA, fieldA.lowerLimit ?? 0.0,
+        fieldA.upperLimit ?? double.infinity, 0.0, 1.0);
+    final rB = _mapRange(intakeB, fieldB.lowerLimit ?? 0.0,
+        fieldB.upperLimit ?? double.infinity, 0.0, 1.0);
+    return rB.compareTo(rA);
   }
 
   Widget _buildActionButtons() {

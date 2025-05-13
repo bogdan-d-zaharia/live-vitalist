@@ -12,6 +12,7 @@ import 'notification_handler.dart';
 import 'nutrient/nutrient_provider.dart';
 import 'palette.dart';
 import 'settings_data.dart';
+import 'string_input.dart';
 
 class MealsJournal extends ConsumerWidget {
   const MealsJournal({super.key});
@@ -19,10 +20,13 @@ class MealsJournal extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final day = ref.watch(cachedSelectedDaysProvider).firstOrNull ?? Day();
+    final dayNotifier = ref.read(dayCacheProvider.notifier);
+
     final date = ref.watch(selectedDatesProvider).first;
 
     final bank = ref.watch(alimentBankProvider);
-    final model = ref.watch(nutrientStateProvider).data;
+    final nutrients = ref.watch(nutrientStateProvider).data;
+
     final List<Widget> elements = day.meals.map<Widget>(
       (meal) {
         final Map<String, double> values = meal.aliments.summedFields(bank);
@@ -30,7 +34,7 @@ class MealsJournal extends ConsumerWidget {
         return MealElement(
           title: meal.name,
           subtitle:
-              '$kcals ${model['kcals']?.translations[SettingsData.language]?.toLowerCase() ?? ''}',
+              '$kcals ${nutrients['kcals']?.translations[SettingsData.language]?.toLowerCase() ?? ''}',
           onTap: () {
             Navigator.push(
               context,
@@ -89,10 +93,50 @@ class MealsJournal extends ConsumerWidget {
     }
 
     return CustomCard(
+      logo: Icon(Icons.menu_book_rounded),
       title: {
-        'ENG': 'Meals journal',
-        'ROU': 'Jurnal mese'
+        'ENG': 'Meals Journal',
+        'ROU': 'Jurnal Mese'
       }[SettingsData.language],
+      action: SizedBox(
+        height: 36.0,
+        child: Center(
+          child: TextButton.icon(
+            onPressed: () async {
+              final newMealName = await showDialog(
+                context: context,
+                builder: (_) => Dialog(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24.0, vertical: 16.0),
+                    child: Expanded(
+                      child: StringInput(
+                        initString: 'meal #${day.meals.length + 1}',
+                        submit: (newKey) {
+                          final key = newKey.trim();
+                          Navigator.pop(context, key);
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              );
+              if (newMealName == null) return;
+
+              if (!day.meals.map((e) => e.name).contains(newMealName)) {
+                dayNotifier.setDay(
+                    date, Day(meals: [...day.meals, Meal(name: newMealName)]));
+              }
+            },
+            label: Text('Add Meal'),
+            icon: Icon(Icons.add_rounded),
+            iconAlignment: IconAlignment.end,
+            style: ButtonStyle(
+                padding: WidgetStatePropertyAll(
+                    EdgeInsets.symmetric(horizontal: 8.0))),
+          ),
+        ),
+      ),
       child: Column(
         children: elements,
       ),

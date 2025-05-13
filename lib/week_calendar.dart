@@ -76,7 +76,7 @@ class WeekCalendar extends ConsumerWidget {
 
     return CustomCard(
       logo: const Icon(Icons.view_week),
-      title: "Week Calendar",
+      title: "Calendar",
       action: MyIconButton(
         icon: const Icon(Icons.help_outline_rounded, size: 22.0),
         onTap: () => showHelp(context, ref),

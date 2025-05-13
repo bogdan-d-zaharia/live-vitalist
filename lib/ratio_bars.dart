@@ -67,7 +67,7 @@ class Bar extends StatelessWidget {
             (e) {
               final s = '${(e.amount * 100.0 / total).toStringAsFixed(0)}%';
               return Expanded(
-                flex: (e.amount * 1000.0).round(),
+                flex: (e.amount * 1e3).round(),
                 child: Container(
                   color: e.color,
                   child: switch (s != '0%') {
@@ -127,7 +127,8 @@ class RatioBars extends StatelessWidget {
     ];
 
     return CustomCard(
-      title: 'Ratio Bars',
+      logo: Icon(Icons.stacked_bar_chart_rounded),
+      title: 'Distribution Bars',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: children,

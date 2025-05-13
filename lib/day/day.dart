@@ -87,7 +87,19 @@ class Day {
     for (final day in days) {
       for (final meal in day.meals) {
         merged.putIfAbsent(meal.name, () => Meal(name: meal.name));
-        merged[meal.name]!.aliments.addAll(meal.aliments);
+        merged[meal.name]!.aliments.addAll(
+          /* Creates a copy of the map aliment to solve the problem where
+             the aliment was mutated when averaging multiple days. */
+          meal.aliments.map(
+            (e) {
+              if (e is InstancedAliment) {
+                return InstancedAliment.fromJson(e.toJson());
+              } else /* if (e is TemporaryAliment) */ {
+                return TemporaryAliment.fromJson(e.toJson());
+              }
+            },
+          ),
+        );
       }
     }
 
@@ -99,6 +111,7 @@ class Day {
 
     for (var meal in sum.meals) {
       for (var aliment in meal.aliments) {
+        /* BE CAREFUL WITH MUTATIONS */
         aliment.servingSize = aliment.servingSize / days.length;
       }
     }
