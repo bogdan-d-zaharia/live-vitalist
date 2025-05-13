@@ -46,6 +46,35 @@ class MealsJournal extends ConsumerWidget {
               ),
             );
           },
+          onLongPress: () async {
+            final isDelete = await showDialog<bool>(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text('Delete meal?'),
+                content: Text('Are you sure you want to delete this meal?'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('Cancel'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => Navigator.pop(context, true),
+                    child: const Text('Delete'),
+                  ),
+                ],
+              ),
+            );
+
+            if (isDelete == true) {
+              dayNotifier.setDay(
+                date,
+                Day(
+                  meals: [...day.meals]
+                    ..removeWhere((element) => element.name == meal.name),
+                ),
+              );
+            }
+          },
           onAdd: () async {
             //TODO: Copied tom `MealEditor`
             final InstancedAliment newAliment =
@@ -149,6 +178,7 @@ class MealElement extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.onTap,
+    required this.onLongPress,
     required this.onAdd,
     super.key,
   });
@@ -156,6 +186,7 @@ class MealElement extends StatelessWidget {
   final String title;
   final String subtitle;
   final void Function() onTap;
+  final void Function() onLongPress;
   final void Function() onAdd;
 
   @override
@@ -166,6 +197,7 @@ class MealElement extends StatelessWidget {
           Expanded(
             child: InkWell(
               onTap: onTap,
+              onLongPress: onLongPress,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
