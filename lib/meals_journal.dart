@@ -278,6 +278,15 @@ class MealEditor extends ConsumerWidget {
                     ),
                   ),
                 );
+              } else if (aliment is TemporaryAliment) {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AlimentDataEditor(
+                      data: aliment.alimentData,
+                    ),
+                  ),
+                );
               }
               updateDay();
             },
@@ -293,6 +302,16 @@ class MealEditor extends ConsumerWidget {
                   ),
                 );
                 bankNotifier.setAliment(aliment.alimentID, data);
+              } else if (aliment is TemporaryAliment) {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AlimentDataEditor(
+                      data: aliment.alimentData,
+                    ),
+                  ),
+                );
+                updateDay();
               }
             },
           ),
@@ -319,6 +338,42 @@ class MealEditor extends ConsumerWidget {
         );
 
         if (newAliment.alimentID != '') {
+          meal.aliments.add(newAliment);
+          ref.read(dayCacheProvider.notifier).setDay(date, day);
+        }
+      },
+      additional: [],
+    ));
+
+    elements.add(ElementWidget(
+      title: {
+        'ENG': 'Add temporary aliment',
+        'ROU': 'Adaugare aliment temporar',
+      }[SettingsData.language]!,
+      subTitle: '',
+      onTap: () async {
+        final TemporaryAliment newAliment = TemporaryAliment(
+          alimentData: AlimentData(
+            name: '',
+            unit: 'portion',
+            referenceSize: 1.0,
+            referenceFields: {},
+            unitSynonyms: {},
+          ),
+          servingSize: 1.0,
+          unit: 'portion',
+        );
+
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AlimentDataEditor(
+              data: newAliment.alimentData,
+            ),
+          ),
+        );
+
+        if (newAliment.alimentData.name != '') {
           meal.aliments.add(newAliment);
           ref.read(dayCacheProvider.notifier).setDay(date, day);
         }

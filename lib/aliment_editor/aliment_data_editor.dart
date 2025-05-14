@@ -248,8 +248,8 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
         padding: const EdgeInsets.all(12),
         child: Row(
           children: [
-            Text('$label:'),
-            const Spacer(),
+            Expanded(child: Text('$label:', overflow: TextOverflow.ellipsis)),
+            const SizedBox(width: 12),
             NumberInput(
               getValue: getValue,
               setValue: setValue,

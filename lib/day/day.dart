@@ -152,12 +152,13 @@ extension DayAnalysis on Day {
 
   Map<Aliment, double> topIntakeAliments(
       String nutrient, AlimentBankState bank) {
-    final Map<Aliment, double> result = Map.fromEntries(totalAliments(bank).map(
-        (aliment) => MapEntry(aliment,
-            aliment.readDataRef(bank).referenceFields[nutrient] ?? 0.0)))
+    final ta = totalAliments(bank);
+    final Map<Aliment, double> result = Map.fromEntries(ta.map((aliment) =>
+        MapEntry(aliment,
+            aliment.readField(nutrient, aliment.readDataRef(bank), 1.0))))
       ..removeWhere((_, value) => value == 0.0);
 
-    return Map.fromEntries(result.entries.toList()
-      ..sort((a, b) => (b.value - a.value).sign.toInt()));
+    return Map.fromEntries(
+        result.entries.toList()..sort((a, b) => b.value.compareTo(a.value)));
   }
 }

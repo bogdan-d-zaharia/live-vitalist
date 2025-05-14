@@ -229,12 +229,18 @@ extension AlimentDataReadUtils on Aliment {
     return readDataRef(bank).unitSynonyms[unit] ?? 1.0;
   }
 
+  double readField(String nutrient, AlimentData data, double unitSize) {
+    final refField = data.referenceFields[nutrient] ?? 0.0;
+    return refField * servingSize * unitSize / data.referenceSize;
+  }
+
   /// Returns a processed copy of the referencedFields,
   /// taking into account the servingSize and unit size.
   Map<String, double> readFields(AlimentBankState bank) {
     final data = readDataRef(bank);
-    return data.referenceFields.map((key, value) => MapEntry(
-        key, value * servingSize * readUnitSize(bank) / data.referenceSize));
+    return data.referenceFields.map((key, value) =>
+        MapEntry(key, readField(key, data, readUnitSize(bank))));
+    //  value * servingSize * readUnitSize(bank) / data.referenceSize));
   }
 }
 
