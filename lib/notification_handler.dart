@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart'
     as ntf;
+import 'package:permission_handler/permission_handler.dart';
 
 import 'aliment/aliment.dart';
 import 'aliment/aliment_bank_provider.dart';
@@ -21,6 +22,11 @@ class NotificationHandler {
 
   static Future<void> showListNotification(
       List<Aliment> list, AlimentBankState bank, String mealName) async {
+    final status = await Permission.notification.status;
+    if (status.isDenied || status.isRestricted) {
+      await Permission.notification.request();
+    }
+
     List<String> lines = list.map(
       (e) {
         final String name = e.readDataRef(bank).name;
@@ -35,9 +41,9 @@ class NotificationHandler {
 
     final ntf.AndroidNotificationDetails androidPlatformChannelSpecifics =
         ntf.AndroidNotificationDetails(
-      'list_notification',
-      'List Notification',
-      channelDescription: 'A simple text-based notification with a list',
+      'meal_summary',
+      'Meal Summary',
+      channelDescription: 'Text-based notification with a list of aliments',
       importance: ntf.Importance.max,
       priority: ntf.Priority.high,
       ticker: 'ticker',
