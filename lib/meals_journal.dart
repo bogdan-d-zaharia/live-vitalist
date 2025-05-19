@@ -138,14 +138,12 @@ class MealsJournal extends ConsumerWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24.0, vertical: 16.0),
-                    child: Expanded(
-                      child: StringInput(
-                        initString: 'meal #${day.meals.length + 1}',
-                        submit: (newKey) {
-                          final key = newKey.trim();
-                          Navigator.pop(context, key);
-                        },
-                      ),
+                    child: StringInput(
+                      initString: 'meal #${day.meals.length + 1}',
+                      submit: (newKey) {
+                        final key = newKey.trim();
+                        Navigator.pop(context, key);
+                      },
                     ),
                   ),
                 ),
