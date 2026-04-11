@@ -17,7 +17,7 @@ class NotificationHandler {
     const ntf.InitializationSettings initSettings =
         ntf.InitializationSettings(android: androidInitSettings);
 
-    await _notificationsPlugin.initialize(initSettings);
+    await _notificationsPlugin.initialize(settings: initSettings);
   }
 
   static Future<void> showListNotification(
@@ -60,10 +60,10 @@ class NotificationHandler {
         ntf.NotificationDetails(android: androidPlatformChannelSpecifics);
 
     await _notificationsPlugin.show(
-      0,
-      '$mealName aliments',
-      'Expand to view aliments',
-      notificationDetails,
+      id: 0,
+      title: '$mealName aliments',
+      body: 'Expand to view aliments',
+      notificationDetails: notificationDetails,
     );
   }
 }
