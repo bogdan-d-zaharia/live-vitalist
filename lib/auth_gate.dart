@@ -31,8 +31,11 @@ class _AuthGateState extends ConsumerState<AuthGate> {
     await Future.microtask(() => ref.read(alimentBankProvider.notifier).load());
 
     if (mounted) {
-      await Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => HomeScreen()));
+      await Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+        (route) => false,
+      );
     }
   }
 
