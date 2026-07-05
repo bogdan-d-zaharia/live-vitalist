@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/aliment/aliment_extensions.dart';
 
 import 'aliment/aliment.dart';
 import 'aliment/aliment_bank_provider.dart';
@@ -76,20 +77,18 @@ class MealsJournal extends ConsumerWidget {
             }
           },
           onAdd: () async {
-            //TODO: Copied tom `MealEditor`
-            final InstancedAliment newAliment =
-                InstancedAliment(alimentID: '', servingSize: 1.0, unit: 'g');
+            //TODO: Copied to `MealEditor`
 
-            await Navigator.push(
+            final newAliment = await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => InstanceEditor(
-                  aliment: newAliment,
+                  initialAliment: InstancedAliment.empty,
                 ),
               ),
             );
 
-            if (newAliment.alimentID != '') {
+            if (newAliment != null && newAliment.alimentID != '') {
               meal.aliments.add(newAliment);
               ref.read(dayCacheProvider.notifier).setDay(date, day);
             }
@@ -258,63 +257,82 @@ class MealEditor extends ConsumerWidget {
 
     void updateDay() => ref.read(dayCacheProvider.notifier).setDay(date, day);
 
-    final List<Widget> elements = meal.aliments
-        .map<Widget>(
-          (aliment) => AlimentWidget(
-            aliment: aliment,
-            deleteAliment: () {
-              meal.aliments.remove(aliment);
-              updateDay();
-            },
-            onTap: () async {
-              if (aliment is InstancedAliment) {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => InstanceEditor(
-                      aliment: aliment,
-                    ),
+    final List<Widget> elements = meal.aliments.map<Widget>(
+      (aliment) {
+        final idx = meal.aliments.indexOf(aliment);
+        return AlimentWidget(
+          aliment: aliment,
+          deleteAliment: () {
+            meal.aliments.remove(aliment);
+            updateDay();
+          },
+          onTap: () async {
+            Aliment? newAliment;
+            if (aliment is InstancedAliment) {
+              newAliment = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => InstanceEditor(
+                    initialAliment: aliment,
                   ),
-                );
-              } else if (aliment is TemporaryAliment) {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AlimentDataEditor(
-                      data: aliment.alimentData,
-                    ),
+                ),
+              );
+            } else if (aliment is TemporaryAliment) {
+              final newData = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AlimentDataEditor(
+                    initialData: aliment.alimentData,
                   ),
-                );
+                ),
+              );
+              if (newData != null) {
+                newAliment = aliment.copyWith(alimentData: newData);
               }
-              updateDay();
-            },
-            onLongPress: () async {
-              if (aliment is InstancedAliment) {
-                final data = aliment.readDataRef(bank);
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AlimentDataEditor(
-                      data: data,
-                    ),
+            }
+            if (newAliment != null) {
+              meal.aliments
+                ..removeAt(idx)
+                ..insert(idx, newAliment);
+            }
+            updateDay();
+          },
+          onLongPress: () async {
+            if (aliment is InstancedAliment) {
+              final initialData = aliment.readDataRef(bank);
+              final data = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AlimentDataEditor(
+                    initialData: initialData,
                   ),
-                );
+                ),
+              );
+              if (data != null) {
                 bankNotifier.setAliment(aliment.alimentID, data);
-              } else if (aliment is TemporaryAliment) {
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AlimentDataEditor(
-                      data: aliment.alimentData,
-                    ),
-                  ),
-                );
-                updateDay();
               }
-            },
-          ),
-        )
-        .toList();
+            } else if (aliment is TemporaryAliment) {
+              final newData = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AlimentDataEditor(
+                    initialData: aliment.alimentData,
+                  ),
+                ),
+              );
+
+              if (newData != null) {
+                meal.aliments
+                  ..removeAt(idx)
+                  ..insert(idx, aliment.copyWith(alimentData: newData));
+              }
+
+              updateDay();
+            }
+          },
+        );
+      },
+    ).toList();
 
     elements.add(ElementWidget(
       title: {
@@ -323,19 +341,16 @@ class MealEditor extends ConsumerWidget {
       }[SettingsData.language]!,
       subTitle: '',
       onTap: () async {
-        final InstancedAliment newAliment =
-            InstancedAliment(alimentID: '', servingSize: 1.0, unit: 'g');
-
-        await Navigator.push(
+        final newAliment = await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => InstanceEditor(
-              aliment: newAliment,
+              initialAliment: InstancedAliment.empty,
             ),
           ),
         );
 
-        if (newAliment.alimentID != '') {
+        if (newAliment != null && newAliment.alimentID != '') {
           meal.aliments.add(newAliment);
           ref.read(dayCacheProvider.notifier).setDay(date, day);
         }
@@ -350,29 +365,19 @@ class MealEditor extends ConsumerWidget {
       }[SettingsData.language]!,
       subTitle: '',
       onTap: () async {
-        final TemporaryAliment newAliment = TemporaryAliment(
-          alimentData: AlimentData(
-            name: '',
-            unit: 'portion',
-            referenceSize: 1.0,
-            referenceFields: {},
-            unitSynonyms: {},
-          ),
-          servingSize: 1.0,
-          unit: 'portion',
-        );
+        final TemporaryAliment newAliment = TemporaryAliment.empty;
 
-        await Navigator.push(
+        final newData = await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => AlimentDataEditor(
-              data: newAliment.alimentData,
+              initialData: newAliment.alimentData,
             ),
           ),
         );
 
-        if (newAliment.alimentData.name != '') {
-          meal.aliments.add(newAliment);
+        if (newData != null && newData.name != '') {
+          meal.aliments.add(newAliment.copyWith(alimentData: newData));
           ref.read(dayCacheProvider.notifier).setDay(date, day);
         }
       },

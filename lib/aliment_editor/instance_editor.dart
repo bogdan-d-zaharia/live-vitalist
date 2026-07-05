@@ -1,25 +1,44 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:diacritic/diacritic.dart';
+import 'package:live_vitalist/aliment/aliment_data.dart';
 
-import '../aliment/aliment.dart';
-import '../aliment/aliment_bank_provider.dart';
-import '../custom_card.dart';
-import '../palette.dart';
-import '../string_input.dart';
+import 'package:live_vitalist/aliment/aliment.dart';
+import 'package:live_vitalist/aliment/aliment_bank_provider.dart';
+import 'package:live_vitalist/custom_card.dart';
+import 'package:live_vitalist/palette.dart';
+import 'package:live_vitalist/string_input.dart';
 import 'aliment_data_editor.dart';
 
 class InstanceEditor extends ConsumerStatefulWidget {
-  const InstanceEditor({required this.aliment, super.key});
-  final InstancedAliment aliment;
+  const InstanceEditor({required this.initialAliment, super.key});
+  final InstancedAliment initialAliment;
 
   @override
   ConsumerState<InstanceEditor> createState() => _InstanceEditorState();
 }
 
 class _InstanceEditorState extends ConsumerState<InstanceEditor> {
+  late InstancedAliment aliment;
+
+  bool get isModified =>
+      jsonEncode(aliment.toJson()) !=
+      jsonEncode(widget.initialAliment.toJson());
+
+  void _pop() {
+    Navigator.pop(context, isModified ? aliment : null);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    aliment = InstancedAliment.fromJson(widget.initialAliment.toJson());
+  }
+
   AlimentData? get selectedAliment =>
-      ref.watch(alimentBankProvider).aliments[widget.aliment.alimentID];
+      ref.watch(alimentBankProvider).aliments[aliment.alimentID];
 
   Future<void> _selectAliment() async {
     final selectedId = await showDialog<String>(
@@ -34,8 +53,10 @@ class _InstanceEditorState extends ConsumerState<InstanceEditor> {
     final selected = ref.read(alimentBankProvider).aliments[selectedId];
     if (selected == null) return;
 
-    widget.aliment.alimentID = selectedId;
-    widget.aliment.unit = selected.unit;
+    aliment = aliment.copyWith(
+      alimentID: selectedId,
+      unit: selected.unit,
+    );
 
     ref.read(alimentBankProvider.notifier).setFirst(selectedId);
   }
@@ -75,9 +96,9 @@ class _InstanceEditorState extends ConsumerState<InstanceEditor> {
         Expanded(
           child: Center(
             child: NumberInput(
-              getValue: () => widget.aliment.servingSize,
+              getValue: () => aliment.servingSize,
               setValue: (val) {
-                if (val >= 0.0) widget.aliment.servingSize = val;
+                if (val >= 0.0) aliment = aliment.copyWith(servingSize: val);
               },
             ),
           ),
@@ -87,14 +108,14 @@ class _InstanceEditorState extends ConsumerState<InstanceEditor> {
   }
 
   Widget? _buildUnitSelector() {
-    final aliment = selectedAliment;
-    if (aliment == null) return null;
+    final data = selectedAliment;
+    if (data == null) return null;
 
-    final units = [aliment.unit, ...aliment.unitSynonyms.keys];
+    final units = [data.unit, ...data.unitSynonyms.keys];
 
     return DropdownButton<String>(
       isExpanded: true,
-      value: units.contains(widget.aliment.unit) ? widget.aliment.unit : null,
+      value: units.contains(aliment.unit) ? aliment.unit : null,
       items: units.map((unit) {
         return DropdownMenuItem(
           value: unit,
@@ -103,7 +124,7 @@ class _InstanceEditorState extends ConsumerState<InstanceEditor> {
       }).toList(),
       onChanged: (unit) {
         if (unit != null) {
-          setState(() => widget.aliment.unit = unit);
+          setState(() => aliment = aliment.copyWith(unit: unit));
         }
       },
     );
@@ -113,18 +134,25 @@ class _InstanceEditorState extends ConsumerState<InstanceEditor> {
   Widget build(BuildContext context) {
     final unitSelector = _buildUnitSelector();
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Editor')),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildAlimentSelector(),
-              _buildServedInput(),
-              if (unitSelector != null) unitSelector,
-            ],
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop) return;
+        _pop();
+      },
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Editor')),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildAlimentSelector(),
+                _buildServedInput(),
+                if (unitSelector != null) unitSelector,
+              ],
+            ),
           ),
         ),
       ),
@@ -231,21 +259,14 @@ class _SelectorState extends ConsumerState<Selector> {
     return MiniCard(
       child: InkWell(
         onTap: () async {
-          final aliment = AlimentData(
-            name: '',
-            unit: 'g',
-            referenceSize: 100.0,
-            referenceFields: {},
-            unitSynonyms: {},
+          final AlimentData? aliment = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  AlimentDataEditor(initialData: AlimentData.empty),
+            ),
           );
-          final bool isSaved = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AlimentDataEditor(data: aliment),
-                ),
-              ) ??
-              false;
-          if (!isSaved) return;
+          if (aliment == null) return;
 
           final id = aliment.hashCode.toString();
           notifier.setAliment(id, aliment);
