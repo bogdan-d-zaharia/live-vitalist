@@ -146,16 +146,18 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
           actions: [
             IconButton(
               onPressed: () async {
-                final isMutate = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AlimentJsonEditor(
-                          initialData: data,
-                        ),
-                      ),
-                    ) ??
-                    false;
-                if (isMutate) setState(() => updateControllers());
+                final newData = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AlimentJsonEditor(
+                      initialData: data,
+                    ),
+                  ),
+                );
+                if (newData != null) {
+                  data = newData;
+                  setState(() => updateControllers());
+                }
               },
               icon: Icon(Icons.code_rounded),
             ),

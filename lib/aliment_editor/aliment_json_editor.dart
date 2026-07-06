@@ -43,7 +43,7 @@ class _AlimentJsonEditorState extends ConsumerState<AlimentJsonEditor> {
     super.dispose();
   }
 
-  bool get isModified => controller.text == originalText;
+  bool get isModified => controller.text != originalText;
 
   void popSave() {
     if (!isModified) return Navigator.pop(context, null);
