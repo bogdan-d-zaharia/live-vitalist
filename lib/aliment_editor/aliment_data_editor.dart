@@ -3,19 +3,19 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../aliment/aliment.dart';
-import '../custom_card.dart';
-import '../nutrient/nutrient_provider.dart';
-import '../string_input.dart';
-import 'aliment_json_editor.dart';
+import 'package:live_vitalist/aliment/aliment_data.dart';
+import 'package:live_vitalist/custom_card.dart';
+import 'package:live_vitalist/nutrient/nutrient_provider.dart';
+import 'package:live_vitalist/string_input.dart';
+import 'package:live_vitalist/aliment_editor/aliment_json_editor.dart';
 
 class AlimentDataEditor extends ConsumerStatefulWidget {
+  final AlimentData initialData;
+
   const AlimentDataEditor({
-    required this.data,
+    required this.initialData,
     super.key,
   });
-
-  final AlimentData data;
 
   @override
   ConsumerState<AlimentDataEditor> createState() => _AlimentDataEditorState();
@@ -24,7 +24,7 @@ class AlimentDataEditor extends ConsumerStatefulWidget {
 class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
   NutrientState get nutrients => ref.watch(nutrientStateProvider);
 
-  late AlimentData editableData;
+  AlimentData data = AlimentData.empty;
   bool isShowAdvanced = false;
 
   final Map<String, TextEditingController> _nameControllers = {};
@@ -37,7 +37,7 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
   @override
   void initState() {
     super.initState();
-    editableData = AlimentData.fromJson(widget.data.toJson());
+    data = AlimentData.fromJson(widget.initialData.toJson());
 
     _newSynonymNameController = TextEditingController();
     _newSynonymValueController = TextEditingController();
@@ -45,7 +45,7 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
     _nameController = TextEditingController();
     _unitController = TextEditingController();
 
-    for (var entry in editableData.unitSynonyms.entries) {
+    for (var entry in data.unitSynonyms.entries) {
       _nameControllers[entry.key] = TextEditingController();
       _valueControllers[entry.key] = TextEditingController();
     }
@@ -69,11 +69,11 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
   }
 
   void updateControllers() {
-    _nameController.text = editableData.name;
-    _unitController.text = editableData.unit;
+    _nameController.text = data.name;
+    _unitController.text = data.unit;
 
     for (var x in List.from(_nameControllers.keys)) {
-      if (!editableData.unitSynonyms.containsKey(x)) {
+      if (!data.unitSynonyms.containsKey(x)) {
         _nameControllers[x]?.dispose();
         _valueControllers[x]?.dispose();
         _nameControllers.remove(x);
@@ -81,7 +81,7 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
       }
     }
 
-    for (var entry in editableData.unitSynonyms.entries) {
+    for (var entry in data.unitSynonyms.entries) {
       if (_nameControllers[entry.key] != null) {
         _nameControllers[entry.key]!.text = entry.key;
         _valueControllers[entry.key]!.text = entry.value.toString();
@@ -94,15 +94,14 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
   }
 
   bool get isModified =>
-      jsonEncode(editableData.toJson()) != jsonEncode(widget.data.toJson());
+      jsonEncode(data.toJson()) != jsonEncode(widget.initialData.toJson());
 
   void _popSave() {
-    widget.data.mutateByJson(editableData.toJson());
-    Navigator.pop(context, true);
+    Navigator.pop(context, data);
   }
 
   void _popCancel() {
-    Navigator.pop(context, false);
+    Navigator.pop(context, null);
   }
 
   Future<bool?> _showSaveAlert() {
@@ -147,16 +146,18 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
           actions: [
             IconButton(
               onPressed: () async {
-                final isMutate = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AlimentJsonEditor(
-                          alimentData: editableData,
-                        ),
-                      ),
-                    ) ??
-                    false;
-                if (isMutate) setState(() => updateControllers());
+                final newData = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AlimentJsonEditor(
+                      initialData: data,
+                    ),
+                  ),
+                );
+                if (newData != null) {
+                  data = newData;
+                  setState(() => updateControllers());
+                }
               },
               icon: Icon(Icons.code_rounded),
             ),
@@ -168,21 +169,22 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
             children: [
               _stringInput(
                 'Name',
-                editableData.name,
-                (val) => setState(() => editableData.name = val),
+                data.name,
+                (val) => setState(() => data = data.copyWith(name: val)),
                 _nameController,
               ),
               _stringInput(
                 'Unit',
-                editableData.unit,
-                (val) => setState(() => editableData.unit = val),
+                data.unit,
+                (val) => setState(() => data = data.copyWith(unit: val)),
                 _unitController,
               ),
               _numberInput(
                 'Per amount',
-                () => editableData.referenceSize,
-                (val) => setState(() => editableData.referenceSize = val),
-                unit: editableData.unit,
+                () => data.referenceSize,
+                (val) =>
+                    setState(() => data = data.copyWith(referenceSize: val)),
+                unit: data.unit,
               ),
               ...basicFields.map(_nutrientInput),
               Row(
@@ -199,7 +201,7 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
                 ...advancedFields.map(_nutrientInput),
                 const SizedBox(height: 12),
                 const Text('Unit synonyms:'),
-                ...editableData.unitSynonyms.entries
+                ...data.unitSynonyms.entries
                     .map((entry) => _unitSynonymInput(entry.key)),
                 _addSynonymInput(),
               ],
@@ -274,8 +276,8 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
 
     return _numberInput(
       label,
-      () => editableData.referenceFields[key] ?? 0.0,
-      (val) => editableData.referenceFields[key] = val,
+      () => data.referenceFields[key] ?? 0.0,
+      (val) => data.referenceFields[key] = val,
       unit: unit,
     );
   }
@@ -298,8 +300,7 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
                   newKey = newKey.trim();
                   if (newKey.isEmpty || newKey == key) return;
 
-                  final newMap =
-                      Map<String, double>.from(editableData.unitSynonyms);
+                  final newMap = Map<String, double>.from(data.unitSynonyms);
                   final oldValue = newMap.remove(key)!;
                   newMap[newKey] = oldValue;
 
@@ -309,7 +310,7 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
                   _valueControllers.remove(key);
 
                   setState(() {
-                    editableData.unitSynonyms = newMap;
+                    data = data.copyWith(unitSynonyms: newMap);
                   });
                 },
               ),
@@ -326,7 +327,7 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
                   if (parsed == null || parsed <= 0) return;
 
                   setState(() {
-                    editableData.unitSynonyms[key] = parsed;
+                    data.unitSynonyms[key] = parsed;
                   });
                 },
               ),
@@ -340,7 +341,7 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
                 _valueControllers.remove(key);
 
                 setState(() {
-                  editableData.unitSynonyms.remove(key);
+                  data.unitSynonyms.remove(key);
                 });
               },
             ),
@@ -382,9 +383,9 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
                 if (key.isNotEmpty &&
                     val != null &&
                     val > 0 &&
-                    !editableData.unitSynonyms.containsKey(key)) {
+                    !data.unitSynonyms.containsKey(key)) {
                   setState(() {
-                    editableData.unitSynonyms[key] = val;
+                    data.unitSynonyms[key] = val;
                     _nameControllers[key] = TextEditingController(text: key);
                     _valueControllers[key] =
                         TextEditingController(text: val.toString());

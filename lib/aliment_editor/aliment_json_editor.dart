@@ -6,18 +6,19 @@ import 'package:flutter_highlight/themes/arta.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:highlight/languages/json.dart';
 
-import '../aliment/aliment.dart';
-import '../custom_card.dart';
-import '../json_handler.dart';
-import '../nutrient/nutrient_provider.dart';
+import 'package:live_vitalist/aliment/aliment_data.dart';
+import 'package:live_vitalist/aliment/aliment_data_extensions.dart';
+import 'package:live_vitalist/custom_card.dart';
+import 'package:live_vitalist/json_handler.dart';
+import 'package:live_vitalist/nutrient/nutrient_provider.dart';
 
 class AlimentJsonEditor extends ConsumerStatefulWidget {
   const AlimentJsonEditor({
-    required this.alimentData,
+    required this.initialData,
     super.key,
   });
 
-  final AlimentData alimentData;
+  final AlimentData initialData;
 
   @override
   ConsumerState<AlimentJsonEditor> createState() => _AlimentJsonEditorState();
@@ -30,7 +31,7 @@ class _AlimentJsonEditorState extends ConsumerState<AlimentJsonEditor> {
   @override
   void initState() {
     super.initState();
-    originalText = widget.alimentData
+    originalText = widget.initialData
         .toExpandedWithUnitsJson(ref.read(nutrientStateProvider));
     controller = CodeController(language: json, text: originalText);
   }
@@ -41,16 +42,15 @@ class _AlimentJsonEditorState extends ConsumerState<AlimentJsonEditor> {
     super.dispose();
   }
 
+  bool get isModified => controller.text != originalText;
+
   void popSave() {
-    if (controller.text == originalText) {
-      return Navigator.pop(context, false);
-    }
+    if (!isModified) return Navigator.pop(context, null);
 
     try {
-      widget.alimentData.mutateByJson(widget.alimentData
+      final data = AlimentData.fromJson(widget.initialData
           .fromExpandedJsonWithCommentsToJsonMap(controller.text));
-
-      Navigator.pop(context, true);
+      Navigator.pop(context, data);
     } catch (e) {
       showDialog(
         context: context,

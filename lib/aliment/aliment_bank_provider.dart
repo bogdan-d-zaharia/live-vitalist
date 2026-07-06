@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
+import 'package:live_vitalist/aliment/aliment_data.dart';
 
-import '../file_handler.dart';
-import '../json_handler.dart';
-import 'aliment.dart';
+import 'package:live_vitalist/file_handler.dart';
+import 'package:live_vitalist/json_handler.dart';
 
 class AlimentBankState {
   final Map<String, AlimentData> aliments;

@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart' as intl;
+import 'package:live_vitalist/aliment/aliment_extensions.dart';
 
 import '../aliment/aliment.dart';
 import '../aliment/aliment_bank_provider.dart';
@@ -109,12 +110,21 @@ class Day {
   static Day averageDays(List<Day> days) {
     final Day sum = sumDays(days);
 
-    for (var meal in sum.meals) {
-      for (var aliment in meal.aliments) {
-        /* BE CAREFUL WITH MUTATIONS */
-        aliment.servingSize = aliment.servingSize / days.length;
-      }
-    }
+    final averagedMeals = sum.meals
+        .map(
+          (meal) => Meal(
+            name: meal.name,
+            aliments: meal.aliments
+                .map((aliment) => aliment.copyWith(
+                    servingSize: aliment.servingSize / days.length))
+                .toList(),
+          ),
+        )
+        .toList();
+
+    sum.meals
+      ..clear()
+      ..addAll(averagedMeals);
 
     return sum;
   }
@@ -140,8 +150,12 @@ extension DayAnalysis on Day {
             unit: data.unit,
           );
         }
-        tias[sa.alimentID]!.servingSize +=
-            sa.servingSize * sa.readUnitSize(bank);
+
+        // totalServingSize += thisServingSize * thisUnitSize;
+        tias[sa.alimentID] = tias[sa.alimentID]!.copyWith(
+          servingSize: tias[sa.alimentID]!.servingSize +
+              sa.servingSize * sa.readUnitSize(bank),
+        );
       } else if (sa is TemporaryAliment) {
         ttas.add(sa);
       }
@@ -153,9 +167,8 @@ extension DayAnalysis on Day {
   Map<Aliment, double> topIntakeAliments(
       String nutrient, AlimentBankState bank) {
     final ta = totalAliments(bank);
-    final Map<Aliment, double> result = Map.fromEntries(ta.map((aliment) =>
-        MapEntry(aliment,
-            aliment.readField(nutrient, aliment.readDataRef(bank), 1.0))))
+    final Map<Aliment, double> result = Map.fromEntries(ta.map(
+        (aliment) => MapEntry(aliment, aliment.readField(nutrient, bank, 1.0))))
       ..removeWhere((_, value) => value == 0.0);
 
     return Map.fromEntries(
