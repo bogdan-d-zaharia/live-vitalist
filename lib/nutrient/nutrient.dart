@@ -1,17 +1,40 @@
-class Nutrient {
-  Map<String, String> translations;
-  String unit;
-  double? lowerLimit;
-  double? upperLimit;
-  List<String> tags;
+import 'package:flutter/foundation.dart';
 
-  Nutrient({
+@immutable
+class Nutrient {
+  final Map<String, String> translations;
+  final String unit;
+  final double? lowerLimit;
+  final double? upperLimit;
+  final List<String> tags;
+
+  const Nutrient({
     required this.translations,
     required this.unit,
     this.lowerLimit,
     this.upperLimit,
     List<String>? tags,
-  }) : tags = tags ?? [];
+  }) : tags = tags ?? const [];
+
+  Map<String, dynamic> toJson() {
+    return {
+      'unit': unit,
+      'lowerLimit': lowerLimit,
+      'upperLimit': upperLimit,
+      'translations': translations,
+      if (tags.isNotEmpty) 'tags': tags,
+    };
+  }
+
+  factory Nutrient.fromJson(Map<String, dynamic> json) {
+    return Nutrient(
+      unit: json['unit'],
+      lowerLimit: (json['lowerLimit'] as num?)?.toDouble(),
+      upperLimit: (json['upperLimit'] as num?)?.toDouble(),
+      translations: Map<String, String>.from(json['translations'] ?? {}),
+      tags: List<String>.from(json['tags'] ?? []),
+    );
+  }
 
   Nutrient copyWith({
     Map<String, String>? translations,
@@ -27,28 +50,6 @@ class Nutrient {
       upperLimit: upperLimit ?? this.upperLimit,
       tags: tags ?? List.from(this.tags),
     );
-  }
-
-  factory Nutrient.fromJson(Map<String, dynamic> json) {
-    return Nutrient(
-      unit: json['unit'],
-      lowerLimit: (json['lowerLimit'] as num?)?.toDouble(),
-      upperLimit: (json['upperLimit'] as num?)?.toDouble(),
-      translations: Map<String, String>.from(json['translations'] ?? {}),
-      tags: List<String>.from(json['tags'] ?? []),
-    );
-  }
-}
-
-extension NutrientSerialization on Nutrient {
-  Map<String, dynamic> toJson() {
-    return {
-      'unit': unit,
-      'lowerLimit': lowerLimit,
-      'upperLimit': upperLimit,
-      'translations': translations,
-      if (tags.isNotEmpty) 'tags': tags,
-    };
   }
 }
 

@@ -1,7 +1,6 @@
 import 'nutrient.dart';
 
-/// Do not mutate.
-final Map<String, Nutrient> initialNutrientMap = {
+const Map<String, Nutrient> initialNutrientMap = {
   /* Main */
   'kcals': Nutrient(
     unit: 'kcal',

@@ -1,14 +1,19 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/legacy.dart';
 
 import '../../file_handler.dart';
 import 'nutrient.dart';
 import 'nutrient_initial_data.dart';
 
+@immutable
 class NutrientState {
   final Map<String, Nutrient> data;
   final List<String> order;
 
-  NutrientState({required this.data, required this.order});
+  const NutrientState({
+    required this.data,
+    required this.order,
+  });
 
   Nutrient getByIndex(int index) => data[order[index]]!;
 }
