@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'aliment/aliment_bank_provider.dart';
 import 'custom_card.dart';
 import 'file_handler.dart';
-import 'home_screen.dart';
+import 'app/home_screen.dart';
 import 'nutrient/nutrient_provider.dart';
 import 'settings_data.dart';
 

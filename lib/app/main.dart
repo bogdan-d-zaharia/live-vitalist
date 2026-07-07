@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'auth_gate.dart';
-import 'notification_handler.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
-import 'settings_data.dart';
+
+import 'package:live_vitalist/auth_gate.dart';
+import 'package:live_vitalist/notification_handler.dart';
+import 'package:live_vitalist/firebase_options.dart';
+import 'package:live_vitalist/settings_data.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
