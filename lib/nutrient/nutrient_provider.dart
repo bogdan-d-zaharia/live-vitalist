@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/legacy.dart';
+import 'package:live_vitalist/storage/data/storage_solution.dart';
 
-import '../../file_handler.dart';
 import 'nutrient.dart';
 import 'nutrient_initial_data.dart';
 
@@ -84,11 +84,11 @@ class NutrientStateNotifier extends StateNotifier<NutrientState> {
   }
 
   Future<void> _save() {
-    return StorageHandler.saveJson('nutrients', toJson(), doBackup: true);
+    return StorageSolution.instance.saveJson('nutrients', toJson());
   }
 
   Future<void> load() async {
-    final json = await StorageHandler.loadJson('nutrients');
+    final json = await StorageSolution.instance.loadJson('nutrients');
     if (json != null) {
       loadFromJson(json);
     }

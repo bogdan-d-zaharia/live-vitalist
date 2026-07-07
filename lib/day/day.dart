@@ -1,9 +1,8 @@
 import 'package:intl/intl.dart' as intl;
+import 'package:live_vitalist/aliment/aliment.dart';
+import 'package:live_vitalist/aliment/aliment_bank_provider.dart';
 import 'package:live_vitalist/aliment/aliment_extensions.dart';
-
-import '../aliment/aliment.dart';
-import '../aliment/aliment_bank_provider.dart';
-import '../file_handler.dart';
+import 'package:live_vitalist/storage/data/storage_solution.dart';
 
 class Meal {
   Meal({required this.name, List<Aliment>? aliments})
@@ -72,12 +71,12 @@ class Day {
 
   Future<void> save(DateTime date) async {
     final fileName = intl.DateFormat('d_M_y').format(date);
-    await StorageHandler.saveJson(fileName, toJson());
+    await StorageSolution.instance.saveJson(fileName, toJson());
   }
 
   Future<bool> load(DateTime date) async {
     final fileName = intl.DateFormat('d_M_y').format(date);
-    final json = await StorageHandler.loadJson(fileName);
+    final json = await StorageSolution.instance.loadJson(fileName);
     fromJson(json ?? {});
     return json != null;
   }

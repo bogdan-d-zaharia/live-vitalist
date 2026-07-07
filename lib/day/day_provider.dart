@@ -1,9 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:intl/intl.dart' as intl;
-
-import '../file_handler.dart';
-import 'day.dart';
+import 'package:live_vitalist/day/day.dart';
+import 'package:live_vitalist/storage/data/storage_solution.dart';
 
 extension DateTimeNormalizer on DateTime {
   /// Normalize to date-only.
@@ -25,7 +24,7 @@ class DayCacheNotifier extends StateNotifier<Map<DateTime, Day>> {
     if (state.containsKey(normalized)) return true;
 
     final fileName = _fileNameFor(normalized);
-    final json = await StorageHandler.loadJson(fileName);
+    final json = await StorageSolution.instance.loadJson(fileName);
     final day = Day()..fromJson(json ?? {});
     state = {...state, normalized: day};
 

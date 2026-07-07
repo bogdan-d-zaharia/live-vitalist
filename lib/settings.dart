@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:live_vitalist/storage/data/storage_solution.dart';
+import 'package:live_vitalist/storage/domain/storage_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'aliment/aliment_bank_provider.dart';
 import 'custom_card.dart';
 import 'day/day_provider.dart';
-import 'file_handler.dart';
+import 'storage/data/file_handler.dart';
 import 'palette.dart';
 import 'settings_data.dart';
 
@@ -93,7 +95,7 @@ class _SettingsState extends ConsumerState<Settings> {
         false;
 
     if (b) {
-      StorageHandler.isFirebase = false;
+      StorageSolution.isFirebase = false;
     }
 
     return b;
@@ -164,7 +166,7 @@ class _SettingsState extends ConsumerState<Settings> {
   }
 
   Future<void> deleteEverything() async {
-    if (StorageHandler.isFirebase && !await deleteInternet()) return;
+    if (StorageSolution.isFirebase && !await deleteInternet()) return;
     await FileHandler.deleteLocal();
     await SettingsData.deleteAll();
 
@@ -306,7 +308,7 @@ class _SettingsState extends ConsumerState<Settings> {
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: ListView(
                             children: [
-                              if (StorageHandler.isFirebase)
+                              if (StorageSolution.isFirebase)
                                 CustomCard(
                                   logo: Icon(Icons.no_accounts_rounded),
                                   title: 'Account and data deletion',
@@ -355,7 +357,7 @@ class _SettingsState extends ConsumerState<Settings> {
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: ListView(
           children: [
-            if (!StorageHandler.isFirebase)
+            if (!StorageSolution.isFirebase)
               CustomCard(
                 logo: Icon(Icons.cloud_upload_rounded),
                 title: 'Connect with Google',
@@ -381,7 +383,7 @@ class _SettingsState extends ConsumerState<Settings> {
                         await FirebaseAuth.instance
                             .signInWithCredential(credential);
 
-                        StorageHandler.isFirebase = true;
+                        StorageSolution.isFirebase = true;
 
                         //TODO: Perhaps show a pop up and ask upon conflict.
 
@@ -411,12 +413,12 @@ class _SettingsState extends ConsumerState<Settings> {
             ////     ],
             ////   ),
             //// ),
-            if (StorageHandler.isFirebase)
+            if (StorageSolution.isFirebase)
               CustomCard(
                 logo: Icon(Icons.sync_rounded),
                 title: 'Backup to cloud',
                 child: TextButton(
-                  onPressed: () => StorageHandler.syncAll(),
+                  onPressed: () => StorageSolution.instance.syncAll(),
                   child: Text('Backup all data to cloud'),
                 ),
               ),

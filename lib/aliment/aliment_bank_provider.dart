@@ -2,8 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:live_vitalist/aliment/aliment_data.dart';
 
-import 'package:live_vitalist/file_handler.dart';
 import 'package:live_vitalist/json_handler.dart';
+import 'package:live_vitalist/storage/data/storage_solution.dart';
 
 class AlimentBankState {
   final Map<String, AlimentData> aliments;
@@ -59,23 +59,27 @@ class AlimentBank extends StateNotifier<AlimentBankState> {
   }
 
   Future<void> save() {
-    return StorageHandler.saveJson('alimentBank', state.toJson(),
-        doBackup: true);
+    return StorageSolution.instance.saveJson('alimentBank', state.toJson());
   }
 
   Future<void> load() async {
-    final json = await StorageHandler.loadJson('alimentBank');
+    final json = await StorageSolution.instance.loadJson('alimentBank');
     if (json != null) {
       state = AlimentBankState.fromJson(json);
     }
   }
 
   Future<void> loadMerged() async {
-    final local = await FileHandler.loadJson('alimentBank') ?? {};
-    final internet = await FirebaseHandler.loadJson('alimentBank') ?? {};
+    final sources = await StorageSolution.instance.loadSources();
     final mergedData = JsonHandler.mergeBaseAddon(
-        internet['aliments'] ?? {}, local['aliments'] ?? {});
-    final mergedOrder = [...local['order'] ?? [], ...internet['order'] ?? []];
+      sources['cloud']['aliments'] ?? {},
+      sources['local']['aliments'] ?? {},
+    );
+    final mergedOrder = [
+      ...sources['local']['order'] ?? [],
+      ...sources['cloud']['order'] ?? [],
+    ];
+
     state = AlimentBankState.fromJson(JsonHandler.processJson(
         {'aliments': mergedData, 'order': mergedOrder}));
     await save();

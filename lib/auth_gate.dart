@@ -3,14 +3,13 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/aliment/aliment_bank_provider.dart';
+import 'package:live_vitalist/custom_card.dart';
+import 'package:live_vitalist/home_screen.dart';
+import 'package:live_vitalist/nutrient/nutrient_provider.dart';
+import 'package:live_vitalist/settings_data.dart';
+import 'package:live_vitalist/storage/data/storage_solution.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import 'aliment/aliment_bank_provider.dart';
-import 'custom_card.dart';
-import 'file_handler.dart';
-import 'home_screen.dart';
-import 'nutrient/nutrient_provider.dart';
-import 'settings_data.dart';
 
 class AuthGate extends ConsumerStatefulWidget {
   const AuthGate({super.key});
@@ -25,7 +24,7 @@ class _AuthGateState extends ConsumerState<AuthGate> {
 
   Future<void> onEnter() async {
     SettingsData.isLoggedIn = true;
-    StorageHandler.isFirebase = isGoogle;
+    StorageSolution.isFirebase = isGoogle;
     await Future.microtask(
         () => ref.read(nutrientStateProvider.notifier).load());
     await Future.microtask(() => ref.read(alimentBankProvider.notifier).load());
