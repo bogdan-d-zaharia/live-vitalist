@@ -1,17 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:live_vitalist/storage/data/storage_solution.dart';
-import 'package:live_vitalist/storage/domain/storage_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'aliment/aliment_bank_provider.dart';
+import 'aliment/aliment_bank.dart';
 import 'custom_card.dart';
 import 'day/day_provider.dart';
-import 'storage/data/file_handler.dart';
 import 'palette.dart';
 import 'settings_data.dart';
 
@@ -37,9 +34,6 @@ class _SettingsState extends ConsumerState<Settings> {
       'Are you sure you want to delete your account and all data stored online? This action is permanent and cannot be undone.';
 
   Future<bool> deleteInternet() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) return false;
-
     final bool b = await showDialog(
           context: context,
           builder: (context) {
@@ -57,22 +51,7 @@ class _SettingsState extends ConsumerState<Settings> {
                     SizedBox(height: 12.0),
                     ElevatedButton.icon(
                       onPressed: () async {
-                        final googleUser = await GoogleSignIn().signIn();
-                        final googleAuth = await googleUser?.authentication;
-
-                        final credential = GoogleAuthProvider.credential(
-                          accessToken: googleAuth?.accessToken,
-                          idToken: googleAuth?.idToken,
-                        );
-
-                        await user.reauthenticateWithCredential(credential);
-
-                        await FirebaseDatabase.instance
-                            .ref('users/${user.uid}')
-                            .remove();
-
-                        await user.delete();
-
+                        //! TODO: Account deletion
                         if (context.mounted) {
                           Navigator.pop(context, true);
                         }
@@ -167,7 +146,7 @@ class _SettingsState extends ConsumerState<Settings> {
 
   Future<void> deleteEverything() async {
     if (StorageSolution.isFirebase && !await deleteInternet()) return;
-    await FileHandler.deleteLocal();
+    //! TODO: await FileHandler.deleteLocal();
     await SettingsData.deleteAll();
 
     if (mounted) {
@@ -387,7 +366,7 @@ class _SettingsState extends ConsumerState<Settings> {
 
                         //TODO: Perhaps show a pop up and ask upon conflict.
 
-                        await bankNotifier.loadMerged();
+                        await bankNotifier.load(); //! TODO: Verify
                         // await NutrientsHandler.load(); //TODO: Verify
                         dayCacheNotifier.clear();
                         setState(() {});
@@ -413,15 +392,15 @@ class _SettingsState extends ConsumerState<Settings> {
             ////     ],
             ////   ),
             //// ),
-            if (StorageSolution.isFirebase)
-              CustomCard(
-                logo: Icon(Icons.sync_rounded),
-                title: 'Backup to cloud',
-                child: TextButton(
-                  onPressed: () => StorageSolution.instance.syncAll(),
-                  child: Text('Backup all data to cloud'),
-                ),
-              ),
+            // if (StorageSolution.isFirebase)
+            //   CustomCard(
+            //     logo: Icon(Icons.sync_rounded),
+            //     title: 'Backup to cloud',
+            //     child: TextButton(
+            //       onPressed: () => StorageSolution.instance.syncAll(),
+            //       child: Text('Backup all data to cloud'),
+            //     ),
+            //   ),
 
             MiniCard(
               child: Row(

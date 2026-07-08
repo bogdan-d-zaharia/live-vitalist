@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:live_vitalist/aliment/aliment_bank_provider.dart';
+import 'package:live_vitalist/aliment/aliment_bank.dart';
 import 'package:live_vitalist/day/day_provider.dart';
 import 'aliment/aliment.dart';
 import 'custom_card.dart';
@@ -25,9 +25,8 @@ class _NutrientDisplayState extends ConsumerState<NutrientDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    final nutrientState = ref.watch(nutrientStateProvider);
-    final NutrientStateNotifier nutrientNotifier =
-        ref.read(nutrientStateProvider.notifier);
+    final nutrientState = ref.watch(nutrientsProvider);
+    final nutrientNotifier = ref.read(nutrientsProvider.notifier);
 
     return isEditMode
         ? _buildEditMode(context, nutrientState, nutrientNotifier)
@@ -57,8 +56,11 @@ class _NutrientDisplayState extends ConsumerState<NutrientDisplay> {
     );
   }
 
-  Widget _buildEditMode(BuildContext context, NutrientState state,
-      NutrientStateNotifier nutrientNotifier) {
+  Widget _buildEditMode(
+    BuildContext context,
+    NutrientState state,
+    Nutrients nutrientNotifier,
+  ) {
     final widgets = state.order.map((key) {
       final field = state.data[key]!;
       final label = field.translations[SettingsData.language]!;
@@ -375,7 +377,9 @@ class _NutrientDisplayState extends ConsumerState<NutrientDisplay> {
   }
 
   void _showNewNutrientDialog(
-      BuildContext context, NutrientStateNotifier notifier) {
+    BuildContext context,
+    Nutrients notifier,
+  ) {
     showDialog(
       context: context,
       builder: (_) => Dialog(

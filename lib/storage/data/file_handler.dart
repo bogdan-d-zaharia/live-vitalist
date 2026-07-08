@@ -27,6 +27,7 @@ final class FileHandler implements IStorageHandler {
     return file;
   }
 
+  @override
   Future<bool> saveJson(String path, Map<String, dynamic> json) async {
     final File file = (await _getFile(path, doCreate: true))!;
     if (json.isEmpty) {
@@ -59,10 +60,12 @@ final class FileHandler implements IStorageHandler {
     return null;
   }
 
-  static Future<void> deleteLocal() async {
+  @override
+  Future<bool> delete() async {
     final dir = Directory(await FileHandler.localPath);
     for (File file in dir.listSync().whereType<File>()) {
       await file.delete();
     }
+    return true;
   }
 }

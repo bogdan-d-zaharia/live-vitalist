@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart' as intl;
 import 'package:live_vitalist/aliment/aliment.dart';
-import 'package:live_vitalist/aliment/aliment_bank_provider.dart';
+import 'package:live_vitalist/aliment/aliment_bank.dart';
 import 'package:live_vitalist/aliment/aliment_extensions.dart';
 import 'package:live_vitalist/storage/data/storage_solution.dart';
 

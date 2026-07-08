@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:live_vitalist/storage/data/storage_solution.dart';
 import 'package:live_vitalist/storage/domain/storage_handler.dart';
 import 'package:path/path.dart' as p;
@@ -7,10 +8,6 @@ import 'package:path/path.dart' as p;
 import 'package:live_vitalist/json_handler.dart';
 
 final class FirebaseHandler implements IStorageHandler {
-  // @override
-  // late IStorageHandler? nextHandler;
-  // FirebaseHandler(this.nextHandler);
-
   @override
   Future<bool> saveJson(String path, Map<String, dynamic> json) async {
     final fileName = p.basenameWithoutExtension(path);
@@ -45,5 +42,25 @@ final class FirebaseHandler implements IStorageHandler {
     }
 
     return null;
+  }
+
+  @override
+  Future<bool> delete() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return false;
+
+    final googleUser = await GoogleSignIn().signIn();
+    final googleAuth = await googleUser?.authentication;
+
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    await user.reauthenticateWithCredential(credential);
+    await FirebaseDatabase.instance.ref('users/${user.uid}').remove();
+    await user.delete();
+
+    return true;
   }
 }

@@ -22,7 +22,7 @@ class AlimentDataEditor extends ConsumerStatefulWidget {
 }
 
 class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
-  NutrientState get nutrients => ref.watch(nutrientStateProvider);
+  NutrientState get nutrients => ref.watch(nutrientsProvider);
 
   AlimentData data = AlimentData.empty;
   bool isShowAdvanced = false;

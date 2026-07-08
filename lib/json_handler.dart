@@ -97,15 +97,18 @@ abstract final class JsonHandler {
   ///     }
   ///
   ///     Recursion only for Map + Map, not for List + List
-  static Map mergeBaseAddon(Map base, Map addon) {
-    final result = Map.from(base);
+  static Map<K, dynamic> mergeBaseAddon<K>(
+    Map<K, dynamic> base,
+    Map<K, dynamic> addon,
+  ) {
+    final result = Map<K, dynamic>.from(base);
 
     for (var entry in addon.entries) {
       final key = entry.key;
       final baseValue = base[key];
       final addonValue = entry.value;
 
-      if (baseValue is Map && addonValue is Map) {
+      if (baseValue is Map<K, dynamic> && addonValue is Map<K, dynamic>) {
         result[key] = mergeBaseAddon(baseValue, addonValue);
       } else if (baseValue is List && addonValue is List) {
         (result[key] as List).addAll(addonValue);

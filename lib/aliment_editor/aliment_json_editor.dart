@@ -31,8 +31,8 @@ class _AlimentJsonEditorState extends ConsumerState<AlimentJsonEditor> {
   @override
   void initState() {
     super.initState();
-    originalText = widget.initialData
-        .toExpandedWithUnitsJson(ref.read(nutrientStateProvider));
+    originalText =
+        widget.initialData.toExpandedWithUnitsJson(ref.read(nutrientsProvider));
     controller = CodeController(language: json, text: originalText);
   }
 

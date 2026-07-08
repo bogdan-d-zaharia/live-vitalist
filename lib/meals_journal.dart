@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/aliment/aliment_extensions.dart';
 
 import 'aliment/aliment.dart';
-import 'aliment/aliment_bank_provider.dart';
+import 'aliment/aliment_bank.dart';
 import 'aliment_editor/aliment_data_editor.dart';
 import 'aliment_editor/instance_editor.dart';
 import 'custom_card.dart';
@@ -26,7 +26,7 @@ class MealsJournal extends ConsumerWidget {
     final date = ref.watch(selectedDatesProvider).first;
 
     final bank = ref.watch(alimentBankProvider);
-    final nutrients = ref.watch(nutrientStateProvider).data;
+    final nutrients = ref.watch(nutrientsProvider).data;
 
     final List<Widget> elements = day.meals.map<Widget>(
       (meal) {
@@ -496,7 +496,7 @@ class AlimentWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final model = ref.watch(nutrientStateProvider).data;
+    final model = ref.watch(nutrientsProvider).data;
     final bank = ref.watch(alimentBankProvider);
 
     final values = aliment.readFields(bank);

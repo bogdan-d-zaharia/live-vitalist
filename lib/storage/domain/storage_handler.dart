@@ -1,12 +1,24 @@
 abstract interface class IStorageHandler {
   Future<bool> saveJson(String path, Map<String, dynamic> json);
   Future<Map<String, dynamic>?> loadJson(String path);
-  // abstract int priority;
+  Future<bool> delete();
 }
 
-// abstract interface class IChainOfResponsibility<T> {
-//   abstract T? nextHandler;
-// }
+class ResponseChain<T> {
+  final T Function() respond;
+  final ResponseChain<T>? subordinate;
+  final T Function(T superior, T inferior)? resolve;
 
-// abstract interface class IStorageMethod
-//     implements IStorageHandler, IChainOfResponsibility<IStorageHandler> {}
+  ResponseChain({
+    required this.respond,
+    this.subordinate,
+    this.resolve,
+  });
+
+  T chainResponse() {
+    final superior = respond();
+    final inferior = subordinate?.respond();
+    if (inferior == null || resolve == null) return superior;
+    return resolve!(superior, inferior);
+  }
+}

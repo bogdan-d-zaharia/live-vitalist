@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart' as intl;
 
-import 'aliment/aliment_bank_provider.dart';
+import 'aliment/aliment_bank.dart';
 import 'custom_card.dart';
 import 'day/day.dart';
 import 'day/day_provider.dart';
@@ -166,7 +166,7 @@ class CalendarItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final dayMap = ref.watch(dayCacheProvider);
     final bank = ref.watch(alimentBankProvider);
-    final nutrients = ref.watch(nutrientStateProvider);
+    final nutrients = ref.watch(nutrientsProvider);
 
     final day = dayMap[date];
     if (day != null) {

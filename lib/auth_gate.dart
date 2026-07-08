@@ -3,7 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:live_vitalist/aliment/aliment_bank_provider.dart';
+import 'package:live_vitalist/aliment/aliment_bank.dart';
 import 'package:live_vitalist/custom_card.dart';
 import 'package:live_vitalist/home_screen.dart';
 import 'package:live_vitalist/nutrient/nutrient_provider.dart';
@@ -25,8 +25,7 @@ class _AuthGateState extends ConsumerState<AuthGate> {
   Future<void> onEnter() async {
     SettingsData.isLoggedIn = true;
     StorageSolution.isFirebase = isGoogle;
-    await Future.microtask(
-        () => ref.read(nutrientStateProvider.notifier).load());
+    await Future.microtask(() => ref.read(nutrientsProvider.notifier).load());
     await Future.microtask(() => ref.read(alimentBankProvider.notifier).load());
 
     if (mounted) {
