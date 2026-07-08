@@ -1,20 +1,24 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:live_vitalist/storage/data/storage_solution.dart';
 import 'package:live_vitalist/storage/domain/storage_handler.dart';
 import 'package:path/path.dart' as p;
 
 import 'package:live_vitalist/json_handler.dart';
 
+/// Verifies if the user is connected when used.
+///
+/// A connected user stays non-null even when there is no internet connection.
 final class FirebaseHandler implements IStorageHandler {
   @override
   Future<bool> saveJson(String path, Map<String, dynamic> json) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return true;
+
     final fileName = p.basenameWithoutExtension(path);
     if (fileName.contains('_backup') || fileName == 'settings') return false;
 
-    final user = FirebaseAuth.instance.currentUser;
-    final uid = user?.uid;
+    final uid = user.uid;
     final db = FirebaseDatabase.instance.ref();
 
     /* Just waits until it has internet connection and sends. 
@@ -28,10 +32,10 @@ final class FirebaseHandler implements IStorageHandler {
 
   @override
   Future<Map<String, dynamic>?> loadJson(String path) async {
-    if (!StorageSolution.isFirebase) return null;
-
     final user = FirebaseAuth.instance.currentUser;
-    final uid = user?.uid;
+    if (user == null) return null;
+
+    final uid = user.uid;
     final db = FirebaseDatabase.instance.ref();
 
     final snapshot = await db.child('users/$uid/$path').get();
@@ -47,20 +51,24 @@ final class FirebaseHandler implements IStorageHandler {
   @override
   Future<bool> delete() async {
     final user = FirebaseAuth.instance.currentUser;
-    if (user == null) return false;
+    if (user == null) return true;
 
-    final googleUser = await GoogleSignIn().signIn();
-    final googleAuth = await googleUser?.authentication;
+    try {
+      final googleUser = await GoogleSignIn().signIn();
+      final googleAuth = await googleUser?.authentication;
 
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth?.accessToken,
-      idToken: googleAuth?.idToken,
-    );
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
+      );
 
-    await user.reauthenticateWithCredential(credential);
-    await FirebaseDatabase.instance.ref('users/${user.uid}').remove();
-    await user.delete();
+      await user.reauthenticateWithCredential(credential);
+      await FirebaseDatabase.instance.ref('users/${user.uid}').remove();
+      await user.delete();
 
-    return true;
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }

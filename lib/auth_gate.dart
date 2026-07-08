@@ -8,7 +8,6 @@ import 'package:live_vitalist/custom_card.dart';
 import 'package:live_vitalist/home_screen.dart';
 import 'package:live_vitalist/nutrient/nutrient_provider.dart';
 import 'package:live_vitalist/settings_data.dart';
-import 'package:live_vitalist/storage/data/storage_solution.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AuthGate extends ConsumerStatefulWidget {
@@ -24,7 +23,7 @@ class _AuthGateState extends ConsumerState<AuthGate> {
 
   Future<void> onEnter() async {
     SettingsData.isLoggedIn = true;
-    StorageSolution.isFirebase = isGoogle;
+
     await Future.microtask(() => ref.read(nutrientsProvider.notifier).load());
     await Future.microtask(() => ref.read(alimentBankProvider.notifier).load());
 

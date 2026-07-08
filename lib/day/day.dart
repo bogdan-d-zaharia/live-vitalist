@@ -1,72 +1,24 @@
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:live_vitalist/aliment/aliment.dart';
 import 'package:live_vitalist/aliment/aliment_bank.dart';
 import 'package:live_vitalist/aliment/aliment_extensions.dart';
-import 'package:live_vitalist/storage/data/storage_solution.dart';
+import 'package:live_vitalist/day/day_constants.dart';
+import 'package:live_vitalist/day/meal.dart';
 
-class Meal {
-  Meal({required this.name, List<Aliment>? aliments})
-      : aliments = aliments ?? [];
-
-  final String name;
-  final List<Aliment> aliments;
-
-  Map<String, dynamic> toJson() => {
-        'name': name,
-        'aliments': aliments.map((a) => a.toJson()).toList(),
-      };
-
-  factory Meal.fromJson(Map<String, dynamic> json) => Meal(
-        name: json['name'],
-        aliments: ((json['aliments'] ?? []) as List<dynamic>)
-            .map((e) => (e as Map<String, dynamic>).containsKey('alimentID')
-                ? InstancedAliment.fromJson(e)
-                : TemporaryAliment.fromJson(e))
-            .toList(),
-      );
-}
-
+@immutable
 class Day {
-  Day({List<Meal>? meals})
-      : meals = meals ??
-            [
-              Meal(name: 'breakfast'),
-              Meal(name: 'lunch'),
-              Meal(name: 'dinner'),
-            ];
-
   final List<Meal> meals;
+  Day({List<Meal>? meals}) : meals = meals ?? DayConstants.defaultMeals;
 
   Map<String, dynamic> toJson() =>
       {if (meals.isNotEmpty) 'meals': meals.map((m) => m.toJson()).toList()};
 
-  void fromJson(Map<String, dynamic> json) {
-    if (json['meals'] != null) {
-      meals
-        ..clear()
-        ..addAll((json['meals'] as List<dynamic>)
-            .map((e) => Meal.fromJson(e as Map<String, dynamic>)));
-    } else if (json.containsKey('breakfast')) {
-      meals
-        ..clear()
-        ..addAll(([
-          {
-            'name': 'breakfast',
-            'aliments': json['breakfast'] ?? [],
-          },
-          {
-            'name': 'lunch',
-            'aliments': json['lunch'] ?? [],
-          },
-          {
-            'name': 'dinner',
-            'aliments': json['dinner'] ?? [],
-          },
-        ]).map((e) => Meal.fromJson(e)));
-
-      //             'name': name,
-      // 'aliments': aliments.map((a) => a.toJson()).toList(),
-    }
+  factory Day.fromJson(Map<String, dynamic> json) {
+    final meals = (json['meals'] as List?)
+        ?.map((e) => Meal.fromJson(e as Map<String, dynamic>))
+        .toList();
+    return Day(meals: meals);
   }
 
   Future<void> save(DateTime date) async {
@@ -80,11 +32,13 @@ class Day {
     fromJson(json ?? {});
     return json != null;
   }
+}
 
-  static Day sumDays(List<Day> days) {
+extension DaysGroupAnalysis on List<Day> {
+  Day sum() {
     final merged = <String, Meal>{};
 
-    for (final day in days) {
+    for (final day in this) {
       for (final meal in day.meals) {
         merged.putIfAbsent(meal.name, () => Meal(name: meal.name));
         merged[meal.name]!.aliments.addAll(
@@ -106,26 +60,22 @@ class Day {
     return Day(meals: merged.values.toList());
   }
 
-  static Day averageDays(List<Day> days) {
-    final Day sum = sumDays(days);
+  Day average() {
+    final Day sum = this.sum();
 
     final averagedMeals = sum.meals
         .map(
           (meal) => Meal(
             name: meal.name,
             aliments: meal.aliments
-                .map((aliment) => aliment.copyWith(
-                    servingSize: aliment.servingSize / days.length))
+                .map((aliment) =>
+                    aliment.copyWith(servingSize: aliment.servingSize / length))
                 .toList(),
           ),
         )
         .toList();
 
-    sum.meals
-      ..clear()
-      ..addAll(averagedMeals);
-
-    return sum;
+    return Day(meals: averagedMeals);
   }
 }
 

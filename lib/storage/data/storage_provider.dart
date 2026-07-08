@@ -1,4 +1,3 @@
-import 'package:live_vitalist/json_handler.dart';
 import 'package:live_vitalist/storage/data/file_handler.dart';
 import 'package:live_vitalist/storage/data/firebase_handler.dart';
 import 'package:live_vitalist/storage/domain/storage_handler.dart';
@@ -6,83 +5,38 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'storage_provider.g.dart';
 
-typedef Data = Map<String, dynamic>;
-
 @riverpod
 class Storage extends _$Storage implements IStorageHandler {
-  String path = '';
-  Data data = {};
+  // We don't have to verify if the user is connected,
+  // because `FirebaseHandler` verifies that automatically when used.
 
-  late ResponseChain<Future<Data?>> loadChain;
-  late ResponseChain<Future<bool>> saveChain;
-  late ResponseChain<Future<bool>> deletionChain;
-
-  Future<Data?> mergeFutureData(
-    Future<Data?> superior,
-    Future<Data?> inferior,
-  ) async {
-    final s = await superior;
-    final i = await inferior;
-    if (i == null) return s;
-    if (s == null) return i;
-    return JsonHandler.mergeBaseAddon<String>(s, i);
-  }
+  late FileHandler _fileHlr;
+  late FirebaseHandler _firebaseHlr;
 
   @override
   void build() {
-    final fileHandler = FileHandler();
-    final firebaseHandler = FirebaseHandler();
-
-    final firebaseLoad = ResponseChain<Future<Data?>>(
-      respond: () => firebaseHandler.loadJson(path),
-    );
-    final fileLoad = ResponseChain<Future<Data?>>(
-      respond: () => fileHandler.loadJson(path),
-      subordinate: firebaseLoad,
-      resolve: mergeFutureData,
-    );
-    loadChain = fileLoad;
-
-    final firebaseSave = ResponseChain<Future<bool>>(
-      respond: () => firebaseHandler.saveJson(path, data),
-    );
-    final fileSave = ResponseChain<Future<bool>>(
-      respond: () => fileHandler.saveJson(path, data),
-      subordinate: firebaseSave,
-      resolve: (superior, inferior) async {
-        return (await superior) && (await inferior);
-      },
-    );
-    saveChain = fileSave;
-
-    final firebaseDeletion = ResponseChain<Future<bool>>(
-      respond: firebaseHandler.delete,
-    );
-    final fileDeletion = ResponseChain<Future<bool>>(
-      respond: fileHandler.delete,
-      subordinate: firebaseDeletion,
-      resolve: (superior, inferior) async {
-        return (await superior) && (await inferior);
-      },
-    );
-    deletionChain = fileDeletion;
+    _fileHlr = FileHandler();
+    _firebaseHlr = FirebaseHandler();
   }
 
   @override
-  Future<bool> saveJson(String path, Map<String, dynamic> json) {
-    this.path = path;
-    data = json;
-    return saveChain.chainResponse();
+  Future<bool> saveJson(String path, Map<String, dynamic> json) async {
+    final local = await _fileHlr.saveJson(path, json);
+    final cloud = await _firebaseHlr.saveJson(path, json);
+    return local && cloud;
   }
 
   @override
-  Future<Map<String, dynamic>?> loadJson(String path) {
-    this.path = path;
-    return loadChain.chainResponse();
+  Future<Map<String, dynamic>?> loadJson(String path) async {
+    final localData = await _fileHlr.loadJson(path);
+    if (localData != null) return localData;
+    return _firebaseHlr.loadJson(path);
   }
 
   @override
-  Future<bool> delete() {
-    return deletionChain.chainResponse();
+  Future<bool> delete() async {
+    final local = await _fileHlr.delete();
+    final cloud = await _firebaseHlr.delete();
+    return local && cloud;
   }
 }
