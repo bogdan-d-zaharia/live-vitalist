@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/aliment/aliment_bank.dart';
+import 'package:live_vitalist/day/day_extensions.dart';
 import 'package:live_vitalist/day/day_provider.dart';
 import 'aliment/aliment.dart';
 import 'custom_card.dart';

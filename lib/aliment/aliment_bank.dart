@@ -1,16 +1,16 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/foundation.dart';
 import 'package:live_vitalist/aliment/aliment_data.dart';
-
 import 'package:live_vitalist/storage/data/storage_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'aliment_bank.g.dart';
 
+@immutable
 class AlimentBankState {
   final Map<String, AlimentData> aliments;
   final List<String> order;
 
-  AlimentBankState({
+  const AlimentBankState({
     required this.aliments,
     required this.order,
   });
@@ -42,8 +42,6 @@ class AlimentBank extends _$AlimentBank {
   AlimentBankState build() {
     return AlimentBankState(aliments: {}, order: []);
   }
-
-  static final instance = Provider<AlimentBank>((ref) => AlimentBank());
 
   void setAliment(String id, AlimentData data) {
     state = AlimentBankState(

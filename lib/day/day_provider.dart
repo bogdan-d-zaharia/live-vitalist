@@ -1,5 +1,7 @@
 import 'package:intl/intl.dart' as intl;
 import 'package:live_vitalist/day/day.dart';
+import 'package:live_vitalist/day/day_extensions.dart';
+import 'package:live_vitalist/day/meal.dart';
 import 'package:live_vitalist/storage/data/storage_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -8,9 +10,8 @@ part 'day_provider.g.dart';
 extension DateTimeNormalizer on DateTime {
   /// Normalize to date-only.
   DateTime get normalized => DateTime(year, month, day);
+  String get fileName => intl.DateFormat('d_M_y').format(this);
 }
-
-String _fileNameFor(DateTime date) => intl.DateFormat('d_M_y').format(date);
 
 @riverpod
 class SelectedDates extends _$SelectedDates {
@@ -20,33 +21,40 @@ class SelectedDates extends _$SelectedDates {
   void update(List<DateTime> dates) => state = dates;
 }
 
-/// Reactive `Map<DateTime, Day>`, loaded on demand, auto-saved on edit.
-@riverpod
+/// `Map<DateTime, Day>`
+@Riverpod(keepAlive: true)
 class DayCache extends _$DayCache {
   @override
   Map<DateTime, Day> build() => {};
 
-  /// Access a Day for the given date. Loads from disk if needed.
-  Future<bool> load(DateTime date) async {
+  Future<Day> load(DateTime date) async {
     final normalized = date.normalized;
-    if (state.containsKey(normalized)) return true;
+    if (state.containsKey(normalized)) {
+      return state[normalized]!;
+    }
 
-    final fileName = _fileNameFor(normalized);
+    final fileName = normalized.fileName;
     final json = await ref.read(storageProvider.notifier).loadJson(fileName);
     final day = Day.fromJson(json ?? {});
     state = {...state, normalized: day};
-
-    return json != null;
+    return day;
   }
 
-  Future<void> setDay(DateTime date, Day day) async {
+  Future<void> save(DateTime date, Day day) async {
     final normalized = date.normalized;
     state = {...state, normalized: day};
-    await day.save(normalized);
+    final fileName = normalized.fileName;
+    await ref.read(storageProvider.notifier).saveJson(fileName, day.toJson());
   }
 
-  void clear() {
-    state = {};
+  void removeMeal(DateTime date, Day day, Meal meal) {
+    final meals = [...day.meals]..removeWhere((e) => e.name == meal.name);
+    save(date, Day(meals: meals));
+  }
+
+  void addMeal(DateTime date, Day day, Meal meal) {
+    final meals = [...day.meals, meal];
+    save(date, Day(meals: meals));
   }
 }
 
@@ -68,6 +76,7 @@ Future<List<Day>> selectedDays(Ref ref) async {
       .toList();
 }
 
+// TODO: Can this be simplified?
 @riverpod
 class CachedSelectedDays extends _$CachedSelectedDays {
   @override

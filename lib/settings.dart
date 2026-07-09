@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:live_vitalist/storage/data/storage_solution.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'aliment/aliment_bank.dart';
@@ -20,206 +19,206 @@ class Settings extends ConsumerStatefulWidget {
 }
 
 class _SettingsState extends ConsumerState<Settings> {
-  // #region //* ACCOUNT DELETION *//
-  final String deleteAll1 =
-      'You can delete your account and all data stored both online and on your device by using the button below. This will permanently remove everything linked to your account and reset the app.';
+  // // #region //* ACCOUNT DELETION *//
+  // final String deleteAll1 =
+  //     'You can delete your account and all data stored both online and on your device by using the button below. This will permanently remove everything linked to your account and reset the app.';
 
-  final String deleteAll2 =
-      'Are you sure you want to delete your account and all associated data? This will erase your online data and local storage. This action is permanent and cannot be undone.';
+  // final String deleteAll2 =
+  //     'Are you sure you want to delete your account and all associated data? This will erase your online data and local storage. This action is permanent and cannot be undone.';
 
-  final String deleteInternet1 =
-      'You can delete your account and all data stored online by using the button below. Your data will be permanently removed from our servers, but app settings and local storage will remain on your device.';
+  // final String deleteInternet1 =
+  //     'You can delete your account and all data stored online by using the button below. Your data will be permanently removed from our servers, but app settings and local storage will remain on your device.';
 
-  final String deleteInternet2 =
-      'Are you sure you want to delete your account and all data stored online? This action is permanent and cannot be undone.';
+  // final String deleteInternet2 =
+  //     'Are you sure you want to delete your account and all data stored online? This action is permanent and cannot be undone.';
 
-  Future<bool> deleteInternet() async {
-    final bool b = await showDialog(
-          context: context,
-          builder: (context) {
-            return Dialog(
-              backgroundColor: Colors.transparent,
-              child: CustomCard(
-                headerSpace: 0.0,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'You must authenticate first before we can delete your account associated with Google.',
-                      style: TextStyle(fontSize: 16.0),
-                    ),
-                    SizedBox(height: 12.0),
-                    ElevatedButton.icon(
-                      onPressed: () async {
-                        //! TODO: Account deletion
-                        if (context.mounted) {
-                          Navigator.pop(context, true);
-                        }
-                      },
-                      icon: Icon(Icons.delete, color: Colors.white),
-                      label: Text("Re-authenticate and delete"),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        foregroundColor: Colors.white,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        ) ??
-        false;
+  // Future<bool> deleteInternet() async {
+  //   final bool b = await showDialog(
+  //         context: context,
+  //         builder: (context) {
+  //           return Dialog(
+  //             backgroundColor: Colors.transparent,
+  //             child: CustomCard(
+  //               headerSpace: 0.0,
+  //               child: Column(
+  //                 crossAxisAlignment: CrossAxisAlignment.center,
+  //                 children: [
+  //                   Text(
+  //                     'You must authenticate first before we can delete your account associated with Google.',
+  //                     style: TextStyle(fontSize: 16.0),
+  //                   ),
+  //                   SizedBox(height: 12.0),
+  //                   ElevatedButton.icon(
+  //                     onPressed: () async {
+  //                       //! TODO: Account deletion
+  //                       if (context.mounted) {
+  //                         Navigator.pop(context, true);
+  //                       }
+  //                     },
+  //                     icon: Icon(Icons.delete, color: Colors.white),
+  //                     label: Text("Re-authenticate and delete"),
+  //                     style: ElevatedButton.styleFrom(
+  //                       backgroundColor: Colors.red,
+  //                       foregroundColor: Colors.white,
+  //                       padding:
+  //                           EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ),
+  //           );
+  //         },
+  //       ) ??
+  //       false;
 
-    if (b) {
-      StorageSolution.isFirebase = false;
-    }
+  //   if (b) {
+  //     StorageSolution.isFirebase = false;
+  //   }
 
-    return b;
-  }
+  //   return b;
+  // }
 
-  void deleteInternetPopup() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          child: CustomCard(
-            headerSpace: 0.0,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  deleteInternet2,
-                  style: TextStyle(fontSize: 16.0),
-                ),
-                SizedBox(height: 12.0),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(
-                      width: 100.0,
-                      child: ElevatedButton.icon(
-                        onPressed: () => Navigator.pop(context),
-                        label: Text("Cancel"),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          foregroundColor: Colors.white,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 12),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 12.0),
-                    SizedBox(
-                      width: 100.0,
-                      child: ElevatedButton.icon(
-                        onPressed: () async {
-                          if (await deleteInternet()) {
-                            setState(() {});
-                            if (context.mounted) {
-                              Navigator.pop(context);
-                            }
-                          }
-                        },
-                        icon: Icon(Icons.delete, color: Colors.white),
-                        label: Text("Delete"),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                          foregroundColor: Colors.white,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 12),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
+  // void deleteInternetPopup() {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return Dialog(
+  //         backgroundColor: Colors.transparent,
+  //         child: CustomCard(
+  //           headerSpace: 0.0,
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.center,
+  //             children: [
+  //               Text(
+  //                 deleteInternet2,
+  //                 style: TextStyle(fontSize: 16.0),
+  //               ),
+  //               SizedBox(height: 12.0),
+  //               Row(
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 children: [
+  //                   SizedBox(
+  //                     width: 100.0,
+  //                     child: ElevatedButton.icon(
+  //                       onPressed: () => Navigator.pop(context),
+  //                       label: Text("Cancel"),
+  //                       style: ElevatedButton.styleFrom(
+  //                         backgroundColor: Colors.blue,
+  //                         foregroundColor: Colors.white,
+  //                         padding: EdgeInsets.symmetric(
+  //                             horizontal: 16, vertical: 12),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                   SizedBox(width: 12.0),
+  //                   SizedBox(
+  //                     width: 100.0,
+  //                     child: ElevatedButton.icon(
+  //                       onPressed: () async {
+  //                         if (await deleteInternet()) {
+  //                           setState(() {});
+  //                           if (context.mounted) {
+  //                             Navigator.pop(context);
+  //                           }
+  //                         }
+  //                       },
+  //                       icon: Icon(Icons.delete, color: Colors.white),
+  //                       label: Text("Delete"),
+  //                       style: ElevatedButton.styleFrom(
+  //                         backgroundColor: Colors.red,
+  //                         foregroundColor: Colors.white,
+  //                         padding: EdgeInsets.symmetric(
+  //                             horizontal: 16, vertical: 12),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
-  Future<void> deleteEverything() async {
-    if (StorageSolution.isFirebase && !await deleteInternet()) return;
-    //! TODO: await FileHandler.deleteLocal();
-    await SettingsData.deleteAll();
+  // Future<void> deleteEverything() async {
+  //   if (StorageSolution.isFirebase && !await deleteInternet()) return;
+  //   //! TODO: await FileHandler.deleteLocal();
+  //   await SettingsData.deleteAll();
 
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Closing the app...'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-    }
+  //   if (mounted) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text('Closing the app...'),
+  //         duration: Duration(seconds: 2),
+  //       ),
+  //     );
+  //   }
 
-    await Future.delayed(Duration(seconds: 3));
-    SystemNavigator.pop();
-  }
+  //   await Future.delayed(Duration(seconds: 3));
+  //   SystemNavigator.pop();
+  // }
 
-  void deleteEverythingPopup() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          child: CustomCard(
-            headerSpace: 0.0,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  deleteAll2,
-                  style: TextStyle(fontSize: 16.0),
-                ),
-                SizedBox(height: 12.0),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(
-                      width: 100.0,
-                      child: ElevatedButton.icon(
-                        onPressed: () => Navigator.pop(context),
-                        label: Text("Cancel"),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue,
-                          foregroundColor: Colors.white,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 12),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 12.0),
-                    SizedBox(
-                      width: 100.0,
-                      child: ElevatedButton.icon(
-                        onPressed: deleteEverything,
-                        icon: Icon(Icons.delete, color: Colors.white),
-                        label: Text("Delete"),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                          foregroundColor: Colors.white,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 12),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
+  // void deleteEverythingPopup() {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return Dialog(
+  //         backgroundColor: Colors.transparent,
+  //         child: CustomCard(
+  //           headerSpace: 0.0,
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.center,
+  //             children: [
+  //               Text(
+  //                 deleteAll2,
+  //                 style: TextStyle(fontSize: 16.0),
+  //               ),
+  //               SizedBox(height: 12.0),
+  //               Row(
+  //                 mainAxisSize: MainAxisSize.min,
+  //                 children: [
+  //                   SizedBox(
+  //                     width: 100.0,
+  //                     child: ElevatedButton.icon(
+  //                       onPressed: () => Navigator.pop(context),
+  //                       label: Text("Cancel"),
+  //                       style: ElevatedButton.styleFrom(
+  //                         backgroundColor: Colors.blue,
+  //                         foregroundColor: Colors.white,
+  //                         padding: EdgeInsets.symmetric(
+  //                             horizontal: 16, vertical: 12),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                   SizedBox(width: 12.0),
+  //                   SizedBox(
+  //                     width: 100.0,
+  //                     child: ElevatedButton.icon(
+  //                       onPressed: deleteEverything,
+  //                       icon: Icon(Icons.delete, color: Colors.white),
+  //                       label: Text("Delete"),
+  //                       style: ElevatedButton.styleFrom(
+  //                         backgroundColor: Colors.red,
+  //                         foregroundColor: Colors.white,
+  //                         padding: EdgeInsets.symmetric(
+  //                             horizontal: 16, vertical: 12),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
-  // #endregion
+  // // #endregion
 
   @override
   Widget build(BuildContext context) {
@@ -274,60 +273,60 @@ class _SettingsState extends ConsumerState<Settings> {
                 },
                 child: Text('Send Feedback'),
               ),
-              PopupMenuItem<String>(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Scaffold(
-                        appBar: AppBar(
-                          title: Text('Account Deletion'),
-                        ),
-                        body: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: ListView(
-                            children: [
-                              if (StorageSolution.isFirebase)
-                                CustomCard(
-                                  logo: Icon(Icons.no_accounts_rounded),
-                                  title: 'Account and data deletion',
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(deleteInternet1),
-                                      TextButton(
-                                        onPressed: deleteInternetPopup,
-                                        child: Text(
-                                            'Permanently delete online data'),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              CustomCard(
-                                logo: Icon(Icons.no_accounts_rounded),
-                                title: 'Account and data deletion',
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(deleteAll1),
-                                    TextButton(
-                                      onPressed: deleteEverythingPopup,
-                                      child:
-                                          Text('Permanently delete all data'),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-                child: Text('Data Deletion'),
-              ),
+              // PopupMenuItem<String>(
+              //   onTap: () {
+              //     Navigator.push(
+              //       context,
+              //       MaterialPageRoute(
+              //         builder: (context) => Scaffold(
+              //           appBar: AppBar(
+              //             title: Text('Account Deletion'),
+              //           ),
+              //           body: Padding(
+              //             padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              //             child: ListView(
+              //               children: [
+              //                 if (StorageSolution.isFirebase)
+              //                   CustomCard(
+              //                     logo: Icon(Icons.no_accounts_rounded),
+              //                     title: 'Account and data deletion',
+              //                     child: Column(
+              //                       crossAxisAlignment:
+              //                           CrossAxisAlignment.start,
+              //                       children: [
+              //                         Text(deleteInternet1),
+              //                         TextButton(
+              //                           onPressed: deleteInternetPopup,
+              //                           child: Text(
+              //                               'Permanently delete online data'),
+              //                         ),
+              //                       ],
+              //                     ),
+              //                   ),
+              //                 CustomCard(
+              //                   logo: Icon(Icons.no_accounts_rounded),
+              //                   title: 'Account and data deletion',
+              //                   child: Column(
+              //                     crossAxisAlignment: CrossAxisAlignment.start,
+              //                     children: [
+              //                       Text(deleteAll1),
+              //                       TextButton(
+              //                         onPressed: deleteEverythingPopup,
+              //                         child:
+              //                             Text('Permanently delete all data'),
+              //                       ),
+              //                     ],
+              //                   ),
+              //                 ),
+              //               ],
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //     );
+              //   },
+              //   child: Text('Data Deletion'),
+              // ),
             ],
           ),
         ],
@@ -336,46 +335,44 @@ class _SettingsState extends ConsumerState<Settings> {
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: ListView(
           children: [
-            if (!StorageSolution.isFirebase)
-              CustomCard(
-                logo: Icon(Icons.cloud_upload_rounded),
-                title: 'Connect with Google',
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                        'Backup your files to cloud or restore your data by connecting with Google.'),
-                    SizedBox(height: 12.0),
-                    TextButton(
-                      onPressed: () async {
-                        /* From AuthGate */
-                        final googleUser = await GoogleSignIn().signIn();
-                        if (googleUser == null) return; /* user canceled */
+            // if (!StorageSolution.isFirebase)
+            //   CustomCard(
+            //     logo: Icon(Icons.cloud_upload_rounded),
+            //     title: 'Connect with Google',
+            //     child: Column(
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: [
+            //         Text(
+            //             'Backup your files to cloud or restore your data by connecting with Google.'),
+            //         SizedBox(height: 12.0),
+            //         TextButton(
+            //           onPressed: () async {
+            //             /* From AuthGate */
+            //             final googleUser = await GoogleSignIn().signIn();
+            //             if (googleUser == null) return; /* user canceled */
 
-                        final googleAuth = await googleUser.authentication;
+            //             final googleAuth = await googleUser.authentication;
 
-                        final credential = GoogleAuthProvider.credential(
-                          accessToken: googleAuth.accessToken,
-                          idToken: googleAuth.idToken,
-                        );
+            //             final credential = GoogleAuthProvider.credential(
+            //               accessToken: googleAuth.accessToken,
+            //               idToken: googleAuth.idToken,
+            //             );
 
-                        await FirebaseAuth.instance
-                            .signInWithCredential(credential);
+            //             await FirebaseAuth.instance
+            //                 .signInWithCredential(credential);
 
-                        StorageSolution.isFirebase = true;
+            //             //TODO: Perhaps show a pop up and ask upon conflict.
 
-                        //TODO: Perhaps show a pop up and ask upon conflict.
-
-                        await bankNotifier.load(); //! TODO: Verify
-                        // await NutrientsHandler.load(); //TODO: Verify
-                        dayCacheNotifier.clear();
-                        setState(() {});
-                      },
-                      child: Text('Connect with Google'),
-                    ),
-                  ],
-                ),
-              ),
+            //             await bankNotifier.load(); //! TODO: Verify
+            //             // await NutrientsHandler.load(); //TODO: Verify
+            //             dayCacheNotifier.clear();
+            //             setState(() {});
+            //           },
+            //           child: Text('Connect with Google'),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
             //TODO: Implement
             //// CustomCard(
             ////   logo: Icon(Icons.file_upload_outlined),
