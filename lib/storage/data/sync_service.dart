@@ -1,4 +1,5 @@
 import 'package:live_vitalist/aliment/aliment_bank.dart';
+import 'package:live_vitalist/aliment/aliment_constants.dart';
 import 'package:live_vitalist/day/day_provider.dart';
 import 'package:live_vitalist/nutrient/nutrient_provider.dart';
 import 'package:live_vitalist/storage/data/file_handler.dart';
@@ -32,7 +33,8 @@ class SyncService extends _$SyncService {
   Future<void> _appendOrderWithCloud() async {
     // TODO: Make .loadJson generic (and cast at return, implicitly or not)
     // and use .load('alimentBank/order')
-    final cloudOrder = (await _firebaseHlr.loadJson('alimentBank'))?['order'];
+    final cloudOrder = (await _firebaseHlr
+        .loadJson(AlimentConstants.alimentBankPath))?['order'];
     final oldState = ref.read(alimentBankProvider);
     ref.read(alimentBankProvider.notifier).setState(AlimentBankState(
           aliments: oldState.aliments,

@@ -3,7 +3,7 @@ import 'package:live_vitalist/storage/data/storage_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'nutrient.dart';
-import 'nutrient_initial_data.dart';
+import 'nutrient_constants.dart';
 
 part 'nutrient_provider.g.dart';
 
@@ -23,12 +23,7 @@ class NutrientState {
 @Riverpod(keepAlive: true)
 class Nutrients extends _$Nutrients {
   @override
-  NutrientState build() {
-    return NutrientState(
-      data: initialNutrientMap,
-      order: initialNutrientMap.keys.toList(),
-    );
-  }
+  NutrientState build() => NutrientConstants.defaultNutrientState;
 
   void reorder(int oldIndex, int newIndex) {
     if (newIndex > oldIndex) newIndex--;

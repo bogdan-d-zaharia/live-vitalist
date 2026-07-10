@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:live_vitalist/aliment/aliment_constants.dart';
 import 'package:live_vitalist/aliment/aliment_data.dart';
 import 'package:live_vitalist/storage/data/storage_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -67,12 +68,13 @@ class AlimentBank extends _$AlimentBank {
   Future<void> save() {
     return ref
         .read(storageProvider.notifier)
-        .saveJson('alimentBank', state.toJson());
+        .saveJson(AlimentConstants.alimentBankPath, state.toJson());
   }
 
   Future<void> load() async {
-    final json =
-        await ref.read(storageProvider.notifier).loadJson('alimentBank');
+    final json = await ref
+        .read(storageProvider.notifier)
+        .loadJson(AlimentConstants.alimentBankPath);
     if (json != null) state = AlimentBankState.fromJson(json);
   }
 
