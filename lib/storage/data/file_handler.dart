@@ -47,18 +47,20 @@ final class FileHandler implements IStorageHandler {
     final File? file = await _getFile(path);
     String? str = (await file?.readAsString());
 
-    if (str != null && str.length > 2) {
-      //TODO: Investigate and fix real cause.
-      /* This happends rarely but is annoying enough.
+    try {
+      if (str != null && str.length > 2) {
+        //TODO: Investigate and fix real cause.
+        /* This happends rarely but is annoying enough.
          The first " is replaced with a }.
          I made a lazy fix.
 
          FormatException (FormatException: Unexpected character (at character 3)
          {}aliments":{"652656957":{"name":"q","referenceSize":1.0,"referenceFields":...
            ^ */
-      if (str[1] == "}") str = str.replaceRange(1, 2, '"');
-      return jsonDecode(str);
-    }
+        if (str[1] == "}") str = str.replaceRange(1, 2, '"');
+        return jsonDecode(str);
+      }
+    } finally {}
     return null;
   }
 
