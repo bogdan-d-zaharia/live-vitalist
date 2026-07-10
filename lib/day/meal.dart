@@ -18,10 +18,11 @@ class Meal {
 
   factory Meal.fromJson(Map<String, dynamic> json) => Meal(
         name: json['name'],
-        aliments: ((json['aliments'] ?? []) as List<dynamic>)
-            .map((e) => (e as Map<String, dynamic>).containsKey('alimentID')
-                ? InstancedAliment.fromJson(e)
-                : TemporaryAliment.fromJson(e))
-            .toList(),
+        aliments: ((json['aliments'] ?? []) as List<dynamic>).map((e) {
+          final el = (e as Map).cast<String, dynamic>();
+          return el.containsKey('alimentID')
+              ? InstancedAliment.fromJson(el)
+              : TemporaryAliment.fromJson(el);
+        }).toList(),
       );
 }

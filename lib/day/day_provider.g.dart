@@ -58,22 +58,22 @@ abstract class _$SelectedDates extends $Notifier<List<DateTime>> {
   }
 }
 
-/// Reactive `Map<DateTime, Day>`, loaded on demand, auto-saved on edit.
+/// `Map<DateTime, Day>`
 
 @ProviderFor(DayCache)
 final dayCacheProvider = DayCacheProvider._();
 
-/// Reactive `Map<DateTime, Day>`, loaded on demand, auto-saved on edit.
+/// `Map<DateTime, Day>`
 final class DayCacheProvider
     extends $NotifierProvider<DayCache, Map<DateTime, Day>> {
-  /// Reactive `Map<DateTime, Day>`, loaded on demand, auto-saved on edit.
+  /// `Map<DateTime, Day>`
   DayCacheProvider._()
       : super(
           from: null,
           argument: null,
           retry: null,
           name: r'dayCacheProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -94,9 +94,9 @@ final class DayCacheProvider
   }
 }
 
-String _$dayCacheHash() => r'1e31dab2324059be675800d4c49f872d92bf842a';
+String _$dayCacheHash() => r'b05aaf653a758b2b40756b7c02116c044eda6bfa';
 
-/// Reactive `Map<DateTime, Day>`, loaded on demand, auto-saved on edit.
+/// `Map<DateTime, Day>`
 
 abstract class _$DayCache extends $Notifier<Map<DateTime, Day>> {
   Map<DateTime, Day> build();
@@ -149,7 +149,7 @@ final class SelectedDaysProvider extends $FunctionalProvider<
   }
 }
 
-String _$selectedDaysHash() => r'b38f41b29882f0c9eb686a6bb326e434be264ad7';
+String _$selectedDaysHash() => r'38819df7ca1dceb802362b182d730a6123063ed1';
 
 @ProviderFor(CachedSelectedDays)
 final cachedSelectedDaysProvider = CachedSelectedDaysProvider._();
@@ -236,4 +236,4 @@ final class AverageDayCachedProvider extends $FunctionalProvider<Day, Day, Day>
   }
 }
 
-String _$averageDayCachedHash() => r'e652e68b9a80c444969b8a225698bfe540e472ee';
+String _$averageDayCachedHash() => r'827168d05b71befcdd9cdc5877af2461b8082704';

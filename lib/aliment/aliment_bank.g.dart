@@ -20,7 +20,7 @@ final class AlimentBankProvider
           argument: null,
           retry: null,
           name: r'alimentBankProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -41,7 +41,7 @@ final class AlimentBankProvider
   }
 }
 
-String _$alimentBankHash() => r'2cf51bf43b19750b7fe8c62d2ebadfebc7f6a9e9';
+String _$alimentBankHash() => r'c9fd5c490361bc8c253df09cf8f8106fc57f62f9';
 
 abstract class _$AlimentBank extends $Notifier<AlimentBankState> {
   AlimentBankState build();

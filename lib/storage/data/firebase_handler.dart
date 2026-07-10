@@ -1,10 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:live_vitalist/storage/domain/storage_handler.dart';
-import 'package:path/path.dart' as p;
-
 import 'package:live_vitalist/json_handler.dart';
+import 'package:live_vitalist/storage/domain/storage_handler.dart';
 
 /// Verifies if the user is connected when used.
 ///
@@ -15,17 +13,12 @@ final class FirebaseHandler implements IStorageHandler {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return true;
 
-    final fileName = p.basenameWithoutExtension(path);
-    if (fileName.contains('_backup') || fileName == 'settings') return false;
-
     final uid = user.uid;
     final db = FirebaseDatabase.instance.ref();
 
     /* Just waits until it has internet connection and sends. 
        If there is no internet connection, it waits, no exceptions given. */
-    await db
-        .child('users/$uid/$path')
-        .set(json); /* used `mapToListRecursive` to maintain order */
+    await db.child('users/$uid/$path').update(json);
 
     return true;
   }

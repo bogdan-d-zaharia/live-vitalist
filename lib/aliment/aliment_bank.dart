@@ -16,7 +16,10 @@ class AlimentBankState {
   });
 
   Map<String, dynamic> toJson() => {
-        'aliments': aliments.map((id, data) => MapEntry(id, data.toJson())),
+        // dot notation
+        ...aliments.map((id, data) => MapEntry('aliments/$id', data.toJson())),
+
+        // 'aliments': aliments.map((id, data) => MapEntry('$id', data.toJson())),
         'order': order,
       };
 
@@ -36,7 +39,7 @@ class AlimentBankState {
   }
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 class AlimentBank extends _$AlimentBank {
   @override
   AlimentBankState build() {
@@ -70,8 +73,6 @@ class AlimentBank extends _$AlimentBank {
   Future<void> load() async {
     final json =
         await ref.read(storageProvider.notifier).loadJson('alimentBank');
-    if (json != null) {
-      state = AlimentBankState.fromJson(json);
-    }
+    if (json != null) state = AlimentBankState.fromJson(json);
   }
 }

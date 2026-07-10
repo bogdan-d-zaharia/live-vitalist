@@ -12,7 +12,7 @@ class Day {
 
   factory Day.fromJson(Map<String, dynamic> json) {
     final meals = (json['meals'] as List?)
-        ?.map((e) => Meal.fromJson(e as Map<String, dynamic>))
+        ?.map((e) => Meal.fromJson((e as Map).cast<String, dynamic>()))
         .toList();
     return Day(meals: meals);
   }

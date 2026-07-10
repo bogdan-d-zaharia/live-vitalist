@@ -121,3 +121,24 @@ abstract final class JsonHandler {
     return result;
   }
 }
+
+extension StringMapExtensions on Map<String, dynamic> {
+  // dot notation
+  // json: {'aliments.a': x, 'aliments.b': y, 'order': z}
+  //    => {'aliments': {'a': x, 'b': y}, 'order': z}
+  Map<String, dynamic> flattenDotNotation() {
+    final Map<String, dynamic> result = {};
+    for (var entry in entries) {
+      final keyField = entry.key.split('/');
+      final field = keyField.elementAtOrNull(1);
+      if (field == null) {
+        result[entry.key] = entry.value;
+      } else {
+        final key = keyField.elementAt(0);
+        if (result[key] == null) result[key] = <String, dynamic>{};
+        result[key][field] = entry.value;
+      }
+    }
+    return result;
+  }
+}

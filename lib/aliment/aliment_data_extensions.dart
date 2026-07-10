@@ -45,7 +45,8 @@ extension AlimentJsonExtension on AlimentData {
 
     // referenceFields
     buffer.writeln('  "referenceFields": {');
-    final refFields = expandedJson['referenceFields'] as Map<String, dynamic>;
+    final refFields =
+        (expandedJson['referenceFields'] as Map).cast<String, dynamic>();
     for (final entry in refFields.entries) {
       final unit = nutrients.data[entry.key]?.unit ?? '';
       writeField(entry.key, entry.value ?? 'null', comment: unit, indent: 4);

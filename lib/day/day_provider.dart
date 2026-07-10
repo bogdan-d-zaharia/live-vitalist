@@ -33,8 +33,8 @@ class DayCache extends _$DayCache {
       return state[normalized]!;
     }
 
-    final fileName = normalized.fileName;
-    final json = await ref.read(storageProvider.notifier).loadJson(fileName);
+    final path = 'records/${normalized.fileName}';
+    final json = await ref.read(storageProvider.notifier).loadJson(path);
     final day = Day.fromJson(json ?? {});
     state = {...state, normalized: day};
     return day;
@@ -43,8 +43,8 @@ class DayCache extends _$DayCache {
   Future<void> save(DateTime date, Day day) async {
     final normalized = date.normalized;
     state = {...state, normalized: day};
-    final fileName = normalized.fileName;
-    await ref.read(storageProvider.notifier).saveJson(fileName, day.toJson());
+    final path = 'records/${normalized.fileName}';
+    await ref.read(storageProvider.notifier).saveJson(path, day.toJson());
   }
 
   void removeMeal(DateTime date, Day day, Meal meal) {
@@ -63,17 +63,7 @@ class DayCache extends _$DayCache {
 Future<List<Day>> selectedDays(Ref ref) async {
   final selectedDates = ref.watch(selectedDatesProvider);
   final notifier = ref.read(dayCacheProvider.notifier);
-
-  for (var date in selectedDates) {
-    await notifier.load(date);
-  }
-
-  final dayCache = ref.watch(dayCacheProvider);
-
-  return selectedDates
-      .map((d) => dayCache[d.normalized])
-      .whereType<Day>()
-      .toList();
+  return Future.wait(selectedDates.map((date) => notifier.load(date)).toList());
 }
 
 // TODO: Can this be simplified?

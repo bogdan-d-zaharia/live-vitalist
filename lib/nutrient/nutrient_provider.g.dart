@@ -20,7 +20,7 @@ final class NutrientsProvider
           argument: null,
           retry: null,
           name: r'nutrientsProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -41,7 +41,7 @@ final class NutrientsProvider
   }
 }
 
-String _$nutrientsHash() => r'12d9106c706961d6b221b0e5646eb1c6c4c15621';
+String _$nutrientsHash() => r'744c4e289a2ec58d2eeb98cd3c9e646060335805';
 
 abstract class _$Nutrients extends $Notifier<NutrientState> {
   NutrientState build();

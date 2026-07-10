@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:live_vitalist/json_handler.dart';
 import 'package:live_vitalist/storage/domain/storage_handler.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -35,7 +36,8 @@ final class FileHandler implements IStorageHandler {
       return true;
     }
 
-    final String str = jsonEncode(json);
+    final String str = jsonEncode(json.flattenDotNotation()); // dot notation
+    // final String str = jsonEncode(json);
     await file.writeAsString(str);
     return true;
   }

@@ -20,7 +20,7 @@ class NutrientState {
   Nutrient getByIndex(int index) => data[order[index]]!;
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 class Nutrients extends _$Nutrients {
   @override
   NutrientState build() {
@@ -94,9 +94,7 @@ class Nutrients extends _$Nutrients {
 
   Future<void> load() async {
     final json = await ref.read(storageProvider.notifier).loadJson('nutrients');
-    if (json != null) {
-      loadFromJson(json);
-    }
+    if (json != null) loadFromJson(json);
   }
 
   /* Tags */

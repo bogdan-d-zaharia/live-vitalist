@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'storage_provider.dart';
+part of 'settings_controller.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -9,27 +9,28 @@ part of 'storage_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 
-@ProviderFor(Storage)
-final storageProvider = StorageProvider._();
+@ProviderFor(SettingsController)
+final settingsControllerProvider = SettingsControllerProvider._();
 
-final class StorageProvider extends $NotifierProvider<Storage, void> {
-  StorageProvider._()
+final class SettingsControllerProvider
+    extends $NotifierProvider<SettingsController, void> {
+  SettingsControllerProvider._()
       : super(
           from: null,
           argument: null,
           retry: null,
-          name: r'storageProvider',
+          name: r'settingsControllerProvider',
           isAutoDispose: true,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
 
   @override
-  String debugGetCreateSourceHash() => _$storageHash();
+  String debugGetCreateSourceHash() => _$settingsControllerHash();
 
   @$internal
   @override
-  Storage create() => Storage();
+  SettingsController create() => SettingsController();
 
   /// {@macro riverpod.override_with_value}
   Override overrideWithValue(void value) {
@@ -40,9 +41,10 @@ final class StorageProvider extends $NotifierProvider<Storage, void> {
   }
 }
 
-String _$storageHash() => r'5eb0b955e7918a0ca798f148b58ae84317524c6e';
+String _$settingsControllerHash() =>
+    r'7b40ac267443a9bf9d21c8db4dd75371108e0a9e';
 
-abstract class _$Storage extends $Notifier<void> {
+abstract class _$SettingsController extends $Notifier<void> {
   void build();
   @$mustCallSuper
   @override
