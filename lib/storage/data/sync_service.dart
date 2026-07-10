@@ -2,6 +2,7 @@ import 'package:live_vitalist/aliment/aliment_bank.dart';
 import 'package:live_vitalist/day/day_provider.dart';
 import 'package:live_vitalist/nutrient/nutrient_provider.dart';
 import 'package:live_vitalist/storage/data/file_handler.dart';
+import 'package:live_vitalist/storage/data/firebase_handler.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'sync_service.g.dart';
@@ -20,10 +21,23 @@ part 'sync_service.g.dart';
 @riverpod
 class SyncService extends _$SyncService {
   late FileHandler _fileHlr;
+  late FirebaseHandler _firebaseHlr;
 
   @override
   void build() {
     _fileHlr = FileHandler();
+    _firebaseHlr = FirebaseHandler();
+  }
+
+  Future<void> _appendOrderWithCloud() async {
+    // TODO: Make .loadJson generic (and cast at return, implicitly or not)
+    // and use .load('alimentBank/order')
+    final cloudOrder = (await _firebaseHlr.loadJson('alimentBank'))?['order'];
+    final oldState = ref.read(alimentBankProvider);
+    ref.read(alimentBankProvider.notifier).setState(AlimentBankState(
+          aliments: oldState.aliments,
+          order: [...oldState.order, ...cloudOrder],
+        ));
   }
 
   Future<void> _saveProviders() async {
@@ -47,6 +61,7 @@ class SyncService extends _$SyncService {
   Future<void> lateLogin() async {
     final keepAliveLink = ref.keepAlive();
     try {
+      await _appendOrderWithCloud();
       await _saveProviders();
       await _fileHlr.delete();
       await _clearProviders();

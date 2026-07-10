@@ -75,4 +75,9 @@ class AlimentBank extends _$AlimentBank {
         await ref.read(storageProvider.notifier).loadJson('alimentBank');
     if (json != null) state = AlimentBankState.fromJson(json);
   }
+
+  void setState(AlimentBankState newState) {
+    state = newState;
+    save();
+  }
 }

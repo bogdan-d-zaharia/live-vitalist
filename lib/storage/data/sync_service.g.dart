@@ -73,7 +73,7 @@ final class SyncServiceProvider extends $NotifierProvider<SyncService, void> {
   }
 }
 
-String _$syncServiceHash() => r'801af4fb0e754bf32cb624c1c538823d258c73d6';
+String _$syncServiceHash() => r'dea3276690f3363b6b6aea30f97d692368406ac7';
 
 /// To solve data conflicts, we can either:
 /// 1. Save & Load intelligently
