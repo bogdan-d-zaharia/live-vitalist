@@ -97,15 +97,18 @@ abstract final class JsonHandler {
   ///     }
   ///
   ///     Recursion only for Map + Map, not for List + List
-  static Map mergeBaseAddon(Map base, Map addon) {
-    final result = Map.from(base);
+  static Map<K, dynamic> mergeBaseAddon<K>(
+    Map<K, dynamic> base,
+    Map<K, dynamic> addon,
+  ) {
+    final result = Map<K, dynamic>.from(base);
 
     for (var entry in addon.entries) {
       final key = entry.key;
       final baseValue = base[key];
       final addonValue = entry.value;
 
-      if (baseValue is Map && addonValue is Map) {
+      if (baseValue is Map<K, dynamic> && addonValue is Map<K, dynamic>) {
         result[key] = mergeBaseAddon(baseValue, addonValue);
       } else if (baseValue is List && addonValue is List) {
         (result[key] as List).addAll(addonValue);
@@ -115,6 +118,27 @@ abstract final class JsonHandler {
       /* else: key exists in base, leave as is */
     }
 
+    return result;
+  }
+}
+
+extension StringMapExtensions on Map<String, dynamic> {
+  // dot notation
+  // json: {'aliments.a': x, 'aliments.b': y, 'order': z}
+  //    => {'aliments': {'a': x, 'b': y}, 'order': z}
+  Map<String, dynamic> flattenDotNotation() {
+    final Map<String, dynamic> result = {};
+    for (var entry in entries) {
+      final keyField = entry.key.split('/');
+      final field = keyField.elementAtOrNull(1);
+      if (field == null) {
+        result[entry.key] = entry.value;
+      } else {
+        final key = keyField.elementAt(0);
+        if (result[key] == null) result[key] = <String, dynamic>{};
+        result[key][field] = entry.value;
+      }
+    }
     return result;
   }
 }

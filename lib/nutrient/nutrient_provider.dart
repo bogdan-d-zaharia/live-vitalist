@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/legacy.dart';
-import 'package:live_vitalist/storage/data/storage_solution.dart';
+import 'package:live_vitalist/storage/data/storage_provider.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import 'nutrient.dart';
-import 'nutrient_initial_data.dart';
+import 'nutrient_constants.dart';
+
+part 'nutrient_provider.g.dart';
 
 @immutable
 class NutrientState {
@@ -18,12 +20,10 @@ class NutrientState {
   Nutrient getByIndex(int index) => data[order[index]]!;
 }
 
-class NutrientStateNotifier extends StateNotifier<NutrientState> {
-  NutrientStateNotifier()
-      : super(NutrientState(
-          data: initialNutrientMap,
-          order: initialNutrientMap.keys.toList(),
-        ));
+@Riverpod(keepAlive: true)
+class Nutrients extends _$Nutrients {
+  @override
+  NutrientState build() => NutrientConstants.defaultNutrientState;
 
   void reorder(int oldIndex, int newIndex) {
     if (newIndex > oldIndex) newIndex--;
@@ -84,14 +84,12 @@ class NutrientStateNotifier extends StateNotifier<NutrientState> {
   }
 
   Future<void> _save() {
-    return StorageSolution.instance.saveJson('nutrients', toJson());
+    return ref.read(storageProvider.notifier).saveJson('nutrients', toJson());
   }
 
   Future<void> load() async {
-    final json = await StorageSolution.instance.loadJson('nutrients');
-    if (json != null) {
-      loadFromJson(json);
-    }
+    final json = await ref.read(storageProvider.notifier).loadJson('nutrients');
+    if (json != null) loadFromJson(json);
   }
 
   /* Tags */
@@ -126,7 +124,3 @@ class NutrientStateNotifier extends StateNotifier<NutrientState> {
     update(key, old.copyWith(tags: tags));
   }
 }
-
-final nutrientStateProvider =
-    StateNotifierProvider<NutrientStateNotifier, NutrientState>(
-        (ref) => NutrientStateNotifier());
