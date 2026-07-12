@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/settings/settings_screen.dart';
 
-import 'package:live_vitalist/app/meal_add_selector.dart';
 import 'package:live_vitalist/app/super_bar.dart';
 import 'package:live_vitalist/nutrient_display.dart';
 import 'package:live_vitalist/ratio_bars.dart';
-import 'package:live_vitalist/settings.dart';
 import 'package:live_vitalist/week_calendar.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -43,7 +42,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => Settings(),
+                        builder: (context) => SettingsScreen(),
                       ),
                     ).then((value) {
                       setState(() {});

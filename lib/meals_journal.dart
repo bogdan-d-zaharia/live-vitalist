@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/aliment/aliment_extensions.dart';
+import 'package:live_vitalist/day/meal.dart';
 
 import 'aliment/aliment.dart';
-import 'aliment/aliment_bank_provider.dart';
+import 'aliment/aliment_bank.dart';
 import 'aliment_editor/aliment_data_editor.dart';
 import 'aliment_editor/instance_editor.dart';
 import 'custom_card.dart';
@@ -26,7 +27,7 @@ class MealsJournal extends ConsumerWidget {
     final date = ref.watch(selectedDatesProvider).first;
 
     final bank = ref.watch(alimentBankProvider);
-    final nutrients = ref.watch(nutrientStateProvider).data;
+    final nutrients = ref.watch(nutrientsProvider).data;
 
     final List<Widget> elements = day.meals.map<Widget>(
       (meal) {
@@ -67,13 +68,7 @@ class MealsJournal extends ConsumerWidget {
             );
 
             if (isDelete == true) {
-              dayNotifier.setDay(
-                date,
-                Day(
-                  meals: [...day.meals]
-                    ..removeWhere((element) => element.name == meal.name),
-                ),
-              );
+              dayNotifier.removeMeal(date, day, meal);
             }
           },
           onAdd: () async {
@@ -90,7 +85,7 @@ class MealsJournal extends ConsumerWidget {
 
             if (newAliment != null && newAliment.alimentID != '') {
               meal.aliments.add(newAliment);
-              ref.read(dayCacheProvider.notifier).setDay(date, day);
+              dayNotifier.save(date, day);
             }
           },
         );
@@ -150,8 +145,7 @@ class MealsJournal extends ConsumerWidget {
               if (newMealName == null) return;
 
               if (!day.meals.map((e) => e.name).contains(newMealName)) {
-                dayNotifier.setDay(
-                    date, Day(meals: [...day.meals, Meal(name: newMealName)]));
+                dayNotifier.addMeal(date, day, Meal(name: newMealName));
               }
             },
             label: Text('Add Meal'),
@@ -251,11 +245,12 @@ class MealEditor extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final day = ref.watch(dayCacheProvider)[date]!;
+    final dayNotifier = ref.read(dayCacheProvider.notifier);
     final meal = day.meals.firstWhere((m) => m.name == mealName);
     final bank = ref.watch(alimentBankProvider);
     final bankNotifier = ref.read(alimentBankProvider.notifier);
 
-    void updateDay() => ref.read(dayCacheProvider.notifier).setDay(date, day);
+    void updateDay() => dayNotifier.save(date, day);
 
     final List<Widget> elements = meal.aliments.map<Widget>(
       (aliment) {
@@ -352,7 +347,7 @@ class MealEditor extends ConsumerWidget {
 
         if (newAliment != null && newAliment.alimentID != '') {
           meal.aliments.add(newAliment);
-          ref.read(dayCacheProvider.notifier).setDay(date, day);
+          dayNotifier.save(date, day);
         }
       },
       additional: [],
@@ -378,7 +373,7 @@ class MealEditor extends ConsumerWidget {
 
         if (newData != null && newData.name != '') {
           meal.aliments.add(newAliment.copyWith(alimentData: newData));
-          ref.read(dayCacheProvider.notifier).setDay(date, day);
+          dayNotifier.save(date, day);
         }
       },
       additional: [],
@@ -496,7 +491,7 @@ class AlimentWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final model = ref.watch(nutrientStateProvider).data;
+    final model = ref.watch(nutrientsProvider).data;
     final bank = ref.watch(alimentBankProvider);
 
     final values = aliment.readFields(bank);

@@ -7,6 +7,8 @@ import 'package:live_vitalist/notification_handler.dart';
 import 'package:live_vitalist/firebase_options.dart';
 import 'package:live_vitalist/settings_data.dart';
 
+// TODO: Storage Management SOLID
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(

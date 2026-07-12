@@ -22,7 +22,7 @@ class AlimentDataEditor extends ConsumerStatefulWidget {
 }
 
 class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
-  NutrientState get nutrients => ref.watch(nutrientStateProvider);
+  NutrientState get nutrients => ref.watch(nutrientsProvider);
 
   AlimentData data = AlimentData.empty;
   bool isShowAdvanced = false;
@@ -111,8 +111,14 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
         title: const Text('Save changes?'),
         content: const Text('Do you want to save this aliment?'),
         actions: [
-          TextButton(onPressed: _popCancel, child: const Text('Cancel')),
-          ElevatedButton(onPressed: _popSave, child: const Text('Save')),
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Save'),
+          ),
         ],
       ),
     );

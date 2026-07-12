@@ -4,7 +4,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart'
 import 'package:permission_handler/permission_handler.dart';
 
 import 'aliment/aliment.dart';
-import 'aliment/aliment_bank_provider.dart';
+import 'aliment/aliment_bank.dart';
 
 class NotificationHandler {
   static final ntf.FlutterLocalNotificationsPlugin _notificationsPlugin =

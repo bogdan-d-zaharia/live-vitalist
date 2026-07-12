@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:live_vitalist/day/day_extensions.dart';
 
-import 'aliment/aliment_bank_provider.dart';
+import 'aliment/aliment_bank.dart';
 import 'custom_card.dart';
-import 'day/day.dart';
 import 'day/day_provider.dart';
 import 'icon_button.dart';
 import 'labels_widget.dart';
@@ -85,9 +85,7 @@ class WeekCalendar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final now = DateTime.now().normalized;
     final dates = ref.watch(selectedDatesProvider);
-
-    void updateSelectedDates(List<DateTime> newDates) =>
-        ref.read(selectedDatesProvider.notifier).state = newDates;
+    final updateSelectedDates = ref.read(selectedDatesProvider.notifier).update;
 
     return CustomCard(
       logo: const Icon(Icons.view_week),
@@ -166,7 +164,7 @@ class CalendarItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final dayMap = ref.watch(dayCacheProvider);
     final bank = ref.watch(alimentBankProvider);
-    final nutrients = ref.watch(nutrientStateProvider);
+    final nutrients = ref.watch(nutrientsProvider);
 
     final day = dayMap[date];
     if (day != null) {
