@@ -4,6 +4,7 @@ import 'package:live_vitalist/core/widgets/selectable_icon_button.dart';
 import 'package:live_vitalist/core/widgets/sized_icon_button.dart';
 
 class SuperBar extends StatefulWidget {
+  final TextEditingController? controller;
   final void Function()? onEnter;
   final void Function()? onExit;
   final void Function(String)? onChanged;
@@ -11,6 +12,7 @@ class SuperBar extends StatefulWidget {
 
   const SuperBar({
     super.key,
+    this.controller,
     required this.onEnter,
     required this.onExit,
     required this.onChanged,
@@ -40,6 +42,7 @@ class _SuperBarState extends State<SuperBar> {
   @override
   Widget build(BuildContext context) {
     return SearchBar(
+      controller: widget.controller,
       onTap: widget.onEnter,
       onTapOutside: (event) => widget.onExit?.call(),
       onChanged: widget.onChanged,

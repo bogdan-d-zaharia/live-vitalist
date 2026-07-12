@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/meals_journal.dart';
+import 'package:live_vitalist/nutrient_circle/nutrient_circle.dart';
 import 'package:live_vitalist/settings/settings_screen.dart';
 
+import 'package:live_vitalist/app/constants.dart';
 import 'package:live_vitalist/app/super_bar.dart';
 import 'package:live_vitalist/nutrient_display.dart';
 import 'package:live_vitalist/ratio_bars.dart';
+import 'package:live_vitalist/super_search/presentation/add_aliment_actions.dart';
+import 'package:live_vitalist/super_search/presentation/controllers/aliment_search_controller.dart';
+import 'package:live_vitalist/super_search/presentation/widgets/search_overlay.dart';
+import 'package:live_vitalist/super_search/super_search_constants.dart';
 import 'package:live_vitalist/week_calendar.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -15,13 +22,30 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  final TextEditingController _searchController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
   }
 
   @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    ref.listen<AlimentSearchState>(alimentSearchProvider, (previous, next) {
+      if (previous?.isActive == true && !next.isActive) {
+        _searchController.clear();
+        FocusManager.instance.primaryFocus?.unfocus();
+      }
+    });
+
+    final searchNotifier = ref.read(alimentSearchProvider.notifier);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Live Vitalist'),
@@ -62,27 +86,39 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: ListView(
               children: [
                 WeekCalendar(),
-                ConsumerRatioBars(),
-                // MealsJournal(),
+                NutrientCircle(),
                 NutrientDisplay(),
+                ConsumerRatioBars(),
+                MealsJournal(),
                 SizedBox(height: 12.0),
               ],
             ),
           ),
-          // TODO: Make this a super-search screen
-          // A new widget (Scaffold) that has a list of aliments,
-          // and the super bar underneath,
-          // the body hidden when the super bar is not focused
-          // the body shown when the super bar is selected
+          Positioned(
+            top: 0.0,
+            left: SuperSearchConstants.overlayHorizontalInset,
+            right: SuperSearchConstants.overlayHorizontalInset,
+            bottom: 20.0 +
+                Constants.searchBarHeight +
+                SuperSearchConstants.overlayBarSpacing,
+            child: SearchOverlay(),
+          ),
           Positioned(
             bottom: 20.0,
             left: 12.0,
             right: 12.0,
             child: SuperBar(
-              onEnter: null,
-              onExit: null,
-              onChanged: null,
-              onAdd: null,
+              controller: _searchController,
+              onEnter: searchNotifier.enter,
+              onExit: () => FocusManager.instance.primaryFocus?.unfocus(),
+              onChanged: searchNotifier.setQuery,
+              onAdd: (isTemp, isGen) {
+                if (isTemp) {
+                  AddAlimentActions.addTemporary(context, ref);
+                } else {
+                  AddAlimentActions.addInstanced(context, ref);
+                }
+              },
             ),
           ),
         ],
