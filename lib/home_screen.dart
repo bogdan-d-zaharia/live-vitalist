@@ -105,7 +105,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 onExit: searchNotifier.exit,
                 onChanged: searchNotifier.setQuery,
                 onAdd: (isTemp, isGen) {
-                  if (isTemp) {
+                  if (isGen) {
+                    AddAlimentActions.addGenerated(
+                      context,
+                      ref,
+                      _searchController.text,
+                      isTemp: isTemp,
+                    );
+                  } else if (isTemp) {
                     AddAlimentActions.addTemporary(context, ref);
                   } else {
                     AddAlimentActions.addInstanced(context, ref);

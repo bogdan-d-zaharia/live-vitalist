@@ -4,18 +4,26 @@ import 'package:live_vitalist/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/aliment/domain/aliment.dart';
 import 'package:live_vitalist/aliment/domain/aliment_data.dart';
 import 'package:live_vitalist/aliment_editor/aliment_data_editor.dart';
+import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
 import 'package:live_vitalist/day/data/day_provider.dart';
 import 'package:live_vitalist/day/domain/day.dart';
+import 'package:live_vitalist/settings_data.dart';
+import 'package:live_vitalist/string_input.dart';
+import 'package:live_vitalist/super_search/data/aliment_generator.dart';
 import 'package:live_vitalist/super_search/presentation/widgets/meal_picker_dialog.dart';
 
 abstract final class AddAlimentActions {
   /// Creates a new aliment in the bank, so it can be instanced afterwards.
-  static Future<void> addInstanced(BuildContext context, WidgetRef ref) async {
+  static Future<void> addInstanced(
+    BuildContext context,
+    WidgetRef ref, {
+    AlimentData? initialData,
+  }) async {
     final AlimentData? aliment = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) =>
-            const AlimentDataEditor(initialData: AlimentData.empty),
+            AlimentDataEditor(initialData: initialData ?? AlimentData.empty),
       ),
     );
     if (aliment == null) return;
@@ -25,14 +33,18 @@ abstract final class AddAlimentActions {
   }
 
   /// Creates a one-off aliment and puts it straight into a meal.
-  static Future<void> addTemporary(BuildContext context, WidgetRef ref) async {
+  static Future<void> addTemporary(
+    BuildContext context,
+    WidgetRef ref, {
+    AlimentData? initialData,
+  }) async {
     final TemporaryAliment newAliment = TemporaryAliment.empty;
 
     final newData = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) =>
-            AlimentDataEditor(initialData: newAliment.alimentData),
+        builder: (context) => AlimentDataEditor(
+            initialData: initialData ?? newAliment.alimentData),
       ),
     );
     if (newData == null || newData.name == '') return;
@@ -46,5 +58,89 @@ abstract final class AddAlimentActions {
 
     meal.aliments.add(newAliment.copyWith(alimentData: newData));
     ref.read(dayCacheProvider.notifier).save(date, day);
+  }
+
+  /// Asks Gemini to fill in the nutritional data for the searched text,
+  /// then continues with the usual instanced/temporary flow, prefilled.
+  static Future<void> addGenerated(
+    BuildContext context,
+    WidgetRef ref,
+    String input, {
+    required bool isTemp,
+  }) async {
+    if (input.trim() == '') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Write the aliment in the search bar first.')),
+      );
+      return;
+    }
+
+    final apiKey = await _ensureApiKey(context);
+    if (apiKey == null) return;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const Center(child: CircularProgressIndicator()),
+    );
+
+    AlimentData? generated;
+    Object? error;
+    try {
+      generated = await AlimentGenerator.generate(apiKey, input);
+    } catch (e) {
+      error = e;
+    }
+    Navigator.pop(context);
+
+    if (generated == null) {
+      showDialog(
+        context: context,
+        builder: (context) => Dialog(
+          backgroundColor: Colors.transparent,
+          child: CustomCard(
+            headerSpace: 0.0,
+            child: Text('${error.toString()}\n'),
+          ),
+        ),
+      );
+      return;
+    }
+
+    if (isTemp) {
+      await addTemporary(context, ref, initialData: generated);
+    } else {
+      await addInstanced(context, ref, initialData: generated);
+    }
+  }
+
+  /// Returns the saved Google AI Studio key, asking for one if missing.
+  static Future<String?> _ensureApiKey(BuildContext context) async {
+    if (SettingsData.geminiApiKey != '') return SettingsData.geminiApiKey;
+
+    final entered = await showDialog<String>(
+      context: context,
+      builder: (context) => Dialog(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Google AI Studio API key'),
+              StringInput(
+                submit: (key) => Navigator.pop(context, key.trim()),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    if (entered == null || entered == '') return null;
+
+    SettingsData.geminiApiKey = entered;
+    return entered;
   }
 }

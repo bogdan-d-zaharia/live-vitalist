@@ -35,6 +35,9 @@ abstract final class SettingsData {
   static set isShowOmegaBalance(bool val) =>
       _prefs.setBool('isShowOmegaBalance', val);
 
+  static String get geminiApiKey => _prefs.getString('geminiApiKey') ?? '';
+  static set geminiApiKey(String val) => _prefs.setString('geminiApiKey', val);
+
   static Future<void> deleteAll() async {
     await _prefs.clear();
   }
