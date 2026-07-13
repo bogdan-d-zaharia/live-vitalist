@@ -41,7 +41,7 @@ final class SelectedDatesProvider
   }
 }
 
-String _$selectedDatesHash() => r'41a9ca0670076b20f8ef210a7688829ee4c0570b';
+String _$selectedDatesHash() => r'f0888036ec0a49ac8f4e08957c7522f23ea0a6e3';
 
 abstract class _$SelectedDates extends $Notifier<List<DateTime>> {
   List<DateTime> build();
@@ -113,109 +113,65 @@ abstract class _$DayCache extends $Notifier<Map<DateTime, Day>> {
   }
 }
 
-/// Returns the list of Day objects for currently selected dates
+@ProviderFor(syncSelectedDays)
+final syncSelectedDaysProvider = SyncSelectedDaysProvider._();
 
-@ProviderFor(selectedDays)
-final selectedDaysProvider = SelectedDaysProvider._();
-
-/// Returns the list of Day objects for currently selected dates
-
-final class SelectedDaysProvider extends $FunctionalProvider<
-        AsyncValue<List<Day>>, List<Day>, FutureOr<List<Day>>>
-    with $FutureModifier<List<Day>>, $FutureProvider<List<Day>> {
-  /// Returns the list of Day objects for currently selected dates
-  SelectedDaysProvider._()
+final class SyncSelectedDaysProvider
+    extends $FunctionalProvider<List<Day>?, List<Day>?, List<Day>?>
+    with $Provider<List<Day>?> {
+  SyncSelectedDaysProvider._()
       : super(
           from: null,
           argument: null,
           retry: null,
-          name: r'selectedDaysProvider',
+          name: r'syncSelectedDaysProvider',
           isAutoDispose: true,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
 
   @override
-  String debugGetCreateSourceHash() => _$selectedDaysHash();
+  String debugGetCreateSourceHash() => _$syncSelectedDaysHash();
 
   @$internal
   @override
-  $FutureProviderElement<List<Day>> $createElement($ProviderPointer pointer) =>
-      $FutureProviderElement(pointer);
+  $ProviderElement<List<Day>?> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
 
   @override
-  FutureOr<List<Day>> create(Ref ref) {
-    return selectedDays(ref);
+  List<Day>? create(Ref ref) {
+    return syncSelectedDays(ref);
   }
-}
-
-String _$selectedDaysHash() => r'38819df7ca1dceb802362b182d730a6123063ed1';
-
-@ProviderFor(CachedSelectedDays)
-final cachedSelectedDaysProvider = CachedSelectedDaysProvider._();
-
-final class CachedSelectedDaysProvider
-    extends $NotifierProvider<CachedSelectedDays, List<Day>> {
-  CachedSelectedDaysProvider._()
-      : super(
-          from: null,
-          argument: null,
-          retry: null,
-          name: r'cachedSelectedDaysProvider',
-          isAutoDispose: true,
-          dependencies: null,
-          $allTransitiveDependencies: null,
-        );
-
-  @override
-  String debugGetCreateSourceHash() => _$cachedSelectedDaysHash();
-
-  @$internal
-  @override
-  CachedSelectedDays create() => CachedSelectedDays();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(List<Day> value) {
+  Override overrideWithValue(List<Day>? value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<List<Day>>(value),
+      providerOverride: $SyncValueProvider<List<Day>?>(value),
     );
   }
 }
 
-String _$cachedSelectedDaysHash() =>
-    r'b403d69291038299bd330023bef7a8ad642e5f7f';
+String _$syncSelectedDaysHash() => r'6608a212387593c21a79ee2f8e34dec85ab7f979';
 
-abstract class _$CachedSelectedDays extends $Notifier<List<Day>> {
-  List<Day> build();
-  @$mustCallSuper
-  @override
-  WhenComplete runBuild() {
-    final ref = this.ref as $Ref<List<Day>, List<Day>>;
-    final element = ref.element as $ClassProviderElement<
-        AnyNotifier<List<Day>, List<Day>>, List<Day>, Object?, Object?>;
-    return element.handleCreate(ref, build);
-  }
-}
+@ProviderFor(syncAverageDay)
+final syncAverageDayProvider = SyncAverageDayProvider._();
 
-@ProviderFor(averageDayCached)
-final averageDayCachedProvider = AverageDayCachedProvider._();
-
-final class AverageDayCachedProvider extends $FunctionalProvider<Day, Day, Day>
+final class SyncAverageDayProvider extends $FunctionalProvider<Day, Day, Day>
     with $Provider<Day> {
-  AverageDayCachedProvider._()
+  SyncAverageDayProvider._()
       : super(
           from: null,
           argument: null,
           retry: null,
-          name: r'averageDayCachedProvider',
+          name: r'syncAverageDayProvider',
           isAutoDispose: true,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
 
   @override
-  String debugGetCreateSourceHash() => _$averageDayCachedHash();
+  String debugGetCreateSourceHash() => _$syncAverageDayHash();
 
   @$internal
   @override
@@ -224,7 +180,7 @@ final class AverageDayCachedProvider extends $FunctionalProvider<Day, Day, Day>
 
   @override
   Day create(Ref ref) {
-    return averageDayCached(ref);
+    return syncAverageDay(ref);
   }
 
   /// {@macro riverpod.override_with_value}
@@ -236,4 +192,4 @@ final class AverageDayCachedProvider extends $FunctionalProvider<Day, Day, Day>
   }
 }
 
-String _$averageDayCachedHash() => r'827168d05b71befcdd9cdc5877af2461b8082704';
+String _$syncAverageDayHash() => r'37215235fbaf4cc70ff6b4a8d6954881490fa5f8';

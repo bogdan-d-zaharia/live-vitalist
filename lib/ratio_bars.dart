@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/aliment/aliment_bank.dart';
+import 'package:live_vitalist/custom_card.dart';
 import 'package:live_vitalist/day/day_extensions.dart';
-
-import 'aliment/aliment_bank.dart';
-import 'custom_card.dart';
-import 'day/day_provider.dart';
-import 'labels_widget.dart';
-import 'palette.dart';
-import 'settings_data.dart';
+import 'package:live_vitalist/day/day_provider.dart';
+import 'package:live_vitalist/labels_widget.dart';
+import 'package:live_vitalist/palette.dart';
+import 'package:live_vitalist/settings_data.dart';
 
 class RatioBarElement {
   const RatioBarElement(
@@ -147,7 +146,7 @@ class ConsumerRatioBars extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bank = ref.watch(alimentBankProvider);
-    final intake = ref.watch(averageDayCachedProvider).readIntake(bank);
+    final intake = ref.watch(syncAverageDayProvider).readIntake(bank);
 
     final omega6 = intake['omega6'] ?? 0.0;
     final omega3 = intake['omega3'] ?? 0.0;

@@ -35,7 +35,7 @@ class _NutrientDisplayState extends ConsumerState<NutrientDisplay> {
   }
 
   Widget _buildViewMode(BuildContext context, NutrientState state) {
-    final avgDay = ref.watch(averageDayCachedProvider);
+    final avgDay = ref.watch(syncAverageDayProvider);
     final bank = ref.watch(alimentBankProvider);
 
     final intake = avgDay.readIntake(bank);
@@ -368,7 +368,7 @@ class _NutrientDisplayState extends ConsumerState<NutrientDisplay> {
       divided.add(widgets[i]);
       if (i < widgets.length - 1) {
         divided.add(Divider(
-          color: Colors.black.withOpacity(0.1),
+          color: Colors.black.withValues(alpha: 0.1),
           thickness: 0.5,
           height: 0.0,
         ));

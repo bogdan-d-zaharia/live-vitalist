@@ -85,7 +85,7 @@ class WeekCalendar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final now = DateTime.now().normalized;
     final dates = ref.watch(selectedDatesProvider);
-    final updateSelectedDates = ref.read(selectedDatesProvider.notifier).update;
+    final datesNotifier = ref.read(selectedDatesProvider.notifier);
 
     return CustomCard(
       logo: const Icon(Icons.view_week),
@@ -108,15 +108,8 @@ class WeekCalendar extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(8.0),
                   clipBehavior: Clip.hardEdge,
                   child: InkWell(
-                    onTap: () => updateSelectedDates([date]),
-                    onLongPress: () {
-                      if (!dates.contains(date)) {
-                        updateSelectedDates([...dates, date]);
-                      } else if (dates.length > 1) {
-                        final updated = [...dates]..remove(date);
-                        updateSelectedDates(updated);
-                      }
-                    },
+                    onTap: () => datesNotifier.setSingleDate(date),
+                    onLongPress: () => datesNotifier.toggleDate(date),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 6.0),
                       child: CalendarItem(

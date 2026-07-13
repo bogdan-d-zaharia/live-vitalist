@@ -21,7 +21,7 @@ class MealsJournal extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final day = ref.watch(cachedSelectedDaysProvider).firstOrNull ?? Day();
+    final day = ref.watch(syncSelectedDaysProvider)?.firstOrNull ?? Day();
     final dayNotifier = ref.read(dayCacheProvider.notifier);
 
     final date = ref.watch(selectedDatesProvider).first;

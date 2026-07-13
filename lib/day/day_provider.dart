@@ -7,6 +7,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'day_provider.g.dart';
 
+// TODO: Save records by the month
+
 extension DateTimeNormalizer on DateTime {
   /// Normalize to date-only.
   DateTime get normalized => DateTime(year, month, day);
@@ -18,7 +20,14 @@ class SelectedDates extends _$SelectedDates {
   @override
   List<DateTime> build() => [DateTime.now().normalized];
 
-  void update(List<DateTime> dates) => state = dates;
+  void setSingleDate(DateTime date) => state = [date];
+  void toggleDate(DateTime date) {
+    if (!state.contains(date)) {
+      state = [...state, date];
+    } else if (state.length > 1) {
+      state = [...state]..remove(date);
+    }
+  }
 }
 
 /// `Map<DateTime, Day>`
@@ -58,35 +67,24 @@ class DayCache extends _$DayCache {
   }
 }
 
-/// Returns the list of Day objects for currently selected dates
 @riverpod
-Future<List<Day>> selectedDays(Ref ref) async {
+List<Day>? syncSelectedDays(Ref ref) {
   final selectedDates = ref.watch(selectedDatesProvider);
+  final dayCache = ref.watch(dayCacheProvider);
   final notifier = ref.read(dayCacheProvider.notifier);
-  return Future.wait(selectedDates.map((date) => notifier.load(date)).toList());
-}
 
-// TODO: Can this be simplified?
-@riverpod
-class CachedSelectedDays extends _$CachedSelectedDays {
-  @override
-  List<Day> build() {
-    ref.listen<AsyncValue<List<Day>>>(
-      selectedDaysProvider,
-      (previous, next) {
-        next.whenData((days) {
-          if (days.isNotEmpty) {
-            state = days;
-          }
-        });
-      },
-    );
-    return [];
+  bool isAll = true;
+  for (var date in selectedDates) {
+    if (dayCache[date] == null) {
+      notifier.load(date);
+      isAll = false;
+    }
   }
+  return isAll ? selectedDates.map((date) => dayCache[date]!).toList() : null;
 }
 
 @riverpod
-Day averageDayCached(Ref ref) {
-  final days = ref.watch(cachedSelectedDaysProvider);
-  return days.average();
+Day syncAverageDay(Ref ref) {
+  final days = ref.watch(syncSelectedDaysProvider);
+  return days?.average() ?? Day();
 }
