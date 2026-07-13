@@ -11,7 +11,7 @@ class MealAddSelector extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final day = ref.watch(cachedSelectedDaysProvider).firstOrNull ?? Day();
+    final day = ref.watch(selectedDaysProvider).firstOrNull ?? Day();
     final date = ref.watch(selectedDatesProvider).first;
     final children = day.meals
         .map(

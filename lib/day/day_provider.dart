@@ -61,12 +61,13 @@ class DayCache extends _$DayCache {
 /// Returns the list of Day objects for currently selected dates
 @riverpod
 Future<List<Day>> selectedDays(Ref ref) async {
+  ref.watch(dayCacheProvider);
+
   final selectedDates = ref.watch(selectedDatesProvider);
   final notifier = ref.read(dayCacheProvider.notifier);
   return Future.wait(selectedDates.map((date) => notifier.load(date)).toList());
 }
 
-// TODO: Can this be simplified?
 @riverpod
 class CachedSelectedDays extends _$CachedSelectedDays {
   @override

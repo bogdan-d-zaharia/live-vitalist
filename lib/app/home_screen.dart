@@ -4,14 +4,12 @@ import 'package:live_vitalist/meals_journal.dart';
 import 'package:live_vitalist/nutrient_circle/nutrient_circle.dart';
 import 'package:live_vitalist/settings/settings_screen.dart';
 
-import 'package:live_vitalist/app/constants.dart';
 import 'package:live_vitalist/app/super_bar.dart';
 import 'package:live_vitalist/nutrient_display.dart';
 import 'package:live_vitalist/ratio_bars.dart';
 import 'package:live_vitalist/super_search/presentation/add_aliment_actions.dart';
 import 'package:live_vitalist/super_search/presentation/controllers/aliment_search_controller.dart';
 import 'package:live_vitalist/super_search/presentation/widgets/search_overlay.dart';
-import 'package:live_vitalist/super_search/super_search_constants.dart';
 import 'package:live_vitalist/week_calendar.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -94,31 +92,27 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ],
             ),
           ),
-          Positioned(
-            top: 0.0,
-            left: SuperSearchConstants.overlayHorizontalInset,
-            right: SuperSearchConstants.overlayHorizontalInset,
-            bottom: 20.0 +
-                Constants.searchBarHeight +
-                SuperSearchConstants.overlayBarSpacing,
+          Positioned.fill(
             child: SearchOverlay(),
           ),
           Positioned(
             bottom: 20.0,
             left: 12.0,
             right: 12.0,
-            child: SuperBar(
-              controller: _searchController,
-              onEnter: searchNotifier.enter,
-              onExit: () => FocusManager.instance.primaryFocus?.unfocus(),
-              onChanged: searchNotifier.setQuery,
-              onAdd: (isTemp, isGen) {
-                if (isTemp) {
-                  AddAlimentActions.addTemporary(context, ref);
-                } else {
-                  AddAlimentActions.addInstanced(context, ref);
-                }
-              },
+            child: TextFieldTapRegion(
+              child: SuperBar(
+                controller: _searchController,
+                onEnter: searchNotifier.enter,
+                onExit: searchNotifier.exit,
+                onChanged: searchNotifier.setQuery,
+                onAdd: (isTemp, isGen) {
+                  if (isTemp) {
+                    AddAlimentActions.addTemporary(context, ref);
+                  } else {
+                    AddAlimentActions.addInstanced(context, ref);
+                  }
+                },
+              ),
             ),
           ),
         ],

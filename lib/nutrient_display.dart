@@ -26,7 +26,12 @@ class _NutrientDisplayState extends ConsumerState<NutrientDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    final nutrientState = ref.watch(nutrientsProvider);
+    final originalState = ref.watch(nutrientsProvider);
+    final leading = originalState.order.firstOrNull;
+    final nutrientState = NutrientState(
+      data: Map.of(originalState.data)..remove(leading),
+      order: List.of(originalState.order)..remove(leading),
+    );
     final nutrientNotifier = ref.read(nutrientsProvider.notifier);
 
     return isEditMode
