@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:live_vitalist/aliment/aliment_bank.dart';
-import 'package:live_vitalist/aliment/aliment_data.dart';
+import 'package:live_vitalist/aliment/data/aliment_bank.dart';
+import 'package:live_vitalist/aliment/domain/aliment_data.dart';
 
 @immutable
 abstract class Aliment {

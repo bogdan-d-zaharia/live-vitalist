@@ -3,10 +3,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:live_vitalist/aliment/aliment_bank.dart';
-import 'package:live_vitalist/custom_card.dart';
+import 'package:live_vitalist/aliment/data/aliment_bank.dart';
+import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
 import 'package:live_vitalist/home_screen.dart';
-import 'package:live_vitalist/nutrient/nutrient_provider.dart';
+import 'package:live_vitalist/nutrient/data/nutrient_provider.dart';
 import 'package:live_vitalist/settings_data.dart';
 import 'package:url_launcher/url_launcher.dart';
 

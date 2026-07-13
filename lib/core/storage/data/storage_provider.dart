@@ -1,6 +1,6 @@
-import 'package:live_vitalist/storage/data/file_handler.dart';
-import 'package:live_vitalist/storage/data/firebase_handler.dart';
-import 'package:live_vitalist/storage/domain/storage_handler.dart';
+import 'package:live_vitalist/core/storage/data/file_handler.dart';
+import 'package:live_vitalist/core/storage/data/firebase_handler.dart';
+import 'package:live_vitalist/core/storage/domain/storage_handler.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'storage_provider.g.dart';

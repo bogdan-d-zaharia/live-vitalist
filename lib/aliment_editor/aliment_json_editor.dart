@@ -6,11 +6,11 @@ import 'package:flutter_highlight/themes/arta.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:highlight/languages/json.dart';
 
-import 'package:live_vitalist/aliment/aliment_data.dart';
-import 'package:live_vitalist/aliment/aliment_data_extensions.dart';
-import 'package:live_vitalist/custom_card.dart';
+import 'package:live_vitalist/aliment/domain/aliment_data.dart';
+import 'package:live_vitalist/aliment/data/aliment_data_extensions.dart';
+import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
 import 'package:live_vitalist/json_handler.dart';
-import 'package:live_vitalist/nutrient/nutrient_provider.dart';
+import 'package:live_vitalist/nutrient/data/nutrient_provider.dart';
 
 class AlimentJsonEditor extends ConsumerStatefulWidget {
   const AlimentJsonEditor({

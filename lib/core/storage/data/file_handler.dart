@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:live_vitalist/json_handler.dart';
-import 'package:live_vitalist/storage/domain/storage_handler.dart';
+import 'package:live_vitalist/core/storage/domain/storage_handler.dart';
 import 'package:path_provider/path_provider.dart';
 
 final class FileHandler implements IStorageHandler {
@@ -57,7 +57,9 @@ final class FileHandler implements IStorageHandler {
          FormatException (FormatException: Unexpected character (at character 3)
          {}aliments":{"652656957":{"name":"q","referenceSize":1.0,"referenceFields":...
            ^ */
-        if (str[1] == "}") str = str.replaceRange(1, 2, '"');
+        if (str[1] == "}") {
+          str = str.replaceRange(1, 2, '"');
+        }
         return jsonDecode(str);
       }
     } finally {}

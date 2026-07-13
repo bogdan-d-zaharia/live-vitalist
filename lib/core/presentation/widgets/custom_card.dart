@@ -1,38 +1,6 @@
 import 'package:flutter/material.dart';
-import 'palette.dart';
-
-class CloseButton extends StatelessWidget {
-  const CloseButton({super.key, required this.onTap, this.size = 20.0});
-
-  final void Function()? onTap;
-  final double size;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(size / 2.0),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(size / 2.0),
-          border: Border.all(
-            color: Palette.almostWhite,
-            width: 1.0 / 20.0 * size,
-          ),
-        ),
-        width: size,
-        height: size,
-        child: Center(
-          child: Icon(
-            Icons.close_rounded,
-            size: size * 0.7,
-            color: Palette.almostWhite,
-          ),
-        ),
-      ),
-    );
-  }
-}
+import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
+import 'package:live_vitalist/palette.dart';
 
 class CustomCard extends StatelessWidget {
   const CustomCard({
@@ -93,26 +61,6 @@ class CustomCard extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class MiniCard extends StatelessWidget {
-  const MiniCard({
-    this.child,
-    super.key,
-  });
-
-  final Widget? child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      clipBehavior: Clip.hardEdge,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24.0),
-      ),
-      child: child,
     );
   }
 }

@@ -1,4 +1,4 @@
-import 'package:live_vitalist/day/meal.dart';
+import 'package:live_vitalist/day/domain/meal.dart';
 
 class DayConstants {
   static List<Meal> get defaultMeals => [

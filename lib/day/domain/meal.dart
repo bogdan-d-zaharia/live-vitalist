@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:live_vitalist/aliment/aliment.dart';
+import 'package:live_vitalist/aliment/domain/aliment.dart';
 
 @immutable
 class Meal {

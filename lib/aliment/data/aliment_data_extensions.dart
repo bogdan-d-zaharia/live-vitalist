@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:live_vitalist/aliment/aliment_data.dart';
-import 'package:live_vitalist/nutrient/nutrient_provider.dart';
+import 'package:live_vitalist/aliment/domain/aliment_data.dart';
+import 'package:live_vitalist/nutrient/data/nutrient_provider.dart';
 import 'package:live_vitalist/json_handler.dart';
 
 extension AlimentJsonExtension on AlimentData {

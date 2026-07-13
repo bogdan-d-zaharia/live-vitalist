@@ -1,8 +1,8 @@
-import 'package:live_vitalist/aliment/aliment_extensions.dart';
-import 'package:live_vitalist/aliment/aliment_bank.dart';
-import 'package:live_vitalist/aliment/aliment.dart';
-import 'package:live_vitalist/day/day.dart';
-import 'package:live_vitalist/day/meal.dart';
+import 'package:live_vitalist/aliment/domain/aliment_extensions.dart';
+import 'package:live_vitalist/aliment/data/aliment_bank.dart';
+import 'package:live_vitalist/aliment/domain/aliment.dart';
+import 'package:live_vitalist/day/domain/day.dart';
+import 'package:live_vitalist/day/domain/meal.dart';
 
 extension DaysGroupAnalysis on List<Day> {
   Day sum() {

@@ -5,7 +5,7 @@ import 'package:live_vitalist/settings/settings_screen.dart';
 import 'meals_journal.dart';
 import 'nutrient_display.dart';
 import 'ratio_bars.dart';
-import 'week_calendar.dart';
+import 'features/calendar/calendar.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});

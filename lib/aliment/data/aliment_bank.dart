@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
-import 'package:live_vitalist/aliment/aliment_constants.dart';
-import 'package:live_vitalist/aliment/aliment_data.dart';
-import 'package:live_vitalist/storage/data/storage_provider.dart';
+import 'package:live_vitalist/aliment/domain/aliment_constants.dart';
+import 'package:live_vitalist/aliment/domain/aliment_data.dart';
+import 'package:live_vitalist/core/storage/data/storage_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'aliment_bank.g.dart';

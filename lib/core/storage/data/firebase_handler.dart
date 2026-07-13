@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:live_vitalist/json_handler.dart';
-import 'package:live_vitalist/storage/domain/storage_handler.dart';
+import 'package:live_vitalist/core/storage/domain/storage_handler.dart';
 
 /// Verifies if the user is connected when used.
 ///

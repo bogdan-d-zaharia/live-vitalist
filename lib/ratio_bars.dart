@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:live_vitalist/aliment/aliment_bank.dart';
-import 'package:live_vitalist/custom_card.dart';
-import 'package:live_vitalist/day/day_extensions.dart';
-import 'package:live_vitalist/day/day_provider.dart';
-import 'package:live_vitalist/labels_widget.dart';
-import 'package:live_vitalist/palette.dart';
-import 'package:live_vitalist/settings_data.dart';
+import 'package:live_vitalist/day/domain/day_extensions.dart';
+
+import 'aliment/data/aliment_bank.dart';
+import 'core/presentation/widgets/custom_card.dart';
+import 'day/data/day_provider.dart';
+import 'labels_widget.dart';
+import 'palette.dart';
+import 'settings_data.dart';
 
 class RatioBarElement {
   const RatioBarElement(

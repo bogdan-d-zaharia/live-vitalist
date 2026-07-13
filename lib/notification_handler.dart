@@ -3,8 +3,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart'
     as ntf;
 import 'package:permission_handler/permission_handler.dart';
 
-import 'aliment/aliment.dart';
-import 'aliment/aliment_bank.dart';
+import 'aliment/domain/aliment.dart';
+import 'aliment/data/aliment_bank.dart';
 
 class NotificationHandler {
   static final ntf.FlutterLocalNotificationsPlugin _notificationsPlugin =

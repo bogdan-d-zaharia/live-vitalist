@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 abstract final class Palette {
-  static isDarkMode(BuildContext context) =>
+  static bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
 
   static RichText dimParentheses(String label, TextStyle? style) {

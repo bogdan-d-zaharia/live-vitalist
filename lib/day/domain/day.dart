@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
-import 'package:live_vitalist/day/day_constants.dart';
-import 'package:live_vitalist/day/meal.dart';
+import 'package:live_vitalist/day/domain/day_constants.dart';
+import 'package:live_vitalist/day/domain/meal.dart';
 
 @immutable
 class Day {

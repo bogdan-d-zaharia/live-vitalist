@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:live_vitalist/aliment/aliment_extensions.dart';
-import 'package:live_vitalist/day/meal.dart';
+import 'package:live_vitalist/aliment/domain/aliment_extensions.dart';
+import 'package:live_vitalist/day/domain/meal.dart';
 
-import 'aliment/aliment.dart';
-import 'aliment/aliment_bank.dart';
+import 'aliment/domain/aliment.dart';
+import 'aliment/data/aliment_bank.dart';
 import 'aliment_editor/aliment_data_editor.dart';
 import 'aliment_editor/instance_editor.dart';
-import 'custom_card.dart';
-import 'day/day.dart';
-import 'day/day_provider.dart';
+import 'core/presentation/widgets/custom_card.dart';
+import 'day/domain/day.dart';
+import 'day/data/day_provider.dart';
 import 'notification_handler.dart';
-import 'nutrient/nutrient_provider.dart';
+import 'nutrient/data/nutrient_provider.dart';
 import 'palette.dart';
 import 'settings_data.dart';
 import 'string_input.dart';

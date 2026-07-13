@@ -1,8 +1,8 @@
 import 'package:intl/intl.dart' as intl;
-import 'package:live_vitalist/day/day.dart';
-import 'package:live_vitalist/day/day_extensions.dart';
-import 'package:live_vitalist/day/meal.dart';
-import 'package:live_vitalist/storage/data/storage_provider.dart';
+import 'package:live_vitalist/day/domain/day.dart';
+import 'package:live_vitalist/day/domain/day_extensions.dart';
+import 'package:live_vitalist/day/domain/meal.dart';
+import 'package:live_vitalist/core/storage/data/storage_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'day_provider.g.dart';

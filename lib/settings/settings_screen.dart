@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:live_vitalist/custom_card.dart';
+import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
+import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
 import 'package:live_vitalist/palette.dart';
 import 'package:live_vitalist/settings/presentation/controllers/settings_controller.dart';
 import 'package:live_vitalist/settings/presentation/widgets/data_deletion_page.dart';
@@ -104,8 +105,9 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
                   Checkbox(
                     value: SettingsData.isMonthDay,
                     onChanged: (val) {
-                      if (val != null)
+                      if (val != null) {
                         setState(() => SettingsData.isMonthDay = val);
+                      }
                     },
                   ),
                   const Text('Use M/D format'),
@@ -119,8 +121,9 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
                   Checkbox(
                     value: SettingsData.isComplexCalendar,
                     onChanged: (val) {
-                      if (val != null)
+                      if (val != null) {
                         setState(() => SettingsData.isComplexCalendar = val);
+                      }
                     },
                   ),
                   const Text('Use complex calendar view'),
@@ -134,8 +137,9 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
                   Checkbox(
                     value: SettingsData.isShowOmegaBalance,
                     onChanged: (val) {
-                      if (val != null)
+                      if (val != null) {
                         setState(() => SettingsData.isShowOmegaBalance = val);
+                      }
                     },
                   ),
                   const Text('Show Omega-3 to Omega-6 balance'),
