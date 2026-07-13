@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:live_vitalist/aliment/aliment_bank.dart';
-import 'package:live_vitalist/custom_card.dart';
-import 'package:live_vitalist/day/day_extensions.dart';
-import 'package:live_vitalist/day/day_provider.dart';
-import 'package:live_vitalist/nutrient/nutrient_provider.dart';
+import 'package:live_vitalist/aliment/data/aliment_bank.dart';
+import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
+import 'package:live_vitalist/day/data/day_provider.dart';
+import 'package:live_vitalist/day/domain/day_extensions.dart';
+import 'package:live_vitalist/nutrient/data/nutrient_provider.dart';
 import 'package:live_vitalist/nutrient_circle/animated_calorie_ring.dart';
 import 'package:live_vitalist/nutrient_circle/nutrient_circle_constants.dart';
 import 'package:live_vitalist/palette.dart';
@@ -19,7 +19,7 @@ class NutrientCircle extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final nutrientState = ref.watch(nutrientsProvider);
-    final avgDay = ref.watch(averageDayCachedProvider);
+    final avgDay = ref.watch(syncAverageDayProvider);
     final bank = ref.watch(alimentBankProvider);
 
     if (nutrientState.order.isEmpty) return const SizedBox.shrink();

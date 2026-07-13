@@ -1,11 +1,10 @@
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:live_vitalist/aliment/aliment_bank.dart';
-import 'package:live_vitalist/custom_card.dart';
-import 'package:live_vitalist/day/day.dart';
-import 'package:live_vitalist/day/day_provider.dart';
+import 'package:live_vitalist/aliment/data/aliment_bank.dart';
+import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
+import 'package:live_vitalist/day/data/day_provider.dart';
+import 'package:live_vitalist/day/domain/day.dart';
 import 'package:live_vitalist/palette.dart';
 import 'package:live_vitalist/super_search/presentation/controllers/aliment_search_controller.dart';
 import 'package:live_vitalist/super_search/presentation/widgets/aliment_result_tile.dart';
@@ -23,7 +22,7 @@ class SearchOverlay extends ConsumerWidget {
     if (mealName == null) return;
 
     final date = ref.read(selectedDatesProvider).first;
-    final day = ref.read(cachedSelectedDaysProvider).firstOrNull ?? Day();
+    final day = ref.read(syncSelectedDaysProvider)?.firstOrNull ?? Day();
     final meal = day.meals.firstWhere((m) => m.name == mealName);
 
     meal.aliments.addAll(selection.map((item) => item.toInstanced()));

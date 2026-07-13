@@ -1,16 +1,15 @@
 import 'dart:convert';
 
+import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:diacritic/diacritic.dart';
-import 'package:live_vitalist/aliment/aliment_data.dart';
-
-import 'package:live_vitalist/aliment/aliment.dart';
-import 'package:live_vitalist/aliment/aliment_bank.dart';
-import 'package:live_vitalist/custom_card.dart';
+import 'package:live_vitalist/aliment/data/aliment_bank.dart';
+import 'package:live_vitalist/aliment/domain/aliment.dart';
+import 'package:live_vitalist/aliment/domain/aliment_data.dart';
+import 'package:live_vitalist/aliment_editor/aliment_data_editor.dart';
+import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
 import 'package:live_vitalist/palette.dart';
 import 'package:live_vitalist/string_input.dart';
-import 'aliment_data_editor.dart';
 
 class InstanceEditor extends ConsumerStatefulWidget {
   const InstanceEditor({required this.initialAliment, super.key});

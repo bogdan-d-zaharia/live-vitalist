@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:live_vitalist/aliment/aliment_bank.dart';
-import 'package:live_vitalist/day/day_extensions.dart';
-import 'package:live_vitalist/day/day_provider.dart';
-import 'aliment/aliment.dart';
-import 'custom_card.dart';
-import 'day/day.dart';
-import 'nutrient/nutrient.dart';
-import 'nutrient/nutrient_provider.dart';
-import 'palette.dart';
-import 'settings_data.dart';
-import 'string_input.dart';
-import 'icon_button.dart';
+import 'package:live_vitalist/aliment/data/aliment_bank.dart';
+import 'package:live_vitalist/aliment/domain/aliment.dart';
+import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
+import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
+import 'package:live_vitalist/day/data/day_provider.dart';
+import 'package:live_vitalist/day/domain/day.dart';
+import 'package:live_vitalist/day/domain/day_extensions.dart';
+import 'package:live_vitalist/icon_button.dart';
+import 'package:live_vitalist/nutrient/data/nutrient_provider.dart';
+import 'package:live_vitalist/nutrient/domain/nutrient.dart';
+import 'package:live_vitalist/nutrient/domain/nutrient_extensions.dart';
+import 'package:live_vitalist/palette.dart';
+import 'package:live_vitalist/settings_data.dart';
+import 'package:live_vitalist/string_input.dart';
 
 class NutrientDisplay extends ConsumerStatefulWidget {
   const NutrientDisplay({super.key});
@@ -40,7 +42,7 @@ class _NutrientDisplayState extends ConsumerState<NutrientDisplay> {
   }
 
   Widget _buildViewMode(BuildContext context, NutrientState state) {
-    final avgDay = ref.watch(averageDayCachedProvider);
+    final avgDay = ref.watch(syncAverageDayProvider);
     final bank = ref.watch(alimentBankProvider);
 
     final intake = avgDay.readIntake(bank);
@@ -373,7 +375,7 @@ class _NutrientDisplayState extends ConsumerState<NutrientDisplay> {
       divided.add(widgets[i]);
       if (i < widgets.length - 1) {
         divided.add(Divider(
-          color: Colors.black.withOpacity(0.1),
+          color: Colors.black.withValues(alpha: 0.1),
           thickness: 0.5,
           height: 0.0,
         ));

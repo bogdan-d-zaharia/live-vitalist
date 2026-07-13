@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:live_vitalist/custom_card.dart';
+import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
 
 class ReauthenticateDialog extends StatelessWidget {
   const ReauthenticateDialog({super.key});

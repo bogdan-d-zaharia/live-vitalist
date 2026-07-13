@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'package:live_vitalist/day/day.dart';
-import 'package:live_vitalist/day/day_provider.dart';
+import 'package:live_vitalist/day/data/day_provider.dart';
+import 'package:live_vitalist/day/domain/day.dart';
 
 /// Asks in which meal the aliments go; pops with the meal name.
 Future<String?> showMealPicker(BuildContext context) {
@@ -17,7 +16,7 @@ class MealPickerDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final day = ref.watch(cachedSelectedDaysProvider).firstOrNull ?? Day();
+    final day = ref.watch(syncSelectedDaysProvider)?.firstOrNull ?? Day();
 
     final children = day.meals
         .map(
