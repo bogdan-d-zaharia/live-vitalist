@@ -8,7 +8,7 @@ import 'package:live_vitalist/features/calendar/widgets/calendar_help_dialog.dar
 import 'package:live_vitalist/features/calendar/widgets/calendar_item.dart';
 import 'package:live_vitalist/features/calendar/widgets/dotted_line.dart';
 import 'package:live_vitalist/icon_button.dart';
-import 'package:live_vitalist/settings_data.dart';
+import 'package:live_vitalist/settings/data/settings_data.dart';
 
 class WeekCalendar extends ConsumerWidget {
   const WeekCalendar({super.key});

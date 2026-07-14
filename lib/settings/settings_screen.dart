@@ -5,7 +5,7 @@ import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
 import 'package:live_vitalist/palette.dart';
 import 'package:live_vitalist/settings/presentation/controllers/settings_controller.dart';
 import 'package:live_vitalist/settings/presentation/widgets/data_deletion_page.dart';
-import 'package:live_vitalist/settings_data.dart';
+import 'package:live_vitalist/settings/data/settings_data.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {

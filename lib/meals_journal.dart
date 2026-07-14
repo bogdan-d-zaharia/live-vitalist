@@ -13,7 +13,7 @@ import 'day/data/day_provider.dart';
 import 'notification_handler.dart';
 import 'nutrient/data/nutrient_provider.dart';
 import 'palette.dart';
-import 'settings_data.dart';
+import 'settings/data/settings_data.dart';
 import 'string_input.dart';
 
 class MealsJournal extends ConsumerWidget {

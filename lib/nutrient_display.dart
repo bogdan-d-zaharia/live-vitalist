@@ -11,7 +11,7 @@ import 'day/domain/day.dart';
 import 'nutrient/domain/nutrient.dart';
 import 'nutrient/data/nutrient_provider.dart';
 import 'palette.dart';
-import 'settings_data.dart';
+import 'settings/data/settings_data.dart';
 import 'string_input.dart';
 import 'icon_button.dart';
 

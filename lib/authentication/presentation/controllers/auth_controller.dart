@@ -1,6 +1,6 @@
 import 'package:live_vitalist/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/nutrient/data/nutrient_provider.dart';
-import 'package:live_vitalist/settings_data.dart';
+import 'package:live_vitalist/settings/data/settings_data.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_controller.g.dart';
