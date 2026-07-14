@@ -7,8 +7,6 @@ import 'package:live_vitalist/aliment_editor/aliment_data_editor.dart';
 import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
 import 'package:live_vitalist/day/data/day_provider.dart';
 import 'package:live_vitalist/day/domain/day.dart';
-import 'package:live_vitalist/settings_data.dart';
-import 'package:live_vitalist/string_input.dart';
 import 'package:live_vitalist/super_search/data/aliment_generator.dart';
 import 'package:live_vitalist/super_search/presentation/widgets/meal_picker_dialog.dart';
 
@@ -60,8 +58,9 @@ abstract final class AddAlimentActions {
     ref.read(dayCacheProvider.notifier).save(date, day);
   }
 
-  /// Asks Gemini to fill in the nutritional data for the searched text,
-  /// then continues with the usual instanced/temporary flow, prefilled.
+  /// Asks Gemini (through Firebase AI Logic) to fill in the nutritional
+  /// data for the searched text, then continues with the usual
+  /// instanced/temporary flow, prefilled.
   static Future<void> addGenerated(
     BuildContext context,
     WidgetRef ref,
@@ -76,9 +75,6 @@ abstract final class AddAlimentActions {
       return;
     }
 
-    final apiKey = await _ensureApiKey(context);
-    if (apiKey == null) return;
-
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -88,7 +84,7 @@ abstract final class AddAlimentActions {
     AlimentData? generated;
     Object? error;
     try {
-      generated = await AlimentGenerator.generate(apiKey, input);
+      generated = await AlimentGenerator.generate(input);
     } catch (e) {
       error = e;
     }
@@ -113,34 +109,5 @@ abstract final class AddAlimentActions {
     } else {
       await addInstanced(context, ref, initialData: generated);
     }
-  }
-
-  /// Returns the saved Google AI Studio key, asking for one if missing.
-  static Future<String?> _ensureApiKey(BuildContext context) async {
-    if (SettingsData.geminiApiKey != '') return SettingsData.geminiApiKey;
-
-    final entered = await showDialog<String>(
-      context: context,
-      builder: (context) => Dialog(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text('Google AI Studio API key'),
-              StringInput(
-                submit: (key) => Navigator.pop(context, key.trim()),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-
-    if (entered == null || entered == '') return null;
-
-    SettingsData.geminiApiKey = entered;
-    return entered;
   }
 }

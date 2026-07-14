@@ -46,8 +46,9 @@ dependencies:
   # flutter_highlight: ^0.7.0
   flutter_code_editor: ^0.3.2
   highlight: ^0.7.0
-  firebase_core: ^4.6.0
-  firebase_auth: ^6.3.0
+  firebase_core: ^4.12.0
+  firebase_ai: ^3.14.0
+  firebase_auth: ^6.5.5
   firebase_database: ^12.2.0
   google_sign_in: ^6.3.0
   firebase_ui_auth: ^3.0.1

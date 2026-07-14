@@ -1,11 +1,10 @@
-import 'dart:convert';
-import 'dart:io';
-
+import 'package:firebase_ai/firebase_ai.dart';
 import 'package:live_vitalist/aliment/data/aliment_data_extensions.dart';
 import 'package:live_vitalist/aliment/domain/aliment_data.dart';
 
-/// Fills in the nutritional data of an aliment by asking Gemini
-/// (Google AI Studio) about the given input.
+/// Fills in the nutritional data of an aliment by asking Gemini, through
+/// Firebase AI Logic, about the given input. The app never holds an API
+/// key: Firebase authorizes and bills the request on the app's project.
 abstract final class AlimentGenerator {
   static const String _model = 'gemini-flash-latest';
 
@@ -68,46 +67,22 @@ Input:
 <<input-ul>>
 ''';
 
-  static Future<AlimentData> generate(String apiKey, String input) async {
+  static Future<AlimentData> generate(String input) async {
     final prompt = _promptTemplate.replaceFirst('<<input-ul>>', input);
 
-    final uri = Uri.parse('https://generativelanguage.googleapis.com'
-        '/v1beta/models/$_model:generateContent');
+    final model = FirebaseAI.googleAI().generativeModel(model: _model);
+    final response = await model.generateContent([Content.text(prompt)]);
 
-    final client = HttpClient();
-    try {
-      final request = await client.postUrl(uri);
-      request.headers.contentType = ContentType.json;
-      request.headers.set('x-goog-api-key', apiKey);
-      request.write(jsonEncode({
-        'contents': [
-          {
-            'parts': [
-              {'text': prompt},
-            ],
-          },
-        ],
-      }));
-
-      final response = await request.close();
-      final body = await response.transform(utf8.decoder).join();
-
-      if (response.statusCode != HttpStatus.ok) {
-        throw HttpException(
-            'Gemini request failed (${response.statusCode}): $body');
-      }
-
-      final text = jsonDecode(body)['candidates'][0]['content']['parts'][0]
-          ['text'] as String;
-
-      return AlimentData.fromJson(
-        AlimentData.empty.fromExpandedJsonWithCommentsToJsonMap(
-          _extractJsonObject(text),
-        ),
-      );
-    } finally {
-      client.close();
+    final text = response.text;
+    if (text == null || text.isEmpty) {
+      throw StateError('Gemini did not return any text.');
     }
+
+    return AlimentData.fromJson(
+      AlimentData.empty.fromExpandedJsonWithCommentsToJsonMap(
+        _extractJsonObject(text),
+      ),
+    );
   }
 
   /// Cuts out the outermost `{...}`, dropping markdown fences and any
