@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/ratio_bars/ratio_bars_card.dart';
 import 'package:live_vitalist/settings/settings_screen.dart';
 
-import 'meals_journal.dart';
+import 'meals_journal/meals_journal.dart';
 import 'nutrient_display.dart';
 import 'features/calendar/calendar.dart';
 
