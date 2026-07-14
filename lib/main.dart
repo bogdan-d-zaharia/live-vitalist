@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'auth_gate.dart';
+import 'authentication/auth_gate.dart';
 import 'notification_handler.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
