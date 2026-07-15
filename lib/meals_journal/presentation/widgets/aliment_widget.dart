@@ -5,7 +5,7 @@ import 'package:live_vitalist/aliment/domain/aliment.dart';
 import 'package:live_vitalist/aliment/domain/aliment_extensions.dart';
 import 'package:live_vitalist/meals_journal/presentation/widgets/element_widget.dart';
 import 'package:live_vitalist/nutrient/data/nutrient_provider.dart';
-import 'package:live_vitalist/palette.dart';
+import 'package:live_vitalist/core/theme/palette.dart';
 import 'package:live_vitalist/settings/data/settings_data.dart';
 
 class AlimentWidget extends ConsumerWidget {

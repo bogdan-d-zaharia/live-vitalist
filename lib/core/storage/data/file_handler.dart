@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:live_vitalist/json_handler.dart';
+import 'package:live_vitalist/core/utils/json_handler.dart';
 import 'package:live_vitalist/core/storage/domain/storage_handler.dart';
 import 'package:path_provider/path_provider.dart';
 

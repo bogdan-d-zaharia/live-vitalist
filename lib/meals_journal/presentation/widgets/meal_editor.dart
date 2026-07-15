@@ -8,7 +8,7 @@ import 'package:live_vitalist/meals_journal/presentation/aliment_editing_extensi
 import 'package:live_vitalist/meals_journal/presentation/widgets/aliment_widget.dart';
 import 'package:live_vitalist/meals_journal/presentation/widgets/element_widget.dart';
 import 'package:live_vitalist/notification_handler.dart';
-import 'package:live_vitalist/palette.dart';
+import 'package:live_vitalist/core/theme/palette.dart';
 import 'package:live_vitalist/settings/data/settings_data.dart';
 
 class MealEditor extends ConsumerWidget {

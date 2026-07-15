@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/day/data/day_provider.dart';
 import 'package:live_vitalist/day/domain/day_extensions.dart';
-import 'package:live_vitalist/palette.dart';
+import 'package:live_vitalist/core/theme/palette.dart';
 import 'package:live_vitalist/ratio_bars/presentation/widgets/ratio_bars.dart';
 import 'package:live_vitalist/ratio_bars/presentation/widgets/ratio_bars_models.dart';
 import 'package:live_vitalist/settings/data/settings_data.dart';

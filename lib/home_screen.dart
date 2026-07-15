@@ -1,25 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/features/calendar/calendar.dart';
+import 'package:live_vitalist/meals_journal/meals_journal.dart';
+import 'package:live_vitalist/nutrient_display.dart';
 import 'package:live_vitalist/ratio_bars/ratio_bars_card.dart';
 import 'package:live_vitalist/settings/settings_screen.dart';
 
-import 'meals_journal/meals_journal.dart';
-import 'nutrient_display.dart';
-import 'features/calendar/calendar.dart';
-
-class HomeScreen extends ConsumerStatefulWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

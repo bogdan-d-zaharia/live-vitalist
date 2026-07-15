@@ -12,7 +12,7 @@ import '../core/presentation/widgets/custom_card.dart';
 import '../day/domain/day.dart';
 import '../day/data/day_provider.dart';
 import '../nutrient/data/nutrient_provider.dart';
-import '../palette.dart';
+import '../core/theme/palette.dart';
 import '../settings/data/settings_data.dart';
 import '../string_input.dart';
 

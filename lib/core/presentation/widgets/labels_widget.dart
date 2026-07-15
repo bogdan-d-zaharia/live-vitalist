@@ -11,7 +11,7 @@ class LabelsWidget extends StatelessWidget {
   final Map<String, Color> map;
   final bool isHorizontal;
 
-  static List<Widget> labels(Map<String, Color> map) {
+  static List<Widget> _labels(Map<String, Color> map) {
     return map.entries
         .map(
           (e) => Row(
@@ -34,7 +34,7 @@ class LabelsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> elements = labels(map);
+    final List<Widget> elements = _labels(map);
 
     if (!isHorizontal) {
       return Column(
@@ -44,9 +44,7 @@ class LabelsWidget extends StatelessWidget {
       );
     } else {
       return Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: elements,
+        children: elements.map((e) => Flexible(child: e)).toList(),
       );
     }
   }

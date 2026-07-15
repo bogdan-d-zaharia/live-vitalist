@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:live_vitalist/palette.dart';
+import 'package:live_vitalist/core/theme/palette.dart';
 import 'package:live_vitalist/ratio_bars/presentation/widgets/ratio_bars_models.dart';
 
 class Bar extends StatelessWidget {

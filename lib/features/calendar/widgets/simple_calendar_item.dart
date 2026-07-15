@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:live_vitalist/features/calendar/domain/calendar_constants.dart';
 import 'package:live_vitalist/nutrient/domain/nutrient.dart';
 import 'package:live_vitalist/nutrient/domain/nutrient_extensions.dart';
-import 'package:live_vitalist/palette.dart';
+import 'package:live_vitalist/core/theme/palette.dart';
 import 'package:live_vitalist/settings/data/settings_data.dart';
 
 class SimpleCalendarItem extends StatelessWidget {

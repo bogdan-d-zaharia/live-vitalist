@@ -8,7 +8,7 @@ import 'package:live_vitalist/aliment/domain/aliment_data.dart';
 import 'package:live_vitalist/aliment/domain/aliment.dart';
 import 'package:live_vitalist/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
-import 'package:live_vitalist/palette.dart';
+import 'package:live_vitalist/core/theme/palette.dart';
 import 'package:live_vitalist/string_input.dart';
 import 'aliment_data_editor.dart';
 

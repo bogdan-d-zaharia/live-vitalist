@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
 import 'package:live_vitalist/features/calendar/domain/calendar_constants.dart';
 import 'package:live_vitalist/features/calendar/widgets/simple_calendar_item.dart';
-import 'package:live_vitalist/labels_widget.dart';
+import 'package:live_vitalist/core/presentation/widgets/labels_widget.dart';
 import 'package:live_vitalist/settings/data/settings_data.dart';
 
 class CalendarHelpDialog extends StatelessWidget {

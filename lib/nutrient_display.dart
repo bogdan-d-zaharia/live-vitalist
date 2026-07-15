@@ -10,10 +10,10 @@ import 'core/presentation/widgets/custom_card.dart';
 import 'day/domain/day.dart';
 import 'nutrient/domain/nutrient.dart';
 import 'nutrient/data/nutrient_provider.dart';
-import 'palette.dart';
+import 'core/theme/palette.dart';
 import 'settings/data/settings_data.dart';
 import 'string_input.dart';
-import 'icon_button.dart';
+import 'core/presentation/widgets/custom_icon_button.dart';
 
 class NutrientDisplay extends ConsumerStatefulWidget {
   const NutrientDisplay({super.key});
@@ -234,7 +234,7 @@ class _NutrientDisplayState extends ConsumerState<NutrientDisplay> {
   Widget _buildActionButtons() {
     return Row(
       children: [
-        MyIconButton(
+        CustomIconButton(
           onTap: () {
             setState(() {
               SettingsData.sort = SettingsData.sort == 1
@@ -251,7 +251,7 @@ class _NutrientDisplayState extends ConsumerState<NutrientDisplay> {
           ),
         ),
         const SizedBox(width: 8),
-        MyIconButton(
+        CustomIconButton(
           onTap: () {
             setState(
                 () => SettingsData.isSmartHide = !SettingsData.isSmartHide);
@@ -263,7 +263,7 @@ class _NutrientDisplayState extends ConsumerState<NutrientDisplay> {
           ),
         ),
         const SizedBox(width: 8),
-        MyIconButton(
+        CustomIconButton(
           onTap: () => setState(() => isEditMode = !isEditMode),
           icon: Icon(
             Icons.edit,

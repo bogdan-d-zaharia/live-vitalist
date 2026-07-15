@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'palette.dart';
+import 'core/theme/palette.dart';
 
 //TODO: I don't yet need it but it can be an upgrade.
 // class StringField {

@@ -7,7 +7,7 @@ import 'package:live_vitalist/features/calendar/domain/calendar_constants.dart';
 import 'package:live_vitalist/features/calendar/widgets/calendar_help_dialog.dart';
 import 'package:live_vitalist/features/calendar/widgets/calendar_item.dart';
 import 'package:live_vitalist/features/calendar/widgets/dotted_line.dart';
-import 'package:live_vitalist/icon_button.dart';
+import 'package:live_vitalist/core/presentation/widgets/custom_icon_button.dart';
 import 'package:live_vitalist/settings/data/settings_data.dart';
 
 class WeekCalendar extends ConsumerWidget {
@@ -22,7 +22,7 @@ class WeekCalendar extends ConsumerWidget {
     return CustomCard(
       logo: const Icon(Icons.view_week),
       title: "Calendar",
-      action: MyIconButton(
+      action: CustomIconButton(
         icon: const Icon(Icons.help_outline_rounded, size: 22.0),
         onTap: () => showDialog(
           context: context,
