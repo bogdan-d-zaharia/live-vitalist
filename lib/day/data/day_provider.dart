@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart' as intl;
+import 'package:live_vitalist/aliment/domain/aliment.dart';
 import 'package:live_vitalist/day/domain/day.dart';
 import 'package:live_vitalist/day/domain/day_extensions.dart';
 import 'package:live_vitalist/day/domain/meal.dart';
@@ -49,21 +50,61 @@ class DayCache extends _$DayCache {
     return day;
   }
 
-  Future<void> save(DateTime date, Day day) async {
+  Future<void> _save(DateTime date, Day day) async {
     final normalized = date.normalized;
     state = {...state, normalized: day};
     final path = 'records/${normalized.fileName}';
     await ref.read(storageProvider.notifier).saveJson(path, day.toJson());
   }
 
-  void removeMeal(DateTime date, Day day, Meal meal) {
-    final meals = [...day.meals]..removeWhere((e) => e.name == meal.name);
-    save(date, Day(meals: meals));
+  Future<void> removeMeal(DateTime date, String mealName) async {
+    final day = await load(date);
+    final meals = [...day.meals]..removeWhere((e) => e.name == mealName);
+    _save(date, Day(meals: meals));
   }
 
-  void addMeal(DateTime date, Day day, Meal meal) {
+  Future<void> addMeal(DateTime date, Meal meal) async {
+    final day = await load(date);
     final meals = [...day.meals, meal];
-    save(date, Day(meals: meals));
+    _save(date, Day(meals: meals));
+  }
+
+  // TODO: Momentan se muteaza obiectul Meal
+  // day.meals[...].alimente.muteaza()
+  // trebuie rezolvat dupa ce Meal devine @freezed.
+
+  Future<void> addAliment(
+      DateTime date, String mealName, Aliment aliment) async {
+    final day = await load(date);
+    final meal = day.meals.firstWhere((meal) => meal.name == mealName);
+    meal.aliments.add(aliment);
+    final meals = [...day.meals];
+    _save(date, Day(meals: meals));
+  }
+
+  Future<void> removeAliment(
+      DateTime date, String mealName, Aliment aliment) async {
+    final day = await load(date);
+    final meal = day.meals.firstWhere((meal) => meal.name == mealName);
+    meal.aliments.remove(aliment);
+    final meals = [...day.meals];
+    _save(date, Day(meals: meals));
+  }
+
+  Future<void> updateAliment(
+    DateTime date,
+    String mealName,
+    Aliment oldAliment,
+    Aliment newAliment,
+  ) async {
+    final day = await load(date);
+    final meal = day.meals.firstWhere((meal) => meal.name == mealName);
+    final idx = meal.aliments.indexOf(oldAliment);
+    meal.aliments
+      ..removeAt(idx)
+      ..insert(idx, newAliment);
+    final meals = [...day.meals];
+    _save(date, Day(meals: meals));
   }
 }
 

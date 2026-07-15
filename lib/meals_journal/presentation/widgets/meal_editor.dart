@@ -29,27 +29,17 @@ class MealEditor extends ConsumerWidget {
     final bank = ref.watch(alimentBankProvider);
     final bankNotifier = ref.read(alimentBankProvider.notifier);
 
-    // TODO: Momentan se muteaza si salveaza aceasi referinta obiectului Day
-    // day.meals[...].alimente.muteaza()
-    // trebuie rezolvat dupa ce Meal devine @freezed.
-    void updateDay() => dayNotifier.save(date, day);
-
     Widget alimentToWidget(Aliment aliment) {
-      final idx = meal.aliments.indexOf(aliment);
       return AlimentWidget(
         aliment: aliment,
         deleteAliment: () {
-          meal.aliments.remove(aliment);
-          updateDay();
+          dayNotifier.removeAliment(date, mealName, aliment);
         },
         onTap: () async {
           final newAliment = await aliment.pushEditingScreen(context);
           if (newAliment != null) {
-            meal.aliments
-              ..removeAt(idx)
-              ..insert(idx, newAliment);
+            dayNotifier.updateAliment(date, mealName, aliment, newAliment);
           }
-          updateDay();
         },
         onLongPress: () async {
           if (aliment is InstancedAliment) {
@@ -62,12 +52,9 @@ class MealEditor extends ConsumerWidget {
             final newData =
                 await aliment.alimentData.pushEditingScreen(context);
             if (newData != null) {
-              meal.aliments
-                ..removeAt(idx)
-                ..insert(idx, aliment.copyWith(alimentData: newData));
+              dayNotifier.updateAliment(date, mealName, aliment,
+                  aliment.copyWith(alimentData: newData));
             }
-
-            updateDay();
           }
         },
       );
@@ -84,8 +71,7 @@ class MealEditor extends ConsumerWidget {
             await InstancedAliment.empty.pushEditingScreen(context);
 
         if (newAliment != null && newAliment.alimentID != '') {
-          meal.aliments.add(newAliment);
-          dayNotifier.save(date, day);
+          dayNotifier.addAliment(date, mealName, newAliment);
         }
       },
       additional: [],
@@ -102,8 +88,7 @@ class MealEditor extends ConsumerWidget {
             await TemporaryAliment.empty.pushEditingScreen(context);
 
         if (newAliment != null) {
-          meal.aliments.add(newAliment);
-          dayNotifier.save(date, day);
+          dayNotifier.addAliment(date, mealName, newAliment);
         }
       },
       additional: [],

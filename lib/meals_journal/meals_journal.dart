@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/aliment/domain/aliment_extensions.dart';
 import 'package:live_vitalist/day/domain/meal.dart';
+import 'package:live_vitalist/meals_journal/presentation/aliment_editing_extensions.dart';
 import 'package:live_vitalist/meals_journal/presentation/widgets/meal_editor.dart';
 import 'package:live_vitalist/meals_journal/presentation/widgets/meal_element.dart';
 
 import '../aliment/domain/aliment.dart';
 import '../aliment/data/aliment_bank.dart';
-import '../aliment_editor/instance_editor.dart';
 import '../core/presentation/widgets/custom_card.dart';
 import '../day/domain/day.dart';
 import '../day/data/day_provider.dart';
@@ -23,9 +23,7 @@ class MealsJournal extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final day = ref.watch(syncSelectedDaysProvider)?.firstOrNull ?? Day();
     final dayNotifier = ref.read(dayCacheProvider.notifier);
-
     final date = ref.watch(selectedDatesProvider).first;
-
     final bank = ref.watch(alimentBankProvider);
     final nutrients = ref.watch(nutrientsProvider).data;
 
@@ -68,43 +66,21 @@ class MealsJournal extends ConsumerWidget {
             );
 
             if (isDelete == true) {
-              dayNotifier.removeMeal(date, day, meal);
+              dayNotifier.removeMeal(date, meal.name);
             }
           },
           onAdd: () async {
             //TODO: Copied to `MealEditor`
-
-            final newAliment = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => InstanceEditor(
-                  initialAliment: InstancedAliment.empty,
-                ),
-              ),
-            );
+            final newAliment =
+                await InstancedAliment.empty.pushEditingScreen(context);
 
             if (newAliment != null && newAliment.alimentID != '') {
-              meal.aliments.add(newAliment);
-              dayNotifier.save(date, day);
+              dayNotifier.addAliment(date, meal.name, newAliment);
             }
           },
         );
       },
     ).toList();
-
-    // final List<Widget> elements = day.meals.map((meal) {
-    //   return ListTile(
-    //     title: Text(meal.name),
-    //     onTap: () {
-    //       Navigator.push(
-    //         context,
-    //         MaterialPageRoute(
-    //           builder: (_) => MealEditor(mealName: meal.name, date: date),
-    //         ),
-    //       );
-    //     },
-    //   );
-    // }).toList();
 
     final Widget divider = Divider(
       color: Palette.divGrey,
@@ -145,7 +121,7 @@ class MealsJournal extends ConsumerWidget {
               if (newMealName == null) return;
 
               if (!day.meals.map((e) => e.name).contains(newMealName)) {
-                dayNotifier.addMeal(date, day, Meal(name: newMealName));
+                dayNotifier.addMeal(date, Meal(name: newMealName));
               }
             },
             label: Text('Add Meal'),
