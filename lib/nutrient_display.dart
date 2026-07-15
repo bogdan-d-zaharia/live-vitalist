@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
+import 'package:live_vitalist/core/presentation/widgets/data_input/fields_input.dart';
 import 'package:live_vitalist/day/domain/day_extensions.dart';
 import 'package:live_vitalist/day/data/day_provider.dart';
 import 'package:live_vitalist/nutrient/domain/nutrient_extensions.dart';
@@ -12,7 +13,7 @@ import 'nutrient/domain/nutrient.dart';
 import 'nutrient/data/nutrient_provider.dart';
 import 'core/theme/palette.dart';
 import 'settings/data/settings_data.dart';
-import 'string_input.dart';
+import 'core/presentation/widgets/data_input/string_input.dart';
 import 'core/presentation/widgets/custom_icon_button.dart';
 
 class NutrientDisplay extends ConsumerStatefulWidget {

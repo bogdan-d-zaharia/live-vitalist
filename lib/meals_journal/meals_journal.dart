@@ -14,7 +14,7 @@ import '../day/data/day_provider.dart';
 import '../nutrient/data/nutrient_provider.dart';
 import '../core/theme/palette.dart';
 import '../settings/data/settings_data.dart';
-import '../string_input.dart';
+import '../core/presentation/widgets/data_input/string_input.dart';
 
 class MealsJournal extends ConsumerWidget {
   const MealsJournal({super.key});

@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/aliment/domain/aliment_data.dart';
 import 'package:live_vitalist/aliment_editor/aliment_json_editor.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
+import 'package:live_vitalist/core/presentation/widgets/data_input/number_input.dart';
 import 'package:live_vitalist/nutrient/data/nutrient_provider.dart';
-import 'package:live_vitalist/string_input.dart';
 
 class AlimentDataEditor extends ConsumerStatefulWidget {
   final AlimentData initialData;
