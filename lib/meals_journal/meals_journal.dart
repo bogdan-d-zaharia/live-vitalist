@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/aliment/domain/aliment_extensions.dart';
 import 'package:live_vitalist/day/domain/meal.dart';
 import 'package:live_vitalist/meals_journal/presentation/aliment_editing_extensions.dart';
+import 'package:live_vitalist/meals_journal/presentation/widgets/custom_divider.dart';
 import 'package:live_vitalist/meals_journal/presentation/widgets/meal_editor.dart';
 import 'package:live_vitalist/meals_journal/presentation/widgets/meal_element.dart';
 
@@ -12,7 +13,6 @@ import '../core/presentation/widgets/custom_card.dart';
 import '../day/domain/day.dart';
 import '../day/data/day_provider.dart';
 import '../nutrient/data/nutrient_provider.dart';
-import '../core/theme/palette.dart';
 import '../settings/data/settings_data.dart';
 import '../core/presentation/widgets/data_input/string_input.dart';
 
@@ -82,13 +82,8 @@ class MealsJournal extends ConsumerWidget {
       },
     ).toList();
 
-    final Widget divider = Divider(
-      color: Palette.divGrey,
-      thickness: 0.5,
-      height: 0.0,
-    );
     for (int i = elements.length - 1; i > 0; i--) {
-      elements.insert(i, divider);
+      elements.insert(i, CustomDivider());
     }
 
     return CustomCard(

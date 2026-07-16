@@ -6,9 +6,9 @@ import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
 import 'package:live_vitalist/day/data/day_provider.dart';
 import 'package:live_vitalist/meals_journal/presentation/aliment_editing_extensions.dart';
 import 'package:live_vitalist/meals_journal/presentation/widgets/aliment_widget.dart';
+import 'package:live_vitalist/meals_journal/presentation/widgets/custom_divider.dart';
 import 'package:live_vitalist/meals_journal/presentation/widgets/element_widget.dart';
 import 'package:live_vitalist/notification_handler.dart';
-import 'package:live_vitalist/core/theme/palette.dart';
 import 'package:live_vitalist/settings/data/settings_data.dart';
 
 class MealEditor extends ConsumerWidget {
@@ -94,17 +94,11 @@ class MealEditor extends ConsumerWidget {
       additional: [],
     );
 
-    final Widget divider = Divider(
-      color: Palette.divGrey,
-      thickness: 0.5,
-      height: 0.0,
-    );
-
     final List<Widget> elements = [
       ...meal.aliments.map(alimentToWidget),
       addInstanced,
       addTemporary,
-    ].expand((element) => [element, divider]).toList()
+    ].expand((element) => [element, CustomDivider()]).toList()
       ..removeLast();
 
     return Scaffold(
