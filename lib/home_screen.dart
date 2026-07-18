@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/features/calendar/calendar.dart';
-import 'package:live_vitalist/meals_journal.dart';
+import 'package:live_vitalist/meals_journal/meals_journal.dart';
 import 'package:live_vitalist/nutrient_circle/nutrient_circle.dart';
-import 'package:live_vitalist/nutrient_display.dart';
-import 'package:live_vitalist/ratio_bars.dart';
+import 'package:live_vitalist/nutrient_display/nutrient_display.dart';
+import 'package:live_vitalist/ratio_bars/ratio_bars_card.dart';
 import 'package:live_vitalist/settings/settings_screen.dart';
 import 'package:live_vitalist/super_search/presentation/add_aliment_actions.dart';
 import 'package:live_vitalist/super_search/presentation/controllers/aliment_search_controller.dart';
@@ -20,11 +20,6 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   void dispose() {
@@ -85,7 +80,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 WeekCalendar(),
                 NutrientCircle(),
                 NutrientDisplay(),
-                ConsumerRatioBars(),
+                RatioBarsCard(),
                 ...[MealsJournal(), SizedBox(height: 50.0)],
                 SizedBox(height: 12.0),
               ],

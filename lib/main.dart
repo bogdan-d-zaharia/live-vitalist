@@ -1,11 +1,11 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:live_vitalist/auth_gate.dart';
-import 'package:live_vitalist/firebase_options.dart';
-import 'package:live_vitalist/notification_handler.dart';
-import 'package:live_vitalist/settings_data.dart';
+import 'authentication/auth_gate.dart';
+import 'notification_handler.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'settings/data/settings_data.dart';
 
 // TODO: Storage Management SOLID
 

@@ -1,6 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:live_vitalist/aliment/domain/aliment.dart';
 
+// TODO: Ar trebui sa foloseasca `@freezed` in loc de `@immutable`
+// pentru ca si lista de alimente sa nu fie modificabila
+
 @immutable
 class Meal {
   Meal({

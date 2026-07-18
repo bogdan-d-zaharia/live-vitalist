@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/aliment/domain/aliment_data.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
-import 'package:live_vitalist/palette.dart';
-import 'package:live_vitalist/string_input.dart';
+import 'package:live_vitalist/core/theme/palette.dart';
+import 'package:live_vitalist/core/presentation/widgets/data_input/number_input.dart';
 import 'package:live_vitalist/super_search/domain/pending_aliment.dart';
 import 'package:live_vitalist/super_search/presentation/controllers/aliment_search_controller.dart';
 
@@ -56,8 +56,8 @@ class _AlimentResultTileState extends ConsumerState<AlimentResultTile> {
           ),
           if (pending != null)
             Padding(
-              padding: const EdgeInsets.only(
-                  left: 16.0, right: 16.0, bottom: 12.0),
+              padding:
+                  const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 12.0),
               child: _buildAmountRow(data, pending),
             ),
         ],

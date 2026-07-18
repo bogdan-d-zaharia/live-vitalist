@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
+import 'package:live_vitalist/core/theme/palette.dart';
 import 'package:live_vitalist/day/data/day_provider.dart';
-import 'package:live_vitalist/day/domain/day.dart';
-import 'package:live_vitalist/palette.dart';
 import 'package:live_vitalist/super_search/presentation/controllers/aliment_search_controller.dart';
 import 'package:live_vitalist/super_search/presentation/widgets/aliment_result_tile.dart';
 import 'package:live_vitalist/super_search/presentation/widgets/meal_picker_dialog.dart';
@@ -22,11 +21,10 @@ class SearchOverlay extends ConsumerWidget {
     if (mealName == null) return;
 
     final date = ref.read(selectedDatesProvider).first;
-    final day = ref.read(syncSelectedDaysProvider)?.firstOrNull ?? Day();
-    final meal = day.meals.firstWhere((m) => m.name == mealName);
 
-    meal.aliments.addAll(selection.map((item) => item.toInstanced()));
-    ref.read(dayCacheProvider.notifier).save(date, day);
+    for (final aliment in selection.map((item) => item.toInstanced())) {
+      ref.read(dayCacheProvider.notifier).addAliment(date, mealName, aliment);
+    }
 
     final bankNotifier = ref.read(alimentBankProvider.notifier);
     for (final item in selection.reversed) {

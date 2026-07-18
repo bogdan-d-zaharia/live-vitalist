@@ -1,6 +1,6 @@
+import 'package:live_vitalist/aliment/domain/aliment_extensions.dart';
 import 'package:live_vitalist/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/aliment/domain/aliment.dart';
-import 'package:live_vitalist/aliment/domain/aliment_extensions.dart';
 import 'package:live_vitalist/day/domain/day.dart';
 import 'package:live_vitalist/day/domain/meal.dart';
 

@@ -3,10 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/aliment/domain/aliment.dart';
 import 'package:live_vitalist/aliment/domain/aliment_data.dart';
-import 'package:live_vitalist/aliment_editor/aliment_data_editor.dart';
+import 'package:live_vitalist/aliment_editor/aliment_data_editor/aliment_data_editor.dart';
 import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
 import 'package:live_vitalist/day/data/day_provider.dart';
-import 'package:live_vitalist/day/domain/day.dart';
 import 'package:live_vitalist/super_search/data/aliment_generator.dart';
 import 'package:live_vitalist/super_search/presentation/widgets/meal_picker_dialog.dart';
 
@@ -51,11 +50,9 @@ abstract final class AddAlimentActions {
     if (mealName == null) return;
 
     final date = ref.read(selectedDatesProvider).first;
-    final day = ref.read(syncSelectedDaysProvider)?.firstOrNull ?? Day();
-    final meal = day.meals.firstWhere((m) => m.name == mealName);
-
-    meal.aliments.add(newAliment.copyWith(alimentData: newData));
-    ref.read(dayCacheProvider.notifier).save(date, day);
+    ref
+        .read(dayCacheProvider.notifier)
+        .addAliment(date, mealName, newAliment.copyWith(alimentData: newData));
   }
 
   /// Asks Gemini (through Firebase AI Logic) to fill in the nutritional

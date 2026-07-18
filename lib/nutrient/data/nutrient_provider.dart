@@ -1,8 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:live_vitalist/core/storage/data/storage_provider.dart';
-import 'package:live_vitalist/nutrient/domain/nutrient.dart';
-import 'package:live_vitalist/nutrient/domain/nutrient_constants.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../domain/nutrient.dart';
+import '../domain/nutrient_constants.dart';
 
 part 'nutrient_provider.g.dart';
 

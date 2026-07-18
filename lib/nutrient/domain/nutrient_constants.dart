@@ -1,5 +1,6 @@
 import 'package:live_vitalist/nutrient/data/nutrient_provider.dart';
-import 'package:live_vitalist/nutrient/domain/nutrient.dart';
+
+import 'nutrient.dart';
 
 abstract final class NutrientConstants {
   static const Map<String, Nutrient> defaultNutrientMap = {
