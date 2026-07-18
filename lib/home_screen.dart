@@ -86,7 +86,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 NutrientCircle(),
                 NutrientDisplay(),
                 ConsumerRatioBars(),
-                MealsJournal(),
+                ...[MealsJournal(), SizedBox(height: 50.0)],
                 SizedBox(height: 12.0),
               ],
             ),
