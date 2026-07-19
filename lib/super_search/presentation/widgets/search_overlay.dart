@@ -36,6 +36,8 @@ class SearchOverlay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // TODO: Cand nu apare niciun rezultat sa apara un rezultat cu bordura mov
+    // de generat.
     final searchState = ref.watch(alimentSearchProvider);
     final bank = ref.watch(alimentBankProvider);
 
