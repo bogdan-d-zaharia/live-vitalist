@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:diacritic/diacritic.dart';
 
 import 'package:live_vitalist/aliment/data/aliment_bank.dart';
-import 'package:live_vitalist/aliment_editor/instance_editor/widgets/add_aliment_button.dart';
-import 'package:live_vitalist/aliment_editor/instance_editor/widgets/selector_search_bar.dart';
+import 'package:live_vitalist/aliment_editor/instance_editor/presentation/widgets/add_aliment_button.dart';
+import 'package:live_vitalist/aliment_editor/instance_editor/presentation/widgets/selector_search_bar.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
 import 'package:live_vitalist/core/theme/palette.dart';
 

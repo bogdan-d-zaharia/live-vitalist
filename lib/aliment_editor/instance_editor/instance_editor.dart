@@ -6,10 +6,10 @@ import 'package:live_vitalist/aliment/domain/aliment_data.dart';
 
 import 'package:live_vitalist/aliment/domain/aliment.dart';
 import 'package:live_vitalist/aliment/data/aliment_bank.dart';
-import 'package:live_vitalist/aliment_editor/instance_editor/widgets/aliment_picker_field.dart';
-import 'package:live_vitalist/aliment_editor/instance_editor/widgets/served_amount_input.dart';
-import 'package:live_vitalist/aliment_editor/instance_editor/widgets/unit_dropdown.dart';
-import 'widgets/aliment_selector.dart';
+import 'package:live_vitalist/aliment_editor/instance_editor/presentation/widgets/aliment_picker_field.dart';
+import 'package:live_vitalist/aliment_editor/instance_editor/presentation/widgets/aliment_selector.dart';
+import 'package:live_vitalist/aliment_editor/instance_editor/presentation/widgets/served_amount_input.dart';
+import 'package:live_vitalist/aliment_editor/instance_editor/presentation/widgets/unit_dropdown.dart';
 
 class InstanceEditor extends ConsumerStatefulWidget {
   const InstanceEditor({required this.initialAliment, super.key});
