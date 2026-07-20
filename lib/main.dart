@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'authentication/auth_gate.dart';
-import 'notification_handler.dart';
+import 'features/authentication/auth_gate.dart';
+import 'features/notifications/notification_handler.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'settings/data/settings_data.dart';
+import 'features/settings/data/settings_data.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

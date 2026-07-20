@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:live_vitalist/features/calendar/calendar.dart';
-import 'package:live_vitalist/meals_journal/meals_journal.dart';
-import 'package:live_vitalist/nutrient_display/nutrient_display.dart';
-import 'package:live_vitalist/ratio_bars/ratio_bars_card.dart';
-import 'package:live_vitalist/settings/settings_screen.dart';
+import 'package:live_vitalist/features/meals_journal/meals_journal.dart';
+import 'package:live_vitalist/features/nutrient_display/nutrient_display.dart';
+import 'package:live_vitalist/features/ratio_bars/ratio_bars_card.dart';
+import 'package:live_vitalist/features/settings/settings_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

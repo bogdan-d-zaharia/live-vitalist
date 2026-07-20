@@ -1,7 +1,7 @@
-import 'package:live_vitalist/aliment/data/aliment_bank.dart';
-import 'package:live_vitalist/aliment/domain/aliment_constants.dart';
-import 'package:live_vitalist/day/data/day_provider.dart';
-import 'package:live_vitalist/nutrient/data/nutrient_provider.dart';
+import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
+import 'package:live_vitalist/features/aliment/domain/aliment_constants.dart';
+import 'package:live_vitalist/features/day/data/day_provider.dart';
+import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
 import 'package:live_vitalist/core/storage/data/file_handler.dart';
 import 'package:live_vitalist/core/storage/data/firebase_handler.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

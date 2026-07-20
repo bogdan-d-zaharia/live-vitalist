@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:live_vitalist/aliment/data/aliment_bank.dart';
-import 'package:live_vitalist/day/data/day_provider.dart';
-import 'package:live_vitalist/day/domain/day_extensions.dart';
+import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
+import 'package:live_vitalist/features/day/data/day_provider.dart';
+import 'package:live_vitalist/features/day/domain/day_extensions.dart';
 import 'package:live_vitalist/features/calendar/widgets/simple_calendar_item.dart';
-import 'package:live_vitalist/nutrient/data/nutrient_provider.dart';
-import 'package:live_vitalist/nutrient/domain/nutrient.dart';
+import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
+import 'package:live_vitalist/features/nutrient/domain/nutrient.dart';
 
 class CalendarItem extends ConsumerWidget {
   const CalendarItem({

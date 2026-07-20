@@ -1,4 +1,4 @@
-import 'package:live_vitalist/nutrient/domain/nutrient.dart';
+import 'package:live_vitalist/features/nutrient/domain/nutrient.dart';
 
 abstract final class CalendarConstants {
   static const double itemHeight = 80.0;
