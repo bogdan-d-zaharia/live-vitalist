@@ -7,7 +7,7 @@ part 'nutrient_display_controller.g.dart';
 @immutable
 class NutrientDisplayState {
   final bool isEditMode;
-  final int sort;
+  final Sort sort;
   final bool isSmartHide;
 
   const NutrientDisplayState({
@@ -17,7 +17,7 @@ class NutrientDisplayState {
   });
 
   NutrientDisplayState copyWith(
-      {bool? isEditMode, int? sort, bool? isSmartHide}) {
+      {bool? isEditMode, Sort? sort, bool? isSmartHide}) {
     return NutrientDisplayState(
       isEditMode: isEditMode ?? this.isEditMode,
       sort: sort ?? this.sort,
@@ -36,10 +36,10 @@ class NutrientDisplayController extends _$NutrientDisplayController {
       );
 
   void circleSort() {
-    final int newSort = switch (state.sort) {
-      0 => 1,
-      1 => -1,
-      _ => 0,
+    final Sort newSort = switch (state.sort) {
+      Sort.unsorted => Sort.descending,
+      Sort.descending => Sort.ascending,
+      _ => Sort.unsorted,
     };
     state = state.copyWith(sort: newSort);
     SettingsData.sort = newSort;

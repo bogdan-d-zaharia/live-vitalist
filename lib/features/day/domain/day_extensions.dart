@@ -11,19 +11,11 @@ extension DaysGroupAnalysis on List<Day> {
     for (final day in this) {
       for (final meal in day.meals) {
         merged.putIfAbsent(meal.name, () => Meal(name: meal.name));
-        merged[meal.name]!.aliments.addAll(
-          /* Creates a copy of the map aliment to solve the problem where
+        /* Creates a copy of the map aliment to solve the problem where
              the aliment was mutated when averaging multiple days. */
-          meal.aliments.map(
-            (e) {
-              if (e is InstancedAliment) {
-                return InstancedAliment.fromJson(e.toJson());
-              } else /* if (e is TemporaryAliment) */ {
-                return TemporaryAliment.fromJson(e.toJson());
-              }
-            },
-          ),
-        );
+        merged[meal.name]!
+            .aliments
+            .addAll(meal.aliments.map((e) => e.copyWith()));
       }
     }
 

@@ -1,5 +1,11 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
+enum Sort {
+  unsorted,
+  ascending,
+  descending,
+}
+
 abstract final class SettingsData {
   static late SharedPreferencesWithCache _prefs;
 
@@ -24,8 +30,8 @@ abstract final class SettingsData {
   static set isComplexCalendar(bool val) =>
       _prefs.setBool('isComplexCalendar', val);
 
-  static int get sort => _prefs.getInt('sort') ?? 0;
-  static set sort(int val) => _prefs.setInt('sort', val);
+  static Sort get sort => Sort.values[_prefs.getInt('sort') ?? 0];
+  static set sort(Sort val) => _prefs.setInt('sort', val.index);
 
   static bool get isSmartHide => _prefs.getBool('isSmartHide') ?? false;
   static set isSmartHide(bool val) => _prefs.setBool('isSmartHide', val);

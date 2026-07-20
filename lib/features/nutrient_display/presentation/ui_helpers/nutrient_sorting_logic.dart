@@ -19,11 +19,11 @@ List<String> filteredAndSortedKeys(
     }).toList();
   }
 
-  if (SettingsData.sort != 0) {
+  if (SettingsData.sort != Sort.unsorted) {
     keys.sort((a, b) {
       final aValue = (intake[a] ?? 0.0);
       final bValue = (intake[b] ?? 0.0);
-      return SettingsData.sort == 1
+      return SettingsData.sort == Sort.descending
           ? _compareDescending(aValue, state.data[a]!, bValue, state.data[b]!)
           : _compareAscending(aValue, state.data[a]!, bValue, state.data[b]!);
     });
@@ -55,16 +55,5 @@ int _compareAscending(
 
 int _compareDescending(
     double intakeA, Nutrient fieldA, double intakeB, Nutrient fieldB) {
-  // final debugNA = fieldA.translations['ENG'];
-  // final debugNB = fieldB.translations['ENG'];
-
-  final ratioA = fieldA.getRatio(intakeA)!;
-  final ratioB = fieldB.getRatio(intakeB)!;
-  if (ratioA != ratioB) return ratioB.compareTo(ratioA);
-
-  final rA = _mapRange(intakeA, fieldA.lowerLimit ?? 0.0,
-      fieldA.upperLimit ?? double.infinity, 0.0, 1.0);
-  final rB = _mapRange(intakeB, fieldB.lowerLimit ?? 0.0,
-      fieldB.upperLimit ?? double.infinity, 0.0, 1.0);
-  return rB.compareTo(rA);
+  return _compareAscending(intakeB, fieldB, intakeA, fieldA);
 }

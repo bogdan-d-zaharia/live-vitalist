@@ -17,10 +17,10 @@ class ActionButtons extends ConsumerWidget {
         CustomIconButton(
           onTap: notifier.circleSort,
           icon: Icon(
-            SettingsData.sort == -1
+            SettingsData.sort == Sort.ascending
                 ? Icons.keyboard_arrow_up
                 : Icons.keyboard_arrow_down,
-            color: SettingsData.sort != 0 ? Colors.green : null,
+            color: SettingsData.sort != Sort.unsorted ? Colors.green : null,
             size: 26.0,
           ),
         ),
