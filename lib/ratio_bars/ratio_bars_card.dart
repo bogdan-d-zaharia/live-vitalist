@@ -22,16 +22,14 @@ class RatioBarsCard extends ConsumerWidget {
 
     final omega6 = intake['omega6'] ?? 0.0;
     final omega3 = intake['omega3'] ?? 0.0;
-    String omegaBalance = 'Omega-6 to Omega-3 balance';
     final balance = omega6 / omega3;
-    if (balance.isFinite) {
-      omegaBalance = "$omegaBalance: ${formatNumber(balance)} / 1";
-    }
+    String omegaBalance = 'Omega balance'
+        '${balance.isFinite ? ': ${formatNumber(balance)} / 1' : ''}';
 
     return RatioBars(
       bars: [
         RatioBar(
-          'Macro distribution (% calories)',
+          'Calorie distribution',
           [
             RatioBarElement(
               'Carbs',

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/calorie_distribution/calorie_distribution_card.dart';
 import 'package:live_vitalist/features/calendar/calendar.dart';
 import 'package:live_vitalist/meals_journal/meals_journal.dart';
 import 'package:live_vitalist/nutrient_circle/nutrient_circle.dart';
@@ -80,6 +81,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 WeekCalendar(),
                 NutrientCircle(),
                 NutrientDisplay(),
+                CalorieDistributionCard(),
                 RatioBarsCard(),
                 ...[MealsJournal(), SizedBox(height: 50.0)],
                 SizedBox(height: 12.0),

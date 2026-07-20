@@ -18,12 +18,14 @@ class RatioBars extends StatelessWidget {
         .expand((bar) => [
               Text(bar.text),
               SizedBox(height: 4.0),
-              Bar(elements: bar.elements),
-              SizedBox(height: 4.0),
-              LabelsWidget(
-                map: Map.fromEntries(
-                    bar.elements.map((e) => MapEntry(e.label, e.color))),
-                isHorizontal: true,
+              Row(
+                children: [
+                  LabelsWidget(
+                      map: Map.fromEntries(
+                          bar.elements.map((e) => MapEntry(e.label, e.color)))),
+                  SizedBox(width: 12.0),
+                  Expanded(child: Bar(elements: bar.elements)),
+                ],
               ),
               SizedBox(height: 20.0)
             ])

@@ -43,9 +43,7 @@ class LabelsWidget extends StatelessWidget {
         children: elements,
       );
     } else {
-      return Row(
-        children: elements.map((e) => Flexible(child: e)).toList(),
-      );
+      return Row(children: elements.map((e) => Flexible(child: e)).toList());
     }
   }
 }
