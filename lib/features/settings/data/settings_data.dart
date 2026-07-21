@@ -30,7 +30,7 @@ abstract final class SettingsData {
   static set isComplexCalendar(bool val) =>
       _prefs.setBool('isComplexCalendar', val);
 
-  static Sort get sort => Sort.values[_prefs.getInt('sort') ?? 0];
+  static Sort get sort => Sort.values[_prefs.getInt('sort')?.clamp(0, 2) ?? 0];
   static set sort(Sort val) => _prefs.setInt('sort', val.index);
 
   static bool get isSmartHide => _prefs.getBool('isSmartHide') ?? false;

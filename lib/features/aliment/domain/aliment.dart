@@ -3,7 +3,7 @@ import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
 
 @immutable
-abstract class Aliment {
+sealed class Aliment {
   final double servingSize;
   final String unit;
 

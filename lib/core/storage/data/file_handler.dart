@@ -69,7 +69,7 @@ final class FileHandler implements IStorageHandler, ILocalDeletion {
   @override
   Future<bool> deleteLocal() async {
     final dir = Directory(await FileHandler.localPath);
-    dir.delete(recursive: true);
+    await dir.delete(recursive: true);
     return true;
   }
 }

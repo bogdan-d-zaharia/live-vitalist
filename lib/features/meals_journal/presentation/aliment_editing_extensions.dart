@@ -36,7 +36,6 @@ extension AlimentEditing on Aliment {
     return switch (this) {
       InstancedAliment a => a.pushEditingScreen(context),
       TemporaryAliment b => b.pushEditingScreen(context),
-      Aliment _ => null,
     };
   }
 }

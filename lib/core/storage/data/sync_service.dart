@@ -36,7 +36,6 @@ class SyncService extends _$SyncService {
           aliments: oldState.aliments,
           order: [...localOrder, ...oldState.order],
         ));
-    ref.read(alimentBankProvider.notifier).save();
   }
 
   Future<void> _saveProviders() async {

@@ -41,6 +41,32 @@ extension DaysGroupAnalysis on List<Day> {
   }
 }
 
+extension AlimentFlattening on Aliment {
+  dynamic getKey() {
+    return switch (this) {
+      InstancedAliment a => a.alimentID,
+      TemporaryAliment b => b, // The reference
+    };
+  }
+
+  double basicServingSize(AlimentBankState bank) {
+    return servingSize * readUnitSize(bank);
+  }
+
+  Aliment withBasicUnit(AlimentBankState bank) {
+    return copyWith(
+      unit: readDataRef(bank).unit,
+      servingSize: basicServingSize(bank),
+    );
+  }
+
+  Aliment addToAliment(Aliment current, AlimentBankState bank) {
+    return current.copyWith(
+      servingSize: current.servingSize + basicServingSize(bank),
+    );
+  }
+}
+
 extension DayAnalysis on Day {
   List<Aliment> get aliments => meals.expand((meal) => meal.aliments).toList();
 
@@ -48,31 +74,15 @@ extension DayAnalysis on Day {
       aliments.summedFields(bank);
 
   List<Aliment> totalAliments(AlimentBankState bank) {
-    final Map<String, InstancedAliment> tias = {};
-    final List<TemporaryAliment> ttas = [];
-
-    for (final Aliment sa in aliments) {
-      if (sa is InstancedAliment) {
-        final data = sa.readDataRef(bank);
-        if (tias[sa.alimentID] == null) {
-          tias[sa.alimentID] = InstancedAliment(
-            alimentID: sa.alimentID,
-            servingSize: 0.0,
-            unit: data.unit,
-          );
-        }
-
-        // totalServingSize += thisServingSize * thisUnitSize;
-        tias[sa.alimentID] = tias[sa.alimentID]!.copyWith(
-          servingSize: tias[sa.alimentID]!.servingSize +
-              sa.servingSize * sa.readUnitSize(bank),
-        );
-      } else if (sa is TemporaryAliment) {
-        ttas.add(sa);
-      }
+    final Map<dynamic, Aliment> total = {}; // Working in basic unit
+    for (final aliment in aliments) {
+      total.update(
+        aliment.getKey(),
+        (current) => aliment.addToAliment(current, bank),
+        ifAbsent: () => aliment.withBasicUnit(bank),
+      );
     }
-
-    return [...tias.values, ...ttas];
+    return total.values.toList();
   }
 
   Map<Aliment, double> topIntakeAliments(
