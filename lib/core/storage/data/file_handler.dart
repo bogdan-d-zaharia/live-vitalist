@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:live_vitalist/core/utils/json_handler.dart';
-import 'package:live_vitalist/core/storage/domain/storage_handler.dart';
+import 'package:live_vitalist/core/storage/domain/storage_interfaces.dart';
 import 'package:path_provider/path_provider.dart';
 
-final class FileHandler implements IStorageHandler {
+final class FileHandler implements IStorageHandler, ILocalDeletion {
   // @override
   // late IStorageHandler? nextHandler;
   // FileHandler(this.nextHandler);
@@ -67,11 +67,9 @@ final class FileHandler implements IStorageHandler {
   }
 
   @override
-  Future<bool> delete() async {
+  Future<bool> deleteLocal() async {
     final dir = Directory(await FileHandler.localPath);
-    for (File file in dir.listSync().whereType<File>()) {
-      await file.delete();
-    }
+    dir.delete(recursive: true);
     return true;
   }
 }

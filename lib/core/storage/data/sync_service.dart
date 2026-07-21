@@ -1,9 +1,7 @@
+import 'package:live_vitalist/core/storage/data/storage_provider.dart';
 import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
-import 'package:live_vitalist/features/aliment/domain/aliment_constants.dart';
 import 'package:live_vitalist/features/day/data/day_provider.dart';
 import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
-import 'package:live_vitalist/core/storage/data/file_handler.dart';
-import 'package:live_vitalist/core/storage/data/firebase_handler.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'sync_service.g.dart';
@@ -15,31 +13,30 @@ part 'sync_service.g.dart';
 ///        then delete everything local (to force online download)
 ///        then pull from cloud
 /// We are going to use the second option.
-///
-/// note: both are connected to be able to save,
-/// so we have to take them separately to delete local data,
-/// we can't use the StorageProvider directly.
 @riverpod
 class SyncService extends _$SyncService {
-  late FileHandler _fileHlr;
-  late FirebaseHandler _firebaseHlr;
+  late Storage _storageNotifier;
 
   @override
   void build() {
-    _fileHlr = FileHandler();
-    _firebaseHlr = FirebaseHandler();
+    _storageNotifier = ref.read(storageProvider.notifier);
   }
 
-  Future<void> _appendOrderWithCloud() async {
-    // TODO: Make .loadJson generic (and cast at return, implicitly or not)
-    // and use .load('alimentBank/order')
-    final cloudOrder = (await _firebaseHlr
-        .loadJson(AlimentConstants.alimentBankPath))?['order'];
+  List<String> _popLocalOrder() {
+    final localAlimentBank = ref.read(alimentBankProvider);
+    final localOrder = List.of(localAlimentBank.order);
+    ref.read(alimentBankProvider.notifier).setState(
+        AlimentBankState(aliments: localAlimentBank.aliments, order: []));
+    return localOrder;
+  }
+
+  void _pushLocalOrder(List<String> localOrder) {
     final oldState = ref.read(alimentBankProvider);
     ref.read(alimentBankProvider.notifier).setState(AlimentBankState(
           aliments: oldState.aliments,
-          order: [...oldState.order, ...cloudOrder],
+          order: [...localOrder, ...oldState.order],
         ));
+    ref.read(alimentBankProvider.notifier).save();
   }
 
   Future<void> _saveProviders() async {
@@ -63,11 +60,14 @@ class SyncService extends _$SyncService {
   Future<void> lateLogin() async {
     final keepAliveLink = ref.keepAlive();
     try {
-      await _appendOrderWithCloud();
-      await _saveProviders();
-      await _fileHlr.delete();
+      final localOrder = _popLocalOrder();
+
+      await _saveProviders(); // (except order)
+      await _storageNotifier.deleteLocal();
       await _clearProviders();
       await _loadProviders();
+
+      _pushLocalOrder(localOrder);
     } finally {
       keepAliveLink.close();
     }

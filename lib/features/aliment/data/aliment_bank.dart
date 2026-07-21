@@ -19,9 +19,7 @@ class AlimentBankState {
   Map<String, dynamic> toJson() => {
         // dot notation
         ...aliments.map((id, data) => MapEntry('aliments/$id', data.toJson())),
-
-        // 'aliments': aliments.map((id, data) => MapEntry('$id', data.toJson())),
-        'order': order,
+        if (order.isNotEmpty) 'order': order,
       };
 
   factory AlimentBankState.fromJson(Map<String, dynamic> json) {

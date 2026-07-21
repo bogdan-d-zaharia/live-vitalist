@@ -21,15 +21,19 @@ class DataDeletionPage extends ConsumerWidget {
       if (reauth != true) return;
     }
 
-    await controller.executeDeleteEverything();
+    final deleted = await controller.executeDeleteEverything();
 
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text('Closing the app...'),
-            duration: Duration(seconds: 2)),
+        SnackBar(
+            content: Text(deleted
+                ? 'Closing the app...'
+                : 'Deletion failed, nothing was removed.'),
+            duration: const Duration(seconds: 2)),
       );
     }
+
+    if (!deleted) return;
 
     await Future.delayed(const Duration(seconds: 3));
     SystemNavigator.pop();
@@ -66,6 +70,7 @@ class DataDeletionPage extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: ListView(
           children: [
+            // TODO: Add all records (that are now local) to queue.
             if (isFirebase)
               CustomCard(
                 logo: const Icon(Icons.no_accounts_rounded),

@@ -2,12 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:live_vitalist/core/utils/json_handler.dart';
-import 'package:live_vitalist/core/storage/domain/storage_handler.dart';
+import 'package:live_vitalist/core/storage/domain/storage_interfaces.dart';
 
 /// Verifies if the user is connected when used.
 ///
 /// A connected user stays non-null even when there is no internet connection.
-final class FirebaseHandler implements IStorageHandler {
+final class FirebaseHandler implements IStorageHandler, ICloudDeletion {
   @override
   Future<bool> saveJson(String path, Map<String, dynamic> json) async {
     final user = FirebaseAuth.instance.currentUser;
@@ -42,7 +42,7 @@ final class FirebaseHandler implements IStorageHandler {
   }
 
   @override
-  Future<bool> delete() async {
+  Future<bool> deleteAccount() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) return true;
 

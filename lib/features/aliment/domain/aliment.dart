@@ -36,7 +36,8 @@ class TemporaryAliment extends Aliment {
 
   factory TemporaryAliment.fromJson(Map<String, dynamic> json) =>
       TemporaryAliment(
-        alimentData: AlimentData.fromJson(json['alimentData']),
+        alimentData: AlimentData.fromJson(
+            (json['alimentData'] as Map).cast<String, dynamic>()),
         servingSize: (json['servingSize'] as num).toDouble(),
         unit: json['unit'] ?? '',
       );
