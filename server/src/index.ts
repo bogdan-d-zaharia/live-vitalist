@@ -47,6 +47,29 @@ app.post('/api/trigger-report', async (req: Request, res: Response) => {
     }
 });
 
+app.get('/api/reports/:id', async (req: Request, res: Response) => {
+    const reportId = req.params.id;
+    
+    try {
+        const { fcmToken, userId } = req.body;
+
+        const message = {
+            token: fcmToken,
+            notification: {
+                title: 'Weekly Nutritional Report',
+                body: 'Your statistics for this week are ready!',
+            },
+        };
+
+        await getMessaging().send(message);
+
+        res.status(200).json({ success: true, message: 'Weekly report sent!' });
+    } catch (error) {
+        console.error('FCM Error:', error);
+        res.status(500).json({ error: 'An error has occurred when sending the report notification.' });
+    }
+});
+
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`Server running at: http://localhost:${PORT}`);

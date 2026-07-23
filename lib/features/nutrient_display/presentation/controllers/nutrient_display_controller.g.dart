@@ -42,7 +42,7 @@ final class NutrientDisplayControllerProvider
 }
 
 String _$nutrientDisplayControllerHash() =>
-    r'1c2c1e136cb72a43dd960f5a580730f6e07e4d32';
+    r'0f666155c4e3864e1cbd8a1d235468469d0ebe6e';
 
 abstract class _$NutrientDisplayController
     extends $Notifier<NutrientDisplayState> {
