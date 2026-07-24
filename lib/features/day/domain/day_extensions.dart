@@ -1,5 +1,5 @@
+import 'package:live_vitalist/features/aliment/domain/aliment_bank_state.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_extensions.dart';
-import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment.dart';
 import 'package:live_vitalist/features/day/domain/day.dart';
 import 'package:live_vitalist/features/day/domain/meal.dart';

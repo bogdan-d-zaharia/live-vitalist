@@ -4,7 +4,10 @@ import dotenv from 'dotenv';
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getMessaging } from 'firebase-admin/messaging';
 import { getDatabase } from 'firebase-admin/database';
-// import { readDaysFromDatabase } from './DatabaseUtils';
+import { addToDate } from './core/utils/DateUtils';
+import { FirebaseStorageHandler } from './core/storage/data/FirebaseHandler';
+import { IStorageHandler } from './core/storage/domain/StorageInterfaces';
+import { Day } from './features/day/domain/Day';
 
 dotenv.config();
 initializeApp({
@@ -50,12 +53,23 @@ app.post('/api/trigger-report', async (req: Request, res: Response) => {
 
 app.get('/api/:userId/load-latest-week-report', async (req: Request, res: Response) => {
     try {
-        // const userId = req.params.userId as string;
+        const userId = req.params.userId as string;
 
-        // const now = new Date();
-        // const offset = now.getDay(); // Sunday is 0, Monday is 1, ... // Current - Sunday = Current day //
-        // const sunday = subtractFromDate(now, offset);
-        // const monday = subtractFromDate(sunday, 6);
+        const now = new Date();
+        const offset = now.getDay(); // Sunday is 0, Monday is 1, ... // Current - Sunday = Current day //
+        const sunday = addToDate(now, offset);
+
+        const fbh: IStorageHandler = new FirebaseStorageHandler();
+        const recordsPath = `users/${userId}/records`;
+        const daysPromise = Array
+            .from({ length: 7 }, (_, i) => addToDate(sunday, i - 6))
+            .map(date => fbh.loadJson(
+                `${recordsPath}/` +
+                `${date.getDate()}_` +
+                `${date.getMonth() + 1}_` +
+                `${date.getFullYear()}`));
+        const days = await Promise.all(daysPromise) as Day[];
+
 
         // const db = getDatabase();
         // const days = await readDaysFromDatabase(monday, sunday, userId, db);
@@ -77,7 +91,7 @@ app.get('/api/:userId/load-latest-week-report', async (req: Request, res: Respon
 
         res.status(200).json({
             number: 11,
-            averageCalories: 2411.0,
+            averageCalories: days[0].meals.length,
         });
     } catch (error) {
         console.error('FCM Error:', error);

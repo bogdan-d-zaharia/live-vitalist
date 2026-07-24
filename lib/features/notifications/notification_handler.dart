@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart'
     as ntf;
+import 'package:live_vitalist/features/aliment/domain/aliment.dart';
+import 'package:live_vitalist/features/aliment/domain/aliment_bank_state.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-import '../aliment/domain/aliment.dart';
-import '../aliment/data/aliment_bank.dart';
 
 typedef NotifPlugin = ntf.FlutterLocalNotificationsPlugin;
 typedef AndroidSettings = ntf.AndroidInitializationSettings;
