@@ -6,6 +6,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'features/settings/data/settings_data.dart';
 
+// Fetching announcements from localhost works
+// by using ngrok with the port.
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(

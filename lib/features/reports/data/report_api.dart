@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:live_vitalist/core/api/domain/api_type_exception.dart';
 import 'package:live_vitalist/core/network/data/network_provider.dart';
 import 'package:live_vitalist/core/network/domain/network_interface.dart';
@@ -13,8 +14,10 @@ class ReportApi implements IReportApi {
   ReportApi(this._networkHandler);
 
   @override
-  Future<WeekReport> loadLatestWeekReport() async {
-    final json = await _networkHandler.get('load-latest-week-report');
+  Future<WeekReport?> loadLatestWeekReport() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) return null;
+    final json = await _networkHandler.get('$userId/load-latest-week-report');
     try {
       return WeekReportModel.fromJson(json);
     } catch (e) {

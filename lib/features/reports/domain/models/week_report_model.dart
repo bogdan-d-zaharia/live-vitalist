@@ -16,7 +16,7 @@ class WeekReportModel extends WeekReport {
   factory WeekReportModel.fromJson(Map<String, dynamic> json) {
     return WeekReportModel(
       number: json['number'],
-      averageCalories: json['averageCalories'],
+      averageCalories: (json['averageCalories'] as num?)?.toDouble(),
     );
   }
 
