@@ -8,6 +8,8 @@ import { addToDate } from './core/utils/DateUtils';
 import { FirebaseStorageHandler } from './core/storage/data/FirebaseHandler';
 import { IStorageHandler } from './core/storage/domain/StorageInterfaces';
 import { Day } from './features/day/domain/Day';
+import { AlimentBankState } from './features/aliment/domain/AlimentBankState';
+import { averageDays, readDayIntake } from './features/day/domain/DayExtensions';
 
 dotenv.config();
 initializeApp({
@@ -68,30 +70,13 @@ app.get('/api/:userId/load-latest-week-report', async (req: Request, res: Respon
                 `${date.getDate()}_` +
                 `${date.getMonth() + 1}_` +
                 `${date.getFullYear()}`));
-        const days = await Promise.all(daysPromise) as Day[];
+        const days = (await Promise.all(daysPromise)).filter(Boolean) as Day[];
+        const bank = await fbh.loadJson(`users/${userId}/aliment_bank`) as AlimentBankState;
 
-
-        // const db = getDatabase();
-        // const days = await readDaysFromDatabase(monday, sunday, userId, db);
-        // if (!days) {
-        //     res.status(200).json(null);
-        //     return;
-        // }
-
-        // const path = `users/${userId}/aliment_bank`;
-        // const snapshot = await db.ref(path).get();
-        // if (!snapshot.exists()) {
-        //     res.status(200).json(null);
-        //     return;
-        // }
-
-        // const aliment_bank: { [k: string]: [v: AlimentData] } = snapshot.val();
-        // const day_list = Object.values(days) as Day[]
-        // const calorieAverage = getAverageCalories(day_list, aliment_bank);
-
+        const readIntake = (day: Day) => readDayIntake(day, bank);
         res.status(200).json({
             number: 11,
-            averageCalories: days[0].meals.length,
+            averageCalories: [days].map<Day>(averageDays).map(readIntake)[0]['kcals'],
         });
     } catch (error) {
         console.error('FCM Error:', error);
