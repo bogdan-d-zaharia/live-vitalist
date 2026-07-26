@@ -15,10 +15,6 @@ part of 'sync_service.dart';
 ///        then delete everything local (to force online download)
 ///        then pull from cloud
 /// We are going to use the second option.
-///
-/// note: both are connected to be able to save,
-/// so we have to take them separately to delete local data,
-/// we can't use the StorageProvider directly.
 
 @ProviderFor(SyncService)
 final syncServiceProvider = SyncServiceProvider._();
@@ -30,10 +26,6 @@ final syncServiceProvider = SyncServiceProvider._();
 ///        then delete everything local (to force online download)
 ///        then pull from cloud
 /// We are going to use the second option.
-///
-/// note: both are connected to be able to save,
-/// so we have to take them separately to delete local data,
-/// we can't use the StorageProvider directly.
 final class SyncServiceProvider extends $NotifierProvider<SyncService, void> {
   /// To solve data conflicts, we can either:
   /// 1. Save & Load intelligently
@@ -42,10 +34,6 @@ final class SyncServiceProvider extends $NotifierProvider<SyncService, void> {
   ///        then delete everything local (to force online download)
   ///        then pull from cloud
   /// We are going to use the second option.
-  ///
-  /// note: both are connected to be able to save,
-  /// so we have to take them separately to delete local data,
-  /// we can't use the StorageProvider directly.
   SyncServiceProvider._()
       : super(
           from: null,
@@ -73,7 +61,7 @@ final class SyncServiceProvider extends $NotifierProvider<SyncService, void> {
   }
 }
 
-String _$syncServiceHash() => r'7b67fa4f85c7563f390ca89c42b378a8ddecb5c7';
+String _$syncServiceHash() => r'b84afe58784a460c91e90bd6cae502bab9f1b58d';
 
 /// To solve data conflicts, we can either:
 /// 1. Save & Load intelligently
@@ -82,10 +70,6 @@ String _$syncServiceHash() => r'7b67fa4f85c7563f390ca89c42b378a8ddecb5c7';
 ///        then delete everything local (to force online download)
 ///        then pull from cloud
 /// We are going to use the second option.
-///
-/// note: both are connected to be able to save,
-/// so we have to take them separately to delete local data,
-/// we can't use the StorageProvider directly.
 
 abstract class _$SyncService extends $Notifier<void> {
   void build();

@@ -1,5 +1,6 @@
 import 'package:live_vitalist/core/storage/data/storage_provider.dart';
 import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
+import 'package:live_vitalist/features/aliment/domain/aliment_bank_state.dart';
 import 'package:live_vitalist/features/day/data/day_provider.dart';
 import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

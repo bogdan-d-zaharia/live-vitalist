@@ -5,6 +5,9 @@ abstract final class Palette {
   static bool isDarkMode(BuildContext context) =>
       Theme.of(context).brightness == Brightness.dark;
 
+  static Color counterColor(BuildContext context, {bool flip = false}) =>
+      (Palette.isDarkMode(context) ^ flip) ? Colors.black : Colors.white;
+
   static RichText dimParentheses(String label, TextStyle? style) {
     style = style ?? TextStyle();
 

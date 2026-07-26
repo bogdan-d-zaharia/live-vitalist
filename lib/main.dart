@@ -6,6 +6,23 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'features/settings/data/settings_data.dart';
 
+// Fetching announcements from localhost works
+// by using ngrok with the port.
+
+// *** Announcements & Reports ***
+// TODO: Make the week result page helpful and make it look good.
+// TODO: Show the week result compared to the week before.
+// TODO: Add T&C update as an announcements.
+// Perhaps store the last update date in preferences
+// and request the newest date from server.
+
+// *** Workers & Push Notifications ***
+// TODO: Move to heroku and give notifications
+// when the user hasn't logged his meal yet, twice, in a 3h interval.
+// When he opens the notification, take him to that meal.
+// TODO: Have the user be able to log their meal from the notification
+// with a message text field.
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(

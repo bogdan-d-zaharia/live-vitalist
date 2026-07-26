@@ -60,8 +60,7 @@ class _NumberInputState extends State<NumberInput> {
       height: height,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(height / 2.0),
-        color: (Palette.isDarkMode(context) ? Colors.black : Colors.white)
-            .withValues(alpha: 0.8),
+        color: Palette.counterColor(context).withValues(alpha: 0.8),
       ),
       clipBehavior: Clip.hardEdge,
       child: Row(

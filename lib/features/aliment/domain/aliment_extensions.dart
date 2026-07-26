@@ -1,5 +1,5 @@
-import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment.dart';
+import 'package:live_vitalist/features/aliment/domain/aliment_bank_state.dart';
 
 extension AlimentDataReadUtils on Aliment {
   /// Tolerable to errors,
@@ -18,8 +18,9 @@ extension AlimentDataReadUtils on Aliment {
   /// taking into account the servingSize and unit size.
   Map<String, double> readFields(AlimentBankState bank) {
     final data = readDataRef(bank);
-    return data.referenceFields.map((key, value) =>
-        MapEntry(key, readField(key, bank, readUnitSize(bank))));
+    final unitSize = readUnitSize(bank);
+    return data.referenceFields
+        .map((key, value) => MapEntry(key, readField(key, bank, unitSize)));
     //  value * servingSize * readUnitSize(bank) / data.referenceSize));
   }
 }

@@ -1,3 +1,6 @@
+// TODO: Make Intake have a LooseInterval
+// and rethink Nutrient,
+// perhaps keep a key, move the translations
 class Intake {
   final String label;
   final double amount;
