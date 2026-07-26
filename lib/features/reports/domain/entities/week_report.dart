@@ -3,10 +3,14 @@ import 'package:flutter/foundation.dart';
 @immutable
 class WeekReport {
   final int number;
-  final double? averageCalories;
+  final Map<String, double> averageIntake;
+  final List<bool> completedDays;
+  final List<String> tips;
 
   const WeekReport({
     required this.number,
-    this.averageCalories,
+    required this.averageIntake,
+    required this.tips,
+    required this.completedDays,
   });
 }

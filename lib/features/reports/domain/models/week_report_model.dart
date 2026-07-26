@@ -3,27 +3,28 @@ import 'package:live_vitalist/features/reports/domain/entities/week_report.dart'
 class WeekReportModel extends WeekReport {
   const WeekReportModel({
     required super.number,
-    super.averageCalories,
+    required super.averageIntake,
+    required super.completedDays,
+    required super.tips,
   });
-
-  Map<String, dynamic> toJson() {
-    return {
-      'number': number,
-      'averageCalories': averageCalories,
-    };
-  }
 
   factory WeekReportModel.fromJson(Map<String, dynamic> json) {
     return WeekReportModel(
-      number: json['number'],
-      averageCalories: (json['averageCalories'] as num?)?.toDouble(),
+      number: json['number'] as int,
+      averageIntake: (json['averageIntake'] as Map)
+          .cast<String, num>()
+          .map((key, value) => MapEntry(key, value.toDouble())),
+      completedDays: (json['completedDays'] as List).cast<bool>(),
+      tips: ((json['tips'] ?? []) as List).cast<String>(),
     );
   }
 
   factory WeekReportModel.fromEntity(WeekReport entity) {
     return WeekReportModel(
       number: entity.number,
-      averageCalories: entity.averageCalories,
+      averageIntake: entity.averageIntake,
+      completedDays: entity.completedDays,
+      tips: entity.tips,
     );
   }
 }

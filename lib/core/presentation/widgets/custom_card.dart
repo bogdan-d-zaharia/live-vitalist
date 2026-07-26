@@ -9,8 +9,9 @@ class CustomCard extends StatelessWidget {
     this.title,
     this.highlightText,
     this.onHighlightTap,
-    this.headerSpace = 12.0,
     this.action,
+    this.headerSpace = 12.0,
+    this.padding = const EdgeInsets.symmetric(vertical: 20.0, horizontal: 25.0),
     this.child,
   });
 
@@ -24,13 +25,14 @@ class CustomCard extends StatelessWidget {
   ///
   /// It does not add the `SizedBox` when 0.0.
   final double headerSpace;
+  final EdgeInsetsGeometry padding;
   final Widget? child;
 
   @override
   Widget build(BuildContext context) {
     return MiniCard(
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 25.0),
+        padding: padding,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,7 +44,8 @@ class CustomCard extends StatelessWidget {
                 if (title != null)
                   Text(
                     title!,
-                    style: Theme.of(context).textTheme.bodyLarge,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Palette.counterColor(context, flip: true)),
                   ),
                 const Spacer(),
                 if (highlightText != null)

@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import { initializeApp, cert } from 'firebase-admin/app';
 import { getMessaging } from 'firebase-admin/messaging';
 import { getDatabase } from 'firebase-admin/database';
-import { addToDate } from './core/utils/DateUtils';
+import { addToDate, getISOWeek } from './core/utils/DateUtils';
 import { FirebaseStorageHandler } from './core/storage/data/FirebaseHandler';
 import { IStorageHandler } from './core/storage/domain/StorageInterfaces';
 import { Day } from './features/day/domain/Day';
@@ -59,24 +59,32 @@ app.get('/api/:userId/load-latest-week-report', async (req: Request, res: Respon
 
         const now = new Date();
         const offset = now.getDay(); // Sunday is 0, Monday is 1, ... // Current - Sunday = Current day //
-        const sunday = addToDate(now, offset);
+        const sunday = addToDate(now, -offset);
 
         const fbh: IStorageHandler = new FirebaseStorageHandler();
         const recordsPath = `users/${userId}/records`;
-        const daysPromise = Array
+        const paths = Array
             .from({ length: 7 }, (_, i) => addToDate(sunday, i - 6))
-            .map(date => fbh.loadJson(
+            .map(date =>
                 `${recordsPath}/` +
                 `${date.getDate()}_` +
                 `${date.getMonth() + 1}_` +
-                `${date.getFullYear()}`));
-        const days = (await Promise.all(daysPromise)).filter(Boolean) as Day[];
+                `${date.getFullYear()}`);
+        const daysPromise = paths.map(path => fbh.loadJson(path));
+        const days = (await Promise.all(daysPromise)) as (Day | null)[];
         const bank = await fbh.loadJson(`users/${userId}/aliment_bank`) as AlimentBankState;
 
-        const readIntake = (day: Day) => readDayIntake(day, bank);
+        const strictDays = days.filter(Boolean) as Day[];
+        const averageDay = averageDays(strictDays);
+        const intake = readDayIntake(averageDay, bank);
+        const completedDays = days.map(Boolean);
+        const weekNumber = getISOWeek(sunday);
+
         res.status(200).json({
-            number: 11,
-            averageCalories: [days].map<Day>(averageDays).map(readIntake)[0]['kcals'],
+            number: weekNumber,
+            averageIntake: intake,
+            completedDays: completedDays,
+            // tips: ['Eat more protein'],
         });
     } catch (error) {
         console.error('FCM Error:', error);
