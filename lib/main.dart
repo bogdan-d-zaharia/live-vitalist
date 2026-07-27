@@ -11,7 +11,6 @@ import 'features/settings/data/settings_data.dart';
 
 // *** Announcements & Reports ***
 // TODO: Make the week result page helpful and make it look good.
-// TODO: Show the week result compared to the week before.
 // TODO: Add T&C update as an announcements.
 // Perhaps store the last update date in preferences
 // and request the newest date from server.

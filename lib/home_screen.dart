@@ -28,7 +28,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       if (context.mounted) {
         showDialog(
           context: context,
-          builder: (context) => WeekReportOverlay(wr: value),
+          builder: (context) => WeekReportOverlay(weekReport: value),
         );
       }
     });

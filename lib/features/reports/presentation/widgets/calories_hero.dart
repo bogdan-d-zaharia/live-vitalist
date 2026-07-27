@@ -17,7 +17,10 @@ class CaloriesHero extends StatelessWidget {
           children: [
             Text('Average daily calories', style: Palette.dayViewBold),
             Spacer(),
-            Text('${interval.value} kcal', style: Palette.highlight),
+            Text(
+              '${interval.value.toStringAsFixed(0)} kcal',
+              style: Palette.highlight,
+            ),
           ],
         ),
         SizedBox(height: 10.0),

@@ -1,25 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:live_vitalist/features/nutrient_display/domain/intake.dart';
-import 'package:live_vitalist/features/reports/presentation/widgets/tracker_snippet.dart';
+import 'package:live_vitalist/core/theme/palette.dart';
+import 'package:live_vitalist/features/reports/domain/entities/intake_evolution.dart';
+import 'package:live_vitalist/features/reports/presentation/widgets/intake_evolution_row.dart';
 
 class MacroGrid extends StatelessWidget {
-  final List<Intake> intakes;
-  const MacroGrid({super.key, required this.intakes});
+  final List<IntakeEvolution> evolutions;
+  const MacroGrid({super.key, required this.evolutions});
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      padding: EdgeInsets.zero,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisExtent: 98.0,
-        mainAxisSpacing: 10.0,
-        crossAxisSpacing: 10.0,
-      ),
-      itemCount: intakes.length,
-      itemBuilder: (context, index) => TrackerSnippet(intake: intakes[index]),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text('Previous Week', style: Palette.dayViewBold),
+            ),
+            SizedBox(width: 10.0),
+            Expanded(
+              child: Text('Current Week', style: Palette.dayViewBold),
+            ),
+          ],
+        ),
+        SizedBox(height: 14.0),
+        Expanded(
+          child: ListView.separated(
+            padding: EdgeInsets.zero,
+            itemCount: evolutions.length,
+            separatorBuilder: (context, index) => const SizedBox(height: 10.0),
+            itemBuilder: (context, index) =>
+                IntakeEvolutionRow(intakeEvolution: evolutions[index]),
+          ),
+        ),
+      ],
     );
   }
 }

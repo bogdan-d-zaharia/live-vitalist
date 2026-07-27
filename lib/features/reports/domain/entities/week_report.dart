@@ -1,16 +1,27 @@
 import 'package:flutter/foundation.dart';
 
 @immutable
-class WeekReport {
+class WeekData {
   final int number;
   final Map<String, double> averageIntake;
   final List<bool> completedDays;
-  final List<String> tips;
+  final List<String>? tips;
 
-  const WeekReport({
+  const WeekData({
     required this.number,
     required this.averageIntake,
-    required this.tips,
+    this.tips,
     required this.completedDays,
+  });
+}
+
+@immutable
+class WeekReport {
+  final WeekData currentData;
+  final WeekData previousData;
+
+  const WeekReport({
+    required this.currentData,
+    required this.previousData,
   });
 }
