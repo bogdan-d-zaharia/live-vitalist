@@ -31,21 +31,21 @@ class WeekDataModel extends WeekData {
 
 class WeekReportModel extends WeekReport {
   const WeekReportModel({
-    required super.currentData,
-    required super.previousData,
+    required super.currentWeek,
+    required super.previousWeek,
   });
 
   factory WeekReportModel.fromJson(Map<String, dynamic> json) {
     return WeekReportModel(
-      currentData: WeekDataModel.fromJson(json['currentData']),
-      previousData: WeekDataModel.fromJson(json['previousData']),
+      currentWeek: WeekDataModel.fromJson(json['currentWeek']),
+      previousWeek: WeekDataModel.fromJson(json['previousWeek']),
     );
   }
 
   factory WeekReportModel.fromEntity(WeekReport entity) {
     return WeekReportModel(
-      currentData: entity.currentData,
-      previousData: entity.previousData,
+      currentWeek: entity.currentWeek,
+      previousWeek: entity.previousWeek,
     );
   }
 }

@@ -17,11 +17,11 @@ class WeekData {
 
 @immutable
 class WeekReport {
-  final WeekData currentData;
-  final WeekData previousData;
+  final WeekData currentWeek;
+  final WeekData previousWeek;
 
   const WeekReport({
-    required this.currentData,
-    required this.previousData,
+    required this.currentWeek,
+    required this.previousWeek,
   });
 }

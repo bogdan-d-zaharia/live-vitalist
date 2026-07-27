@@ -21,14 +21,14 @@ class WeekReportOverlay extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final nutrients = ref.watch(nutrientsProvider).data;
-    final intakes = weekReport.currentData.averageIntake.map(
+    final intakes = weekReport.currentWeek.averageIntake.map(
       (key, value) => MapEntry(
         key,
         IntakeEvolution(
-          weekReport.previousData.averageIntake[key] != null
+          weekReport.previousWeek.averageIntake[key] != null
               ? Intake(
                   nutrients[key]?.translations['ENG'] ?? '',
-                  weekReport.previousData.averageIntake[key]!,
+                  weekReport.previousWeek.averageIntake[key]!,
                   nutrients[key]?.lowerLimit,
                   nutrients[key]?.upperLimit,
                   nutrients[key]?.unit ?? '',
@@ -73,7 +73,7 @@ class WeekReportOverlay extends ConsumerWidget {
                       SizedBox(width: 12.0),
                       Expanded(
                         child: Text(
-                          'Week ${weekReport.currentData.number} Report',
+                          'Week ${weekReport.currentWeek.number} Report',
                           style: Theme.of(context)
                               .textTheme
                               .bodyLarge
@@ -95,14 +95,14 @@ class WeekReportOverlay extends ConsumerWidget {
                     ),
                     SizedBox(height: 22.0)
                   ],
-                  ConsistencyStrip(days: weekReport.currentData.completedDays),
+                  ConsistencyStrip(days: weekReport.currentWeek.completedDays),
                   SizedBox(height: 22.0),
                   Expanded(child: MacroGrid(evolutions: evolutions)),
-                  if (weekReport.currentData.tips != null &&
-                      weekReport.currentData.tips!.isNotEmpty) ...[
+                  if (weekReport.currentWeek.tips != null &&
+                      weekReport.currentWeek.tips!.isNotEmpty) ...[
                     SizedBox(height: 18.0),
                     Divider(color: Palette.divGrey, height: 1.0),
-                    ...weekReport.currentData.tips!.expand(
+                    ...weekReport.currentWeek.tips!.expand(
                       (tip) => [
                         SizedBox(height: 14.0),
                         Text(tip, style: Palette.monitor),
