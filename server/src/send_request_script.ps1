@@ -1,9 +1,10 @@
 param (
     [string]$FcmToken = "",
-    [string]$UserId = ""
+    [string]$UserId = "",
+    [string]$IP = ""
 )
 
-$uri = "http://localhost:3000/api/trigger-report"
+$uri = "http://$IP/api/trigger-report"
 
 $body = @{
     fcmToken = $FcmToken

@@ -17,9 +17,6 @@ import 'features/settings/data/settings_data.dart';
 // and request the newest date from server.
 
 // *** Workers & Push Notifications ***
-// TODO: Move to heroku and give notifications
-// when the user hasn't logged his meal yet, twice, in a 3h interval.
-// When he opens the notification, take him to that meal.
 // TODO: Have the user be able to log their meal from the notification
 // with a message text field.
 
