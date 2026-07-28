@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/features/announcements/data/announcements.dart';
+import 'package:live_vitalist/features/announcements/data/announcements_api.dart';
+import 'package:live_vitalist/features/announcements/domain/announcements_api_interface.dart';
 import 'package:live_vitalist/features/calendar/calendar.dart';
 import 'package:live_vitalist/features/meals_journal/meals_journal.dart';
 import 'package:live_vitalist/features/nutrient_display/nutrient_display.dart';
 import 'package:live_vitalist/features/ratio_bars/ratio_bars_card.dart';
-import 'package:live_vitalist/features/reports/data/report_api.dart';
-import 'package:live_vitalist/features/reports/domain/entities/week_report.dart';
-import 'package:live_vitalist/features/reports/domain/report_api_interface.dart';
-import 'package:live_vitalist/features/reports/presentation/widgets/week_report_overlay.dart';
 import 'package:live_vitalist/features/settings/settings_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -18,21 +17,24 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  Future<void> showPopups() async {
+    final IAnnouncementsApi api = ref.watch(announcementsApiProvider);
+    await for (final IAnnouncement announcement in api.fetchAnnouncements()) {
+      await announcement.pushAnnouncementPopup(context);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showPopups();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final IReportApi api = ref.watch(reportApiProvider);
-    final Future<WeekReport?> report = api.loadLatestWeekReport();
-    report.then((value) async {
-      if (value == null) return;
-      await Future.delayed(Duration(seconds: 5));
-      if (context.mounted) {
-        showDialog(
-          context: context,
-          builder: (context) => WeekReportOverlay(weekReport: value),
-        );
-      }
-    });
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Live Vitalist'),

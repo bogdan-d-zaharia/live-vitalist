@@ -43,14 +43,26 @@ app.post('/api/trigger-report', async (req: Request, res: Response) => {
     }
 });
 
+app.get('/api/load-legal-versions', async (req: Request, res: Response) => {
+    try {
+        res.status(200).json({
+            termsOfUse: "2025_04_15",
+            privacyPolicy: "2025_04_15",
+        });
+    } catch (error) {
+        console.error('API Error:', error);
+        res.status(500).json({ error: 'An error has occurred while sending the legal versions.' });
+    }
+});
+
 app.get('/api/:userId/load-latest-week-report', async (req: Request, res: Response) => {
     try {
         const userId = req.params.userId as string;
         const wr = await loadWeekReport(userId);
         res.status(200).json(wr);
     } catch (error) {
-        console.error('FCM Error:', error);
-        res.status(500).json({ error: 'An error has occurred when sending the report notification.' });
+        console.error('API Error:', error);
+        res.status(500).json({ error: 'An error has occurred while sending the latest week report.' });
     }
 });
 

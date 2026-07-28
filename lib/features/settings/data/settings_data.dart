@@ -22,6 +22,13 @@ abstract final class SettingsData {
   static bool get isLoggedIn => _prefs.getBool('isLoggedIn') ?? false;
   static set isLoggedIn(bool val) => _prefs.setBool('isLoggedIn', val);
 
+  static String get termsVersion => _prefs.getString('termsVersion') ?? '';
+  static set termsVersion(String val) => _prefs.setString('termsVersion', val);
+
+  static String get privacyVersion => _prefs.getString('privacyVersion') ?? '';
+  static set privacyVersion(String val) =>
+      _prefs.setString('privacyVersion', val);
+
   static String get language => _prefs.getString('language') ?? 'ENG';
   static set language(String val) => _prefs.setString('language', val);
 

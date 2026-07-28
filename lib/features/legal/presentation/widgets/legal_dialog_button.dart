@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class AuthDialogButton extends StatelessWidget {
+class LegalDialogButton extends StatelessWidget {
   final Function() onPressed;
   final Widget label;
   final Color backgroundColor;
 
-  const AuthDialogButton({
+  const LegalDialogButton({
     super.key,
     required this.onPressed,
     required this.label,

@@ -1,5 +1,5 @@
-import 'package:live_vitalist/features/announcements/domain/announcement_interface.dart';
+import 'package:live_vitalist/features/announcements/data/announcements.dart';
 
 abstract interface class IAnnouncementsApi {
-  Future<IAnnouncement> fetchAnnouncements();
+  Stream<IAnnouncement> fetchAnnouncements();
 }

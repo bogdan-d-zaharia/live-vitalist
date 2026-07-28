@@ -4,7 +4,7 @@ param (
     [string]$IP = ""
 )
 
-$uri = "http://$IP/api/trigger-report"
+$uri = "http://$IP/api/load-legal-versions"
 
 $body = @{
     fcmToken = $FcmToken

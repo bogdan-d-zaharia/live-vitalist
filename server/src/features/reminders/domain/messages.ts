@@ -23,7 +23,7 @@ export function buildReminderMessage(type: reminderType, meal: mealType): Notifi
         case '>week':
             return {
                 title: `We couldn't generate your weekly report!`,
-                body: `Can you help us fix the problem? And maybe next week will your best one yet!`,
+                body: `Can you help us fix the problem? And maybe next week will be your best one yet!`,
             };
     }
 }
