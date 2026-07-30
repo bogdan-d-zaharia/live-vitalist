@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:live_vitalist/calorie_distribution/calorie_distribution_card.dart';
+import 'package:live_vitalist/features/calorie_distribution/calorie_distribution_card.dart';
 import 'package:live_vitalist/features/announcements/data/announcements.dart';
 import 'package:live_vitalist/features/announcements/data/announcements_api.dart';
 import 'package:live_vitalist/features/announcements/domain/announcements_api_interface.dart';
@@ -9,11 +9,11 @@ import 'package:live_vitalist/features/meals_journal/meals_journal.dart';
 import 'package:live_vitalist/features/nutrient_display/nutrient_display.dart';
 import 'package:live_vitalist/features/ratio_bars/ratio_bars_card.dart';
 import 'package:live_vitalist/features/settings/settings_screen.dart';
-import 'package:live_vitalist/nutrient_circle/nutrient_circle.dart';
-import 'package:live_vitalist/super_search/presentation/add_aliment_actions.dart';
-import 'package:live_vitalist/super_search/presentation/controllers/aliment_search_controller.dart';
-import 'package:live_vitalist/super_search/presentation/widgets/search_overlay.dart';
-import 'package:live_vitalist/super_search/presentation/widgets/super_bar.dart';
+import 'package:live_vitalist/features/nutrient_circle/nutrient_circle.dart';
+import 'package:live_vitalist/features/super_search/presentation/add_aliment_actions.dart';
+import 'package:live_vitalist/features/super_search/presentation/controllers/aliment_search_controller.dart';
+import 'package:live_vitalist/features/super_search/presentation/widgets/search_overlay.dart';
+import 'package:live_vitalist/features/super_search/presentation/widgets/super_bar.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});

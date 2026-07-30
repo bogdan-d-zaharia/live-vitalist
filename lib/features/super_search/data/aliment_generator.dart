@@ -1,7 +1,7 @@
 import 'package:firebase_ai/firebase_ai.dart';
-import 'package:live_vitalist/aliment/data/aliment_data_extensions.dart';
-import 'package:live_vitalist/aliment/domain/aliment_data.dart';
-import 'package:live_vitalist/super_search/prompt_template.dart';
+import 'package:live_vitalist/features/aliment/data/aliment_data_extensions.dart';
+import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
+import 'package:live_vitalist/features/super_search/prompt_template.dart';
 
 /// Fills in the nutritional data of an aliment by asking Gemini, through
 /// Firebase AI Logic, about the given input. The app never holds an API

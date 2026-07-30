@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:live_vitalist/core/presentation/widgets/selectable_icon_button.dart';
 import 'package:live_vitalist/core/presentation/widgets/sized_icon_button.dart';
-import 'package:live_vitalist/super_search/super_search_constants.dart';
+import 'package:live_vitalist/features/super_search/super_search_constants.dart';
 
 class SuperBar extends StatefulWidget {
   final TextEditingController? controller;

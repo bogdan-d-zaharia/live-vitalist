@@ -1,4 +1,4 @@
-import 'package:live_vitalist/aliment/domain/aliment.dart';
+import 'package:live_vitalist/features/aliment/domain/aliment.dart';
 
 /// An aliment picked from the search results, waiting to be added to a meal.
 class PendingAliment {

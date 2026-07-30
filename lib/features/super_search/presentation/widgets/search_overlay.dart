@@ -1,14 +1,14 @@
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:live_vitalist/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
 import 'package:live_vitalist/core/theme/palette.dart';
-import 'package:live_vitalist/day/data/day_provider.dart';
-import 'package:live_vitalist/super_search/presentation/controllers/aliment_search_controller.dart';
-import 'package:live_vitalist/super_search/presentation/widgets/aliment_result_tile.dart';
-import 'package:live_vitalist/super_search/presentation/widgets/meal_picker_dialog.dart';
-import 'package:live_vitalist/super_search/super_search_constants.dart';
+import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
+import 'package:live_vitalist/features/day/data/day_provider.dart';
+import 'package:live_vitalist/features/super_search/presentation/controllers/aliment_search_controller.dart';
+import 'package:live_vitalist/features/super_search/presentation/widgets/aliment_result_tile.dart';
+import 'package:live_vitalist/features/super_search/presentation/widgets/meal_picker_dialog.dart';
+import 'package:live_vitalist/features/super_search/super_search_constants.dart';
 
 class SearchOverlay extends ConsumerWidget {
   const SearchOverlay({super.key});

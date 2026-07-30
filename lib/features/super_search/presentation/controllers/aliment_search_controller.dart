@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:live_vitalist/super_search/domain/pending_aliment.dart';
+import 'package:live_vitalist/features/super_search/domain/pending_aliment.dart';
 
 @immutable
 class AlimentSearchState {
@@ -52,9 +52,8 @@ class AlimentSearchController extends Notifier<AlimentSearchState> {
 
   void remove(String alimentID) {
     state = state.copyWith(
-      selection: state.selection
-          .where((item) => item.alimentID != alimentID)
-          .toList(),
+      selection:
+          state.selection.where((item) => item.alimentID != alimentID).toList(),
     );
   }
 }

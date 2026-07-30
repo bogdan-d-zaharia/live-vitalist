@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:live_vitalist/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
-import 'package:live_vitalist/day/data/day_provider.dart';
-import 'package:live_vitalist/day/domain/day_extensions.dart';
-import 'package:live_vitalist/nutrient/data/nutrient_provider.dart';
-import 'package:live_vitalist/nutrient_circle/animated_calorie_ring.dart';
-import 'package:live_vitalist/nutrient_circle/nutrient_circle_constants.dart';
+import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
+import 'package:live_vitalist/features/day/data/day_provider.dart';
+import 'package:live_vitalist/features/day/domain/day_extensions.dart';
+import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
+import 'package:live_vitalist/features/settings/data/settings_data.dart';
+import 'package:live_vitalist/features/nutrient_circle/presentation/widgets/animated_calorie_ring.dart';
+import 'package:live_vitalist/features/nutrient_circle/presentation/nutrient_circle_constants.dart';
 import 'package:live_vitalist/core/theme/palette.dart';
-import 'package:live_vitalist/settings/data/settings_data.dart';
 
 class NutrientCircle extends ConsumerWidget {
   const NutrientCircle({super.key});

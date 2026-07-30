@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:live_vitalist/aliment/data/aliment_bank.dart';
-import 'package:live_vitalist/aliment/domain/aliment.dart';
-import 'package:live_vitalist/aliment/domain/aliment_data.dart';
-import 'package:live_vitalist/aliment_editor/aliment_data_editor/aliment_data_editor.dart';
 import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
-import 'package:live_vitalist/day/data/day_provider.dart';
-import 'package:live_vitalist/super_search/data/aliment_generator.dart';
-import 'package:live_vitalist/super_search/presentation/widgets/meal_picker_dialog.dart';
+import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
+import 'package:live_vitalist/features/aliment/domain/aliment.dart';
+import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
+import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/aliment_data_editor.dart';
+import 'package:live_vitalist/features/day/data/day_provider.dart';
+import 'package:live_vitalist/features/super_search/data/aliment_generator.dart';
+import 'package:live_vitalist/features/super_search/presentation/widgets/meal_picker_dialog.dart';
 
 abstract final class AddAlimentActions {
   /// Creates a new aliment in the bank, so it can be instanced afterwards.

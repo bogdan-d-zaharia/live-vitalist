@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:live_vitalist/nutrient_circle/pie_chart.dart';
+import 'package:live_vitalist/features/nutrient_circle/presentation/widgets/pie_chart.dart';
 
 class AnimatedCalorieRing extends StatelessWidget {
   const AnimatedCalorieRing({

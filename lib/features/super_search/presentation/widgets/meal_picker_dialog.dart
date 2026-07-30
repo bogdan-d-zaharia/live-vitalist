@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:live_vitalist/day/data/day_provider.dart';
-import 'package:live_vitalist/day/domain/day.dart';
+import 'package:live_vitalist/features/day/data/day_provider.dart';
+import 'package:live_vitalist/features/day/domain/day.dart';
 
 /// Asks in which meal the aliments go; pops with the meal name.
 Future<String?> showMealPicker(BuildContext context) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:live_vitalist/core/theme/palette.dart';
-import 'package:live_vitalist/nutrient_display/presentation/nutrients_display_constants.dart';
+import 'package:live_vitalist/features/nutrient_display/presentation/nutrients_display_constants.dart';
 
 class CalorieDistributionBar extends StatelessWidget {
   const CalorieDistributionBar({
