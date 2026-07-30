@@ -39,10 +39,11 @@ export function readFields(
     bank: AlimentBankState
 ): Record<string, number> {
     const data = readDataRef(aliment, bank);
+    const fields = data.referenceFields ?? {};
     const unitSize = readUnitSize(aliment, bank);
     const result: Record<string, number> = {};
 
-    for (const nutrient of Object.keys(data.referenceFields)) {
+    for (const nutrient of Object.keys(fields)) {
         result[nutrient] = readField(aliment, nutrient, bank, unitSize);
     }
 

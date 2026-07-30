@@ -1,4 +1,3 @@
-
 import { FirebaseStorageHandler } from "../../../core/storage/data/FirebaseHandler";
 import { IStorageHandler } from "../../../core/storage/domain/StorageInterfaces";
 import { addToDate, getISOWeek, lastDay } from "../../../core/utils/DateUtils";
