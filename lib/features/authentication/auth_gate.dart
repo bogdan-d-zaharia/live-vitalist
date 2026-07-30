@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/features/authentication/presentation/controllers/auth_controller.dart';
-import 'package:live_vitalist/features/authentication/presentation/widgets/auth_privacy_policy_dialog.dart';
+import 'package:live_vitalist/features/legal/data/legal_handler.dart';
+import 'package:live_vitalist/features/legal/legal_dialog.dart';
 import 'package:live_vitalist/home_screen.dart';
 
 class AuthGate extends ConsumerStatefulWidget {
@@ -12,19 +13,13 @@ class AuthGate extends ConsumerStatefulWidget {
 }
 
 class _AuthGateState extends ConsumerState<AuthGate> {
-  void showPrivacyPolicyAndTermsOfUsePopup() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return AuthPrivacyPolicyDialog(
-          onEnter: () {
-            Navigator.pop(context);
-            ref.read(authControllerProvider.notifier).accept();
-          },
-        );
-      },
-    );
+  Future<void> showPrivacyPolicyAndTermsOfUsePopup() async {
+    final requirements = await ref.read(legalHandlerProvider).fetch();
+    if (!mounted) return;
+    final isAccepted = await showLegalDialog(context, requirements);
+    if (isAccepted) {
+      ref.read(authControllerProvider.notifier).accept();
+    }
   }
 
   void enterHomeScreen() {

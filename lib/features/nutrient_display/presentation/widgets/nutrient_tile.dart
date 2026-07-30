@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
+import 'package:live_vitalist/features/aliment/domain/aliment_bank_state.dart';
 import 'package:live_vitalist/features/day/domain/day.dart';
 import 'package:live_vitalist/features/day/domain/day_extensions.dart';
 import 'package:live_vitalist/features/nutrient_display/domain/intake.dart';

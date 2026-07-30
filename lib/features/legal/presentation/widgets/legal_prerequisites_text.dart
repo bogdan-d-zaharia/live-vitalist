@@ -2,8 +2,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class AuthPrerequisitesText extends StatelessWidget {
-  const AuthPrerequisitesText({super.key});
+class LegalPrerequisitesText extends StatelessWidget {
+  const LegalPrerequisitesText({super.key});
 
   @override
   Widget build(BuildContext context) {

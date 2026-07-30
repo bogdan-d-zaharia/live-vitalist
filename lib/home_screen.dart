@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/calorie_distribution/calorie_distribution_card.dart';
+import 'package:live_vitalist/features/announcements/data/announcements.dart';
+import 'package:live_vitalist/features/announcements/data/announcements_api.dart';
+import 'package:live_vitalist/features/announcements/domain/announcements_api_interface.dart';
 import 'package:live_vitalist/features/calendar/calendar.dart';
 import 'package:live_vitalist/features/meals_journal/meals_journal.dart';
 import 'package:live_vitalist/features/nutrient_display/nutrient_display.dart';
@@ -21,6 +24,22 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
+
+  Future<void> showPopups() async {
+    final IAnnouncementsApi api = ref.watch(announcementsApiProvider);
+    await for (final IAnnouncement announcement in api.fetchAnnouncements()) {
+      await announcement.pushAnnouncementPopup(context);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      showPopups();
+    });
+  }
 
   @override
   void dispose() {

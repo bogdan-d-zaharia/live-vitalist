@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:live_vitalist/features/notifications/data/notifications_api.dart';
 import 'package:live_vitalist/features/settings/data/settings_data.dart';
 import 'package:live_vitalist/core/storage/data/storage_provider.dart';
 import 'package:live_vitalist/core/storage/data/sync_service.dart';
@@ -27,6 +29,15 @@ class SettingsController extends _$SettingsController {
       await FirebaseAuth.instance.signInWithCredential(credential);
 
       await ref.read(syncServiceProvider.notifier).lateLogin();
+      final userId = FirebaseAuth.instance.currentUser?.uid;
+
+      final String? fcmToken = await FirebaseMessaging.instance.getToken();
+      if (fcmToken != null && userId != null) {
+        final api = ref.read(notificationsApiProvider);
+        await api.saveToken(userId, fcmToken);
+      } else {
+        throw Exception("CANNOT RETRIEVE NOTIFICATION CREDENTIALS");
+      }
 
       return true;
     } catch (e) {
