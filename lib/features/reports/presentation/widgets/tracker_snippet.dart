@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:live_vitalist/core/domain/intervals.dart';
-import 'package:live_vitalist/core/presentation/widgets/target_bar.dart';
+import 'package:live_vitalist/core/presentation/widgets/target_bar/target_bar.dart';
+import 'package:live_vitalist/core/presentation/widgets/target_bar/target_bar_draw_data.dart';
 import 'package:live_vitalist/core/theme/palette.dart';
 import 'package:live_vitalist/features/nutrient_display/domain/intake.dart';
 
@@ -48,8 +49,10 @@ class TrackerSnippet extends StatelessWidget {
                     start: intake!.lowerLimit,
                     end: intake!.upperLimit,
                   ),
-                  height: 14.0,
-                  radius: 7.0,
+                  drawData: TargetBarDrawData(
+                    height: 14.0,
+                    radius: 7.0,
+                  ),
                 ),
                 Row(
                   children: [

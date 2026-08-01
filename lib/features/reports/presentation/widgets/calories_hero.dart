@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:live_vitalist/core/domain/intervals.dart';
-import 'package:live_vitalist/core/presentation/widgets/target_bar.dart';
+import 'package:live_vitalist/core/presentation/widgets/target_bar/target_bar.dart';
+import 'package:live_vitalist/core/presentation/widgets/target_bar/target_bar_draw_data.dart';
 import 'package:live_vitalist/core/theme/palette.dart';
 
 class CaloriesHero extends StatelessWidget {
@@ -26,8 +27,10 @@ class CaloriesHero extends StatelessWidget {
         SizedBox(height: 10.0),
         TargetBar(
           interval: interval,
-          height: 28.0,
-          radius: 14.0,
+          drawData: TargetBarDrawData(
+            height: 28.0,
+            radius: 14.0,
+          ),
         ),
         SizedBox(height: 6.0),
         Row(
