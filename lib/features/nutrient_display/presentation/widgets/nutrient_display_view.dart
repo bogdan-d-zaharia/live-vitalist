@@ -16,6 +16,11 @@ class NutrientDisplayView extends ConsumerWidget {
     final avgDay = ref.watch(syncAverageDayProvider);
     final bank = ref.watch(alimentBankProvider);
     final state = ref.watch(nutrientsProvider);
+    // final rawState = ref.watch(nutrientsProvider);
+    // final state = NutrientState(
+    //   data: rawState.data..remove(rawState.order.first),
+    //   order: rawState.order.sublist(1),
+    // );
 
     final intake = avgDay.readIntake(bank);
 

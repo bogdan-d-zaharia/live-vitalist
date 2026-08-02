@@ -25,7 +25,7 @@ class CustomCard extends StatelessWidget {
   ///
   /// It does not add the `SizedBox` when 0.0.
   final double headerSpace;
-  final EdgeInsetsGeometry padding;
+  final EdgeInsets padding;
   final Widget? child;
 
   @override
