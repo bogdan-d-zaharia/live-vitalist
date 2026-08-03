@@ -8,7 +8,7 @@ import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
 import 'package:live_vitalist/features/settings/data/settings_data.dart';
 import 'package:live_vitalist/features/nutrient_circle/presentation/widgets/animated_calorie_ring.dart';
 import 'package:live_vitalist/features/nutrient_circle/presentation/nutrient_circle_constants.dart';
-import 'package:live_vitalist/core/theme/palette.dart';
+import 'package:live_vitalist/core/theme/app_text_styles_theme.dart';
 
 class NutrientCircle extends ConsumerWidget {
   const NutrientCircle({super.key});
@@ -65,7 +65,7 @@ class NutrientCircle extends ConsumerWidget {
                     if (target != null)
                       Text(
                         '/ ${_format(target)} $unit',
-                        style: Palette.dayViewRegular,
+                        style: AppTextStylesTheme.of(context).dayViewRegular,
                       ),
                   ],
                 ),

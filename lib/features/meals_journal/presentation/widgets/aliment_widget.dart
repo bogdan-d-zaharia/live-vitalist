@@ -5,7 +5,6 @@ import 'package:live_vitalist/features/aliment/domain/aliment.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_extensions.dart';
 import 'package:live_vitalist/features/meals_journal/presentation/widgets/element_widget.dart';
 import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
-import 'package:live_vitalist/core/theme/palette.dart';
 import 'package:live_vitalist/features/settings/data/settings_data.dart';
 
 class AlimentWidget extends ConsumerWidget {
@@ -36,7 +35,7 @@ class AlimentWidget extends ConsumerWidget {
       onLongPress: onLongPress,
       additional: [
         VerticalDivider(
-          color: Palette.divGrey,
+          color: Theme.of(context).dividerColor,
           thickness: 0.5,
           width: 0.0,
           indent: 8.0,

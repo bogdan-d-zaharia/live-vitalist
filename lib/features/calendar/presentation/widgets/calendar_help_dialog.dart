@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
 import 'package:live_vitalist/features/calendar/domain/calendar_constants.dart';
-import 'package:live_vitalist/features/calendar/widgets/simple_calendar_item.dart';
+import 'package:live_vitalist/features/calendar/presentation/widgets/simple_calendar_item.dart';
 import 'package:live_vitalist/core/presentation/widgets/labels_widget.dart';
 import 'package:live_vitalist/features/settings/data/settings_data.dart';
 

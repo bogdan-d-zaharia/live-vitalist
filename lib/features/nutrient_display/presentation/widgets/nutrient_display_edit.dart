@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:live_vitalist/core/theme/palette.dart';
 import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
 import 'package:live_vitalist/features/nutrient_display/presentation/ui_helpers/nutrients_editing_logic.dart';
+import 'package:live_vitalist/features/nutrient_display/presentation/widgets/dimmed_parentheses_text.dart';
 import 'package:live_vitalist/features/settings/data/settings_data.dart';
 
 class NutrientDisplayEdit extends ConsumerWidget {
@@ -27,8 +27,10 @@ class NutrientDisplayEdit extends ConsumerWidget {
           children: [
             const Icon(Icons.drag_indicator_rounded),
             Expanded(
-              child: Palette.dimParentheses(
-                  label, Theme.of(context).textTheme.bodyMedium),
+              child: DimmedParenthesesText(
+                label: label,
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
             ),
             Switch(
               value: !nutrient.tags.contains('disabled'),

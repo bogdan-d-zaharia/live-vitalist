@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:live_vitalist/core/theme/palette.dart';
 
 class CalorieRing extends StatelessWidget {
   const CalorieRing({
@@ -23,7 +22,7 @@ class CalorieRing extends StatelessWidget {
           progressColor: Colors.lightGreen,
           backgroundColor: Color.lerp(
             Colors.lightGreen,
-            Palette.isDarkMode(context) ? Colors.black : Colors.white,
+            Theme.of(context).colorScheme.surface,
             0.7,
           )!,
           strokeWidth: strokeWidth,

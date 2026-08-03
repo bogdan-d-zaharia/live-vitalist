@@ -2,7 +2,6 @@ import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
-import 'package:live_vitalist/core/theme/palette.dart';
 import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/features/day/data/day_provider.dart';
 import 'package:live_vitalist/features/super_search/presentation/controllers/aliment_search_controller.dart';
@@ -68,7 +67,10 @@ class SearchOverlay extends ConsumerWidget {
                     alignment: Alignment.centerLeft,
                     child: Text('Aliments', style: TextStyle(fontSize: 20.0)),
                   ),
-                  const Divider(height: 24.0, color: Palette.divGrey),
+                  Divider(
+                    height: 24.0,
+                    color: Theme.of(context).dividerColor,
+                  ),
                   Expanded(
                     child: ListView(
                       children: filteredKeys.map((id) {

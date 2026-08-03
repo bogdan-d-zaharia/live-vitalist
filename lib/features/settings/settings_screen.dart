@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
-import 'package:live_vitalist/core/theme/palette.dart';
 import 'package:live_vitalist/features/settings/presentation/controllers/settings_controller.dart';
 import 'package:live_vitalist/features/settings/presentation/widgets/data_deletion_page.dart';
 import 'package:live_vitalist/features/settings/data/settings_data.dart';
@@ -44,7 +43,7 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(24.0)),
             clipBehavior: Clip.hardEdge,
-            color: Palette.isDarkMode(context) ? Colors.grey[800] : null,
+            color: Theme.of(context).colorScheme.surfaceContainerHigh,
             itemBuilder: (context) => [
               PopupMenuItem(
                 onTap: () => launchUrl(

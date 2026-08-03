@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:live_vitalist/core/theme/app_text_styles_theme.dart';
 import 'package:live_vitalist/core/theme/palette.dart';
+import 'package:live_vitalist/features/reports/presentation/theme/report_styles.dart';
 
 class ConsistencyStrip extends StatelessWidget {
   final List<bool> days;
@@ -9,16 +11,19 @@ class ConsistencyStrip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final labelStyle = Palette.dayViewLabel.copyWith(height: 1.0);
+    final labelStyle = ReportStyles.dayViewLabel.copyWith(height: 1.0);
     final count = days.fold(0, (count, day) => count += day ? 1 : 0);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Row(
           children: [
-            Text('Consistency', style: Palette.dayViewBold),
+            Text('Consistency', style: ReportStyles.dayViewBold),
             Spacer(),
-            Text('$count / 7 days on target', style: Palette.highlight),
+            Text(
+              '$count / 7 days on target',
+              style: AppTextStylesTheme.of(context).highlight,
+            ),
           ],
         ),
         SizedBox(height: 14.0),

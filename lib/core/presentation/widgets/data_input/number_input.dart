@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:live_vitalist/core/theme/palette.dart';
 
 //TODO: Perhaps handle null getValue, so that there might be fields where it is
 // for sure 0.0 and fields where it is assumed that is not specified.
@@ -46,7 +45,7 @@ class _NumberInputState extends State<NumberInput> {
       width: 0.0,
       indent: indent,
       endIndent: indent,
-      color: color ?? Palette.divGrey,
+      color: color ?? Theme.of(context).dividerColor,
     );
   }
 
@@ -60,7 +59,7 @@ class _NumberInputState extends State<NumberInput> {
       height: height,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(height / 2.0),
-        color: Palette.counterColor(context).withValues(alpha: 0.8),
+        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.8),
       ),
       clipBehavior: Clip.hardEdge,
       child: Row(

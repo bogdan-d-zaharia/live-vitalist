@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:live_vitalist/core/theme/palette.dart';
 
 Color getShadowColor(BuildContext context, double shadowStrength) =>
-    Palette.counterColor(context).withValues(alpha: shadowStrength);
+    Theme.of(context).colorScheme.surface.withValues(alpha: shadowStrength);
 
 Color getUnfilledColor(
     BuildContext context, Color color, double shadowStrength) {
-  return Color.lerp(color, Palette.counterColor(context), shadowStrength)!;
+  return Color.lerp(
+      color, Theme.of(context).colorScheme.surface, shadowStrength)!;
 }
 
 Color getHatchedColor(

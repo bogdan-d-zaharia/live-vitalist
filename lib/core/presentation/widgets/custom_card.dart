@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
-import 'package:live_vitalist/core/theme/palette.dart';
+import 'package:live_vitalist/core/theme/app_text_styles_theme.dart';
 
 class CustomCard extends StatelessWidget {
   const CustomCard({
@@ -45,7 +45,7 @@ class CustomCard extends StatelessWidget {
                   Text(
                     title!,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Palette.counterColor(context, flip: true)),
+                        color: Theme.of(context).colorScheme.onSurface),
                   ),
                 const Spacer(),
                 if (highlightText != null)
@@ -53,7 +53,7 @@ class CustomCard extends StatelessWidget {
                     onTap: onHighlightTap,
                     child: Text(
                       highlightText!,
-                      style: Palette.highlight,
+                      style: AppTextStylesTheme.of(context).highlight,
                     ),
                   ),
                 if (action != null) action!,

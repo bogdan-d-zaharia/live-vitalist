@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/core/presentation/widgets/gradient_scaffold.dart';
 import 'package:live_vitalist/features/calorie_distribution/calorie_distribution_card.dart';
 import 'package:live_vitalist/features/announcements/data/announcements.dart';
 import 'package:live_vitalist/features/announcements/data/announcements_api.dart';
@@ -58,8 +61,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     final searchNotifier = ref.read(alimentSearchProvider.notifier);
 
-    return Scaffold(
+    return GradientScaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        scrolledUnderElevation: 0.0,
+        flexibleSpace: ClipRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 20.0, sigmaY: 20.0),
+            child: Container(color: Colors.white.withValues(alpha: 0.0)),
+          ),
+        ),
         title: Text('Live Vitalist'),
         actions: [
           Padding(
@@ -93,19 +106,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
       body: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: ListView(
-              children: [
-                WeekCalendar(),
-                NutrientCircle(),
-                NutrientDisplay(),
-                CalorieDistributionCard(),
-                RatioBarsCard(),
-                ...[MealsJournal(), SizedBox(height: 50.0)],
-                SizedBox(height: 12.0),
-              ],
+          ListView(
+            padding: EdgeInsets.only(
+              top: MediaQuery.viewPaddingOf(context).top + kToolbarHeight,
+              bottom: 100.0,
+              left: 8.0,
+              right: 8.0,
             ),
+            children: [
+              WeekCalendar(),
+              NutrientCircle(),
+              NutrientDisplay(),
+              CalorieDistributionCard(),
+              RatioBarsCard(),
+              MealsJournal(),
+            ],
           ),
           Positioned.fill(
             child: SearchOverlay(),

@@ -6,7 +6,6 @@ import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/features/aliment_editor/instance_editor/presentation/widgets/add_aliment_button.dart';
 import 'package:live_vitalist/features/aliment_editor/instance_editor/presentation/widgets/selector_search_bar.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
-import 'package:live_vitalist/core/theme/palette.dart';
 
 class Selector extends ConsumerStatefulWidget {
   const Selector({super.key});
@@ -58,7 +57,10 @@ class _SelectorState extends ConsumerState<Selector> {
               notifier: notifier,
               onAdded: () => setState(() {}),
             ),
-            const Divider(height: 24.0, color: Palette.divGrey),
+            Divider(
+              height: 24.0,
+              color: Theme.of(context).dividerColor,
+            ),
             Expanded(
               child: ListView(
                 children: filteredKeys.map((id) {

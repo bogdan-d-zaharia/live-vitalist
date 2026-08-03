@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:live_vitalist/features/calendar/domain/calendar_constants.dart';
 import 'package:live_vitalist/features/nutrient/domain/nutrient.dart';
 import 'package:live_vitalist/features/nutrient/domain/nutrient_extensions.dart';
-import 'package:live_vitalist/core/theme/palette.dart';
+import 'package:live_vitalist/core/theme/app_colors_theme.dart';
 import 'package:live_vitalist/features/settings/data/settings_data.dart';
 
 class SimpleCalendarItem extends StatelessWidget {
@@ -16,6 +17,14 @@ class SimpleCalendarItem extends StatelessWidget {
   final Map<Nutrient, double> intake;
   final String title;
   final bool isSelected;
+
+  static final _itemStyle = GoogleFonts.poppins(
+    color: Colors.black,
+    fontSize: 15.0,
+    height: 0.8,
+    letterSpacing: -0.5,
+    fontWeight: FontWeight.w300,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -96,21 +105,17 @@ class SimpleCalendarItem extends StatelessWidget {
             child: Text(
               title,
               style: isSelected
-                  ? Palette.calendarItem.copyWith(
-                      color: Palette.isDarkMode(context)
-                          ? Colors.white
-                          : Colors.black,
+                  ? _itemStyle.copyWith(
+                      color: Theme.of(context).colorScheme.onSurface,
                       shadows: [
                         Shadow(
                           offset: const Offset(0, 1),
                           blurRadius: 12.0,
-                          color: Palette.isDarkMode(context)
-                              ? Colors.white.withValues(alpha: 0.6)
-                              : Colors.black.withValues(alpha: 0.4),
+                          color: AppColorsTheme.of(context).selectedLabelShadow,
                         ),
                       ],
                     )
-                  : Palette.calendarItem.copyWith(
+                  : _itemStyle.copyWith(
                       color: Colors.grey.withValues(alpha: 0.8),
                     ),
             ),

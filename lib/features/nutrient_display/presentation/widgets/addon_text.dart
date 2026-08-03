@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:live_vitalist/core/theme/palette.dart';
+import 'package:live_vitalist/core/theme/app_text_styles_theme.dart';
 import 'package:live_vitalist/features/nutrient_display/presentation/nutrients_display_constants.dart';
 
 class AddonText extends StatelessWidget {
@@ -11,10 +11,10 @@ class AddonText extends StatelessWidget {
   Widget build(BuildContext context) {
     final textW = Text(
       text,
-      style: Palette.dayViewRegular.copyWith(
-        fontSize: fontSize,
-        color: Colors.black.withValues(alpha: 0.6),
-      ),
+      style: AppTextStylesTheme.of(context).dayViewRegular.copyWith(
+            fontSize: fontSize,
+            color: Colors.black.withValues(alpha: 0.6),
+          ),
     );
     if (emphasisColor == null) return textW;
 

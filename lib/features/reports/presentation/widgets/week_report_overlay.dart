@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/core/domain/intervals.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
-import 'package:live_vitalist/core/theme/palette.dart';
+import 'package:live_vitalist/core/theme/app_colors_theme.dart';
+import 'package:live_vitalist/features/reports/presentation/theme/report_styles.dart';
 import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
 import 'package:live_vitalist/features/nutrient_display/domain/intake.dart';
 import 'package:live_vitalist/features/reports/domain/entities/intake_evolution.dart';
@@ -67,7 +68,7 @@ class WeekReportOverlay extends ConsumerWidget {
                     children: [
                       Icon(
                         Icons.calendar_today_rounded,
-                        color: Palette.selectGreen,
+                        color: AppColorsTheme.of(context).select,
                         size: 26.0,
                       ),
                       SizedBox(width: 12.0),
@@ -83,7 +84,7 @@ class WeekReportOverlay extends ConsumerWidget {
                     ],
                   ),
                   SizedBox(height: 4.0),
-                  Text('Jul 14 - Jul 20', style: Palette.monitor),
+                  Text('Jul 14 - Jul 20', style: ReportStyles.monitor),
                   SizedBox(height: 20.0),
                   if (averageCalories != null) ...[
                     CaloriesHero(
@@ -101,11 +102,14 @@ class WeekReportOverlay extends ConsumerWidget {
                   if (weekReport.currentWeek.tips != null &&
                       weekReport.currentWeek.tips!.isNotEmpty) ...[
                     SizedBox(height: 18.0),
-                    Divider(color: Palette.divGrey, height: 1.0),
+                    Divider(
+                      color: Theme.of(context).dividerColor,
+                      height: 1.0,
+                    ),
                     ...weekReport.currentWeek.tips!.expand(
                       (tip) => [
                         SizedBox(height: 14.0),
-                        Text(tip, style: Palette.monitor),
+                        Text(tip, style: ReportStyles.monitor),
                       ],
                     ),
                   ],

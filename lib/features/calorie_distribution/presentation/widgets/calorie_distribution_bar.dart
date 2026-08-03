@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:live_vitalist/core/theme/palette.dart';
+import 'package:live_vitalist/core/theme/app_text_styles_theme.dart';
 import 'package:live_vitalist/features/nutrient_display/presentation/nutrients_display_constants.dart';
 
 class CalorieDistributionBar extends StatelessWidget {
@@ -14,13 +14,13 @@ class CalorieDistributionBar extends StatelessWidget {
   final double proteinPercent;
   final double fatsPercent;
 
-  Widget label(String value) {
+  Widget label(BuildContext context, String value) {
     return Text(
       value,
-      style: Palette.dayViewRegular.copyWith(
-        fontSize: fontSize,
-        color: Colors.black.withValues(alpha: 0.6),
-      ),
+      style: AppTextStylesTheme.of(context).dayViewRegular.copyWith(
+            fontSize: fontSize,
+            color: Colors.black.withValues(alpha: 0.6),
+          ),
     );
   }
 
@@ -48,17 +48,20 @@ class CalorieDistributionBar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20.0),
               ),
               child: Center(
-                child: label('Protein ${proteinPercent.toStringAsFixed(0)}%'),
+                child: label(
+                    context, 'Protein ${proteinPercent.toStringAsFixed(0)}%'),
               ),
             ),
           ),
           Align(
             alignment: Alignment.centerLeft,
-            child: label('${spacing}Carbs ${carbsPercent.toStringAsFixed(0)}%'),
+            child: label(
+                context, '${spacing}Carbs ${carbsPercent.toStringAsFixed(0)}%'),
           ),
           Align(
             alignment: Alignment.centerRight,
-            child: label('Fats ${fatsPercent.toStringAsFixed(0)}%$spacing'),
+            child: label(
+                context, 'Fats ${fatsPercent.toStringAsFixed(0)}%$spacing'),
           ),
         ],
       ),

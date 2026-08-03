@@ -5,11 +5,11 @@ import 'package:live_vitalist/core/presentation/widgets/hatched_pill.dart';
 import 'package:live_vitalist/core/presentation/widgets/target_bar/target_bar.dart';
 import 'package:live_vitalist/core/presentation/widgets/target_bar/target_bar_draw_data.dart';
 import 'package:live_vitalist/core/presentation/widgets/target_bar/target_bar_draw_helper.dart';
-import 'package:live_vitalist/core/theme/palette.dart';
 import 'package:live_vitalist/features/nutrient_display/domain/intake.dart';
 import 'package:live_vitalist/features/nutrient_display/presentation/ui_helpers/nutrient_extensions.dart';
 import 'package:live_vitalist/features/nutrient_display/presentation/nutrients_display_constants.dart';
 import 'package:live_vitalist/features/nutrient_display/presentation/widgets/addon_text.dart';
+import 'package:live_vitalist/features/nutrient_display/presentation/widgets/dimmed_parentheses_text.dart';
 
 class NutrientBar extends StatelessWidget {
   final Intake intake;
@@ -51,8 +51,10 @@ class NutrientBar extends StatelessWidget {
       children: [
         Row(
           children: [
-            Palette.dimParentheses(
-                intake.label, Theme.of(context).textTheme.bodyMedium),
+            DimmedParenthesesText(
+              label: intake.label,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
             Spacer(),
             Center(
               child: Text(

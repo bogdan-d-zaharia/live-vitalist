@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
-import 'package:live_vitalist/core/theme/palette.dart';
+import 'package:live_vitalist/core/theme/app_colors_theme.dart';
 import 'package:live_vitalist/core/presentation/widgets/data_input/number_input.dart';
 import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
@@ -49,7 +49,10 @@ class _AlimentResultTileState extends ConsumerState<AlimentResultTile> {
                 children: [
                   Expanded(child: Text(data.name, softWrap: true)),
                   if (pending != null)
-                    const Icon(Icons.check_rounded, color: Palette.selectGreen),
+                    Icon(
+                      Icons.check_rounded,
+                      color: AppColorsTheme.of(context).select,
+                    ),
                 ],
               ),
             ),

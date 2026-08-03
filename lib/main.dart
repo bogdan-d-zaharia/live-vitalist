@@ -7,6 +7,9 @@ import 'features/notifications/notification_handler.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'features/settings/data/settings_data.dart';
+import 'core/theme/app_background_theme.dart';
+import 'core/theme/app_colors_theme.dart';
+import 'core/theme/app_text_styles_theme.dart';
 
 // Fetching announcements from localhost works
 // by using ngrok with the port.
@@ -39,6 +42,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final searchBarTheme = SearchBarThemeData()
+        .copyWith(shadowColor: WidgetStatePropertyAll(Colors.green));
     return ProviderScope(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -48,18 +53,30 @@ class MyApp extends StatelessWidget {
             seedColor: Colors.green,
             brightness: Brightness.light,
           ),
+          searchBarTheme: searchBarTheme,
           useMaterial3: true,
+          extensions: [
+            AppBackgroundTheme.light,
+            AppColorsTheme.light,
+            AppTextStylesTheme.light,
+          ],
         ),
         darkTheme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
             seedColor: Colors.green,
             brightness: Brightness.dark,
           ),
+          searchBarTheme: searchBarTheme,
           useMaterial3: true,
+          extensions: [
+            AppBackgroundTheme.dark,
+            AppColorsTheme.dark,
+            AppTextStylesTheme.dark,
+          ],
         ),
         themeMode: ThemeMode.system,
-        // home: SettingsData.isLoggedIn ? AuthGate() : OnboardingScreen(),
-        home: OnboardingScreen(),
+        home: SettingsData.isLoggedIn ? AuthGate() : OnboardingScreen(),
+        // home: OnboardingScreen(),
       ),
     );
   }
