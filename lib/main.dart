@@ -75,8 +75,8 @@ class MyApp extends StatelessWidget {
           ],
         ),
         themeMode: ThemeMode.system,
-        home: SettingsData.isLoggedIn ? AuthGate() : OnboardingScreen(),
-        // home: OnboardingScreen(),
+        // home: SettingsData.isLoggedIn ? AuthGate() : OnboardingScreen(),
+        home: OnboardingScreen(),
       ),
     );
   }

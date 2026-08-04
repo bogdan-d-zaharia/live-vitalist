@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/features/authentication/auth_gate.dart';
 import 'package:live_vitalist/features/onboarding/domain/onboarding_step.dart';
 import 'package:live_vitalist/features/onboarding/presentation/controllers/onboarding_controller.dart';
-import 'package:live_vitalist/features/onboarding/presentation/screens/complexity_screen.dart';
+import 'package:live_vitalist/features/onboarding/presentation/screens/goal_screen.dart';
+import 'package:live_vitalist/features/onboarding/presentation/screens/nutrients_screen.dart';
 import 'package:live_vitalist/features/onboarding/presentation/screens/streak_screen.dart';
 import 'package:live_vitalist/features/onboarding/presentation/widgets/completion_widget.dart';
 
@@ -16,10 +17,10 @@ class OnboardingScreen extends ConsumerStatefulWidget {
 
 class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   final _pages = OnboardingStep.values
-      .expand((e) => [e, e, e])
       .map<Widget>(
         (step) => switch (step) {
-          OnboardingStep.complexity => const ComplexityScreen(),
+          OnboardingStep.goal => const GoalScreen(),
+          OnboardingStep.nutrients => const NutrientsScreen(),
           OnboardingStep.streak => const StreakScreen(),
         },
       )
@@ -64,6 +65,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     ref.listen(indexProvider, (_, next) => _onStepChanged(next));
     final controllerNotifier = ref.read(onboardingControllerProvider.notifier);
 
+    final borderRadius = BorderRadius.circular(16.0);
+    final colorScheme = Theme.of(context).colorScheme;
+
     return PopScope(
       canPop: stepIndex == 0,
       onPopInvokedWithResult: (didPop, _) {
@@ -71,14 +75,55 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         controllerNotifier.previousStep();
       },
       child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: controllerNotifier.nextStep,
-          child: Icon(Icons.arrow_forward),
+        floatingActionButton: Ink(
+          width: 56.0,
+          height: 56.0,
+          decoration: BoxDecoration(
+            borderRadius: borderRadius,
+            color: colorScheme.onPrimaryContainer,
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color.lerp(colorScheme.onPrimaryContainer,
+                    colorScheme.onInverseSurface, 0.2)!,
+                Color.lerp(colorScheme.onPrimaryContainer,
+                    colorScheme.onSurface, 0.2)!,
+              ],
+            ),
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 12.0,
+                offset: Offset(0.0, 4.0),
+                color: colorScheme.shadow.withValues(alpha: 0.5),
+              ),
+            ],
+          ),
+          child: InkWell(
+            highlightColor: colorScheme.primary,
+            onTap: controllerNotifier.nextStep,
+            borderRadius: borderRadius,
+            child: Icon(
+              Icons.arrow_forward_rounded,
+              color: colorScheme.onSecondary,
+            ),
+          ),
         ),
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: controllerNotifier.nextStep,
+        //   child: Icon(Icons.arrow_forward),
+        // ),
         body: SafeArea(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Expanded(
+                child: PageView(
+                  controller: _pageController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: _pages,
+                ),
+              ),
               Padding(
                 padding: EdgeInsets.all(16.0),
                 child: SizedBox(
@@ -88,13 +133,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     count: _pages.length,
                     index: stepIndex,
                   ),
-                ),
-              ),
-              Expanded(
-                child: PageView(
-                  controller: _pageController,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: _pages,
                 ),
               ),
             ],

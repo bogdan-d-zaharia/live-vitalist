@@ -12,9 +12,13 @@ part of 'onboarding_data.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 
+bool _$setEquals<T>(Set<T> a, Set<T> b) =>
+    a.length == b.length && a.containsAll(b);
+
 /// @nodoc
 mixin _$OnboardingData {
-  ComplexityOption get complexity;
+  GoalOption get goal;
+  Set<NutrientsOption> get nutrients;
   StreakOption get streak;
 
   /// Create a copy of OnboardingData
@@ -30,17 +34,18 @@ mixin _$OnboardingData {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is OnboardingData &&
-            (identical(other.complexity, complexity) ||
-                other.complexity == complexity) &&
+            (identical(other.goal, goal) || other.goal == goal) &&
+            _$setEquals(other.nutrients, nutrients) &&
             (identical(other.streak, streak) || other.streak == streak));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, complexity, streak);
+  int get hashCode =>
+      Object.hash(runtimeType, goal, Object.hashAllUnordered(nutrients), streak);
 
   @override
   String toString() {
-    return 'OnboardingData(complexity: $complexity, streak: $streak)';
+    return 'OnboardingData(goal: $goal, nutrients: $nutrients, streak: $streak)';
   }
 }
 
@@ -50,7 +55,7 @@ abstract mixin class $OnboardingDataCopyWith<$Res> {
           OnboardingData value, $Res Function(OnboardingData) _then) =
       _$OnboardingDataCopyWithImpl;
   @useResult
-  $Res call({ComplexityOption complexity, StreakOption streak});
+  $Res call({GoalOption goal, Set<NutrientsOption> nutrients, StreakOption streak});
 }
 
 /// @nodoc
@@ -66,14 +71,19 @@ class _$OnboardingDataCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? complexity = null,
+    Object? goal = null,
+    Object? nutrients = null,
     Object? streak = null,
   }) {
     return _then(OnboardingData(
-      complexity: null == complexity
-          ? _self.complexity
-          : complexity // ignore: cast_nullable_to_non_nullable
-              as ComplexityOption,
+      goal: null == goal
+          ? _self.goal
+          : goal // ignore: cast_nullable_to_non_nullable
+              as GoalOption,
+      nutrients: null == nutrients
+          ? _self.nutrients
+          : nutrients // ignore: cast_nullable_to_non_nullable
+              as Set<NutrientsOption>,
       streak: null == streak
           ? _self.streak
           : streak // ignore: cast_nullable_to_non_nullable

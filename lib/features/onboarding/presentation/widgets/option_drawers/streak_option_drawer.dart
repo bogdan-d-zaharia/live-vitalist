@@ -1,30 +1,42 @@
-import 'package:flutter/material.dart' hide SelectableText;
+import 'package:flutter/material.dart';
+import 'package:live_vitalist/core/theme/custom_icons.dart';
 import 'package:live_vitalist/features/onboarding/domain/options/streak_option.dart';
-import 'package:live_vitalist/features/onboarding/presentation/widgets/selectable_text.dart';
+import 'package:live_vitalist/features/onboarding/presentation/widgets/option_card.dart';
 
 class StreakOptionDrawer extends StatelessWidget {
   final StreakOption streak;
   final bool isSelected;
+  final VoidCallback onTap;
+
   const StreakOptionDrawer({
     super.key,
     required this.streak,
     required this.isSelected,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final string = switch (streak) {
-      StreakOption.show => 'Yes! I love streaks!',
-      StreakOption.hide => 'No, I find them annoying.',
+    final icon = switch (streak) {
+      StreakOption.show => CustomIcons.streakOn,
+      StreakOption.hide => CustomIcons.streakOff,
+      // _ => Icons.account_balance_rounded,
     };
-    final text = SelectableText(string, isSelected: isSelected);
-    final visibility = switch (streak) {
-      StreakOption.show => Icon(Icons.visibility_outlined),
-      StreakOption.hide => Icon(Icons.visibility_off_outlined),
+    final title = switch (streak) {
+      StreakOption.show => "Yes! I love streaks!",
+      StreakOption.hide => "No, I find them annoying.",
     };
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [text, visibility],
+    final footer = switch (streak) {
+      StreakOption.show => "Keep me accountable daily",
+      StreakOption.hide => "Just track my progress",
+    };
+
+    return OptionCard(
+      icon: icon,
+      title: title,
+      footer: footer,
+      isSelected: isSelected,
+      onTap: onTap,
     );
   }
 }

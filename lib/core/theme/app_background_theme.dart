@@ -16,7 +16,7 @@ class AppBackgroundTheme extends ThemeExtension<AppBackgroundTheme> {
       Color.fromARGB(200, 255, 255, 255),
       Color.fromARGB(60, 124, 225, 93),
       Color.fromARGB(200, 255, 255, 255),
-      Color.fromARGB(80, 215, 251, 70),
+      Color.fromARGB(80, 112, 251, 70),
     ],
     washColor: Colors.white,
   );

@@ -16,7 +16,7 @@ class MiniCard extends StatelessWidget {
     final color = colorScheme.surfaceContainerLow;
     final borderRadius = BorderRadius.circular(24.0);
     return Card(
-      color: color.withValues(alpha: 0.4),
+      color: color.withValues(alpha: 0.7),
       elevation: 0,
       shadowColor: Colors.transparent,
       surfaceTintColor: Colors.transparent,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:live_vitalist/features/onboarding/domain/onboarding_step.dart';
 import 'package:live_vitalist/features/onboarding/domain/options/streak_option.dart';
 import 'package:live_vitalist/features/onboarding/presentation/controllers/onboarding_controller.dart';
 import 'package:live_vitalist/features/onboarding/presentation/screens/selectable_screen.dart';
@@ -15,14 +14,17 @@ class StreakScreen extends ConsumerWidget {
         .select((onboardingState) => onboardingState.data.streak);
     final controllerNotifier = ref.read(onboardingControllerProvider.notifier);
     final selected = ref.watch(streakProvider);
-    final optionsEntries = StreakOption.values.map((e) =>
-        MapEntry(e, StreakOptionDrawer(streak: e, isSelected: e == selected)));
+    final options = StreakOption.values
+        .map((e) => StreakOptionDrawer(
+              streak: e,
+              isSelected: e == selected,
+              onTap: () => controllerNotifier.setStreak(e),
+            ))
+        .toList();
 
     return SelectableScreen(
-      question: OnboardingStep.streak.question,
-      options: Map.fromEntries(optionsEntries),
-      selected: ref.watch(streakProvider),
-      select: controllerNotifier.setStreak,
+      question: "Do you like having a streak?",
+      options: options,
     );
   }
 }
