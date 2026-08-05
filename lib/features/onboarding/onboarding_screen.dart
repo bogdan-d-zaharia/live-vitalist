@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
 import 'package:live_vitalist/features/onboarding/presentation/controllers/onboarding_controller.dart';
 import 'package:live_vitalist/features/onboarding/presentation/screens/goal_screen.dart';
 import 'package:live_vitalist/features/onboarding/presentation/screens/nutrients_screen.dart';
@@ -40,6 +41,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     if (!mounted) return;
 
     if (isAccepted) {
+      ref.read(nutrientsProvider.notifier).loadFromOnboarding();
       Navigator.pop(context, true);
     } else {
       ref.read(onboardingControllerProvider.notifier).previousStep();

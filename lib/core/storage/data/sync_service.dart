@@ -65,6 +65,9 @@ class SyncService extends _$SyncService {
       await _saveProviders(); // (except order)
       await _storageNotifier.deleteLocal();
       await _clearProviders();
+      // TODO: Make the providers load on build()
+      // -> at startup by themselves
+      // -> after the invalidation
       await _loadProviders();
 
       _pushLocalOrder(localOrder);
