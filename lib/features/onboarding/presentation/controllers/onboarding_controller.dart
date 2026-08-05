@@ -38,7 +38,26 @@ class OnboardingController extends _$OnboardingController {
   void previousStep() =>
       state.stepIndex != 0 ? _setIndex(state.stepIndex - 1) : null;
 
-  void setGoal(GoalOption goal) => _setData(state.data.copyWith(goal: goal));
+  void setGoal(GoalOption goal) {
+    _setData(state.data.copyWith(goal: goal));
+
+    final Set<NutrientsOption> nutrients = switch (goal) {
+      GoalOption.loseWeight => {},
+      GoalOption.buildMuscle => {
+          NutrientsOption.macros,
+        },
+      GoalOption.improveHealth => {
+          NutrientsOption.macros,
+          NutrientsOption.riskFactors,
+        },
+      GoalOption.improvePerformance => {
+          NutrientsOption.macros,
+          NutrientsOption.electrolytes,
+          NutrientsOption.minerals,
+        }
+    };
+    _setData(state.data.copyWith(nutrients: nutrients));
+  }
 
   void toggleNutrient(NutrientsOption nutrient) {
     final nutrients = state.data.nutrients;

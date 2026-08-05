@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:live_vitalist/core/presentation/widgets/gradient_scaffold.dart';
 import 'package:live_vitalist/features/calorie_distribution/calorie_distribution_card.dart';
 import 'package:live_vitalist/features/announcements/data/announcements.dart';
 import 'package:live_vitalist/features/announcements/data/announcements_api.dart';
@@ -61,8 +60,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     final searchNotifier = ref.read(alimentSearchProvider.notifier);
 
-    return GradientScaffold(
-      extendBodyBehindAppBar: true,
+    return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
@@ -108,7 +106,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         children: [
           ListView(
             padding: EdgeInsets.only(
-              top: MediaQuery.viewPaddingOf(context).top + kToolbarHeight,
+              // top: MediaQuery.viewPaddingOf(context).top + kToolbarHeight,
               bottom: 100.0,
               left: 8.0,
               right: 8.0,

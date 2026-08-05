@@ -75,7 +75,12 @@ class OptionCard extends StatelessWidget {
                       EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
                   child: Row(
                     children: [
-                      Icon(icon, size: 42.0, color: contentColor),
+                      Icon(
+                        icon,
+                        size: 42.0,
+                        color: contentColor,
+                        shadows: [Shadow(color: contentColor, blurRadius: 1.0)],
+                      ),
                       SizedBox(width: 16.0),
                       Expanded(
                         child: Column(

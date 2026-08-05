@@ -1,15 +1,13 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firebase_app_check/firebase_app_check.dart';
-import 'package:live_vitalist/features/onboarding/onboarding_screen.dart';
-import 'features/authentication/auth_gate.dart';
-import 'features/notifications/notification_handler.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
-import 'features/settings/data/settings_data.dart';
-import 'core/theme/app_background_theme.dart';
-import 'core/theme/app_colors_theme.dart';
-import 'core/theme/app_text_styles_theme.dart';
+import 'package:live_vitalist/core/theme/app_colors_theme.dart';
+import 'package:live_vitalist/core/theme/app_text_styles_theme.dart';
+import 'package:live_vitalist/features/authentication/auth_gate.dart';
+import 'package:live_vitalist/features/notifications/notification_handler.dart';
+import 'package:live_vitalist/features/settings/data/settings_data.dart';
+import 'package:live_vitalist/firebase_options.dart';
 
 // Fetching announcements from localhost works
 // by using ngrok with the port.
@@ -42,8 +40,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final searchBarTheme = SearchBarThemeData()
-        .copyWith(shadowColor: WidgetStatePropertyAll(Colors.green));
     return ProviderScope(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -53,10 +49,8 @@ class MyApp extends StatelessWidget {
             seedColor: Colors.green,
             brightness: Brightness.light,
           ),
-          searchBarTheme: searchBarTheme,
           useMaterial3: true,
           extensions: [
-            AppBackgroundTheme.light,
             AppColorsTheme.light,
             AppTextStylesTheme.light,
           ],
@@ -66,17 +60,14 @@ class MyApp extends StatelessWidget {
             seedColor: Colors.green,
             brightness: Brightness.dark,
           ),
-          searchBarTheme: searchBarTheme,
           useMaterial3: true,
           extensions: [
-            AppBackgroundTheme.dark,
             AppColorsTheme.dark,
             AppTextStylesTheme.dark,
           ],
         ),
         themeMode: ThemeMode.system,
-        // home: SettingsData.isLoggedIn ? AuthGate() : OnboardingScreen(),
-        home: OnboardingScreen(),
+        home: AuthGate(),
       ),
     );
   }

@@ -16,6 +16,7 @@ class LegalRequirement {
 }
 
 abstract interface class ILegalHandler {
-  Future<List<LegalRequirement>> fetch();
+  Future<List<LegalRequirement>?> fetch();
   Future<void> accept(List<LegalRequirement> requirements);
+  Future<bool> acceptAll();
 }

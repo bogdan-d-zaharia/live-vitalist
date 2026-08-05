@@ -5,6 +5,9 @@ class CustomIcons {
 
   static const String _fontFamily = 'Live Vitalist Icons';
 
+  static const IconData logo = IconData(0xE100, fontFamily: _fontFamily);
+
+  //#region // * Onboarding * //
   static const IconData weight = IconData(0xE000, fontFamily: _fontFamily);
   static const IconData muscle = IconData(0xE001, fontFamily: _fontFamily);
   static const IconData health = IconData(0xE002, fontFamily: _fontFamily);
@@ -19,4 +22,5 @@ class CustomIcons {
 
   static const IconData streakOn = IconData(0xE020, fontFamily: _fontFamily);
   static const IconData streakOff = IconData(0xE021, fontFamily: _fontFamily);
+  //#endregion // * Onboarding * //
 }
