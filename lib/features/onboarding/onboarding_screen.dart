@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
+import 'package:live_vitalist/core/presentation/widgets/loading_fade_overlay.dart';
 import 'package:live_vitalist/features/onboarding/presentation/controllers/onboarding_controller.dart';
 import 'package:live_vitalist/features/onboarding/presentation/screens/goal_screen.dart';
 import 'package:live_vitalist/features/onboarding/presentation/screens/nutrients_screen.dart';
@@ -12,8 +12,7 @@ import 'package:live_vitalist/features/onboarding/presentation/widgets/completio
 import 'package:live_vitalist/features/onboarding/presentation/widgets/no_connection_dialog.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
-  final Future<bool> Function() acceptLegal;
-  const OnboardingScreen({super.key, required this.acceptLegal});
+  const OnboardingScreen({super.key});
 
   @override
   ConsumerState<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -37,11 +36,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   }
 
   Future<void> _tryFinish() async {
-    final isAccepted = await widget.acceptLegal();
+    showLoadingFadeOverlay(context);
+    final finishing = ref.read(onboardingControllerProvider.notifier).finish();
+    await Future.delayed(Duration(seconds: 3));
+    final didFinish = await finishing;
     if (!mounted) return;
+    Navigator.pop(context);
 
-    if (isAccepted) {
-      ref.read(nutrientsProvider.notifier).loadFromOnboarding();
+    if (didFinish) {
       Navigator.pop(context, true);
     } else {
       ref.read(onboardingControllerProvider.notifier).previousStep();

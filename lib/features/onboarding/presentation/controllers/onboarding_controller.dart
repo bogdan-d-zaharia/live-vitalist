@@ -1,6 +1,8 @@
 // ignore_for_file: annotate_overrides
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:live_vitalist/features/legal/data/legal_handler.dart';
+import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
 import 'package:live_vitalist/features/onboarding/domain/onboarding_data.dart';
 import 'package:live_vitalist/features/onboarding/domain/options/goal_option.dart';
 import 'package:live_vitalist/features/onboarding/domain/options/nutrients_option.dart';
@@ -69,4 +71,11 @@ class OnboardingController extends _$OnboardingController {
 
   void setStreak(StreakOption streak) =>
       _setData(state.data.copyWith(streak: streak));
+
+  Future<bool> finish() async {
+    final isAccepted = await ref.read(legalHandlerProvider).acceptAll();
+    if (!isAccepted) return false;
+    ref.read(nutrientsProvider.notifier).loadFromOnboarding();
+    return true;
+  }
 }

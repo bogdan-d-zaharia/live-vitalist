@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/features/authentication/presentation/controllers/auth_controller.dart';
-import 'package:live_vitalist/features/legal/data/legal_handler.dart';
 import 'package:live_vitalist/features/onboarding/onboarding_screen.dart';
 import 'package:live_vitalist/home_screen.dart';
 
@@ -17,11 +16,7 @@ class _AuthGateState extends ConsumerState<AuthGate> {
     if (!mounted) return;
     final isAccepted = await Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => OnboardingScreen(
-          acceptLegal: ref.read(legalHandlerProvider).acceptAll,
-        ),
-      ),
+      MaterialPageRoute(builder: (context) => OnboardingScreen()),
     );
 
     if (isAccepted == true) {
