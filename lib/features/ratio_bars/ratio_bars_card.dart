@@ -35,26 +35,27 @@ class RatioBarsCard extends ConsumerWidget {
 
     return RatioBars(
       bars: [
-        RatioBar(
-          'Macro distribution (% calories)',
-          [
-            RatioBarElement(
-              'Carbs',
-              (intake['carbs'] ?? 0.0) * 4.0,
-              _carbColor,
-            ),
-            RatioBarElement(
-              'Fats',
-              (intake['fats'] ?? 0.0) * 9.0,
-              _fatColor,
-            ),
-            RatioBarElement(
-              'Protein',
-              (intake['protein'] ?? 0.0) * 4.0,
-              _proteinColor,
-            ),
-          ],
-        ),
+        if (SettingsData.isShowCalorieDistribution)
+          RatioBar(
+            'Macro distribution (% calories)',
+            [
+              RatioBarElement(
+                'Carbs',
+                (intake['carbs'] ?? 0.0) * 4.0,
+                _carbColor,
+              ),
+              RatioBarElement(
+                'Fats',
+                (intake['fats'] ?? 0.0) * 9.0,
+                _fatColor,
+              ),
+              RatioBarElement(
+                'Protein',
+                (intake['protein'] ?? 0.0) * 4.0,
+                _proteinColor,
+              ),
+            ],
+          ),
         if (SettingsData.isShowOmegaBalance)
           RatioBar(
             omegaBalance,

@@ -134,6 +134,23 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
                 children: [
                   const SizedBox(width: 16.0),
                   Checkbox(
+                    value: SettingsData.isShowCalorieDistribution,
+                    onChanged: (val) {
+                      if (val != null) {
+                        setState(
+                            () => SettingsData.isShowCalorieDistribution = val);
+                      }
+                    },
+                  ),
+                  const Text('Show macro distribution'),
+                ],
+              ),
+            ),
+            MiniCard(
+              child: Row(
+                children: [
+                  const SizedBox(width: 16.0),
+                  Checkbox(
                     value: SettingsData.isShowOmegaBalance,
                     onChanged: (val) {
                       if (val != null) {
