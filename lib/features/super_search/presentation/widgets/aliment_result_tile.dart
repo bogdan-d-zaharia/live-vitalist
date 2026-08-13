@@ -43,8 +43,7 @@ class _AlimentResultTileState extends ConsumerState<AlimentResultTile> {
               ),
             ),
             child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
               child: Row(
                 children: [
                   Expanded(child: Text(data.name, softWrap: true)),
@@ -59,8 +58,7 @@ class _AlimentResultTileState extends ConsumerState<AlimentResultTile> {
           ),
           if (pending != null)
             Padding(
-              padding:
-                  const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 12.0),
+              padding: EdgeInsets.only(left: 16.0, right: 16.0, bottom: 12.0),
               child: _buildAmountRow(data, pending),
             ),
         ],
@@ -79,7 +77,7 @@ class _AlimentResultTileState extends ConsumerState<AlimentResultTile> {
             if (val >= 0.0) pending.servingSize = val;
           },
         ),
-        const SizedBox(width: 12.0),
+        SizedBox(width: 12.0),
         Expanded(
           child: DropdownButton<String>(
             isExpanded: true,

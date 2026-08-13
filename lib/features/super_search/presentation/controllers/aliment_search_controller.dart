@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
+import 'package:live_vitalist/features/day/data/day_provider.dart';
 import 'package:live_vitalist/features/super_search/domain/pending_aliment.dart';
 
 @immutable
@@ -55,6 +57,23 @@ class AlimentSearchController extends Notifier<AlimentSearchState> {
       selection:
           state.selection.where((item) => item.alimentID != alimentID).toList(),
     );
+  }
+
+  void commitSelection(String mealName) {
+    final selection = state.selection;
+    final date = ref.read(selectedDatesProvider).first;
+    final dayNotifier = ref.read(dayCacheProvider.notifier);
+
+    for (final item in selection) {
+      dayNotifier.addAliment(date, mealName, item.toInstanced());
+    }
+
+    final bankNotifier = ref.read(alimentBankProvider.notifier);
+    for (final item in selection.reversed) {
+      bankNotifier.setFirst(item.alimentID);
+    }
+
+    exit();
   }
 }
 

@@ -1,42 +1,29 @@
+import 'dart:ui';
+
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
 import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
-import 'package:live_vitalist/features/day/data/day_provider.dart';
 import 'package:live_vitalist/features/super_search/presentation/controllers/aliment_search_controller.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/aliment_result_tile.dart';
+import 'package:live_vitalist/features/super_search/presentation/widgets/empty_search.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/meal_picker_dialog.dart';
+import 'package:live_vitalist/features/super_search/presentation/widgets/search_header.dart';
 import 'package:live_vitalist/features/super_search/super_search_constants.dart';
 
 class SearchOverlay extends ConsumerWidget {
   const SearchOverlay({super.key});
 
   Future<void> _commitSelection(BuildContext context, WidgetRef ref) async {
-    final selection = ref.read(alimentSearchProvider).selection;
     FocusManager.instance.primaryFocus?.unfocus();
-
     final mealName = await showMealPicker(context);
     if (mealName == null) return;
-
-    final date = ref.read(selectedDatesProvider).first;
-
-    for (final aliment in selection.map((item) => item.toInstanced())) {
-      ref.read(dayCacheProvider.notifier).addAliment(date, mealName, aliment);
-    }
-
-    final bankNotifier = ref.read(alimentBankProvider.notifier);
-    for (final item in selection.reversed) {
-      bankNotifier.setFirst(item.alimentID);
-    }
-
-    ref.read(alimentSearchProvider.notifier).exit();
+    ref.read(alimentSearchProvider.notifier).commitSelection(mealName);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // TODO: Cand nu apare niciun rezultat sa apara un rezultat cu bordura mov
-    // de generat.
     final searchState = ref.watch(alimentSearchProvider);
     final bank = ref.watch(alimentBankProvider);
 
@@ -46,54 +33,89 @@ class SearchOverlay extends ConsumerWidget {
           .contains(removeDiacritics(searchState.query.toLowerCase()));
     }).toList();
 
-    return IgnorePointer(
-      ignoring: !searchState.isActive,
-      child: AnimatedOpacity(
-        opacity: searchState.isActive ? 1.0 : 0.0,
-        duration: SuperSearchConstants.overlayFadeDuration,
-        curve: Curves.easeOut,
-        child: TextFieldTapRegion(
-          child: MiniCard(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                left: 12.0,
-                right: 12.0,
-                top: 16.0,
-                bottom: SuperSearchConstants.overlayBottomInset,
-              ),
-              child: Column(
-                children: [
-                  const Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text('Aliments', style: TextStyle(fontSize: 20.0)),
-                  ),
-                  Divider(
-                    height: 24.0,
-                    color: Theme.of(context).dividerColor,
-                  ),
-                  Expanded(
-                    child: ListView(
-                      children: filteredKeys.map((id) {
-                        return AlimentResultTile(
-                          key: ValueKey(id),
-                          alimentID: id,
-                        );
-                      }).toList(),
+    final selectedCount = searchState.selection.length;
+    final selectionLabel =
+        selectedCount == 1 ? 'Add aliment' : 'Add $selectedCount aliments';
+
+    return AnimatedOpacity(
+      opacity: searchState.isActive ? 1.0 : 0.0,
+      duration: SuperSearchConstants.overlayFadeDuration,
+      curve: Curves.easeOut,
+      child: ClipRRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+          child: IgnorePointer(
+            ignoring: !searchState.isActive,
+            child: TextFieldTapRegion(
+              onTapOutside: (_) {
+                FocusManager.instance.primaryFocus?.unfocus();
+                ref.read(alimentSearchProvider.notifier).exit();
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: 16.0,
+                  top: 16.0,
+                  right: 16.0,
+                  bottom: SuperSearchConstants.overlayBottomInset,
+                ),
+                child: MiniCard(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 25.0,
+                      vertical: 20.0,
                     ),
-                  ),
-                  if (searchState.selection.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 40.0,
-                        child: ElevatedButton(
-                          onPressed: () => _commitSelection(context, ref),
-                          child: const Text('Done'),
+                    child: Column(
+                      children: [
+                        SearchHeader(
+                          query: searchState.query,
+                          resultCount: filteredKeys.length,
                         ),
-                      ),
+                        Divider(
+                          height: 24.0,
+                          color: Theme.of(context).dividerColor,
+                        ),
+                        Expanded(
+                          child: AnimatedSwitcher(
+                            duration: SuperSearchConstants.overlayFadeDuration,
+                            child: filteredKeys.isEmpty
+                                ? EmptySearch()
+                                : ListView.builder(
+                                    key: const ValueKey('search-results'),
+                                    padding: EdgeInsets.zero,
+                                    itemCount: filteredKeys.length,
+                                    itemBuilder: (context, index) {
+                                      final id = filteredKeys[index];
+                                      return AlimentResultTile(
+                                        key: ValueKey(id),
+                                        alimentID: id,
+                                      );
+                                    },
+                                  ),
+                          ),
+                        ),
+                        AnimatedSize(
+                          duration: SuperSearchConstants.overlayFadeDuration,
+                          curve: Curves.easeOut,
+                          child: searchState.selection.isEmpty
+                              ? const SizedBox.shrink()
+                              : Padding(
+                                  padding: const EdgeInsets.only(top: 12.0),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    height: 48.0,
+                                    child: ElevatedButton.icon(
+                                      onPressed: () =>
+                                          _commitSelection(context, ref),
+                                      icon: const Icon(Icons.add_rounded),
+                                      label: Text(selectionLabel),
+                                    ),
+                                  ),
+                                ),
+                        ),
+                      ],
                     ),
-                ],
+                  ),
+                ),
               ),
             ),
           ),
