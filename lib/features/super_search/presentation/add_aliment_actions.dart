@@ -7,6 +7,8 @@ import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
 import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/aliment_data_editor.dart';
 import 'package:live_vitalist/features/day/data/day_provider.dart';
 import 'package:live_vitalist/features/super_search/data/aliment_generator.dart';
+import 'package:live_vitalist/features/super_search/domain/pending_aliment.dart';
+import 'package:live_vitalist/features/super_search/presentation/controllers/aliment_search_controller.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/meal_picker_dialog.dart';
 
 abstract final class AddAlimentActions {
@@ -27,6 +29,17 @@ abstract final class AddAlimentActions {
 
     final id = aliment.hashCode.toString();
     ref.read(alimentBankProvider.notifier).setAliment(id, aliment);
+
+    final notifier = ref.read(alimentSearchProvider.notifier);
+    notifier.toggle(
+      PendingAliment(
+        alimentID: id,
+        servingSize: 1.0,
+        unit: aliment.unitSynonyms.isNotEmpty
+            ? aliment.unitSynonyms.keys.first
+            : aliment.unit,
+      ),
+    );
   }
 
   /// Creates a one-off aliment and puts it straight into a meal.
