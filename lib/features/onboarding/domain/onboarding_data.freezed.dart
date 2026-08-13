@@ -12,9 +12,6 @@ part of 'onboarding_data.dart';
 // dart format off
 T _$identity<T>(T value) => value;
 
-bool _$setEquals<T>(Set<T> a, Set<T> b) =>
-    a.length == b.length && a.containsAll(b);
-
 /// @nodoc
 mixin _$OnboardingData {
   GoalOption get goal;
@@ -35,13 +32,13 @@ mixin _$OnboardingData {
         (other.runtimeType == runtimeType &&
             other is OnboardingData &&
             (identical(other.goal, goal) || other.goal == goal) &&
-            _$setEquals(other.nutrients, nutrients) &&
+            const DeepCollectionEquality().equals(other.nutrients, nutrients) &&
             (identical(other.streak, streak) || other.streak == streak));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, goal, Object.hashAllUnordered(nutrients), streak);
+  int get hashCode => Object.hash(runtimeType, goal,
+      const DeepCollectionEquality().hash(nutrients), streak);
 
   @override
   String toString() {
@@ -55,7 +52,8 @@ abstract mixin class $OnboardingDataCopyWith<$Res> {
           OnboardingData value, $Res Function(OnboardingData) _then) =
       _$OnboardingDataCopyWithImpl;
   @useResult
-  $Res call({GoalOption goal, Set<NutrientsOption> nutrients, StreakOption streak});
+  $Res call(
+      {GoalOption goal, Set<NutrientsOption> nutrients, StreakOption streak});
 }
 
 /// @nodoc
