@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
+import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/widgets/editor_inputs/editor_input_decoration.dart';
 
 class UnitSynonymInput extends StatelessWidget {
   final TextEditingController nameController;
@@ -19,39 +19,50 @@ class UnitSynonymInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MiniCard(
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Row(
-          children: [
-            Expanded(
-              flex: 2,
-              child: TextField(
-                controller: nameController,
-                decoration: const InputDecoration(hintText: 'Name'),
-                onSubmitted: onRename,
+    void submitValue(String rawValue) {
+      final parsed = double.tryParse(rawValue.trim());
+      if (parsed == null || parsed <= 0) return;
+      onValueChanged(parsed);
+    }
+
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 6.0),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 2,
+            child: TextField(
+              controller: nameController,
+              textInputAction: TextInputAction.next,
+              decoration: editorInputDecoration(
+                context,
+                hintText: 'Unit name',
+                icon: Icons.sell_outlined,
               ),
+              onSubmitted: onRename,
             ),
-            const SizedBox(width: 8),
-            Expanded(
-              flex: 1,
-              child: TextField(
-                controller: valueController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(hintText: 'Value'),
-                onSubmitted: (val) {
-                  final parsed = double.tryParse(val.trim());
-                  if (parsed == null || parsed <= 0) return;
-                  onValueChanged(parsed);
-                },
+          ),
+          SizedBox(width: 8.0),
+          Expanded(
+            flex: 1,
+            child: TextField(
+              controller: valueController,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+              textInputAction: TextInputAction.done,
+              decoration: editorInputDecoration(
+                context,
+                hintText: 'Amount',
               ),
+              onSubmitted: submitValue,
             ),
-            IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: onDelete,
-            ),
-          ],
-        ),
+          ),
+          SizedBox(width: 8.0),
+          IconButton.filledTonal(
+            tooltip: 'Delete synonym',
+            icon: Icon(Icons.delete_outline_rounded),
+            onPressed: onDelete,
+          ),
+        ],
       ),
     );
   }

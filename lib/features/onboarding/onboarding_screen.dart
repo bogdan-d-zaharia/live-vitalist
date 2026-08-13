@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/core/presentation/widgets/animated_navigation_buttons.dart';
+import 'package:live_vitalist/core/presentation/widgets/completion_widget.dart';
 import 'package:live_vitalist/core/presentation/widgets/loading_fade_overlay.dart';
 import 'package:live_vitalist/features/onboarding/presentation/controllers/onboarding_controller.dart';
 import 'package:live_vitalist/features/onboarding/presentation/screens/goal_screen.dart';
@@ -7,8 +9,6 @@ import 'package:live_vitalist/features/onboarding/presentation/screens/nutrients
 import 'package:live_vitalist/features/onboarding/presentation/screens/streak_screen.dart';
 import 'package:live_vitalist/features/onboarding/presentation/screens/terms_screen.dart';
 import 'package:live_vitalist/features/onboarding/presentation/screens/welcome_screen.dart';
-import 'package:live_vitalist/features/onboarding/presentation/widgets/animated_navigation_buttons.dart';
-import 'package:live_vitalist/features/onboarding/presentation/widgets/completion_widget.dart';
 import 'package:live_vitalist/features/onboarding/presentation/widgets/no_connection_dialog.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
@@ -105,9 +105,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               Padding(
                 padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
                 child: AnimatedNavigationButtons(
-                  showBackButton: stepIndex > 0,
                   onNext: controllerNotifier.nextStep,
-                  onPrevious: controllerNotifier.previousStep,
+                  onPrevious:
+                      stepIndex > 0 ? controllerNotifier.previousStep : null,
                 ),
               ),
             ],
