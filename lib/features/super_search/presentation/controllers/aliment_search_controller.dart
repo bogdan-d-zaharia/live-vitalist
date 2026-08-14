@@ -9,11 +9,15 @@ class AlimentSearchState {
   final bool isActive;
   final String query;
   final List<PendingAliment> selection;
+  final DateTime? date;
+  final String? mealName;
 
   const AlimentSearchState({
     this.isActive = false,
     this.query = '',
     this.selection = const [],
+    this.date,
+    this.mealName,
   });
 
   bool isSelected(String alimentID) =>
@@ -23,11 +27,15 @@ class AlimentSearchState {
     bool? isActive,
     String? query,
     List<PendingAliment>? selection,
+    DateTime? date,
+    String? mealName,
   }) {
     return AlimentSearchState(
       isActive: isActive ?? this.isActive,
       query: query ?? this.query,
       selection: selection ?? this.selection,
+      date: date ?? this.date,
+      mealName: mealName ?? this.mealName,
     );
   }
 }
@@ -38,7 +46,11 @@ class AlimentSearchController extends Notifier<AlimentSearchState> {
   @override
   AlimentSearchState build() => const AlimentSearchState();
 
-  void enter() => state = state.copyWith(isActive: true);
+  void enter({DateTime? date, String? mealName}) => state = state.copyWith(
+        isActive: true,
+        date: date,
+        mealName: mealName,
+      );
 
   void exit() => state = const AlimentSearchState();
 
@@ -59,9 +71,8 @@ class AlimentSearchController extends Notifier<AlimentSearchState> {
     );
   }
 
-  void commitSelection(String mealName) {
+  void commitSelection({required DateTime date, required String mealName}) {
     final selection = state.selection;
-    final date = ref.read(selectedDatesProvider).first;
     final dayNotifier = ref.read(dayCacheProvider.notifier);
 
     for (final item in selection) {

@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_extensions.dart';
 import 'package:live_vitalist/features/day/domain/meal.dart';
-import 'package:live_vitalist/features/meals_journal/presentation/aliment_editing_extensions.dart';
 import 'package:live_vitalist/features/meals_journal/presentation/widgets/custom_divider.dart';
 import 'package:live_vitalist/features/meals_journal/presentation/widgets/meal_editor.dart';
 import 'package:live_vitalist/features/meals_journal/presentation/widgets/meal_element.dart';
+import 'package:live_vitalist/features/super_search/presentation/controllers/aliment_search_controller.dart';
 
-import '../aliment/domain/aliment.dart';
 import '../aliment/data/aliment_bank.dart';
 import '../../core/presentation/widgets/custom_card.dart';
 import '../day/domain/day.dart';
@@ -69,14 +68,11 @@ class MealsJournal extends ConsumerWidget {
               dayNotifier.removeMeal(date, meal.name);
             }
           },
-          onAdd: () async {
-            //TODO: Copied to `MealEditor`
-            final newAliment =
-                await InstancedAliment.empty.pushEditingScreen(context);
-
-            if (newAliment != null && newAliment.alimentID != '') {
-              dayNotifier.addAliment(date, meal.name, newAliment);
-            }
+          onAdd: () {
+            ref.read(alimentSearchProvider.notifier).enter(
+                  date: date,
+                  mealName: meal.name,
+                );
           },
         );
       },

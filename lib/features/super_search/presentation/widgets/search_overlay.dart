@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
 import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
+import 'package:live_vitalist/features/day/data/day_provider.dart';
 import 'package:live_vitalist/features/super_search/presentation/controllers/aliment_search_controller.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/aliment_result_tile.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/empty_search.dart';
@@ -17,9 +18,20 @@ class SearchOverlay extends ConsumerWidget {
 
   Future<void> _commitSelection(BuildContext context, WidgetRef ref) async {
     FocusManager.instance.primaryFocus?.unfocus();
-    final mealName = await showMealPicker(context);
-    if (mealName == null) return;
-    ref.read(alimentSearchProvider.notifier).commitSelection(mealName);
+
+    final searchState = ref.read(alimentSearchProvider);
+    var date = searchState.date;
+    var mealName = searchState.mealName;
+
+    if (date == null || mealName == null) {
+      mealName = await showMealPicker(context);
+      if (mealName == null) return;
+      date = ref.read(selectedDatesProvider).first;
+    }
+
+    ref
+        .read(alimentSearchProvider.notifier)
+        .commitSelection(date: date, mealName: mealName);
   }
 
   @override
@@ -52,7 +64,7 @@ class SearchOverlay extends ConsumerWidget {
                 ref.read(alimentSearchProvider.notifier).exit();
               },
               child: Padding(
-                padding: const EdgeInsets.only(
+                padding: EdgeInsets.only(
                   left: 16.0,
                   top: 16.0,
                   right: 16.0,

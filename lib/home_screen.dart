@@ -106,7 +106,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         children: [
           ListView(
             padding: EdgeInsets.only(
-              // top: MediaQuery.viewPaddingOf(context).top + kToolbarHeight,
               bottom: 100.0,
               left: 8.0,
               right: 8.0,
@@ -121,9 +120,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               MealsJournal(),
             ],
           ),
-          Positioned.fill(
-            child: SearchOverlay(),
-          ),
+          Positioned.fill(child: SearchOverlay()),
           Positioned(
             bottom: 20.0,
             left: 12.0,

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/core/presentation/widgets/selectable_icon_button.dart';
 import 'package:live_vitalist/core/presentation/widgets/sized_icon_button.dart';
 import 'package:live_vitalist/features/super_search/domain/super_bar_suggestion.dart';
+import 'package:live_vitalist/features/super_search/presentation/controllers/aliment_search_controller.dart';
 import 'package:live_vitalist/features/super_search/presentation/controllers/suggestion_controller.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/animated_suggestion_hint.dart';
 import 'package:live_vitalist/features/super_search/super_search_constants.dart';
@@ -69,6 +70,17 @@ class _SuperBarState extends ConsumerState<SuperBar> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(
+      alimentSearchProvider.select((state) => state.isActive),
+      (previous, next) {
+        if (previous != true && next) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) _focusNode.requestFocus();
+          });
+        }
+      },
+    );
+
     final colorScheme = Theme.of(context).colorScheme;
     final barColor = Color.alphaBlend(
       colorScheme.primary.withValues(alpha: 0.04),
