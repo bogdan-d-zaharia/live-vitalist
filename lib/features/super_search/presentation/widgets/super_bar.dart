@@ -70,6 +70,10 @@ class _SuperBarState extends ConsumerState<SuperBar> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final barColor = Color.alphaBlend(
+      colorScheme.primary.withValues(alpha: 0.04),
+      colorScheme.surfaceContainerLow,
+    );
     final suggestionIndex =
         ref.watch(suggestionControllerProvider(widget.suggestions));
     final suggestion = widget.suggestions.items.isEmpty
@@ -113,7 +117,7 @@ class _SuperBarState extends ConsumerState<SuperBar> {
                   return Colors.transparent;
                 }),
                 backgroundColor: WidgetStatePropertyAll(
-                  colorScheme.surfaceContainerHigh.withValues(alpha: 0.65),
+                  barColor.withValues(alpha: 0.72),
                 ),
                 elevation: WidgetStatePropertyAll(0.0),
                 shadowColor: WidgetStatePropertyAll(Colors.transparent),
