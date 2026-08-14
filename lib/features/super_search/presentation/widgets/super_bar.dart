@@ -6,7 +6,7 @@ import 'package:live_vitalist/core/presentation/widgets/selectable_icon_button.d
 import 'package:live_vitalist/core/presentation/widgets/sized_icon_button.dart';
 import 'package:live_vitalist/features/super_search/domain/super_bar_suggestion.dart';
 import 'package:live_vitalist/features/super_search/presentation/controllers/suggestion_controller.dart';
-import 'package:live_vitalist/features/super_search/presentation/fade_in_out_curve.dart';
+import 'package:live_vitalist/features/super_search/presentation/widgets/animated_suggestion_hint.dart';
 import 'package:live_vitalist/features/super_search/super_search_constants.dart';
 
 class SuperBar extends ConsumerStatefulWidget {
@@ -45,8 +45,15 @@ class SuperBar extends ConsumerStatefulWidget {
 }
 
 class _SuperBarState extends ConsumerState<SuperBar> {
+  final FocusNode _focusNode = FocusNode();
   bool isTemp = false;
   bool isGen = false;
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
 
   void onTemp() {
     setState(() {
@@ -87,19 +94,9 @@ class _SuperBarState extends ConsumerState<SuperBar> {
         borderRadius: borderRadius,
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-          child: TweenAnimationBuilder<double>(
-            key: ValueKey(suggestionIndex),
-            tween: Tween(begin: 0.0, end: 1.0),
-            duration: suggestion?.duration ?? Duration.zero,
-            curve: FadeInOutCurve(),
-            builder: (context, value, child) {
-              final hintStyle = Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: colorScheme.onSurfaceVariant
-                        .withValues(alpha: value * 0.6),
-                  );
-
-              return SearchBar(
-                hintStyle: WidgetStatePropertyAll(hintStyle),
+          child: Stack(
+            children: [
+              SearchBar(
                 overlayColor: WidgetStateProperty.resolveWith((states) {
                   if (states.contains(WidgetState.pressed)) {
                     return colorScheme.surface.withValues(alpha: 0.24);
@@ -128,8 +125,8 @@ class _SuperBarState extends ConsumerState<SuperBar> {
                 shape: WidgetStatePropertyAll(
                   RoundedRectangleBorder(borderRadius: borderRadius),
                 ),
-                hintText: suggestion?.text,
                 controller: widget.controller,
+                focusNode: _focusNode,
                 onTap: widget.onEnter,
                 onTapOutside: (event) => widget.onExit?.call(),
                 onChanged: widget.onChanged,
@@ -166,8 +163,25 @@ class _SuperBarState extends ConsumerState<SuperBar> {
                     iconSize: SuperSearchConstants.barIconSize,
                   ),
                 ],
-              );
-            },
+              ),
+              Positioned.fill(
+                child: AnimatedSuggestionHint(
+                  animationKey: suggestionIndex,
+                  text: suggestion?.text,
+                  duration: suggestion?.duration ?? Duration.zero,
+                  controller: widget.controller,
+                  padding: EdgeInsets.only(
+                    left: SuperSearchConstants.barHorizontalPadding +
+                        SuperSearchConstants.barButtonSize +
+                        12.0,
+                    right: SuperSearchConstants.barHorizontalPadding +
+                        SuperSearchConstants.barButtonSize * 2.0 +
+                        SuperSearchConstants.barButtonPadding +
+                        12.0,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
