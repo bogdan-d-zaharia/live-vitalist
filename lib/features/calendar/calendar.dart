@@ -4,9 +4,9 @@ import 'package:intl/intl.dart' as intl;
 import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
 import 'package:live_vitalist/features/day/data/day_provider.dart';
 import 'package:live_vitalist/features/calendar/domain/calendar_constants.dart';
-import 'package:live_vitalist/features/calendar/widgets/calendar_help_dialog.dart';
-import 'package:live_vitalist/features/calendar/widgets/calendar_item.dart';
-import 'package:live_vitalist/features/calendar/widgets/dotted_line.dart';
+import 'package:live_vitalist/features/calendar/presentation/widgets/calendar_help_dialog.dart';
+import 'package:live_vitalist/features/calendar/presentation/widgets/calendar_item.dart';
+import 'package:live_vitalist/features/calendar/presentation/widgets/dotted_line.dart';
 import 'package:live_vitalist/core/presentation/widgets/custom_icon_button.dart';
 import 'package:live_vitalist/features/settings/data/settings_data.dart';
 

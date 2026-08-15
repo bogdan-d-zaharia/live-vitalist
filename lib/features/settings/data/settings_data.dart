@@ -46,7 +46,12 @@ abstract final class SettingsData {
   static bool get isShowOmegaBalance =>
       _prefs.getBool('isShowOmegaBalance') ?? false;
   static set isShowOmegaBalance(bool val) =>
-      _prefs.setBool('isShowOmegaBalance', val);
+      _prefs.setBool('isShowOmegaBalance', val); //isShowCalorieDistribution
+
+  static bool get isShowCalorieDistribution =>
+      _prefs.getBool('isShowCalorieDistribution') ?? false;
+  static set isShowCalorieDistribution(bool val) =>
+      _prefs.setBool('isShowCalorieDistribution', val);
 
   static Future<void> deleteAll() async {
     await _prefs.clear();

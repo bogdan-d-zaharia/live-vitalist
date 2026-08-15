@@ -2,9 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/core/presentation/widgets/animated_navigation_buttons.dart';
+import 'package:live_vitalist/core/presentation/widgets/completion_widget.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
+import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/screens/aliment_details_screen.dart';
+import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/screens/aliment_nutrients_screen.dart';
+import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/screens/aliment_synonyms_screen.dart';
 import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/widgets/save_alert.dart';
-import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/widgets/aliment_data_form.dart';
 import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/widgets/json_editor_button.dart';
 
 class AlimentDataEditor extends ConsumerStatefulWidget {
@@ -20,6 +24,10 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
 
   late final TextEditingController _nameController;
   late final TextEditingController _unitController;
+  final PageController _pageController = PageController();
+  int _pageIndex = 0;
+
+  static const _pageCount = 3;
 
   @override
   void initState() {
@@ -34,6 +42,7 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
   void dispose() {
     _nameController.dispose();
     _unitController.dispose();
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -47,6 +56,26 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
 
   void _popSave() => Navigator.pop(context, data);
   void _popCancel() => Navigator.pop(context, null);
+
+  void _setPage(int index) {
+    FocusManager.instance.primaryFocus?.unfocus();
+    setState(() => _pageIndex = index);
+    _pageController.animateToPage(
+      index,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
+
+  void _nextPage() {
+    if (_pageIndex == _pageCount - 1) {
+      _popSave();
+    } else {
+      _setPage(_pageIndex + 1);
+    }
+  }
+
+  void _previousPage() => _setPage(_pageIndex - 1);
 
   Future<bool?> _showSaveAlert(BuildContext context) {
     return showDialog<bool>(
@@ -72,7 +101,11 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
       canPop: false,
       onPopInvokedWithResult: (didPop, _) {
         if (didPop) return;
-        _confirmPop();
+        if (_pageIndex > 0) {
+          _previousPage();
+        } else {
+          _confirmPop();
+        }
       },
       child: Scaffold(
         appBar: AppBar(
@@ -87,12 +120,56 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
             ),
           ],
         ),
-        body: AlimentDataForm(
-          data: data,
-          nameController: _nameController,
-          unitController: _unitController,
-          onDataChanged: (newData) => setState(() => data = newData),
-          onSave: _popSave,
+        body: SafeArea(
+          top: false,
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(16.0),
+                child: SizedBox(
+                  width: 128.0,
+                  height: 6.0,
+                  child: CompletionWidget(
+                    count: _pageCount,
+                    index: _pageIndex,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: PageView(
+                  controller: _pageController,
+                  physics: NeverScrollableScrollPhysics(),
+                  children: [
+                    AlimentDetailsScreen(
+                      data: data,
+                      nameController: _nameController,
+                      unitController: _unitController,
+                      onDataChanged: (newData) {
+                        setState(() => data = newData);
+                      },
+                    ),
+                    AlimentNutrientsScreen(data: data),
+                    AlimentSynonymsScreen(
+                      data: data,
+                      onDataChanged: (newData) {
+                        setState(() => data = newData);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+                child: AnimatedNavigationButtons(
+                  onNext: _nextPage,
+                  onPrevious: _pageIndex > 0 ? _previousPage : null,
+                  onSkip: _popSave,
+                  nextLabel:
+                      _pageIndex == _pageCount - 1 ? 'Save' : 'Continue',
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -12,9 +12,11 @@ class LegalHandler implements ILegalHandler {
   LegalHandler(this._networkHandler);
 
   @override
-  Future<List<LegalRequirement>> fetch() async {
-    final json = await _networkHandler.get('load-legal-versions');
+  Future<List<LegalRequirement>?> fetch() async {
     try {
+      final json = await _networkHandler.get('load-legal-versions');
+      if (json == null) return null;
+
       final acceptedTerms = SettingsData.termsVersion;
       final acceptedPrivacy = SettingsData.privacyVersion;
 
@@ -47,6 +49,14 @@ class LegalHandler implements ILegalHandler {
           SettingsData.privacyVersion = requirement.version;
       }
     }
+  }
+
+  @override
+  Future<bool> acceptAll() async {
+    final requirements = await fetch();
+    if (requirements == null) return false;
+    accept(requirements);
+    return true;
   }
 }
 

@@ -46,8 +46,9 @@ dependencies:
   # flutter_highlight: ^0.7.0
   flutter_code_editor: ^0.3.2
   highlight: ^0.7.0
-  firebase_core: ^4.6.0
-  firebase_auth: ^6.3.0
+  firebase_core: ^4.12.0
+  firebase_ai: ^3.14.0
+  firebase_auth: ^6.5.5
   firebase_database: ^12.2.0
   google_sign_in: ^6.3.0
   firebase_ui_auth: ^3.0.1
@@ -60,8 +61,11 @@ dependencies:
   flutter_riverpod: ^3.3.1
   flutter_highlight: ^0.7.0
   riverpod_annotation: ^4.0.3
+  firebase_app_check: ^0.4.5+2
   firebase_messaging: ^16.4.3
   http: ^1.6.0
+  freezed: ^3.2.6-dev.1
+  freezed_annotation: ^3.1.0
 
 # flutter_launcher_icons:
 #   android: true
@@ -72,6 +76,8 @@ dependencies:
 
 dependency_overrides:
   path_provider_linux: null
+  firebase_core: 4.12.1
+  firebase_core_platform_interface: 8.0.0
 
 dev_dependencies:
   flutter_test:
@@ -113,7 +119,11 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
+  fonts:
+      - family: Live Vitalist Icons
+        fonts:
+          - asset: assets/fonts/Live-Vitalist-Icons.ttf
+
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

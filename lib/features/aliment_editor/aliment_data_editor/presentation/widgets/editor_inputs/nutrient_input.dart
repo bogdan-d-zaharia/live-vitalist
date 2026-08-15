@@ -18,7 +18,7 @@ class NutrientInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final model = nutrients.data[nutrientName];
-    if (model == null) return const SizedBox();
+    if (model == null) return SizedBox();
 
     final label = model.translations['ENG']!;
     final unit = model.unit;

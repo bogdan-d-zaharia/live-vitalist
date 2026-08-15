@@ -1,0 +1,93 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
+import 'package:live_vitalist/features/day/data/day_provider.dart';
+import 'package:live_vitalist/features/super_search/domain/pending_aliment.dart';
+
+@immutable
+class AlimentSearchState {
+  final bool isActive;
+  final String query;
+  final List<PendingAliment> selection;
+  final DateTime? date;
+  final String? mealName;
+
+  const AlimentSearchState({
+    this.isActive = false,
+    this.query = '',
+    this.selection = const [],
+    this.date,
+    this.mealName,
+  });
+
+  bool isSelected(String alimentID) =>
+      selection.any((item) => item.alimentID == alimentID);
+
+  AlimentSearchState copyWith({
+    bool? isActive,
+    String? query,
+    List<PendingAliment>? selection,
+    DateTime? date,
+    String? mealName,
+  }) {
+    return AlimentSearchState(
+      isActive: isActive ?? this.isActive,
+      query: query ?? this.query,
+      selection: selection ?? this.selection,
+      date: date ?? this.date,
+      mealName: mealName ?? this.mealName,
+    );
+  }
+}
+
+/* Written by hand instead of codegen because the search state
+   holds no async work and stays this small. */
+class AlimentSearchController extends Notifier<AlimentSearchState> {
+  @override
+  AlimentSearchState build() => const AlimentSearchState();
+
+  void enter({DateTime? date, String? mealName}) => state = state.copyWith(
+        isActive: true,
+        date: date,
+        mealName: mealName,
+      );
+
+  void exit() => state = const AlimentSearchState();
+
+  void setQuery(String query) => state = state.copyWith(query: query);
+
+  void toggle(PendingAliment aliment) {
+    if (state.isSelected(aliment.alimentID)) {
+      remove(aliment.alimentID);
+    } else {
+      state = state.copyWith(selection: [...state.selection, aliment]);
+    }
+  }
+
+  void remove(String alimentID) {
+    state = state.copyWith(
+      selection:
+          state.selection.where((item) => item.alimentID != alimentID).toList(),
+    );
+  }
+
+  void commitSelection({required DateTime date, required String mealName}) {
+    final selection = state.selection;
+    final dayNotifier = ref.read(dayCacheProvider.notifier);
+
+    for (final item in selection) {
+      dayNotifier.addAliment(date, mealName, item.toInstanced());
+    }
+
+    final bankNotifier = ref.read(alimentBankProvider.notifier);
+    for (final item in selection.reversed) {
+      bankNotifier.setFirst(item.alimentID);
+    }
+
+    exit();
+  }
+}
+
+final alimentSearchProvider =
+    NotifierProvider<AlimentSearchController, AlimentSearchState>(
+        AlimentSearchController.new);

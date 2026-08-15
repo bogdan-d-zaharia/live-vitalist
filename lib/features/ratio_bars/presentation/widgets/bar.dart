@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:live_vitalist/core/theme/palette.dart';
+import 'package:live_vitalist/core/theme/app_text_styles_theme.dart';
 import 'package:live_vitalist/features/ratio_bars/presentation/widgets/ratio_bars_models.dart';
 
 class Bar extends StatelessWidget {
@@ -45,10 +45,11 @@ class Bar extends StatelessWidget {
                     true => Center(
                         child: Text(
                           s,
-                          style: Palette.dayViewRegular.copyWith(
-                            fontSize: fontSize,
-                            color: Colors.black.withValues(alpha: 0.6),
-                          ),
+                          style:
+                              AppTextStylesTheme.of(context).dayViewRegular.copyWith(
+                                    fontSize: fontSize,
+                                    color: Colors.black.withValues(alpha: 0.6),
+                                  ),
                         ),
                       ),
                     false => null,

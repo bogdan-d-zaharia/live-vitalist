@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:live_vitalist/core/storage/data/storage_provider.dart';
+import 'package:live_vitalist/features/onboarding/domain/options/nutrients_option.dart';
+import 'package:live_vitalist/features/onboarding/presentation/controllers/onboarding_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../domain/nutrient.dart';
@@ -47,6 +49,35 @@ class Nutrients extends _$Nutrients {
     state = NutrientState(
       data: {...state.data, key: nutrient},
       order: [...state.order, key],
+    );
+    _save();
+  }
+
+  bool _isEnabled(Iterable<String> tags, Iterable<NutrientsOption> options) {
+    for (var option in options) {
+      if (tags.contains(option.name)) return true;
+    }
+    return false;
+  }
+
+  // TODO: Load automatically at build. Also, optimize
+  void loadFromOnboarding() {
+    final onboarding = ref.read(onboardingControllerProvider).data.nutrients;
+    final data = state.data.map(
+      (key, value) {
+        if (_isEnabled(value.tags, onboarding)) {
+          return MapEntry(key, value);
+        } else {
+          final tags = {'disabled', ...value.tags}.toList();
+          return MapEntry(key, value.copyWith(tags: tags));
+        }
+      },
+    );
+    final kcals = data['kcals']!;
+    data['kcals'] = kcals.copyWith(tags: kcals.tags..remove('disabled'));
+    state = NutrientState(
+      data: data,
+      order: state.order,
     );
     _save();
   }

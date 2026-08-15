@@ -13,8 +13,8 @@ class Nutrient {
     required this.unit,
     this.lowerLimit,
     this.upperLimit,
-    List<String>? tags,
-  }) : tags = tags ?? const [];
+    this.tags = const [],
+  });
 
   Map<String, dynamic> toJson() {
     return {

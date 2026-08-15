@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:live_vitalist/core/domain/intervals.dart';
-import 'package:live_vitalist/core/presentation/widgets/target_bar.dart';
-import 'package:live_vitalist/core/theme/palette.dart';
+import 'package:live_vitalist/core/presentation/widgets/target_bar/target_bar.dart';
+import 'package:live_vitalist/core/presentation/widgets/target_bar/target_bar_draw_data.dart';
+import 'package:live_vitalist/core/theme/app_text_styles_theme.dart';
 import 'package:live_vitalist/features/nutrient_display/domain/intake.dart';
+import 'package:live_vitalist/features/reports/presentation/theme/report_styles.dart';
 
 class TrackerSnippet extends StatelessWidget {
   final Intake? intake;
@@ -10,8 +12,8 @@ class TrackerSnippet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final rangeStyle = Palette.dayViewLabel.copyWith(height: 1.0);
-    final counterColor = Palette.counterColor(context, flip: true);
+    final rangeStyle = ReportStyles.dayViewLabel.copyWith(height: 1.0);
+    final counterColor = Theme.of(context).colorScheme.onSurface;
     return Container(
       height: 80.0,
       decoration: BoxDecoration(
@@ -21,7 +23,7 @@ class TrackerSnippet extends StatelessWidget {
       ),
       padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0),
       child: intake == null
-          ? Center(child: Text('No data', style: Palette.dayViewBold))
+          ? Center(child: Text('No data', style: ReportStyles.dayViewBold))
           : Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -32,13 +34,13 @@ class TrackerSnippet extends StatelessWidget {
                       child: Text(
                         intake!.label,
                         overflow: TextOverflow.ellipsis,
-                        style: Palette.dayViewBold,
+                        style: ReportStyles.dayViewBold,
                       ),
                     ),
                     SizedBox(width: 10.0),
                     Text(
                       '${intake!.amount.toStringAsFixed(0)} ${intake!.unit}',
-                      style: Palette.dayViewRegular,
+                      style: AppTextStylesTheme.of(context).dayViewRegular,
                     ),
                   ],
                 ),
@@ -48,8 +50,10 @@ class TrackerSnippet extends StatelessWidget {
                     start: intake!.lowerLimit,
                     end: intake!.upperLimit,
                   ),
-                  height: 14.0,
-                  radius: 7.0,
+                  drawData: TargetBarDrawData(
+                    height: 14.0,
+                    radius: 7.0,
+                  ),
                 ),
                 Row(
                   children: [

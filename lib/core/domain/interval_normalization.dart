@@ -16,6 +16,12 @@ class NormalizationData {
     endPoint: 2.0 / 3.0,
     fallback: 0.8,
   );
+
+  static const NormalizationData thirds = NormalizationData(
+    startPoint: 1.0 / 3.0,
+    endPoint: 2.0 / 3.0,
+    fallback: 2.0 / 3.0,
+  );
 }
 
 extension StrictIntervalNormalization on StrictInterval {

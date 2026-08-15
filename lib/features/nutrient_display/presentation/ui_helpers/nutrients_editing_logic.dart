@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:live_vitalist/core/presentation/widgets/data_input/fields_input.dart';
-import 'package:live_vitalist/core/theme/palette.dart';
 import 'package:live_vitalist/features/nutrient/domain/nutrient.dart';
 import 'package:live_vitalist/features/nutrient_display/presentation/widgets/dialogs/new_nutrient_dialog.dart';
+import 'package:live_vitalist/features/nutrient_display/presentation/widgets/dimmed_parentheses_text.dart';
 import 'package:live_vitalist/features/settings/data/settings_data.dart';
 
 Future<Nutrient?> editNutrient(
@@ -41,8 +41,11 @@ Future<bool?> _pushFieldsEditor(
     MaterialPageRoute(
       builder: (context) => Scaffold(
         appBar: AppBar(
-            title: Palette.dimParentheses(
-                fields['Label'], Theme.of(context).textTheme.headlineSmall)),
+          title: DimmedParenthesesText(
+            label: fields['Label'],
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
+        ),
         body: FieldsInput(fields: fields),
       ),
     ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:live_vitalist/core/theme/palette.dart';
 
 class MealElement extends StatelessWidget {
   const MealElement({
@@ -50,7 +49,7 @@ class MealElement extends StatelessWidget {
             ),
           ),
           VerticalDivider(
-            color: Palette.divGrey,
+            color: Theme.of(context).dividerColor,
             thickness: 0.5,
             width: 0.0,
             indent: 8.0,

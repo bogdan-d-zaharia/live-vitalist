@@ -1,22 +1,30 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:live_vitalist/core/network/domain/network_interface.dart';
 
 class HttpHandler implements INetwork {
   final String baseUrl;
-  HttpHandler(this.baseUrl);
+  final Duration timeoutDuration;
+  HttpHandler(
+    this.baseUrl, {
+    this.timeoutDuration = const Duration(seconds: 5),
+  });
 
   @override
   Future<void> post(String path, dynamic data) async {
     final url = Uri.parse('$baseUrl/$path');
 
     try {
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: data != null ? jsonEncode(data) : null,
-      );
+      final response = await http
+          .post(
+            url,
+            headers: {'Content-Type': 'application/json'},
+            body: data != null ? jsonEncode(data) : null,
+          )
+          .timeout(timeoutDuration);
 
       if (response.statusCode != 200) {
         throw Exception('Server error: ${response.statusCode}');
@@ -34,7 +42,7 @@ class HttpHandler implements INetwork {
       final response = await http.get(
         url,
         headers: {'Content-Type': 'application/json'},
-      );
+      ).timeout(timeoutDuration);
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -42,6 +50,14 @@ class HttpHandler implements INetwork {
         throw Exception('Server error: ${response.statusCode}');
       }
     } catch (e) {
+      if (e is SocketException ||
+          e is TimeoutException ||
+          e is HttpException ||
+          e is http.ClientException ||
+          e is HandshakeException) {
+        // TODO: Replace with a custom exception
+        return null;
+      }
       rethrow;
     }
   }

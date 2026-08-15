@@ -1,10 +1,14 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'features/authentication/auth_gate.dart';
-import 'features/notifications/notification_handler.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
-import 'features/settings/data/settings_data.dart';
+import 'package:live_vitalist/core/theme/app_colors_theme.dart';
+import 'package:live_vitalist/core/theme/app_text_styles_theme.dart';
+import 'package:live_vitalist/features/authentication/auth_gate.dart';
+import 'package:live_vitalist/features/notifications/notification_handler.dart';
+import 'package:live_vitalist/features/settings/data/settings_data.dart';
+import 'package:live_vitalist/firebase_options.dart';
 
 // Fetching announcements from localhost works
 // by using ngrok with the port.
@@ -21,6 +25,15 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseAppCheck.instance.activate(
+    providerAndroid: kDebugMode
+        ? const AndroidDebugProvider()
+        : const AndroidPlayIntegrityProvider(),
+    providerApple: kDebugMode
+        ? const AppleDebugProvider()
+        : const AppleAppAttestProvider(),
+  );
+
   await NotificationHandler.initialize();
   await SettingsData.init();
 
@@ -42,6 +55,10 @@ class MyApp extends StatelessWidget {
             brightness: Brightness.light,
           ),
           useMaterial3: true,
+          extensions: [
+            AppColorsTheme.light,
+            AppTextStylesTheme.light,
+          ],
         ),
         darkTheme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
@@ -49,6 +66,10 @@ class MyApp extends StatelessWidget {
             brightness: Brightness.dark,
           ),
           useMaterial3: true,
+          extensions: [
+            AppColorsTheme.dark,
+            AppTextStylesTheme.dark,
+          ],
         ),
         themeMode: ThemeMode.system,
         home: AuthGate(),

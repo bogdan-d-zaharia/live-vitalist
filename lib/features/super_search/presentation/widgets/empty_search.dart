@@ -1,0 +1,41 @@
+import 'package:flutter/material.dart';
+
+class EmptySearch extends StatelessWidget {
+  const EmptySearch({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Center(
+      key: ValueKey('empty-search'),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.search_off_rounded,
+              size: 48.0,
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+            SizedBox(height: 16.0),
+            Text(
+              'No aliments found',
+              textAlign: TextAlign.center,
+              style: theme.textTheme.titleMedium,
+            ),
+            SizedBox(height: 6.0),
+            Text(
+              'Try another name or check the spelling.',
+              textAlign: TextAlign.center,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
