@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:live_vitalist/core/storage/data/storage_provider.dart';
 import 'package:live_vitalist/features/onboarding/domain/options/nutrients_option.dart';
-import 'package:live_vitalist/features/onboarding/presentation/controllers/onboarding_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../domain/nutrient.dart';
@@ -61,11 +60,10 @@ class Nutrients extends _$Nutrients {
   }
 
   // TODO: Load automatically at build. Also, optimize
-  void loadFromOnboarding() {
-    final onboarding = ref.read(onboardingControllerProvider).data.nutrients;
+  Future<void> loadFromOnboarding(Set<NutrientsOption> nutrients) async {
     final data = state.data.map(
       (key, value) {
-        if (_isEnabled(value.tags, onboarding)) {
+        if (_isEnabled(value.tags, nutrients)) {
           return MapEntry(key, value);
         } else {
           final tags = {'disabled', ...value.tags}.toList();
@@ -79,7 +77,7 @@ class Nutrients extends _$Nutrients {
       data: data,
       order: state.order,
     );
-    _save();
+    await _save();
   }
 
   void loadFromJson(Map<String, dynamic> json) {

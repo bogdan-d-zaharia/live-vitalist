@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/core/presentation/widgets/animated_navigation_buttons.dart';
 import 'package:live_vitalist/core/presentation/widgets/completion_widget.dart';
 import 'package:live_vitalist/core/presentation/widgets/loading_fade_overlay.dart';
+import 'package:live_vitalist/features/app_initialization/presentation/controllers/app_initialization_provider.dart';
 import 'package:live_vitalist/features/onboarding/presentation/controllers/onboarding_controller.dart';
 import 'package:live_vitalist/features/onboarding/presentation/screens/goal_screen.dart';
 import 'package:live_vitalist/features/onboarding/presentation/screens/nutrients_screen.dart';
@@ -36,19 +37,14 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   }
 
   Future<void> _tryFinish() async {
-    showLoadingFadeOverlay(context);
-    final finishing = ref.read(onboardingControllerProvider.notifier).finish();
-    await Future.delayed(Duration(seconds: 3));
-    final didFinish = await finishing;
-    if (!mounted) return;
-    Navigator.pop(context);
+    final onboardingData = ref.read(onboardingControllerProvider).data;
+    final didFinish = await ref
+        .read(appInitializationProvider.notifier)
+        .finishOnboarding(onboardingData);
+    if (didFinish || !mounted) return;
 
-    if (didFinish) {
-      Navigator.pop(context, true);
-    } else {
-      ref.read(onboardingControllerProvider.notifier).previousStep();
-      await showNoConnectionDialog(context);
-    }
+    ref.read(onboardingControllerProvider.notifier).previousStep();
+    await showNoConnectionDialog(context);
   }
 
   /// A step past the last one available means the onboarding is over.
@@ -70,6 +66,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     final indexProvider =
         onboardingControllerProvider.select((state) => state.stepIndex);
     final stepIndex = ref.watch(indexProvider);
+    final isFinishing = stepIndex >= _pages.length;
     ref.listen(indexProvider, (_, next) => _onStepChanged(next));
     final controllerNotifier = ref.read(onboardingControllerProvider.notifier);
 
@@ -80,38 +77,47 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         controllerNotifier.previousStep();
       },
       child: Scaffold(
-        body: SafeArea(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: EdgeInsets.all(16.0),
-                child: SizedBox(
-                  width: 128.0,
-                  height: 6.0,
-                  child: CompletionWidget(
-                    count: _pages.length,
-                    index: stepIndex,
+        body: Stack(
+          children: [
+            SafeArea(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: SizedBox(
+                      width: 128.0,
+                      height: 6.0,
+                      child: CompletionWidget(
+                        count: _pages.length,
+                        index: stepIndex,
+                      ),
+                    ),
                   ),
-                ),
+                  Expanded(
+                    child: PageView(
+                      controller: _pageController,
+                      physics: NeverScrollableScrollPhysics(),
+                      children: _pages,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+                    child: AnimatedNavigationButtons(
+                      onNext: controllerNotifier.nextStep,
+                      onPrevious: stepIndex > 0
+                          ? controllerNotifier.previousStep
+                          : null,
+                    ),
+                  ),
+                ],
               ),
-              Expanded(
-                child: PageView(
-                  controller: _pageController,
-                  physics: NeverScrollableScrollPhysics(),
-                  children: _pages,
-                ),
+            ),
+            if (isFinishing)
+              Positioned.fill(
+                child: AbsorbPointer(child: LoadingFadeOverlay()),
               ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-                child: AnimatedNavigationButtons(
-                  onNext: controllerNotifier.nextStep,
-                  onPrevious:
-                      stepIndex > 0 ? controllerNotifier.previousStep : null,
-                ),
-              ),
-            ],
-          ),
+          ],
         ),
       ),
     );

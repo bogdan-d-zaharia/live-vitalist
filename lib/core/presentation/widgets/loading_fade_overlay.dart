@@ -18,7 +18,8 @@ class _LoadingFadeOverlayState extends State<LoadingFadeOverlay>
 
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 900),
+      value: 0.5,
     )..repeat();
 
     _animation = CurvedAnimation(
@@ -55,33 +56,9 @@ class _LoadingFadeOverlayState extends State<LoadingFadeOverlay>
               stops: [0.0, 0.4, 0.5, 0.6, 1.0],
             ),
           ),
-          child: const SizedBox.expand(),
+          child: SizedBox.expand(),
         );
       },
     );
   }
-}
-
-Future<void> showLoadingFadeOverlay(BuildContext context) {
-  return showGeneralDialog(
-    context: context,
-    barrierDismissible: false,
-    barrierLabel: 'Loading',
-    barrierColor: Colors.transparent,
-    transitionDuration: const Duration(milliseconds: 500),
-    pageBuilder: (_, __, ___) => const PopScope(
-      canPop: false,
-      child: LoadingFadeOverlay(),
-    ),
-    transitionBuilder: (_, animation, __, child) {
-      return FadeTransition(
-        opacity: CurvedAnimation(
-          parent: animation,
-          curve: Curves.easeOut,
-          reverseCurve: Curves.easeIn,
-        ),
-        child: child,
-      );
-    },
-  );
 }

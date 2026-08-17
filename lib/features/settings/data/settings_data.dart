@@ -19,8 +19,10 @@ abstract final class SettingsData {
   static bool get isMonthDay => _prefs.getBool('isMonthDay') ?? false;
   static set isMonthDay(bool val) => _prefs.setBool('isMonthDay', val);
 
-  static bool get isLoggedIn => _prefs.getBool('isLoggedIn') ?? false;
-  static set isLoggedIn(bool val) => _prefs.setBool('isLoggedIn', val);
+  static bool get hasCompletedOnboarding =>
+      _prefs.getBool('isLoggedIn') ?? false;
+  static set hasCompletedOnboarding(bool val) =>
+      _prefs.setBool('isLoggedIn', val);
 
   static String get termsVersion => _prefs.getString('termsVersion') ?? '';
   static set termsVersion(String val) => _prefs.setString('termsVersion', val);

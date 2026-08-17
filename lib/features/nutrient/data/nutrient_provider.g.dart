@@ -41,7 +41,7 @@ final class NutrientsProvider
   }
 }
 
-String _$nutrientsHash() => r'41ab386ceb17f7ff82a6f3ef14f9ad21d0f5d7f7';
+String _$nutrientsHash() => r'86203d3248adefa057cc4d997ba16225ed9c0957';
 
 abstract class _$Nutrients extends $Notifier<NutrientState> {
   NutrientState build();

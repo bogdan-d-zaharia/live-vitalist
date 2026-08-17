@@ -1,0 +1,4 @@
+enum AppInitState {
+  onboarding,
+  ready,
+}
