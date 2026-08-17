@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:live_vitalist/features/app_initialization/domain/app_initialization_state.dart';
+import 'package:live_vitalist/features/app_initialization/presentation/app_initialization_error_screen.dart';
 import 'package:live_vitalist/features/app_initialization/presentation/controllers/app_initialization_provider.dart';
 import 'package:live_vitalist/features/onboarding/onboarding_screen.dart';
 import 'package:live_vitalist/features/splash_screen/presentation/splash_screen.dart';
-import 'package:live_vitalist/home_screen.dart';
+import 'package:live_vitalist/app/home_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'app_router.g.dart';
@@ -123,37 +123,6 @@ class AppRoutingErrorScreen extends StatelessWidget {
                   ? 'The requested page could not be opened.'
                   : 'The requested page could not be opened:\n$error',
               textAlign: TextAlign.center,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class AppInitializationErrorScreen extends ConsumerWidget {
-  const AppInitializationErrorScreen({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Padding(
-            padding: EdgeInsets.all(24.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'The application could not be initialized.',
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 16.0),
-                FilledButton(
-                  onPressed: () => ref.invalidate(appInitializationProvider),
-                  child: Text('Try again'),
-                ),
-              ],
             ),
           ),
         ),

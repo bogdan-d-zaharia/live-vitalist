@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:live_vitalist/core/routing/app_router.dart';
+import 'package:live_vitalist/app/routing/app_router.dart';
 import 'package:live_vitalist/core/theme/app_colors_theme.dart';
 import 'package:live_vitalist/core/theme/app_text_styles_theme.dart';
 

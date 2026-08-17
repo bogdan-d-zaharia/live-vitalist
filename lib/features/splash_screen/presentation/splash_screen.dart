@@ -10,7 +10,7 @@ class SplashScreen extends StatelessWidget {
       body: Center(
         child: Hero(
           tag: AppLogo.heroTag,
-          child: AppLogo(size: 192.0),
+          child: AppLogo(size: 160.0),
         ),
       ),
     );

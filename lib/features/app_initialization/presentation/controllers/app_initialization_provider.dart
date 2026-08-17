@@ -28,6 +28,7 @@ class AppInitialization extends _$AppInitialization {
     await SettingsData.init();
 
     if (!SettingsData.hasCompletedOnboarding) {
+      await Future.delayed(Duration(seconds: 2));
       return AppInitState.onboarding;
     }
 
