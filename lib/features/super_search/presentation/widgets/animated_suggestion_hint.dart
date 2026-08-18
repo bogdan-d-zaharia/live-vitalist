@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:live_vitalist/features/super_search/presentation/fade_in_out_curve.dart';
+import 'package:live_vitalist/features/super_search/presentation/utils/fade_in_out_curve.dart';
 
 class AnimatedSuggestionHint extends StatefulWidget {
   final int animationKey;

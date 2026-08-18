@@ -6,7 +6,7 @@ import 'package:live_vitalist/core/presentation/widgets/data_input/number_input.
 import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
 import 'package:live_vitalist/features/super_search/domain/pending_aliment.dart';
-import 'package:live_vitalist/features/super_search/presentation/controllers/aliment_search_controller.dart';
+import 'package:live_vitalist/features/super_search/presentation/controllers/super_search_controller.dart';
 
 class AlimentResultTile extends ConsumerStatefulWidget {
   const AlimentResultTile({required this.alimentID, super.key});
@@ -21,8 +21,8 @@ class _AlimentResultTileState extends ConsumerState<AlimentResultTile> {
   @override
   Widget build(BuildContext context) {
     final bank = ref.watch(alimentBankProvider);
-    final searchState = ref.watch(alimentSearchProvider);
-    final notifier = ref.read(alimentSearchProvider.notifier);
+    final searchState = ref.watch(superSearchProvider);
+    final notifier = ref.read(superSearchProvider.notifier);
 
     final data = bank.aliments[widget.alimentID];
     if (data == null) return const SizedBox.shrink();

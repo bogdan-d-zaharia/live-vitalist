@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:live_vitalist/app/home_shell.dart';
+import 'package:live_vitalist/app/home_screen.dart';
 import 'package:live_vitalist/features/app_initialization/domain/app_initialization_state.dart';
 import 'package:live_vitalist/features/app_initialization/presentation/app_initialization_error_screen.dart';
 import 'package:live_vitalist/features/app_initialization/presentation/controllers/app_initialization_provider.dart';
+import 'package:live_vitalist/features/meals_journal/presentation/widgets/meal_editor.dart';
 import 'package:live_vitalist/features/onboarding/onboarding_screen.dart';
+import 'package:live_vitalist/features/settings/settings_screen.dart';
 import 'package:live_vitalist/features/splash_screen/presentation/splash_screen.dart';
-import 'package:live_vitalist/app/home_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'app_router.g.dart';
@@ -15,7 +18,24 @@ abstract final class AppRoutes {
   static const onboarding = '/onboarding';
   static const onboardingPath = 'onboarding';
   static const home = '/home';
+  static const settings = '/home/settings';
+  static const settingsPath = 'settings';
+  static const mealEditor = '/home/meal-editor';
+  static const mealEditorPath = 'meal-editor';
   static const initializationError = '/initialization-error';
+
+  static String mealEditorLocation({
+    required String mealName,
+    required DateTime date,
+  }) {
+    return Uri(
+      path: mealEditor,
+      queryParameters: {
+        'mealName': mealName,
+        'date': date.toIso8601String(),
+      },
+    ).toString();
+  }
 }
 
 @riverpod
@@ -42,9 +62,8 @@ GoRouter appRouter(Ref ref) {
           ),
         ],
       ),
-      GoRoute(
-        path: AppRoutes.home,
-        pageBuilder: (_, state) => CustomTransitionPage(
+      ShellRoute(
+        pageBuilder: (context, state, child) => CustomTransitionPage(
           key: state.pageKey,
           transitionDuration: Duration(milliseconds: 1600),
           reverseTransitionDuration: Duration(milliseconds: 400),
@@ -60,8 +79,56 @@ GoRouter appRouter(Ref ref) {
               ),
             );
           },
-          child: HomeScreen(),
+          // TODO: Move isHomeRoute to a provider perhaps.
+          child: HomeShell(
+            isHomeRoute: state.uri.path == AppRoutes.home,
+            child: child,
+          ),
         ),
+        routes: [
+          GoRoute(
+            path: AppRoutes.home,
+            // TODO: Move onOpenSettings, onOpenMeal to providers.
+            builder: (context, __) => HomeScreen(
+              onOpenSettings: () async {
+                await context.push(AppRoutes.settings);
+              },
+              onOpenMeal: (mealName, date) async {
+                await context.push(
+                  AppRoutes.mealEditorLocation(
+                    mealName: mealName,
+                    date: date,
+                  ),
+                );
+              },
+            ),
+            routes: [
+              GoRoute(
+                path: AppRoutes.settingsPath,
+                builder: (_, __) => SettingsScreen(),
+              ),
+              GoRoute(
+                path: AppRoutes.mealEditorPath,
+                builder: (_, state) {
+                  final mealName = state.uri.queryParameters['mealName'];
+                  final date = DateTime.tryParse(
+                    state.uri.queryParameters['date'] ?? '',
+                  );
+
+                  if (mealName == null || date == null) {
+                    return AppRoutingErrorScreen(
+                      error: FormatException(
+                        'Meal editor route parameters are invalid.',
+                      ),
+                    );
+                  }
+
+                  return MealEditor(mealName: mealName, date: date);
+                },
+              ),
+            ],
+          ),
+        ],
       ),
       GoRoute(
         path: AppRoutes.initializationError,
@@ -69,18 +136,21 @@ GoRouter appRouter(Ref ref) {
       ),
     ],
     errorBuilder: (_, state) => AppRoutingErrorScreen(error: state.error),
-    redirect: (_, state) {
+    redirect: (_, routeState) {
       final initialization = ref.read(appInitializationProvider);
+      final isInHomeBranch = routeState.matchedLocation == AppRoutes.home ||
+          routeState.matchedLocation.startsWith('${AppRoutes.home}/');
       final destination = initialization.when(
         loading: () => AppRoutes.root,
         error: (_, __) => AppRoutes.initializationError,
-        data: (state) => switch (state) {
+        data: (initializationState) => switch (initializationState) {
           AppInitState.onboarding => AppRoutes.onboarding,
-          AppInitState.ready => AppRoutes.home,
+          AppInitState.ready =>
+            isInHomeBranch ? routeState.matchedLocation : AppRoutes.home,
         },
       );
 
-      return state.matchedLocation == destination ? null : destination;
+      return routeState.matchedLocation == destination ? null : destination;
     },
   );
 

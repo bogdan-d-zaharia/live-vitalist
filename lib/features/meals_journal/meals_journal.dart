@@ -3,9 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_extensions.dart';
 import 'package:live_vitalist/features/day/domain/meal.dart';
 import 'package:live_vitalist/features/meals_journal/presentation/widgets/custom_divider.dart';
-import 'package:live_vitalist/features/meals_journal/presentation/widgets/meal_editor.dart';
 import 'package:live_vitalist/features/meals_journal/presentation/widgets/meal_element.dart';
-import 'package:live_vitalist/features/super_search/presentation/controllers/aliment_search_controller.dart';
+import 'package:live_vitalist/features/super_search/presentation/controllers/super_search_controller.dart';
 
 import '../aliment/data/aliment_bank.dart';
 import '../../core/presentation/widgets/custom_card.dart';
@@ -16,7 +15,12 @@ import '../settings/data/settings_data.dart';
 import '../../core/presentation/widgets/data_input/string_input.dart';
 
 class MealsJournal extends ConsumerWidget {
-  const MealsJournal({super.key});
+  final Future<void> Function(String mealName, DateTime date) onOpenMeal;
+
+  const MealsJournal({
+    super.key,
+    required this.onOpenMeal,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -34,17 +38,7 @@ class MealsJournal extends ConsumerWidget {
           title: meal.name,
           subtitle:
               '$kcals ${nutrients['kcals']?.translations[SettingsData.language]?.toLowerCase() ?? ''}',
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => MealEditor(
-                  mealName: meal.name,
-                  date: date,
-                ),
-              ),
-            );
-          },
+          onTap: () => onOpenMeal(meal.name, date),
           onLongPress: () async {
             final isDelete = await showDialog<bool>(
               context: context,
@@ -68,12 +62,9 @@ class MealsJournal extends ConsumerWidget {
               dayNotifier.removeMeal(date, meal.name);
             }
           },
-          onAdd: () {
-            ref.read(alimentSearchProvider.notifier).enter(
-                  date: date,
-                  mealName: meal.name,
-                );
-          },
+          onAdd: () => ref
+              .read(superSearchProvider.notifier)
+              .enter(date: date, mealName: meal.name),
         );
       },
     ).toList();

@@ -10,23 +10,23 @@ import 'package:live_vitalist/features/meals_journal/meals_journal.dart';
 import 'package:live_vitalist/features/nutrient_display/nutrient_display.dart';
 import 'package:live_vitalist/features/ratio_bars/ratio_bars_card.dart';
 import 'package:live_vitalist/features/settings/data/settings_data.dart';
-import 'package:live_vitalist/features/settings/settings_screen.dart';
 import 'package:live_vitalist/features/nutrient_circle/nutrient_circle.dart';
-import 'package:live_vitalist/features/super_search/presentation/add_aliment_actions.dart';
-import 'package:live_vitalist/features/super_search/presentation/controllers/aliment_search_controller.dart';
-import 'package:live_vitalist/features/super_search/presentation/widgets/search_overlay.dart';
-import 'package:live_vitalist/features/super_search/presentation/widgets/super_bar.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
-  const HomeScreen({super.key});
+  final Future<void> Function() onOpenSettings;
+  final Future<void> Function(String mealName, DateTime date) onOpenMeal;
+
+  const HomeScreen({
+    super.key,
+    required this.onOpenSettings,
+    required this.onOpenMeal,
+  });
 
   @override
   ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  final TextEditingController _searchController = TextEditingController();
-
   Future<void> showPopups() async {
     final IAnnouncementsApi api = ref.watch(announcementsApiProvider);
     await for (final IAnnouncement announcement in api.fetchAnnouncements()) {
@@ -44,23 +44,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    ref.listen<AlimentSearchState>(alimentSearchProvider, (previous, next) {
-      if (previous?.isActive == true && !next.isActive) {
-        _searchController.clear();
-        FocusManager.instance.primaryFocus?.unfocus();
-      }
-    });
-
-    final searchNotifier = ref.read(alimentSearchProvider.notifier);
-
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
@@ -74,7 +60,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         title: Text('Live Vitalist'),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 24.0),
+            padding: EdgeInsets.only(right: 24.0),
             child: SizedBox(
               width: 32.0,
               height: 32.0,
@@ -85,15 +71,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 child: InkWell(
                   splashColor: Colors.blue,
                   highlightColor: Colors.blue,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SettingsScreen(),
-                      ),
-                    ).then((value) {
-                      setState(() {});
-                    });
+                  onTap: () async {
+                    await widget.onOpenSettings();
+                    if (mounted) setState(() {});
                   },
                   child: Icon(Icons.settings_rounded, color: Colors.white),
                 ),
@@ -102,52 +82,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ],
       ),
-      body: Stack(
+      body: ListView(
+        padding: EdgeInsets.only(
+          bottom: 100.0,
+          left: 8.0,
+          right: 8.0,
+        ),
         children: [
-          ListView(
-            padding: EdgeInsets.only(
-              bottom: 100.0,
-              left: 8.0,
-              right: 8.0,
-            ),
-            children: [
-              WeekCalendar(),
-              NutrientCircle(),
-              NutrientDisplay(),
-              if (SettingsData.isShowCalorieDistribution ||
-                  SettingsData.isShowOmegaBalance)
-                RatioBarsCard(),
-              MealsJournal(),
-            ],
-          ),
-          Positioned.fill(child: SearchOverlay()),
-          Positioned(
-            bottom: 20.0,
-            left: 12.0,
-            right: 12.0,
-            child: TextFieldTapRegion(
-              child: SuperBar(
-                controller: _searchController,
-                onEnter: searchNotifier.enter,
-                onExit: searchNotifier.exit,
-                onChanged: searchNotifier.setQuery,
-                onAdd: (isTemp, isGen) {
-                  if (isGen) {
-                    AddAlimentActions.addGenerated(
-                      context,
-                      ref,
-                      _searchController.text,
-                      isTemp: isTemp,
-                    );
-                  } else if (isTemp) {
-                    AddAlimentActions.addTemporary(context, ref);
-                  } else {
-                    AddAlimentActions.addInstanced(context, ref);
-                  }
-                },
-              ),
-            ),
-          ),
+          WeekCalendar(),
+          NutrientCircle(),
+          NutrientDisplay(),
+          if (SettingsData.isShowCalorieDistribution ||
+              SettingsData.isShowOmegaBalance)
+            RatioBarsCard(),
+          MealsJournal(onOpenMeal: widget.onOpenMeal),
         ],
       ),
     );

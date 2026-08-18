@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
 import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/features/day/data/day_provider.dart';
-import 'package:live_vitalist/features/super_search/presentation/controllers/aliment_search_controller.dart';
+import 'package:live_vitalist/features/super_search/presentation/controllers/super_search_controller.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/aliment_result_tile.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/empty_search.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/meal_picker_dialog.dart';
@@ -19,7 +19,7 @@ class SearchOverlay extends ConsumerWidget {
   Future<void> _commitSelection(BuildContext context, WidgetRef ref) async {
     FocusManager.instance.primaryFocus?.unfocus();
 
-    final searchState = ref.read(alimentSearchProvider);
+    final searchState = ref.read(superSearchProvider);
     var date = searchState.date;
     var mealName = searchState.mealName;
 
@@ -30,13 +30,13 @@ class SearchOverlay extends ConsumerWidget {
     }
 
     ref
-        .read(alimentSearchProvider.notifier)
+        .read(superSearchProvider.notifier)
         .commitSelection(date: date, mealName: mealName);
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final searchState = ref.watch(alimentSearchProvider);
+    final searchState = ref.watch(superSearchProvider);
     final bank = ref.watch(alimentBankProvider);
 
     final filteredKeys = bank.order.where((id) {
@@ -61,12 +61,12 @@ class SearchOverlay extends ConsumerWidget {
             child: TextFieldTapRegion(
               onTapOutside: (_) {
                 FocusManager.instance.primaryFocus?.unfocus();
-                ref.read(alimentSearchProvider.notifier).exit();
+                ref.read(superSearchProvider.notifier).exit();
               },
               child: Padding(
                 padding: EdgeInsets.only(
                   left: 16.0,
-                  top: 16.0,
+                  top: 32.0,
                   right: 16.0,
                   bottom: SuperSearchConstants.overlayBottomInset,
                 ),

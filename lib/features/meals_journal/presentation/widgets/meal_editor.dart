@@ -10,6 +10,7 @@ import 'package:live_vitalist/features/meals_journal/presentation/widgets/custom
 import 'package:live_vitalist/features/meals_journal/presentation/widgets/element_widget.dart';
 import 'package:live_vitalist/features/notifications/notification_handler.dart';
 import 'package:live_vitalist/features/settings/data/settings_data.dart';
+import 'package:live_vitalist/features/super_search/presentation/controllers/super_search_controller.dart';
 
 class MealEditor extends ConsumerWidget {
   const MealEditor({
@@ -66,14 +67,9 @@ class MealEditor extends ConsumerWidget {
         'ROU': 'Adaugare aliment',
       }[SettingsData.language]!,
       subTitle: '',
-      onTap: () async {
-        final newAliment =
-            await InstancedAliment.empty.pushEditingScreen(context);
-
-        if (newAliment != null && newAliment.alimentID != '') {
-          dayNotifier.addAliment(date, mealName, newAliment);
-        }
-      },
+      onTap: () => ref
+          .read(superSearchProvider.notifier)
+          .enter(date: date, mealName: meal.name),
       additional: [],
     );
 
