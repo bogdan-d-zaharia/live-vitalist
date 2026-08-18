@@ -4,22 +4,6 @@ import 'package:live_vitalist/app/routing/app_router.dart';
 import 'package:live_vitalist/core/theme/app_colors_theme.dart';
 import 'package:live_vitalist/core/theme/app_text_styles_theme.dart';
 
-// Fetching announcements from localhost works
-// by using ngrok with the port.
-
-// *** Announcements & Reports ***
-// TODO: Make the week result page helpful and make it look good.
-
-// *** Workers & Push Notifications ***
-// TODO: Have the user be able to log their meal from the notification
-// with a message text field.
-
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  runApp(const ProviderScope(child: MyApp()));
-}
-
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 

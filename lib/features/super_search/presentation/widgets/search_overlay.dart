@@ -109,7 +109,7 @@ class SearchOverlay extends ConsumerWidget {
                           duration: SuperSearchConstants.overlayFadeDuration,
                           curve: Curves.easeOut,
                           child: searchState.selection.isEmpty
-                              ? const SizedBox.shrink()
+                              ? SizedBox.shrink()
                               : Padding(
                                   padding: const EdgeInsets.only(top: 12.0),
                                   child: SizedBox(
