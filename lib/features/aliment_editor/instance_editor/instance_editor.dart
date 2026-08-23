@@ -90,13 +90,15 @@ class _InstanceEditorState extends ConsumerState<InstanceEditor> {
                     }
                   },
                 ),
-                if (data != null)
+                if (data != null) ...[
+                  SizedBox(height: 4.0),
                   UnitDropdown(
                     data: data,
                     currentUnit: aliment.unit,
                     onChanged: (unit) =>
                         setState(() => aliment = aliment.copyWith(unit: unit)),
                   ),
+                ]
               ],
             ),
           ),

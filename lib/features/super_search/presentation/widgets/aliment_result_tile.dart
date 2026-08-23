@@ -79,16 +79,16 @@ class _AlimentResultTileState extends ConsumerState<AlimentResultTile> {
         ),
         SizedBox(width: 12.0),
         Expanded(
-          child: DropdownButton<String>(
-            isExpanded: true,
-            value: units.contains(pending.unit) ? pending.unit : null,
-            items: units.map((unit) {
-              return DropdownMenuItem(
-                value: unit,
-                child: Text(unit),
-              );
+          child: DropdownMenu<String>(
+            key: ValueKey(pending.unit),
+            expandedInsets: EdgeInsets.zero,
+            requestFocusOnTap: false,
+            initialSelection:
+                units.contains(pending.unit) ? pending.unit : null,
+            dropdownMenuEntries: units.map((unit) {
+              return DropdownMenuEntry(value: unit, label: unit);
             }).toList(),
-            onChanged: (unit) {
+            onSelected: (unit) {
               if (unit != null) {
                 setState(() => pending.unit = unit);
               }

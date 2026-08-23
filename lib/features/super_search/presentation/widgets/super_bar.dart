@@ -144,7 +144,6 @@ class _SuperBarState extends ConsumerState<SuperBar> {
                 controller: widget.controller,
                 focusNode: _focusNode,
                 onTap: widget.onEnter,
-                onTapOutside: (event) => widget.onExit?.call(),
                 onChanged: widget.onChanged,
                 constraints: BoxConstraints(
                   minHeight: SuperSearchConstants.barHeight,

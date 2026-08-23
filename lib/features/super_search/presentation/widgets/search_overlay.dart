@@ -58,8 +58,9 @@ class SearchOverlay extends ConsumerWidget {
           filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
           child: IgnorePointer(
             ignoring: !searchState.isActive,
-            child: TextFieldTapRegion(
-              onTapOutside: (_) {
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
                 FocusManager.instance.primaryFocus?.unfocus();
                 ref.read(superSearchProvider.notifier).exit();
               },
@@ -69,14 +70,17 @@ class SearchOverlay extends ConsumerWidget {
                   right: 16.0,
                   bottom: SuperSearchConstants.overlayBottomInset,
                 ),
-                child: MiniCard(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 25.0,
-                      vertical: 20.0,
-                    ),
-                    child: Column(
-                      children: [
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {},
+                  child: MiniCard(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 25.0,
+                        vertical: 20.0,
+                      ),
+                      child: Column(
+                        children: [
                         SearchHeader(
                           query: searchState.query,
                           resultCount: filteredKeys.length,
@@ -123,7 +127,8 @@ class SearchOverlay extends ConsumerWidget {
                                   ),
                                 ),
                         ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

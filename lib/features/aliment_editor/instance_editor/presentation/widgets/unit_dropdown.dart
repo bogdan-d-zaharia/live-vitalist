@@ -17,16 +17,16 @@ class UnitDropdown extends StatelessWidget {
   Widget build(BuildContext context) {
     final units = [data.unit, ...data.unitSynonyms.keys];
 
-    return DropdownButton<String>(
-      isExpanded: true,
-      value: units.contains(currentUnit) ? currentUnit : null,
-      items: units.map((unit) {
-        return DropdownMenuItem(
-          value: unit,
-          child: SizedBox(width: 300.0, child: Text(unit)),
-        );
+    final selectedUnit = units.contains(currentUnit) ? currentUnit : null;
+
+    return DropdownMenu<String>(
+      key: ValueKey(selectedUnit),
+      expandedInsets: EdgeInsets.zero,
+      initialSelection: selectedUnit,
+      dropdownMenuEntries: units.map((unit) {
+        return DropdownMenuEntry(value: unit, label: unit);
       }).toList(),
-      onChanged: (unit) {
+      onSelected: (unit) {
         if (unit != null) onChanged(unit);
       },
     );
