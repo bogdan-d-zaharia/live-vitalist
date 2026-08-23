@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 enum Sort {
   unsorted,
@@ -54,6 +55,17 @@ abstract final class SettingsData {
       _prefs.getBool('isShowCalorieDistribution') ?? false;
   static set isShowCalorieDistribution(bool val) =>
       _prefs.setBool('isShowCalorieDistribution', val);
+
+  static DateTime? get lastWeekReportReadDate {
+    final str = _prefs.getString('lastWeekReportReadDate');
+    return DateFormat('yyyy-MM-dd').tryParse(str ?? '');
+  }
+
+  static set lastWeekReportReadDate(DateTime? date) {
+    if (date == null) return;
+    final str = DateFormat('yyyy-MM-dd').format(date);
+    _prefs.setString('lastWeekReportReadDate', str);
+  }
 
   static Future<void> deleteAll() async {
     await _prefs.clear();

@@ -52,7 +52,7 @@ GoRouter appRouter(Ref ref) {
             path: AppRoutes.onboardingPath,
             pageBuilder: (_, state) => CustomTransitionPage(
               key: state.pageKey,
-              transitionDuration: Duration(milliseconds: 1400),
+              transitionDuration: Duration(milliseconds: 600),
               reverseTransitionDuration: Duration(milliseconds: 500),
               transitionsBuilder: (_, animation, __, child) {
                 return FadeTransition(opacity: animation, child: child);
@@ -65,7 +65,7 @@ GoRouter appRouter(Ref ref) {
       ShellRoute(
         pageBuilder: (context, state, child) => CustomTransitionPage(
           key: state.pageKey,
-          transitionDuration: Duration(milliseconds: 1600),
+          transitionDuration: Duration(milliseconds: 600),
           reverseTransitionDuration: Duration(milliseconds: 400),
           transitionsBuilder: (context, animation, __, child) {
             return ColoredBox(
@@ -73,7 +73,7 @@ GoRouter appRouter(Ref ref) {
               child: FadeTransition(
                 opacity: CurvedAnimation(
                   parent: animation,
-                  curve: Curves.easeInCubic,
+                  curve: Curves.easeIn,
                 ),
                 child: child,
               ),

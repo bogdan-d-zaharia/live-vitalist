@@ -38,41 +38,48 @@ class _SuperSearchScreenState extends ConsumerState<SuperSearchScreen> {
 
     final searchNotifier = ref.read(superSearchProvider.notifier);
     final isActiveProvider = superSearchProvider.select((s) => s.isActive);
-    final isVisible = widget.isHomeRoute || ref.watch(isActiveProvider);
+    final isActive = ref.watch(isActiveProvider);
+    final isVisible = widget.isHomeRoute;
 
-    return Stack(
-      children: [
-        Positioned.fill(child: SearchOverlay()),
-        AnimatedPositioned(
-          duration: Duration(milliseconds: 500),
-          curve: Curves.easeOutCubic,
-          left: 12.0,
-          right: 12.0,
-          bottom: isVisible ? 20.0 : -80.0,
-          child: TextFieldTapRegion(
-            child: SuperBar(
-              controller: _searchController,
-              onEnter: searchNotifier.enter,
-              onExit: searchNotifier.exit,
-              onChanged: searchNotifier.setQuery,
-              onAdd: (isTemp, isGen) {
-                if (isGen) {
-                  AddAlimentActions.addGenerated(
-                    context,
-                    ref,
-                    _searchController.text,
-                    isTemp: isTemp,
-                  );
-                } else if (isTemp) {
-                  AddAlimentActions.addTemporary(context, ref);
-                } else {
-                  AddAlimentActions.addInstanced(context, ref);
-                }
-              },
+    return SafeArea(
+      child: Stack(
+        children: [
+          Positioned.fill(child: SearchOverlay()),
+          AnimatedPositioned(
+            duration: Duration(milliseconds: 500),
+            curve: Curves.easeOutCubic,
+            left: 12.0,
+            right: 12.0,
+            bottom: switch (true) {
+              _ when isActive => 20.0,
+              _ when isVisible => 0.0,
+              _ => -80.0,
+            },
+            child: TextFieldTapRegion(
+              child: SuperBar(
+                controller: _searchController,
+                onEnter: searchNotifier.enter,
+                onExit: searchNotifier.exit,
+                onChanged: searchNotifier.setQuery,
+                onAdd: (isTemp, isGen) {
+                  if (isGen) {
+                    AddAlimentActions.addGenerated(
+                      context,
+                      ref,
+                      _searchController.text,
+                      isTemp: isTemp,
+                    );
+                  } else if (isTemp) {
+                    AddAlimentActions.addTemporary(context, ref);
+                  } else {
+                    AddAlimentActions.addInstanced(context, ref);
+                  }
+                },
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
