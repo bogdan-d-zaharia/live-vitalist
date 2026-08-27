@@ -20,7 +20,7 @@ final class SuperSearchProvider
           argument: null,
           retry: null,
           name: r'superSearchProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -41,7 +41,7 @@ final class SuperSearchProvider
   }
 }
 
-String _$superSearchHash() => r'746522b0fa5d097c6088f7292d49e863c5549d98';
+String _$superSearchHash() => r'09789eec1da9d6ce66d472930cce5d51a7043e64';
 
 abstract class _$SuperSearch extends $Notifier<SuperSearchState> {
   SuperSearchState build();

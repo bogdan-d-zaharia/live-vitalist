@@ -26,7 +26,7 @@ class SearchOverlay extends ConsumerWidget {
 
     if (date == null || mealName == null) {
       mealName = await showMealPicker(context);
-      if (mealName == null) return;
+      if (!context.mounted || mealName == null) return;
       date = ref.read(selectedDatesProvider).first;
     }
 
@@ -111,14 +111,14 @@ class SearchOverlay extends ConsumerWidget {
                         child: searchState.selection.isEmpty
                             ? SizedBox.shrink()
                             : Padding(
-                                padding: const EdgeInsets.only(top: 12.0),
+                                padding: EdgeInsets.only(top: 12.0),
                                 child: SizedBox(
                                   width: double.infinity,
                                   height: 48.0,
-                                  child: ElevatedButton.icon(
+                                  child: FilledButton.icon(
                                     onPressed: () =>
                                         _commitSelection(context, ref),
-                                    icon: const Icon(Icons.add_rounded),
+                                    icon: Icon(Icons.add_rounded),
                                     label: Text(selectionLabel),
                                   ),
                                 ),
