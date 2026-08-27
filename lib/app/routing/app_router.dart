@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:live_vitalist/app/home_shell.dart';
 import 'package:live_vitalist/app/home_screen.dart';
+import 'package:live_vitalist/app/routing/app_routes.dart';
+import 'package:live_vitalist/app/routing/pages/app_routing_error_screen.dart';
+import 'package:live_vitalist/app/routing/pages/super_search_page.dart';
 import 'package:live_vitalist/features/app_initialization/domain/app_initialization_state.dart';
 import 'package:live_vitalist/features/app_initialization/presentation/app_initialization_error_screen.dart';
 import 'package:live_vitalist/features/app_initialization/presentation/controllers/app_initialization_provider.dart';
@@ -12,31 +15,6 @@ import 'package:live_vitalist/features/splash_screen/presentation/splash_screen.
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'app_router.g.dart';
-
-abstract final class AppRoutes {
-  static const root = '/';
-  static const onboarding = '/onboarding';
-  static const onboardingPath = 'onboarding';
-  static const home = '/home';
-  static const settings = '/home/settings';
-  static const settingsPath = 'settings';
-  static const mealEditor = '/home/meal-editor';
-  static const mealEditorPath = 'meal-editor';
-  static const initializationError = '/initialization-error';
-
-  static String mealEditorLocation({
-    required String mealName,
-    required DateTime date,
-  }) {
-    return Uri(
-      path: mealEditor,
-      queryParameters: {
-        'mealName': mealName,
-        'date': date.toIso8601String(),
-      },
-    ).toString();
-  }
-}
 
 @riverpod
 GoRouter appRouter(Ref ref) {
@@ -82,6 +60,7 @@ GoRouter appRouter(Ref ref) {
           // TODO: Move isHomeRoute to a provider perhaps.
           child: HomeShell(
             isHomeRoute: state.uri.path == AppRoutes.home,
+            isSearchRoute: state.uri.path == AppRoutes.search,
             child: child,
           ),
         ),
@@ -128,6 +107,10 @@ GoRouter appRouter(Ref ref) {
               ),
             ],
           ),
+          GoRoute(
+            path: AppRoutes.search,
+            pageBuilder: (_, state) => SuperSearchPage(key: state.pageKey),
+          ),
         ],
       ),
       GoRoute(
@@ -138,7 +121,8 @@ GoRouter appRouter(Ref ref) {
     errorBuilder: (_, state) => AppRoutingErrorScreen(error: state.error),
     redirect: (_, routeState) {
       final initialization = ref.read(appInitializationProvider);
-      final isInHomeBranch = routeState.matchedLocation == AppRoutes.home ||
+      final isInHomeShell = routeState.matchedLocation == AppRoutes.search ||
+          routeState.matchedLocation == AppRoutes.home ||
           routeState.matchedLocation.startsWith('${AppRoutes.home}/');
       final destination = initialization.when(
         loading: () => AppRoutes.root,
@@ -146,7 +130,7 @@ GoRouter appRouter(Ref ref) {
         data: (initializationState) => switch (initializationState) {
           AppInitState.onboarding => AppRoutes.onboarding,
           AppInitState.ready =>
-            isInHomeBranch ? routeState.matchedLocation : AppRoutes.home,
+            isInHomeShell ? routeState.matchedLocation : AppRoutes.home,
         },
       );
 
@@ -174,29 +158,4 @@ GoRouter appRouter(Ref ref) {
   });
   ref.onDispose(router.dispose);
   return router;
-}
-
-class AppRoutingErrorScreen extends StatelessWidget {
-  const AppRoutingErrorScreen({super.key, this.error});
-
-  final Exception? error;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Padding(
-            padding: EdgeInsets.all(24.0),
-            child: Text(
-              error == null
-                  ? 'The requested page could not be opened.'
-                  : 'The requested page could not be opened:\n$error',
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }

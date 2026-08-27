@@ -4,7 +4,7 @@ import 'package:live_vitalist/features/aliment/domain/aliment_extensions.dart';
 import 'package:live_vitalist/features/day/domain/meal.dart';
 import 'package:live_vitalist/features/meals_journal/presentation/widgets/custom_divider.dart';
 import 'package:live_vitalist/features/meals_journal/presentation/widgets/meal_element.dart';
-import 'package:live_vitalist/features/super_search/presentation/controllers/super_search_controller.dart';
+import 'package:live_vitalist/features/super_search/presentation/utils/super_search_navigation.dart';
 
 import '../aliment/data/aliment_bank.dart';
 import '../../core/presentation/widgets/custom_card.dart';
@@ -62,9 +62,8 @@ class MealsJournal extends ConsumerWidget {
               dayNotifier.removeMeal(date, meal.name);
             }
           },
-          onAdd: () => ref
-              .read(superSearchProvider.notifier)
-              .enter(date: date, mealName: meal.name),
+          onAdd: () => SuperSearchNavigation.open(context, ref,
+              date: date, mealName: meal.name),
         );
       },
     ).toList();
@@ -86,7 +85,7 @@ class MealsJournal extends ConsumerWidget {
             onPressed: () async {
               final newMealName = await showDialog(
                 context: context,
-                builder: (_) => Dialog(
+                builder: (context) => Dialog(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24.0, vertical: 16.0),

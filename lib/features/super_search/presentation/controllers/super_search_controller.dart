@@ -11,11 +11,8 @@ class SuperSearch extends _$SuperSearch {
   @override
   SuperSearchState build() => const SuperSearchState();
 
-  void enter({DateTime? date, String? mealName}) => state = state.copyWith(
-        isActive: true,
-        date: date,
-        mealName: mealName,
-      );
+  void enter({DateTime? date, String? mealName}) =>
+      state = state.copyWith(date: date, mealName: mealName);
 
   void exit() => state = const SuperSearchState();
 
@@ -48,7 +45,5 @@ class SuperSearch extends _$SuperSearch {
     for (final item in selection.reversed) {
       bankNotifier.setFirst(item.alimentID);
     }
-
-    exit();
   }
 }
