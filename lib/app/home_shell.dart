@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:live_vitalist/features/super_search/presentation/super_search_screen.dart';
+import 'package:live_vitalist/features/super_search/presentation/widgets/super_search_bar_overlay.dart';
 
 class HomeShell extends StatelessWidget {
   final Widget child;
@@ -21,7 +21,7 @@ class HomeShell extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           child,
-          SuperSearchScreen(
+          SuperSearchBarOverlay(
             isHomeRoute: isHomeRoute,
             isSearchRoute: isSearchRoute,
           ),
