@@ -12,6 +12,8 @@ import 'package:live_vitalist/app/my_app.dart';
 // TODO: Have the user be able to log their meal from the notification
 // with a message text field.
 
+// TODO: Bug: Closing super search with gesture after closing the meal selector closes the app
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
