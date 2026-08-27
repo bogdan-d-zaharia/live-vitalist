@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>958879460718-f8cjq05d0sn5ngjlvv6kubcicvlsi00u.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.958879460718-f8cjq05d0sn5ngjlvv6kubcicvlsi00u</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>958879460718-62r59r7a9ihqnnb9lerv7133q52k5205.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCybRgSbI6qBeu-rwbyZ4R29h7NVo-3430</string>
+	<key>GCM_SENDER_ID</key>
+	<string>958879460718</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>live.vitalist.app</string>
+	<key>PROJECT_ID</key>
+	<string>vitalist-369f7</string>
+	<key>STORAGE_BUCKET</key>
+	<string>vitalist-369f7.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:958879460718:ios:c68e96b15b9e11de22a57f</string>
+	<key>DATABASE_URL</key>
+	<string>https://vitalist-369f7-default-rtdb.europe-west1.firebasedatabase.app</string>
+</dict>
+</plist>
