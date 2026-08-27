@@ -7,14 +7,12 @@ part 'super_search_state.freezed.dart';
 
 @freezed
 class SuperSearchState with _$SuperSearchState {
-  final bool isActive;
   final String query;
   final List<PendingAliment> selection;
   final DateTime? date;
   final String? mealName;
 
   const SuperSearchState({
-    this.isActive = false,
     this.query = '',
     this.selection = const [],
     this.date,

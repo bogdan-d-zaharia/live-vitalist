@@ -7,6 +7,7 @@ import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
 import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/features/day/data/day_provider.dart';
 import 'package:live_vitalist/features/super_search/presentation/controllers/super_search_controller.dart';
+import 'package:live_vitalist/features/super_search/presentation/utils/super_search_navigation.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/aliment_result_tile.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/empty_search.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/meal_picker_dialog.dart';
@@ -14,7 +15,9 @@ import 'package:live_vitalist/features/super_search/presentation/widgets/search_
 import 'package:live_vitalist/features/super_search/super_search_constants.dart';
 
 class SearchOverlay extends ConsumerWidget {
-  const SearchOverlay({super.key});
+  final bool isActive;
+
+  const SearchOverlay({super.key, required this.isActive});
 
   Future<void> _commitSelection(BuildContext context, WidgetRef ref) async {
     FocusManager.instance.primaryFocus?.unfocus();
@@ -32,6 +35,8 @@ class SearchOverlay extends ConsumerWidget {
     ref
         .read(superSearchProvider.notifier)
         .commitSelection(date: date, mealName: mealName);
+
+    if (context.mounted) SuperSearchNavigation.close(context);
   }
 
   @override
@@ -50,19 +55,19 @@ class SearchOverlay extends ConsumerWidget {
         selectedCount == 1 ? 'Add aliment' : 'Add $selectedCount aliments';
 
     return AnimatedOpacity(
-      opacity: searchState.isActive ? 1.0 : 0.0,
+      opacity: isActive ? 1.0 : 0.0,
       duration: SuperSearchConstants.overlayFadeDuration,
       curve: Curves.easeOut,
       child: ClipRRect(
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
           child: IgnorePointer(
-            ignoring: !searchState.isActive,
+            ignoring: !isActive,
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {
                 FocusManager.instance.primaryFocus?.unfocus();
-                ref.read(superSearchProvider.notifier).exit();
+                SuperSearchNavigation.close(context);
               },
               child: Padding(
                 padding: EdgeInsets.only(
@@ -81,52 +86,53 @@ class SearchOverlay extends ConsumerWidget {
                       ),
                       child: Column(
                         children: [
-                        SearchHeader(
-                          query: searchState.query,
-                          resultCount: filteredKeys.length,
-                        ),
-                        Divider(
-                          height: 24.0,
-                          color: Theme.of(context).dividerColor,
-                        ),
-                        Expanded(
-                          child: AnimatedSwitcher(
-                            duration: SuperSearchConstants.overlayFadeDuration,
-                            child: filteredKeys.isEmpty
-                                ? EmptySearch()
-                                : ListView.builder(
-                                    key: const ValueKey('search-results'),
-                                    padding: EdgeInsets.zero,
-                                    itemCount: filteredKeys.length,
-                                    itemBuilder: (context, index) {
-                                      final id = filteredKeys[index];
-                                      return AlimentResultTile(
-                                        key: ValueKey(id),
-                                        alimentID: id,
-                                      );
-                                    },
-                                  ),
+                          SearchHeader(
+                            query: searchState.query,
+                            resultCount: filteredKeys.length,
                           ),
-                        ),
-                        AnimatedSize(
-                          duration: SuperSearchConstants.overlayFadeDuration,
-                          curve: Curves.easeOut,
-                          child: searchState.selection.isEmpty
-                              ? SizedBox.shrink()
-                              : Padding(
-                                  padding: const EdgeInsets.only(top: 12.0),
-                                  child: SizedBox(
-                                    width: double.infinity,
-                                    height: 48.0,
-                                    child: ElevatedButton.icon(
-                                      onPressed: () =>
-                                          _commitSelection(context, ref),
-                                      icon: const Icon(Icons.add_rounded),
-                                      label: Text(selectionLabel),
+                          Divider(
+                            height: 24.0,
+                            color: Theme.of(context).dividerColor,
+                          ),
+                          Expanded(
+                            child: AnimatedSwitcher(
+                              duration:
+                                  SuperSearchConstants.overlayFadeDuration,
+                              child: filteredKeys.isEmpty
+                                  ? EmptySearch()
+                                  : ListView.builder(
+                                      key: const ValueKey('search-results'),
+                                      padding: EdgeInsets.zero,
+                                      itemCount: filteredKeys.length,
+                                      itemBuilder: (context, index) {
+                                        final id = filteredKeys[index];
+                                        return AlimentResultTile(
+                                          key: ValueKey(id),
+                                          alimentID: id,
+                                        );
+                                      },
+                                    ),
+                            ),
+                          ),
+                          AnimatedSize(
+                            duration: SuperSearchConstants.overlayFadeDuration,
+                            curve: Curves.easeOut,
+                            child: searchState.selection.isEmpty
+                                ? SizedBox.shrink()
+                                : Padding(
+                                    padding: const EdgeInsets.only(top: 12.0),
+                                    child: SizedBox(
+                                      width: double.infinity,
+                                      height: 48.0,
+                                      child: ElevatedButton.icon(
+                                        onPressed: () =>
+                                            _commitSelection(context, ref),
+                                        icon: const Icon(Icons.add_rounded),
+                                        label: Text(selectionLabel),
+                                      ),
                                     ),
                                   ),
-                                ),
-                        ),
+                          ),
                         ],
                       ),
                     ),

@@ -14,7 +14,6 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$SuperSearchState {
-  bool get isActive;
   String get query;
   List<PendingAliment> get selection;
   DateTime? get date;
@@ -33,8 +32,6 @@ mixin _$SuperSearchState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is SuperSearchState &&
-            (identical(other.isActive, isActive) ||
-                other.isActive == isActive) &&
             (identical(other.query, query) || other.query == query) &&
             const DeepCollectionEquality().equals(other.selection, selection) &&
             (identical(other.date, date) || other.date == date) &&
@@ -43,12 +40,12 @@ mixin _$SuperSearchState {
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, isActive, query,
+  int get hashCode => Object.hash(runtimeType, query,
       const DeepCollectionEquality().hash(selection), date, mealName);
 
   @override
   String toString() {
-    return 'SuperSearchState(isActive: $isActive, query: $query, selection: $selection, date: $date, mealName: $mealName)';
+    return 'SuperSearchState(query: $query, selection: $selection, date: $date, mealName: $mealName)';
   }
 }
 
@@ -59,8 +56,7 @@ abstract mixin class $SuperSearchStateCopyWith<$Res> {
       _$SuperSearchStateCopyWithImpl;
   @useResult
   $Res call(
-      {bool isActive,
-      String query,
+      {String query,
       List<PendingAliment> selection,
       DateTime? date,
       String? mealName});
@@ -79,17 +75,12 @@ class _$SuperSearchStateCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? isActive = null,
     Object? query = null,
     Object? selection = null,
     Object? date = freezed,
     Object? mealName = freezed,
   }) {
     return _then(SuperSearchState(
-      isActive: null == isActive
-          ? _self.isActive
-          : isActive // ignore: cast_nullable_to_non_nullable
-              as bool,
       query: null == query
           ? _self.query
           : query // ignore: cast_nullable_to_non_nullable

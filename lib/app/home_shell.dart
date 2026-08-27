@@ -4,11 +4,13 @@ import 'package:live_vitalist/features/super_search/presentation/super_search_sc
 class HomeShell extends StatelessWidget {
   final Widget child;
   final bool isHomeRoute;
+  final bool isSearchRoute;
 
   const HomeShell({
     super.key,
     required this.child,
     required this.isHomeRoute,
+    required this.isSearchRoute,
   });
 
   @override
@@ -19,7 +21,10 @@ class HomeShell extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           child,
-          SuperSearchScreen(isHomeRoute: isHomeRoute),
+          SuperSearchScreen(
+            isHomeRoute: isHomeRoute,
+            isSearchRoute: isSearchRoute,
+          ),
         ],
       ),
     );
