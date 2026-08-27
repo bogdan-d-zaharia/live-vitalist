@@ -86,7 +86,7 @@ class MealsJournal extends ConsumerWidget {
             onPressed: () async {
               final newMealName = await showDialog(
                 context: context,
-                builder: (_) => Dialog(
+                builder: (context) => Dialog(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24.0, vertical: 16.0),
