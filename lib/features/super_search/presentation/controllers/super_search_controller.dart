@@ -6,7 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'super_search_controller.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class SuperSearch extends _$SuperSearch {
   @override
   SuperSearchState build() => const SuperSearchState();

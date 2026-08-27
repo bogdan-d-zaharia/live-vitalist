@@ -15,9 +15,7 @@ import 'package:live_vitalist/features/super_search/presentation/widgets/search_
 import 'package:live_vitalist/features/super_search/super_search_constants.dart';
 
 class SearchOverlay extends ConsumerWidget {
-  final bool isActive;
-
-  const SearchOverlay({super.key, required this.isActive});
+  const SearchOverlay({super.key});
 
   Future<void> _commitSelection(BuildContext context, WidgetRef ref) async {
     FocusManager.instance.primaryFocus?.unfocus();
@@ -28,7 +26,7 @@ class SearchOverlay extends ConsumerWidget {
 
     if (date == null || mealName == null) {
       mealName = await showMealPicker(context);
-      if (mealName == null) return;
+      if (!context.mounted || mealName == null) return;
       date = ref.read(selectedDatesProvider).first;
     }
 
@@ -54,88 +52,79 @@ class SearchOverlay extends ConsumerWidget {
     final selectionLabel =
         selectedCount == 1 ? 'Add aliment' : 'Add $selectedCount aliments';
 
-    return AnimatedOpacity(
-      opacity: isActive ? 1.0 : 0.0,
-      duration: SuperSearchConstants.overlayFadeDuration,
-      curve: Curves.easeOut,
-      child: ClipRRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-          child: IgnorePointer(
-            ignoring: !isActive,
+    return ClipRRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+            SuperSearchNavigation.close(context);
+          },
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 16.0,
+              right: 16.0,
+              bottom: SuperSearchConstants.overlayBottomInset,
+            ),
             child: GestureDetector(
               behavior: HitTestBehavior.opaque,
-              onTap: () {
-                FocusManager.instance.primaryFocus?.unfocus();
-                SuperSearchNavigation.close(context);
-              },
-              child: Padding(
-                padding: EdgeInsets.only(
-                  left: 16.0,
-                  right: 16.0,
-                  bottom: SuperSearchConstants.overlayBottomInset,
-                ),
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () {},
-                  child: MiniCard(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 25.0,
-                        vertical: 20.0,
+              onTap: () {},
+              child: MiniCard(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 25.0,
+                    vertical: 20.0,
+                  ),
+                  child: Column(
+                    children: [
+                      SearchHeader(
+                        query: searchState.query,
+                        resultCount: filteredKeys.length,
                       ),
-                      child: Column(
-                        children: [
-                          SearchHeader(
-                            query: searchState.query,
-                            resultCount: filteredKeys.length,
-                          ),
-                          Divider(
-                            height: 24.0,
-                            color: Theme.of(context).dividerColor,
-                          ),
-                          Expanded(
-                            child: AnimatedSwitcher(
-                              duration:
-                                  SuperSearchConstants.overlayFadeDuration,
-                              child: filteredKeys.isEmpty
-                                  ? EmptySearch()
-                                  : ListView.builder(
-                                      key: const ValueKey('search-results'),
-                                      padding: EdgeInsets.zero,
-                                      itemCount: filteredKeys.length,
-                                      itemBuilder: (context, index) {
-                                        final id = filteredKeys[index];
-                                        return AlimentResultTile(
-                                          key: ValueKey(id),
-                                          alimentID: id,
-                                        );
-                                      },
-                                    ),
-                            ),
-                          ),
-                          AnimatedSize(
-                            duration: SuperSearchConstants.overlayFadeDuration,
-                            curve: Curves.easeOut,
-                            child: searchState.selection.isEmpty
-                                ? SizedBox.shrink()
-                                : Padding(
-                                    padding: const EdgeInsets.only(top: 12.0),
-                                    child: SizedBox(
-                                      width: double.infinity,
-                                      height: 48.0,
-                                      child: ElevatedButton.icon(
-                                        onPressed: () =>
-                                            _commitSelection(context, ref),
-                                        icon: const Icon(Icons.add_rounded),
-                                        label: Text(selectionLabel),
-                                      ),
-                                    ),
+                      Divider(
+                        height: 24.0,
+                        color: Theme.of(context).dividerColor,
+                      ),
+                      Expanded(
+                        child: AnimatedSwitcher(
+                          duration: SuperSearchConstants.overlayFadeDuration,
+                          child: filteredKeys.isEmpty
+                              ? EmptySearch()
+                              : ListView.builder(
+                                  key: const ValueKey('search-results'),
+                                  padding: EdgeInsets.zero,
+                                  itemCount: filteredKeys.length,
+                                  itemBuilder: (context, index) {
+                                    final id = filteredKeys[index];
+                                    return AlimentResultTile(
+                                      key: ValueKey(id),
+                                      alimentID: id,
+                                    );
+                                  },
+                                ),
+                        ),
+                      ),
+                      AnimatedSize(
+                        duration: SuperSearchConstants.overlayFadeDuration,
+                        curve: Curves.easeOut,
+                        child: searchState.selection.isEmpty
+                            ? SizedBox.shrink()
+                            : Padding(
+                                padding: EdgeInsets.only(top: 12.0),
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  height: 48.0,
+                                  child: FilledButton.icon(
+                                    onPressed: () =>
+                                        _commitSelection(context, ref),
+                                    icon: Icon(Icons.add_rounded),
+                                    label: Text(selectionLabel),
                                   ),
-                          ),
-                        ],
+                                ),
+                              ),
                       ),
-                    ),
+                    ],
                   ),
                 ),
               ),

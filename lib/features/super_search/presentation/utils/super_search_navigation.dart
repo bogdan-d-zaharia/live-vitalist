@@ -11,10 +11,12 @@ abstract final class SuperSearchNavigation {
     DateTime? date,
     String? mealName,
   }) async {
-    final notifier = ref.read(superSearchProvider.notifier);
-    notifier.enter(date: date, mealName: mealName);
+    ref
+        .read(superSearchProvider.notifier)
+        .enter(date: date, mealName: mealName);
     await context.push<void>(AppRoutes.search);
-    notifier.exit();
+    if (!context.mounted) return;
+    ref.read(superSearchProvider.notifier).exit();
   }
 
   static void close(BuildContext context) {

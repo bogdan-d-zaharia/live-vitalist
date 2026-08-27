@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:live_vitalist/features/super_search/presentation/widgets/search_overlay.dart';
 
 class SuperSearchPage extends Page<void> {
   const SuperSearchPage({required super.key});
@@ -30,6 +31,6 @@ class _SuperSearchRoute extends PageRoute<void>
 
   @override
   Widget buildContent(BuildContext context) {
-    return const IgnorePointer(child: SizedBox.expand());
+    return const SafeArea(child: SearchOverlay());
   }
 }

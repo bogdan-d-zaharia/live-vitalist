@@ -3,28 +3,41 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/features/super_search/presentation/controllers/super_search_controller.dart';
 import 'package:live_vitalist/features/super_search/presentation/utils/add_aliment_actions.dart';
 import 'package:live_vitalist/features/super_search/presentation/utils/super_search_navigation.dart';
-import 'package:live_vitalist/features/super_search/presentation/widgets/search_overlay.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/super_bar.dart';
 
-class SuperSearchScreen extends ConsumerStatefulWidget {
+class SuperSearchBarOverlay extends ConsumerStatefulWidget {
   final bool isHomeRoute;
   final bool isSearchRoute;
 
-  const SuperSearchScreen({
+  const SuperSearchBarOverlay({
     super.key,
     required this.isHomeRoute,
     required this.isSearchRoute,
   });
 
   @override
-  ConsumerState<SuperSearchScreen> createState() => _SuperSearchScreenState();
+  ConsumerState<SuperSearchBarOverlay> createState() =>
+      _SuperSearchBarOverlayState();
 }
 
-class _SuperSearchScreenState extends ConsumerState<SuperSearchScreen> {
+class _SuperSearchBarOverlayState
+    extends ConsumerState<SuperSearchBarOverlay> {
   final TextEditingController _searchController = TextEditingController();
+  bool _isOpeningSearch = false;
+
+  Future<void> _openSearch() async {
+    if (_isOpeningSearch || widget.isSearchRoute) return;
+
+    _isOpeningSearch = true;
+    try {
+      await SuperSearchNavigation.open(context, ref);
+    } finally {
+      _isOpeningSearch = false;
+    }
+  }
 
   @override
-  void didUpdateWidget(covariant SuperSearchScreen oldWidget) {
+  void didUpdateWidget(covariant SuperSearchBarOverlay oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.isSearchRoute && !widget.isSearchRoute) {
       _searchController.clear();
@@ -40,14 +53,11 @@ class _SuperSearchScreenState extends ConsumerState<SuperSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final searchNotifier = ref.read(superSearchProvider.notifier);
     final isActive = widget.isSearchRoute;
-    final isVisible = widget.isHomeRoute;
 
     return SafeArea(
       child: Stack(
         children: [
-          Positioned.fill(child: SearchOverlay(isActive: isActive)),
           AnimatedPositioned(
             duration: Duration(milliseconds: 500),
             curve: Curves.easeOutCubic,
@@ -55,16 +65,17 @@ class _SuperSearchScreenState extends ConsumerState<SuperSearchScreen> {
             right: 12.0,
             bottom: switch (true) {
               _ when isActive => 20.0,
-              _ when isVisible => 0.0,
+              _ when widget.isHomeRoute => 0.0,
               _ => -80.0,
             },
             child: TextFieldTapRegion(
               child: SuperBar(
                 controller: _searchController,
                 isActive: isActive,
-                onEnter: () => SuperSearchNavigation.open(context, ref),
+                onEnter: _openSearch,
                 onExit: () => SuperSearchNavigation.close(context),
-                onChanged: searchNotifier.setQuery,
+                onChanged: (query) =>
+                    ref.read(superSearchProvider.notifier).setQuery(query),
                 onAdd: (isTemp, isGen) {
                   if (isGen) {
                     AddAlimentActions.addGenerated(
