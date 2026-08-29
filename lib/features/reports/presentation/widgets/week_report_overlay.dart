@@ -6,11 +6,13 @@ import 'package:live_vitalist/core/theme/app_colors_theme.dart';
 import 'package:live_vitalist/features/reports/presentation/theme/report_styles.dart';
 import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
 import 'package:live_vitalist/features/nutrient_display/domain/intake.dart';
+import 'package:live_vitalist/features/nutrient_display/presentation/ui_helpers/nutrient_extensions.dart';
 import 'package:live_vitalist/features/reports/domain/entities/intake_evolution.dart';
 import 'package:live_vitalist/features/reports/domain/entities/week_report.dart';
 import 'package:live_vitalist/features/reports/presentation/widgets/calories_hero.dart';
 import 'package:live_vitalist/features/reports/presentation/widgets/consistency_strip.dart';
 import 'package:live_vitalist/features/reports/presentation/widgets/macro_grid.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class WeekReportOverlay extends ConsumerWidget {
   final WeekReport weekReport;
@@ -22,28 +24,39 @@ class WeekReportOverlay extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final nutrients = ref.watch(nutrientsProvider).data;
+    final localization = AppLocalizations.of(context);
+    final localeCode = Localizations.localeOf(context).languageCode;
     final intakes = weekReport.currentWeek.averageIntake.map(
-      (key, value) => MapEntry(
-        key,
-        IntakeEvolution(
-          weekReport.previousWeek.averageIntake[key] != null
-              ? Intake(
-                  nutrients[key]?.translations['ENG'] ?? '',
-                  weekReport.previousWeek.averageIntake[key]!,
-                  nutrients[key]?.lowerLimit,
-                  nutrients[key]?.upperLimit,
-                  nutrients[key]?.unit ?? '',
-                )
-              : null,
-          Intake(
-            nutrients[key]?.translations['ENG'] ?? '',
-            value,
-            nutrients[key]?.lowerLimit,
-            nutrients[key]?.upperLimit,
-            nutrients[key]?.unit ?? '',
+      (key, value) {
+        final nutrient = nutrients[key];
+        final label = nutrient?.resolveNutrientLabel(
+              localization: localization,
+              nutrientKey: key,
+              localeCode: localeCode,
+            ) ??
+            key;
+        return MapEntry(
+          key,
+          IntakeEvolution(
+            weekReport.previousWeek.averageIntake[key] != null
+                ? Intake(
+                    label,
+                    weekReport.previousWeek.averageIntake[key]!,
+                    nutrient?.lowerLimit,
+                    nutrient?.upperLimit,
+                    nutrient?.unit ?? '',
+                  )
+                : null,
+            Intake(
+              label,
+              value,
+              nutrient?.lowerLimit,
+              nutrient?.upperLimit,
+              nutrient?.unit ?? '',
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
     final averageCalories = intakes.remove('kcals')?.current;
     final evolutions = intakes.values.toList(); // the remaining

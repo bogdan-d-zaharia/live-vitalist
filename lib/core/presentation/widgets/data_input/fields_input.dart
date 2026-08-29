@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 class FieldsInput extends StatefulWidget {
   const FieldsInput({
     required this.fields,
+    this.hints = const {},
     super.key,
   });
 
   final Map<String, dynamic> fields;
+  final Map<String, String> hints;
 
   @override
   State<FieldsInput> createState() => _FieldsInputState();
@@ -89,6 +91,9 @@ class _FieldsInputState extends State<FieldsInput> {
                         setAtIndex(i, val);
                       },
                       keyboardType: keyboardTypes[i],
+                      decoration: InputDecoration(
+                        hintText: widget.hints[editable.keys.elementAt(i)],
+                      ),
                     ),
                   ),
                 ],

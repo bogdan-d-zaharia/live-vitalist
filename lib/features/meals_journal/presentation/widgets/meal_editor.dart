@@ -9,7 +9,6 @@ import 'package:live_vitalist/features/meals_journal/presentation/widgets/alimen
 import 'package:live_vitalist/features/meals_journal/presentation/widgets/custom_divider.dart';
 import 'package:live_vitalist/features/meals_journal/presentation/widgets/element_widget.dart';
 import 'package:live_vitalist/features/notifications/notification_handler.dart';
-import 'package:live_vitalist/features/settings/data/settings_data.dart';
 import 'package:live_vitalist/features/super_search/presentation/utils/super_search_navigation.dart';
 
 class MealEditor extends ConsumerWidget {
@@ -62,10 +61,7 @@ class MealEditor extends ConsumerWidget {
     }
 
     final addInstanced = ElementWidget(
-      title: {
-        'ENG': 'Add aliment',
-        'ROU': 'Adaugare aliment',
-      }[SettingsData.language]!,
+      title: 'Add aliment',
       subTitle: '',
       onTap: () => SuperSearchNavigation.open(context, ref,
           date: date, mealName: meal.name),
@@ -73,10 +69,7 @@ class MealEditor extends ConsumerWidget {
     );
 
     final addTemporary = ElementWidget(
-      title: {
-        'ENG': 'Add temporary aliment',
-        'ROU': 'Adaugare aliment temporar',
-      }[SettingsData.language]!,
+      title: 'Add temporary aliment',
       subTitle: '',
       onTap: () async {
         final TemporaryAliment? newAliment =

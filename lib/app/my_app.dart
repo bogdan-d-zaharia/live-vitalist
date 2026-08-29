@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/app/routing/app_router.dart';
 import 'package:live_vitalist/core/theme/app_colors_theme.dart';
 import 'package:live_vitalist/core/theme/app_text_styles_theme.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class MyApp extends ConsumerWidget {
   const MyApp({super.key});
@@ -35,6 +36,8 @@ class MyApp extends ConsumerWidget {
 
     return MaterialApp.router(
       routerConfig: routerConfig,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       debugShowCheckedModeBanner: false,
       title: 'Live Vitalist',
       theme: ThemeData(

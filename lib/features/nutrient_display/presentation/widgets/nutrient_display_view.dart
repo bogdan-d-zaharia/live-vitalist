@@ -7,6 +7,7 @@ import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
 import 'package:live_vitalist/features/nutrient_display/presentation/ui_helpers/nutrient_sorting_logic.dart';
 import 'package:live_vitalist/features/nutrient_display/presentation/ui_helpers/nutrient_extensions.dart';
 import 'package:live_vitalist/features/nutrient_display/presentation/widgets/nutrient_tile.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class NutrientDisplayView extends ConsumerWidget {
   const NutrientDisplayView({super.key});
@@ -24,12 +25,19 @@ class NutrientDisplayView extends ConsumerWidget {
 
     final intake = avgDay.readIntake(bank);
 
+    final l = AppLocalizations.of(context);
+    final localeCode = Localizations.localeOf(context).languageCode;
     final keys = filteredAndSortedKeys(state, intake);
     final widgets = keys.map((key) {
       final field = state.data[key]!;
       final value = (intake[key] ?? 0.0);
+      final label = field.resolveNutrientLabel(
+        localization: l,
+        nutrientKey: key,
+        localeCode: localeCode,
+      );
       return NutrientTile(
-        intake: field.toIntake(value),
+        intake: field.toIntake(label, value),
         nutrientName: key,
         bank: bank,
         day: avgDay,

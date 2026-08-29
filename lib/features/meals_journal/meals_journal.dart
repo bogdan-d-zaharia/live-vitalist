@@ -11,8 +11,9 @@ import '../../core/presentation/widgets/custom_card.dart';
 import '../day/domain/day.dart';
 import '../day/data/day_provider.dart';
 import '../nutrient/data/nutrient_provider.dart';
-import '../settings/data/settings_data.dart';
+import '../nutrient_display/presentation/ui_helpers/nutrient_extensions.dart';
 import '../../core/presentation/widgets/data_input/string_input.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class MealsJournal extends ConsumerWidget {
   final Future<void> Function(String mealName, DateTime date) onOpenMeal;
@@ -29,6 +30,14 @@ class MealsJournal extends ConsumerWidget {
     final date = ref.watch(selectedDatesProvider).first;
     final bank = ref.watch(alimentBankProvider);
     final nutrients = ref.watch(nutrientsProvider).data;
+    final localization = AppLocalizations.of(context);
+    final localeCode = Localizations.localeOf(context).languageCode;
+    final kcalsLabel = nutrients['kcals']?.resolveNutrientLabel(
+          localization: localization,
+          nutrientKey: 'kcals',
+          localeCode: localeCode,
+        ) ??
+        'Calories';
 
     final List<Widget> elements = day.meals.map<Widget>(
       (meal) {
@@ -36,8 +45,7 @@ class MealsJournal extends ConsumerWidget {
         final int kcals = values['kcals']?.round() ?? 0;
         return MealElement(
           title: meal.name,
-          subtitle:
-              '$kcals ${nutrients['kcals']?.translations[SettingsData.language]?.toLowerCase() ?? ''}',
+          subtitle: '$kcals ${kcalsLabel.toLowerCase()}',
           onTap: () => onOpenMeal(meal.name, date),
           onLongPress: () async {
             final isDelete = await showDialog<bool>(
@@ -74,10 +82,7 @@ class MealsJournal extends ConsumerWidget {
 
     return CustomCard(
       logo: Icon(Icons.menu_book_rounded),
-      title: {
-        'ENG': 'Meals Journal',
-        'ROU': 'Jurnal Mese'
-      }[SettingsData.language],
+      title: 'Meals Journal',
       action: SizedBox(
         height: 36.0,
         child: Center(

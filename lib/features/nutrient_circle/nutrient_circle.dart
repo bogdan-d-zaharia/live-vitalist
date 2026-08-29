@@ -5,10 +5,11 @@ import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/features/day/data/day_provider.dart';
 import 'package:live_vitalist/features/day/domain/day_extensions.dart';
 import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
-import 'package:live_vitalist/features/settings/data/settings_data.dart';
+import 'package:live_vitalist/features/nutrient_display/presentation/ui_helpers/nutrient_extensions.dart';
 import 'package:live_vitalist/features/nutrient_circle/presentation/widgets/animated_calorie_ring.dart';
 import 'package:live_vitalist/features/nutrient_circle/presentation/nutrient_circle_constants.dart';
 import 'package:live_vitalist/core/theme/app_text_styles_theme.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class NutrientCircle extends ConsumerWidget {
   const NutrientCircle({super.key});
@@ -21,6 +22,8 @@ class NutrientCircle extends ConsumerWidget {
     final nutrientState = ref.watch(nutrientsProvider);
     final avgDay = ref.watch(syncAverageDayProvider);
     final bank = ref.watch(alimentBankProvider);
+    final localization = AppLocalizations.of(context);
+    final localeCode = Localizations.localeOf(context).languageCode;
 
     if (nutrientState.order.isEmpty) return const SizedBox.shrink();
 
@@ -29,7 +32,11 @@ class NutrientCircle extends ConsumerWidget {
       orElse: () => nutrientState.order.first,
     );
     final nutrient = nutrientState.data[key]!;
-    final label = nutrient.translations[SettingsData.language] ?? key;
+    final label = nutrient.resolveNutrientLabel(
+      localization: localization,
+      nutrientKey: key,
+      localeCode: localeCode,
+    );
     final unit = nutrient.unit;
 
     final amount = avgDay.readIntake(bank)[key] ?? 0.0;

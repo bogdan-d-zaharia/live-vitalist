@@ -39,8 +39,8 @@ double _mapRange(
 
 int _compareAscending(
     double intakeA, Nutrient fieldA, double intakeB, Nutrient fieldB) {
-  // final debugNA = fieldA.translations['ENG'];
-  // final debugNB = fieldB.translations['ENG'];
+  // final debugNA = fieldA.translationOverrides['en'];
+  // final debugNB = fieldB.translationOverrides['en'];
 
   final ratioA = fieldA.getRatio(intakeA)!;
   final ratioB = fieldB.getRatio(intakeB)!;

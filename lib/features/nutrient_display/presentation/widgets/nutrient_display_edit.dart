@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
+import 'package:live_vitalist/features/nutrient_display/presentation/ui_helpers/nutrient_extensions.dart';
 import 'package:live_vitalist/features/nutrient_display/presentation/ui_helpers/nutrients_editing_logic.dart';
 import 'package:live_vitalist/features/nutrient_display/presentation/widgets/dimmed_parentheses_text.dart';
-import 'package:live_vitalist/features/settings/data/settings_data.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class NutrientDisplayEdit extends ConsumerWidget {
   const NutrientDisplayEdit({super.key});
@@ -12,15 +13,21 @@ class NutrientDisplayEdit extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final nutrientsState = ref.watch(nutrientsProvider);
     final nutrientsNotifier = ref.read(nutrientsProvider.notifier);
+    final localization = AppLocalizations.of(context);
+    final localeCode = Localizations.localeOf(context).languageCode;
 
     final widgets = nutrientsState.order.map((key) {
       final nutrient = nutrientsState.data[key]!;
-      final label = nutrient.translations[SettingsData.language]!;
+      final label = nutrient.resolveNutrientLabel(
+        localization: localization,
+        nutrientKey: key,
+        localeCode: localeCode,
+      );
 
       return InkWell(
         key: ValueKey(key),
         onTap: () async {
-          final updated = await editNutrient(context, nutrient);
+          final updated = await editNutrient(context, nutrient, key);
           if (updated != null) nutrientsNotifier.update(key, updated);
         },
         child: Row(

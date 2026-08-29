@@ -5,7 +5,8 @@ import 'package:live_vitalist/features/aliment/domain/aliment.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_extensions.dart';
 import 'package:live_vitalist/features/meals_journal/presentation/widgets/element_widget.dart';
 import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
-import 'package:live_vitalist/features/settings/data/settings_data.dart';
+import 'package:live_vitalist/features/nutrient_display/presentation/ui_helpers/nutrient_extensions.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class AlimentWidget extends ConsumerWidget {
   const AlimentWidget({
@@ -25,12 +26,18 @@ class AlimentWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final model = ref.watch(nutrientsProvider).data;
     final bank = ref.watch(alimentBankProvider);
+    final kcalsLabel = model['kcals']?.resolveNutrientLabel(
+          localization: AppLocalizations.of(context),
+          nutrientKey: 'kcals',
+          localeCode: Localizations.localeOf(context).languageCode,
+        ) ??
+        'Calories';
 
     final values = aliment.readFields(bank);
     return ElementWidget(
       title: aliment.readDataRef(bank).name,
       subTitle:
-          '${values['kcals']?.round() ?? 0} ${model['kcals']?.translations[SettingsData.language]?.toLowerCase() ?? ''}, ${aliment.servingSize} ${aliment.unit}',
+          '${values['kcals']?.round() ?? 0} ${kcalsLabel.toLowerCase()}, ${aliment.servingSize} ${aliment.unit}',
       onTap: onTap,
       onLongPress: onLongPress,
       additional: [
