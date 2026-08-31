@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/app/my_app.dart';
+import 'package:live_vitalist/features/settings/data/settings_data.dart';
 
 // Fetching announcements from localhost works
 // by using ngrok with the port.
@@ -16,6 +17,7 @@ import 'package:live_vitalist/app/my_app.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SettingsData.init();
 
   runApp(ProviderScope(child: MyApp()));
 }

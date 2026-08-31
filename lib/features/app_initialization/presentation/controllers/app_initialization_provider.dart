@@ -25,7 +25,6 @@ class AppInitialization extends _$AppInitialization {
     _firebaseFuture = _initFirebase();
     _firebaseFuture.ignore();
     NotificationHandler.initialize().ignore();
-    await SettingsData.init();
 
     if (!SettingsData.hasCompletedOnboarding) {
       await Future.delayed(Duration(seconds: 2));

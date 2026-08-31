@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/app/routing/app_router.dart';
+import 'package:live_vitalist/core/localization/localization_provider.dart';
 import 'package:live_vitalist/core/theme/app_colors_theme.dart';
 import 'package:live_vitalist/core/theme/app_text_styles_theme.dart';
 import 'package:live_vitalist/l10n/app_localizations.dart';
@@ -11,6 +12,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final routerConfig = ref.watch(appRouterProvider);
+    final languageCode = ref.watch(localizationProvider);
     final border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(24.0),
       borderSide: BorderSide.none,
@@ -38,6 +40,7 @@ class MyApp extends ConsumerWidget {
       routerConfig: routerConfig,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
+      locale: Locale(languageCode),
       debugShowCheckedModeBanner: false,
       title: 'Live Vitalist',
       theme: ThemeData(

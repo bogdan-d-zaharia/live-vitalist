@@ -1,0 +1,299 @@
+{
+  "@@locale": "ro",
+  "actionSave": "Salvează",
+  "actionCancel": "Anulează",
+  "actionDelete": "Șterge",
+  "actionContinue": "Continuă",
+  "actionTryAgain": "Încearcă din nou",
+  "actionRestore": "Restaurează",
+  "nutrientKcals": "Calorii",
+  "nutrientProtein": "Proteine",
+  "nutrientCarbs": "Carbohidrați",
+  "nutrientSugars": "Zaharuri",
+  "nutrientFibers": "Fibre",
+  "nutrientFats": "Grăsimi",
+  "nutrientOmega3": "Omega-3",
+  "nutrientOmega6": "Omega-6",
+  "nutrientSaturatedFats": "Grăsimi saturate",
+  "nutrientCholesterol": "Colesterol",
+  "nutrientSodium": "Sodiu",
+  "nutrientPotassium": "Potasiu",
+  "nutrientVitaminA": "Vitamina A (retinol)",
+  "nutrientVitaminB1": "Vitamina B1 (tiamină)",
+  "nutrientVitaminB2": "Vitamina B2 (riboflavină)",
+  "nutrientVitaminB3": "Vitamina B3 (niacină)",
+  "nutrientVitaminB4": "Vitamina B4 (colină)",
+  "nutrientVitaminB5": "Vitamina B5 (acid pantotenic)",
+  "nutrientVitaminB6": "Vitamina B6 (piridoxină)",
+  "nutrientVitaminB7": "Vitamina B7 (biotină)",
+  "nutrientVitaminB9": "Vitamina B9 (folat)",
+  "nutrientVitaminB12": "Vitamina B12 (cobalamină)",
+  "nutrientVitaminC": "Vitamina C (acid ascorbic)",
+  "nutrientVitaminD2": "Vitamina D2 (ergocalciferol)",
+  "nutrientVitaminD3": "Vitamina D3 (colecalciferol)",
+  "nutrientVitaminE": "Vitamina E (alfa-tocoferol)",
+  "nutrientVitaminK1": "Vitamina K1 (filochinonă)",
+  "nutrientVitaminK2": "Vitamina K2 (menachinonă)",
+  "nutrientCalcium": "Calciu",
+  "nutrientIron": "Fier",
+  "nutrientMagnesium": "Magneziu",
+  "nutrientZinc": "Zinc",
+  "onboardingGoalQuestion": "Care este obiectivul tău principal?",
+  "onboardingGoalOptionLoseWeight": "Slăbire",
+  "onboardingGoalOptionBuildMuscle": "Creșterea masei musculare",
+  "onboardingGoalOptionImproveHealth": "Îmbunătățirea sănătății",
+  "onboardingGoalOptionImprovePerformance": "Îmbunătățirea performanței",
+  "onboardingNutrientsQuestion": "Ce mai urmărești, în afară de calorii?",
+  "onboardingNutrientsOptionMacrosTitle": "Macronutrienți",
+  "onboardingNutrientsOptionMacrosFooter": "Proteine · Carbohidrați · Grăsimi",
+  "onboardingNutrientsOptionRiskFactorsTitle": "Factori de risc",
+  "onboardingNutrientsOptionRiskFactorsFooter": "Grăsimi sat. · Colesterol",
+  "onboardingNutrientsOptionElectrolytesTitle": "Electroliți",
+  "onboardingNutrientsOptionElectrolytesFooter": "Sodiu · Potasiu",
+  "onboardingNutrientsOptionVitaminsTitle": "Vitamine",
+  "onboardingNutrientsOptionVitaminsFooter": "A · Complex B · C · D · E · K",
+  "onboardingNutrientsOptionMineralsTitle": "Minerale",
+  "onboardingNutrientsOptionMineralsFooter": "Fier · Calciu · Magneziu · Zinc",
+  "onboardingStreakQuestion": "Îți place să ai o serie zilnică?",
+  "onboardingStreakOptionShowTitle": "Da! Îmi plac seriile!",
+  "onboardingStreakOptionShowFooter": "Ajută-mă să rămân consecvent în fiecare zi",
+  "onboardingStreakOptionHideTitle": "Nu, mi se par enervante.",
+  "onboardingStreakOptionHideFooter": "Urmărește doar progresul meu",
+  "noConnectionDialogTitle": "Fără acces la internet",
+  "noConnectionDialogMessage": "Conectează-te la internet pentru a accepta Termenii și condițiile și Politica de confidențialitate.",
+  "googleConnectionDialogAccountNotFoundTitle": "Cont negăsit",
+  "googleConnectionDialogAccountNotFoundMessage": "Nu am găsit un cont Live Vitalist conectat la acest cont Google. Finalizează mai întâi configurarea.",
+  "googleConnectionDialogConnectionFailedTitle": "Conectarea la Google a eșuat",
+  "googleConnectionDialogConnectionFailedMessage": "Nu ne-am putut conecta la Google. Verifică conexiunea la internet și încearcă din nou.",
+  "welcomeScreenTitle": "Bine ai venit la Live Vitalist",
+  "welcomeScreenSubtitle": "Hai să-ți configurăm profilul pentru a-ți personaliza parcursul de nutriție și fitness.",
+  "welcomeScreenExistingAccount": "Ai deja un cont? {googleLink}.",
+  "@welcomeScreenExistingAccount": {
+    "placeholders": {
+      "googleLink": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeScreenGoogleLink": "Conectează-te cu Google",
+  "termsScreenTitle": "Totul este pregătit",
+  "termsScreenAgreement": "Dacă continui, ești de acord cu {termsLink} și {privacyLink}.",
+  "@termsScreenAgreement": {
+    "placeholders": {
+      "termsLink": {
+        "type": "String"
+      },
+      "privacyLink": {
+        "type": "String"
+      }
+    }
+  },
+  "termsScreenTermsLink": "Termenii și condițiile",
+  "termsScreenPrivacyLink": "Politica de confidențialitate",
+  "legalDialogTitle": "Te rugăm să accepți termenii",
+  "legalPrerequisites": "Înainte de a utiliza Live Vitalist, citește și acceptă {privacyLink} și {termsLink}.",
+  "@legalPrerequisites": {
+    "placeholders": {
+      "privacyLink": {
+        "type": "String"
+      },
+      "termsLink": {
+        "type": "String"
+      }
+    }
+  },
+  "legalPrivacyPolicy": "Politica de confidențialitate",
+  "legalTermsOfUse": "Termenii de utilizare",
+  "legalSettingsHint": "Poți consulta oricând Politica de confidențialitate și Termenii de utilizare din Setările aplicației, accesibile din meniul ⋮ din colțul din dreapta sus.",
+  "appRoutingErrorMessage": "Pagina solicitată nu a putut fi deschisă.",
+  "appInitializationErrorMessage": "Aplicația nu a putut fi inițializată.",
+  "calendarTitle": "Calendar",
+  "calendarMaximum": "Maxim",
+  "calendarLeadingNutrient": "Nutrient dominant",
+  "calendarMinimum": "Minim",
+  "alimentJsonEditorTitle": "Editor JSON pentru aliment",
+  "alimentEditorTitle": "Editor de aliment",
+  "alimentEditorGenericTitle": "Editor",
+  "alimentEditorSaveChangesTitle": "Salvezi modificările?",
+  "alimentEditorSaveChangesMessage": "Vrei să salvezi acest aliment?",
+  "alimentEditorAddAliment": "Adaugă aliment",
+  "alimentEditorSearchAliment": "Caută aliment",
+  "alimentEditorServedAmount": "Cantitate servită:",
+  "alimentEditorSelectorTitle": "Selector de alimente",
+  "alimentEditorNewUnit": "Unitate nouă",
+  "alimentEditorUnitName": "Numele unității",
+  "alimentEditorAmount": "Cantitate",
+  "alimentEditorAddSynonym": "Adaugă sinonim",
+  "alimentEditorDeleteSynonym": "Șterge sinonim",
+  "alimentEditorEnterLabel": "Introdu {label}",
+  "@alimentEditorEnterLabel": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "mealsJournalDeleteMealTitle": "Ștergi masa?",
+  "mealsJournalDeleteMealMessage": "Sigur vrei să ștergi această masă?",
+  "mealsJournalTitle": "Jurnal de mese",
+  "mealsJournalBreakfast": "Mic dejun",
+  "mealsJournalLunch": "Prânz",
+  "mealsJournalDinner": "Cină",
+  "mealsJournalAddMeal": "Adaugă masă",
+  "mealsJournalAddAliment": "Adaugă aliment",
+  "mealsJournalAddTemporaryAliment": "Adaugă aliment temporar",
+  "mealsJournalShowNotification": "Afișează notificarea",
+  "mealsJournalAliments": "Alimente",
+  "mealsJournalCalories": "{count, plural, =1{1 calorie} other{{count} calorii}}",
+  "@mealsJournalCalories": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mealsJournalNotificationTitle": "{mealName}: {count, plural, =1{1 aliment} other{{count} alimente}}",
+  "@mealsJournalNotificationTitle": {
+    "placeholders": {
+      "mealName": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mealsJournalNotificationChannel": "Rezumat masă",
+  "mealsJournalNotificationChannelDescription": "Notificare text cu o listă de alimente",
+  "mealsJournalNotificationSummary": "Rezumat masă",
+  "mealsJournalNotificationBody": "Extinde pentru a vedea alimentele",
+  "superSearchSearchAliments": "Caută alimente",
+  "superSearchAliments": "Alimente",
+  "superSearchNoAlimentsFound": "Nu au fost găsite alimente",
+  "superSearchTryAnotherName": "Încearcă un alt nume sau verifică ortografia.",
+  "superSearchAddToMeal": "Adaugă la masă",
+  "superSearchWriteAlimentFirst": "Scrie mai întâi alimentul în bara de căutare.",
+  "superSearchAddAliments": "{count, plural, =1{Adaugă aliment} other{Adaugă {count} alimente}}",
+  "@superSearchAddAliments": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "superSearchResultCount": "{count, plural, =0{Niciun rezultat} =1{1 rezultat} other{{count} rezultate}}",
+  "@superSearchResultCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "nutrientDisplayTitle": "Nutrienți",
+  "nutrientDisplayAddNewNutrient": "Adaugă nutrient nou",
+  "nutrientDisplayAmount": "Cantitate:",
+  "nutrientDisplayLowerLimit": "Limită inferioară:",
+  "nutrientDisplayUpperLimit": "Limită superioară:",
+  "nutrientDisplayTopSources": "Surse principale",
+  "nutrientDisplayIntake": "Aport de {nutrient}",
+  "@nutrientDisplayIntake": {
+    "placeholders": {
+      "nutrient": {
+        "type": "String"
+      }
+    }
+  },
+  "nutrientDisplayAmountValue": "Cantitate: {amount}",
+  "@nutrientDisplayAmountValue": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "nutrientDisplayLowerLimitValue": "Limită inferioară: {value}",
+  "@nutrientDisplayLowerLimitValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "nutrientDisplayUpperLimitValue": "Limită superioară: {value}",
+  "@nutrientDisplayUpperLimitValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "ratioBarsTitle": "Bare de distribuție",
+  "reportsNoData": "Fără date",
+  "reportsPreviousWeek": "Săptămâna anterioară",
+  "reportsCurrentWeek": "Săptămâna curentă",
+  "reportsConsistency": "Consecvență",
+  "reportsAverageDailyCalories": "Media zilnică de calorii",
+  "reportsWeekReportTitle": "Raportul săptămânii {number}",
+  "@reportsWeekReportTitle": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "reportsWeekRange": "{start} – {end}",
+  "@reportsWeekRange": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsDaysOnTarget": "{count} / {total, plural, =1{1 zi} other{{total} zile}} cu obiectivul atins",
+  "@reportsDaysOnTarget": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "reportsMondayShort": "L",
+  "reportsTuesdayShort": "Ma",
+  "reportsWednesdayShort": "Mi",
+  "reportsThursdayShort": "J",
+  "reportsFridayShort": "V",
+  "reportsSaturdayShort": "S",
+  "reportsSundayShort": "D",
+  "settingsTitle": "Setări",
+  "settingsDocuments": "Documente",
+  "settingsPrivacyPolicy": "Politica de confidențialitate",
+  "settingsTermsOfUse": "Termenii de utilizare",
+  "settingsSendFeedback": "Trimite feedback",
+  "settingsDataDeletion": "Ștergerea datelor",
+  "settingsConnectWithGoogle": "Conectează-te cu Google",
+  "settingsGoogleBackupMessage": "Salvează copii de siguranță ale fișierelor în cloud sau restaurează datele conectându-te cu Google.",
+  "settingsUseMonthDayFormat": "Folosește formatul lună/zi",
+  "settingsUseComplexCalendar": "Folosește vizualizarea detaliată a calendarului",
+  "settingsShowMacroDistribution": "Afișează distribuția macronutrienților",
+  "settingsShowOmegaBalance": "Afișează raportul Omega-3/Omega-6",
+  "settingsAccountDeletion": "Ștergerea contului",
+  "settingsAccountAndDataDeletion": "Ștergerea contului și datelor",
+  "settingsPermanentlyDeleteOnlineData": "Șterge permanent datele online",
+  "settingsPermanentlyDeleteAllData": "Șterge permanent toate datele",
+  "settingsReauthenticateMessage": "Trebuie să te autentifici din nou înainte de a putea șterge contul asociat cu Google.",
+  "settingsReauthenticateAndDelete": "Reautentifică-te și șterge",
+  "settingsDeleteAllDescription": "Poți șterge contul și toate datele stocate online și pe dispozitiv folosind butonul de mai jos. Această acțiune va elimina permanent tot ce este asociat contului și va reseta aplicația.",
+  "settingsDeleteAllConfirmation": "Sigur vrei să ștergi contul și toate datele asociate? Aceasta va șterge datele online și stocarea locală. Acțiunea este permanentă și nu poate fi anulată.",
+  "settingsDeleteOnlineDescription": "Poți șterge contul și toate datele stocate online folosind butonul de mai jos. Datele vor fi eliminate permanent de pe serverele noastre, însă setările aplicației și stocarea locală vor rămâne pe dispozitiv.",
+  "settingsDeleteOnlineConfirmation": "Sigur vrei să ștergi contul și toate datele stocate online? Acțiunea este permanentă și nu poate fi anulată.",
+  "settingsDeletionFailed": "Ștergerea a eșuat. Nu a fost eliminat nimic.",
+  "legalClosingApp": "Se închide aplicația...",
+  "legalExitApp": "Ieși din aplicație",
+  "legalAgree": "Sunt de acord"
+}

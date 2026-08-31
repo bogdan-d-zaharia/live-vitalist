@@ -32,6 +32,11 @@ abstract final class SettingsData {
   static set privacyVersion(String val) =>
       _prefs.setString('privacyVersion', val);
 
+  static String? get language => _prefs.getString('language');
+  static set language(String? val) => val != null
+      ? _prefs.setString('language', val)
+      : _prefs.remove('language');
+
   static bool get isComplexCalendar =>
       _prefs.getBool('isComplexCalendar') ?? false;
   static set isComplexCalendar(bool val) =>

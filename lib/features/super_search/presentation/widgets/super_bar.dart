@@ -8,24 +8,25 @@ import 'package:live_vitalist/features/super_search/domain/super_bar_suggestion.
 import 'package:live_vitalist/features/super_search/presentation/controllers/suggestion_controller.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/animated_suggestion_hint.dart';
 import 'package:live_vitalist/features/super_search/super_search_constants.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
+
+SuperBarSuggestions _suggestions(AppLocalizations l) {
+  return SuperBarSuggestions(items: [
+    SuperBarSuggestion(
+      text: l.superSearchSearchAliments,
+      duration: Duration(seconds: 4),
+    ),
+    SuperBarSuggestion(
+      text: l.superSearchAddAliments(1),
+      duration: Duration(seconds: 4),
+    ),
+  ]);
+}
 
 class SuperBar extends ConsumerStatefulWidget {
-  static const defaultSuggestions = SuperBarSuggestions(
-    items: [
-      SuperBarSuggestion(
-        text: 'Search aliments',
-        duration: Duration(seconds: 4),
-      ),
-      SuperBarSuggestion(
-        text: 'Add an aliment',
-        duration: Duration(seconds: 4),
-      ),
-    ],
-  );
-
   final TextEditingController? controller;
   final bool isActive;
-  final SuperBarSuggestions suggestions;
+  final SuperBarSuggestions? suggestions;
   final void Function()? onEnter;
   final void Function()? onExit;
   final void Function(String)? onChanged;
@@ -35,7 +36,7 @@ class SuperBar extends ConsumerStatefulWidget {
     super.key,
     this.controller,
     required this.isActive,
-    this.suggestions = defaultSuggestions,
+    this.suggestions,
     required this.onEnter,
     required this.onExit,
     required this.onChanged,
@@ -81,16 +82,18 @@ class _SuperBarState extends ConsumerState<SuperBar> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final suggestions = widget.suggestions ?? _suggestions(l);
+
     final colorScheme = Theme.of(context).colorScheme;
     final barColor = Color.alphaBlend(
       colorScheme.primary.withValues(alpha: 0.04),
       colorScheme.surfaceContainerLow,
     );
     final suggestionIndex =
-        ref.watch(suggestionControllerProvider(widget.suggestions));
-    final suggestion = widget.suggestions.items.isEmpty
-        ? null
-        : widget.suggestions.items[suggestionIndex];
+        ref.watch(suggestionControllerProvider(suggestions));
+    final suggestion =
+        suggestions.items.isEmpty ? null : suggestions.items[suggestionIndex];
     final borderRadius = BorderRadius.circular(
       SuperSearchConstants.barHeight / 2.0,
     );

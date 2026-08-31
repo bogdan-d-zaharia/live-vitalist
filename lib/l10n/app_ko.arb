@@ -1,0 +1,299 @@
+{
+  "@@locale": "ko",
+  "actionSave": "저장",
+  "actionCancel": "취소",
+  "actionDelete": "삭제",
+  "actionContinue": "계속",
+  "actionTryAgain": "다시 시도",
+  "actionRestore": "복원",
+  "nutrientKcals": "칼로리",
+  "nutrientProtein": "단백질",
+  "nutrientCarbs": "탄수화물",
+  "nutrientSugars": "당류",
+  "nutrientFibers": "식이섬유",
+  "nutrientFats": "지방",
+  "nutrientOmega3": "오메가-3",
+  "nutrientOmega6": "오메가-6",
+  "nutrientSaturatedFats": "포화지방",
+  "nutrientCholesterol": "콜레스테롤",
+  "nutrientSodium": "나트륨",
+  "nutrientPotassium": "칼륨",
+  "nutrientVitaminA": "비타민 A(레티놀)",
+  "nutrientVitaminB1": "비타민 B1(티아민)",
+  "nutrientVitaminB2": "비타민 B2(리보플라빈)",
+  "nutrientVitaminB3": "비타민 B3(나이아신)",
+  "nutrientVitaminB4": "비타민 B4(콜린)",
+  "nutrientVitaminB5": "비타민 B5(판토텐산)",
+  "nutrientVitaminB6": "비타민 B6(피리독신)",
+  "nutrientVitaminB7": "비타민 B7(비오틴)",
+  "nutrientVitaminB9": "비타민 B9(엽산)",
+  "nutrientVitaminB12": "비타민 B12(코발라민)",
+  "nutrientVitaminC": "비타민 C(아스코르브산)",
+  "nutrientVitaminD2": "비타민 D2(에르고칼시페롤)",
+  "nutrientVitaminD3": "비타민 D3(콜레칼시페롤)",
+  "nutrientVitaminE": "비타민 E(알파 토코페롤)",
+  "nutrientVitaminK1": "비타민 K1(필로퀴논)",
+  "nutrientVitaminK2": "비타민 K2(메나퀴논)",
+  "nutrientCalcium": "칼슘",
+  "nutrientIron": "철",
+  "nutrientMagnesium": "마그네슘",
+  "nutrientZinc": "아연",
+  "onboardingGoalQuestion": "가장 중요한 목표는 무엇인가요?",
+  "onboardingGoalOptionLoseWeight": "체중 감량",
+  "onboardingGoalOptionBuildMuscle": "근육 증가",
+  "onboardingGoalOptionImproveHealth": "건강 개선",
+  "onboardingGoalOptionImprovePerformance": "운동 능력 향상",
+  "onboardingNutrientsQuestion": "칼로리 외에 무엇을 추적하나요?",
+  "onboardingNutrientsOptionMacrosTitle": "다량 영양소",
+  "onboardingNutrientsOptionMacrosFooter": "단백질 · 탄수화물 · 지방",
+  "onboardingNutrientsOptionRiskFactorsTitle": "위험 요인",
+  "onboardingNutrientsOptionRiskFactorsFooter": "포화지방 · 콜레스테롤",
+  "onboardingNutrientsOptionElectrolytesTitle": "전해질",
+  "onboardingNutrientsOptionElectrolytesFooter": "나트륨 · 칼륨",
+  "onboardingNutrientsOptionVitaminsTitle": "비타민",
+  "onboardingNutrientsOptionVitaminsFooter": "A · 비타민 B군 · C · D · E · K",
+  "onboardingNutrientsOptionMineralsTitle": "미네랄",
+  "onboardingNutrientsOptionMineralsFooter": "철 · 칼슘 · 마그네슘 · 아연",
+  "onboardingStreakQuestion": "연속 기록 기능을 좋아하시나요?",
+  "onboardingStreakOptionShowTitle": "네! 연속 기록이 좋아요!",
+  "onboardingStreakOptionShowFooter": "매일 꾸준히 기록할 수 있게 도와주세요",
+  "onboardingStreakOptionHideTitle": "아니요, 오히려 부담스러워요.",
+  "onboardingStreakOptionHideFooter": "진행 상황만 추적해 주세요",
+  "noConnectionDialogTitle": "인터넷 연결 없음",
+  "noConnectionDialogMessage": "이용 약관과 개인정보 처리방침에 동의하려면 인터넷에 연결해 주세요.",
+  "googleConnectionDialogAccountNotFoundTitle": "계정을 찾을 수 없음",
+  "googleConnectionDialogAccountNotFoundMessage": "이 Google 계정에 연결된 Live Vitalist 계정을 찾을 수 없습니다. 먼저 온보딩을 완료해 주세요.",
+  "googleConnectionDialogConnectionFailedTitle": "Google 연결 실패",
+  "googleConnectionDialogConnectionFailedMessage": "Google에 연결할 수 없습니다. 인터넷 연결을 확인한 후 다시 시도해 주세요.",
+  "welcomeScreenTitle": "Live Vitalist에 오신 것을 환영합니다",
+  "welcomeScreenSubtitle": "맞춤형 영양 및 운동 여정을 위해 프로필을 설정해 볼까요?",
+  "welcomeScreenExistingAccount": "이미 계정이 있으신가요? {googleLink}.",
+  "@welcomeScreenExistingAccount": {
+    "placeholders": {
+      "googleLink": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeScreenGoogleLink": "Google 계정으로 연결",
+  "termsScreenTitle": "모든 준비가 완료되었습니다",
+  "termsScreenAgreement": "계속하면 {termsLink} 및 {privacyLink}에 동의하게 됩니다.",
+  "@termsScreenAgreement": {
+    "placeholders": {
+      "termsLink": {
+        "type": "String"
+      },
+      "privacyLink": {
+        "type": "String"
+      }
+    }
+  },
+  "termsScreenTermsLink": "이용 약관",
+  "termsScreenPrivacyLink": "개인정보 처리방침",
+  "legalDialogTitle": "약관에 동의해 주세요",
+  "legalPrerequisites": "Live Vitalist를 사용하기 전에 {privacyLink} 및 {termsLink}을 검토하고 동의해 주세요.",
+  "@legalPrerequisites": {
+    "placeholders": {
+      "privacyLink": {
+        "type": "String"
+      },
+      "termsLink": {
+        "type": "String"
+      }
+    }
+  },
+  "legalPrivacyPolicy": "개인정보 처리방침",
+  "legalTermsOfUse": "이용 약관",
+  "legalSettingsHint": "오른쪽 상단의 ⋮ 메뉴에서 접근할 수 있는 앱 설정에서 언제든지 개인정보 처리방침과 이용 약관을 확인할 수 있습니다.",
+  "appRoutingErrorMessage": "요청한 페이지를 열 수 없습니다.",
+  "appInitializationErrorMessage": "앱을 초기화할 수 없습니다.",
+  "calendarTitle": "캘린더",
+  "calendarMaximum": "최대",
+  "calendarLeadingNutrient": "주요 영양소",
+  "calendarMinimum": "최소",
+  "alimentJsonEditorTitle": "식품 JSON 편집기",
+  "alimentEditorTitle": "식품 편집기",
+  "alimentEditorGenericTitle": "편집기",
+  "alimentEditorSaveChangesTitle": "변경 사항을 저장할까요?",
+  "alimentEditorSaveChangesMessage": "이 식품을 저장할까요?",
+  "alimentEditorAddAliment": "식품 추가",
+  "alimentEditorSearchAliment": "식품 검색",
+  "alimentEditorServedAmount": "섭취량:",
+  "alimentEditorSelectorTitle": "식품 선택기",
+  "alimentEditorNewUnit": "새 단위",
+  "alimentEditorUnitName": "단위 이름",
+  "alimentEditorAmount": "수량",
+  "alimentEditorAddSynonym": "동의어 추가",
+  "alimentEditorDeleteSynonym": "동의어 삭제",
+  "alimentEditorEnterLabel": "{label} 입력",
+  "@alimentEditorEnterLabel": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "mealsJournalDeleteMealTitle": "식사를 삭제할까요?",
+  "mealsJournalDeleteMealMessage": "이 식사를 삭제하시겠습니까?",
+  "mealsJournalTitle": "식사 일지",
+  "mealsJournalBreakfast": "아침 식사",
+  "mealsJournalLunch": "점심 식사",
+  "mealsJournalDinner": "저녁 식사",
+  "mealsJournalAddMeal": "식사 추가",
+  "mealsJournalAddAliment": "식품 추가",
+  "mealsJournalAddTemporaryAliment": "임시 식품 추가",
+  "mealsJournalShowNotification": "알림 표시",
+  "mealsJournalAliments": "식품",
+  "mealsJournalCalories": "{count, plural, =1{1칼로리} other{{count}칼로리}}",
+  "@mealsJournalCalories": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mealsJournalNotificationTitle": "{mealName}: {count, plural, =1{식품 1개} other{식품 {count}개}}",
+  "@mealsJournalNotificationTitle": {
+    "placeholders": {
+      "mealName": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mealsJournalNotificationChannel": "식사 요약",
+  "mealsJournalNotificationChannelDescription": "식품 목록이 포함된 텍스트 알림",
+  "mealsJournalNotificationSummary": "식사 요약",
+  "mealsJournalNotificationBody": "식품을 보려면 펼치세요",
+  "superSearchSearchAliments": "식품 검색",
+  "superSearchAliments": "식품",
+  "superSearchNoAlimentsFound": "식품을 찾을 수 없습니다",
+  "superSearchTryAnotherName": "다른 이름을 입력하거나 철자를 확인해 주세요.",
+  "superSearchAddToMeal": "식사에 추가",
+  "superSearchWriteAlimentFirst": "먼저 검색창에 식품을 입력해 주세요.",
+  "superSearchAddAliments": "{count, plural, =1{식품 추가} other{식품 {count}개 추가}}",
+  "@superSearchAddAliments": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "superSearchResultCount": "{count, plural, =0{결과 없음} =1{결과 1개} other{결과 {count}개}}",
+  "@superSearchResultCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "nutrientDisplayTitle": "영양소",
+  "nutrientDisplayAddNewNutrient": "새 영양소 추가",
+  "nutrientDisplayAmount": "양:",
+  "nutrientDisplayLowerLimit": "하한:",
+  "nutrientDisplayUpperLimit": "상한:",
+  "nutrientDisplayTopSources": "주요 공급원",
+  "nutrientDisplayIntake": "{nutrient} 섭취량",
+  "@nutrientDisplayIntake": {
+    "placeholders": {
+      "nutrient": {
+        "type": "String"
+      }
+    }
+  },
+  "nutrientDisplayAmountValue": "양: {amount}",
+  "@nutrientDisplayAmountValue": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "nutrientDisplayLowerLimitValue": "하한: {value}",
+  "@nutrientDisplayLowerLimitValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "nutrientDisplayUpperLimitValue": "상한: {value}",
+  "@nutrientDisplayUpperLimitValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "ratioBarsTitle": "분포 막대",
+  "reportsNoData": "데이터 없음",
+  "reportsPreviousWeek": "지난주",
+  "reportsCurrentWeek": "이번 주",
+  "reportsConsistency": "꾸준함",
+  "reportsAverageDailyCalories": "일일 평균 칼로리",
+  "reportsWeekReportTitle": "{number}주차 보고서",
+  "@reportsWeekReportTitle": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "reportsWeekRange": "{start} – {end}",
+  "@reportsWeekRange": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsDaysOnTarget": "목표 달성: {count} / {total, plural, =1{1일} other{{total}일}}",
+  "@reportsDaysOnTarget": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "reportsMondayShort": "월",
+  "reportsTuesdayShort": "화",
+  "reportsWednesdayShort": "수",
+  "reportsThursdayShort": "목",
+  "reportsFridayShort": "금",
+  "reportsSaturdayShort": "토",
+  "reportsSundayShort": "일",
+  "settingsTitle": "설정",
+  "settingsDocuments": "문서",
+  "settingsPrivacyPolicy": "개인정보 처리방침",
+  "settingsTermsOfUse": "이용 약관",
+  "settingsSendFeedback": "피드백 보내기",
+  "settingsDataDeletion": "데이터 삭제",
+  "settingsConnectWithGoogle": "Google 계정으로 연결",
+  "settingsGoogleBackupMessage": "Google에 연결하여 파일을 클라우드에 백업하거나 데이터를 복원하세요.",
+  "settingsUseMonthDayFormat": "월/일 형식 사용",
+  "settingsUseComplexCalendar": "상세 캘린더 보기 사용",
+  "settingsShowMacroDistribution": "다량 영양소 분포 표시",
+  "settingsShowOmegaBalance": "오메가-3와 오메가-6 균형 표시",
+  "settingsAccountDeletion": "계정 삭제",
+  "settingsAccountAndDataDeletion": "계정 및 데이터 삭제",
+  "settingsPermanentlyDeleteOnlineData": "온라인 데이터 영구 삭제",
+  "settingsPermanentlyDeleteAllData": "모든 데이터 영구 삭제",
+  "settingsReauthenticateMessage": "Google과 연결된 계정을 삭제하려면 먼저 다시 인증해야 합니다.",
+  "settingsReauthenticateAndDelete": "다시 인증 후 삭제",
+  "settingsDeleteAllDescription": "아래 버튼을 사용하여 계정과 온라인 및 기기에 저장된 모든 데이터를 삭제할 수 있습니다. 계정과 연결된 모든 항목이 영구적으로 삭제되고 앱이 초기화됩니다.",
+  "settingsDeleteAllConfirmation": "계정과 연결된 모든 데이터를 삭제하시겠습니까? 온라인 데이터와 로컬 저장소가 지워집니다. 이 작업은 영구적이며 취소할 수 없습니다.",
+  "settingsDeleteOnlineDescription": "아래 버튼을 사용하여 계정과 온라인에 저장된 모든 데이터를 삭제할 수 있습니다. 데이터는 서버에서 영구적으로 삭제되지만 앱 설정과 로컬 저장소는 기기에 남아 있습니다.",
+  "settingsDeleteOnlineConfirmation": "계정과 온라인에 저장된 모든 데이터를 삭제하시겠습니까? 이 작업은 영구적이며 취소할 수 없습니다.",
+  "settingsDeletionFailed": "삭제에 실패했습니다. 삭제된 항목이 없습니다.",
+  "legalClosingApp": "앱을 종료하는 중...",
+  "legalExitApp": "앱 종료",
+  "legalAgree": "동의합니다"
+}

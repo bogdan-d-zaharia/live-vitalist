@@ -5,6 +5,7 @@ import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
 import 'package:live_vitalist/features/settings/presentation/controllers/settings_controller.dart';
 import 'package:live_vitalist/features/settings/presentation/widgets/data_deletion_page.dart';
 import 'package:live_vitalist/features/settings/data/settings_data.dart';
+import 'package:live_vitalist/features/settings/presentation/widgets/language_dropdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:live_vitalist/l10n/app_localizations.dart';
 
@@ -36,10 +37,11 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
             icon: Row(
               children: [
                 Text(l.settingsDocuments),
-                const SizedBox(
-                    width: 32.0,
-                    height: 32.0,
-                    child: Icon(Icons.more_vert_rounded)),
+                SizedBox(
+                  width: 32.0,
+                  height: 32.0,
+                  child: Icon(Icons.more_vert_rounded),
+                ),
               ],
             ),
             shape: RoundedRectangleBorder(
@@ -70,9 +72,11 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
               ),
               PopupMenuItem(
                 onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const DataDeletionPage())),
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const DataDeletionPage(),
+                  ),
+                ),
                 child: Text(l.settingsDataDeletion),
               ),
             ],
@@ -93,11 +97,13 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
                     Text(l.settingsGoogleBackupMessage),
                     const SizedBox(height: 12.0),
                     TextButton(
-                        onPressed: _handleGoogleConnection,
-                        child: Text(l.settingsConnectWithGoogle)),
+                      onPressed: _handleGoogleConnection,
+                      child: Text(l.settingsConnectWithGoogle),
+                    ),
                   ],
                 ),
               ),
+            MiniCard(child: LanguageDropdown()),
             MiniCard(
               child: Row(
                 children: [
@@ -105,9 +111,8 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
                   Checkbox(
                     value: SettingsData.isMonthDay,
                     onChanged: (val) {
-                      if (val != null) {
-                        setState(() => SettingsData.isMonthDay = val);
-                      }
+                      if (val == null) return;
+                      setState(() => SettingsData.isMonthDay = val);
                     },
                   ),
                   Text(l.settingsUseMonthDayFormat),
@@ -121,9 +126,8 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
                   Checkbox(
                     value: SettingsData.isComplexCalendar,
                     onChanged: (val) {
-                      if (val != null) {
-                        setState(() => SettingsData.isComplexCalendar = val);
-                      }
+                      if (val == null) return;
+                      setState(() => SettingsData.isComplexCalendar = val);
                     },
                   ),
                   Text(l.settingsUseComplexCalendar),
@@ -137,10 +141,9 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
                   Checkbox(
                     value: SettingsData.isShowCalorieDistribution,
                     onChanged: (val) {
-                      if (val != null) {
-                        setState(
-                            () => SettingsData.isShowCalorieDistribution = val);
-                      }
+                      if (val == null) return;
+                      setState(
+                          () => SettingsData.isShowCalorieDistribution = val);
                     },
                   ),
                   Text(l.settingsShowMacroDistribution),

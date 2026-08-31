@@ -1,0 +1,299 @@
+{
+  "@@locale": "fr",
+  "actionSave": "Enregistrer",
+  "actionCancel": "Annuler",
+  "actionDelete": "Supprimer",
+  "actionContinue": "Continuer",
+  "actionTryAgain": "Réessayer",
+  "actionRestore": "Restaurer",
+  "nutrientKcals": "Calories",
+  "nutrientProtein": "Protéines",
+  "nutrientCarbs": "Glucides",
+  "nutrientSugars": "Sucres",
+  "nutrientFibers": "Fibres",
+  "nutrientFats": "Lipides",
+  "nutrientOmega3": "Oméga-3",
+  "nutrientOmega6": "Oméga-6",
+  "nutrientSaturatedFats": "Graisses saturées",
+  "nutrientCholesterol": "Cholestérol",
+  "nutrientSodium": "Sodium",
+  "nutrientPotassium": "Potassium",
+  "nutrientVitaminA": "Vitamine A (rétinol)",
+  "nutrientVitaminB1": "Vitamine B1 (thiamine)",
+  "nutrientVitaminB2": "Vitamine B2 (riboflavine)",
+  "nutrientVitaminB3": "Vitamine B3 (niacine)",
+  "nutrientVitaminB4": "Vitamine B4 (choline)",
+  "nutrientVitaminB5": "Vitamine B5 (acide pantothénique)",
+  "nutrientVitaminB6": "Vitamine B6 (pyridoxine)",
+  "nutrientVitaminB7": "Vitamine B7 (biotine)",
+  "nutrientVitaminB9": "Vitamine B9 (folate)",
+  "nutrientVitaminB12": "Vitamine B12 (cobalamine)",
+  "nutrientVitaminC": "Vitamine C (acide ascorbique)",
+  "nutrientVitaminD2": "Vitamine D2 (ergocalciférol)",
+  "nutrientVitaminD3": "Vitamine D3 (cholécalciférol)",
+  "nutrientVitaminE": "Vitamine E (alpha-tocophérol)",
+  "nutrientVitaminK1": "Vitamine K1 (phylloquinone)",
+  "nutrientVitaminK2": "Vitamine K2 (ménaquinone)",
+  "nutrientCalcium": "Calcium",
+  "nutrientIron": "Fer",
+  "nutrientMagnesium": "Magnésium",
+  "nutrientZinc": "Zinc",
+  "onboardingGoalQuestion": "Quel est votre objectif principal ?",
+  "onboardingGoalOptionLoseWeight": "Perdre du poids",
+  "onboardingGoalOptionBuildMuscle": "Prendre du muscle",
+  "onboardingGoalOptionImproveHealth": "Améliorer la santé",
+  "onboardingGoalOptionImprovePerformance": "Améliorer les performances",
+  "onboardingNutrientsQuestion": "Que suivez-vous d'autre que les calories ?",
+  "onboardingNutrientsOptionMacrosTitle": "Macronutriments",
+  "onboardingNutrientsOptionMacrosFooter": "Protéines · Glucides · Lipides",
+  "onboardingNutrientsOptionRiskFactorsTitle": "Facteurs de risque",
+  "onboardingNutrientsOptionRiskFactorsFooter": "Graisses sat. · Cholestérol",
+  "onboardingNutrientsOptionElectrolytesTitle": "Électrolytes",
+  "onboardingNutrientsOptionElectrolytesFooter": "Sodium · Potassium",
+  "onboardingNutrientsOptionVitaminsTitle": "Vitamines",
+  "onboardingNutrientsOptionVitaminsFooter": "A · Complexe B · C · D · E · K",
+  "onboardingNutrientsOptionMineralsTitle": "Minéraux",
+  "onboardingNutrientsOptionMineralsFooter": "Fer · Calcium · Magnésium · Zinc",
+  "onboardingStreakQuestion": "Aimez-vous suivre une série de jours consécutifs ?",
+  "onboardingStreakOptionShowTitle": "Oui ! J’adore les séries !",
+  "onboardingStreakOptionShowFooter": "Aidez-moi à garder le rythme chaque jour",
+  "onboardingStreakOptionHideTitle": "Non, je trouve ça agaçant.",
+  "onboardingStreakOptionHideFooter": "Suivez simplement mes progrès",
+  "noConnectionDialogTitle": "Pas d'accès à Internet",
+  "noConnectionDialogMessage": "Veuillez vous connecter à Internet afin d'accepter nos Conditions générales et notre Politique de confidentialité.",
+  "googleConnectionDialogAccountNotFoundTitle": "Compte introuvable",
+  "googleConnectionDialogAccountNotFoundMessage": "Nous n’avons trouvé aucun compte Live Vitalist associé à ce compte Google. Veuillez d’abord terminer la configuration initiale.",
+  "googleConnectionDialogConnectionFailedTitle": "Échec de la connexion à Google",
+  "googleConnectionDialogConnectionFailedMessage": "Nous n'avons pas pu nous connecter à Google. Vérifiez votre connexion Internet et réessayez.",
+  "welcomeScreenTitle": "Bienvenue sur Live Vitalist",
+  "welcomeScreenSubtitle": "Configurons votre profil afin de personnaliser votre parcours nutrition et fitness.",
+  "welcomeScreenExistingAccount": "Vous avez déjà un compte ? {googleLink}.",
+  "@welcomeScreenExistingAccount": {
+    "placeholders": {
+      "googleLink": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeScreenGoogleLink": "Se connecter avec Google",
+  "termsScreenTitle": "Tout est prêt",
+  "termsScreenAgreement": "En continuant, vous acceptez nos {termsLink} et notre {privacyLink}.",
+  "@termsScreenAgreement": {
+    "placeholders": {
+      "termsLink": {
+        "type": "String"
+      },
+      "privacyLink": {
+        "type": "String"
+      }
+    }
+  },
+  "termsScreenTermsLink": "Conditions générales",
+  "termsScreenPrivacyLink": "Politique de confidentialité",
+  "legalDialogTitle": "Veuillez accepter nos conditions",
+  "legalPrerequisites": "Avant d'utiliser Live Vitalist, veuillez lire et accepter notre {privacyLink} et nos {termsLink}.",
+  "@legalPrerequisites": {
+    "placeholders": {
+      "privacyLink": {
+        "type": "String"
+      },
+      "termsLink": {
+        "type": "String"
+      }
+    }
+  },
+  "legalPrivacyPolicy": "Politique de confidentialité",
+  "legalTermsOfUse": "Conditions d'utilisation",
+  "legalSettingsHint": "Vous pouvez consulter la Politique de confidentialité et les Conditions d'utilisation à tout moment dans les Paramètres de l'application, accessibles via le menu ⋮ en haut à droite.",
+  "appRoutingErrorMessage": "La page demandée n'a pas pu être ouverte.",
+  "appInitializationErrorMessage": "L'application n'a pas pu être initialisée.",
+  "calendarTitle": "Calendrier",
+  "calendarMaximum": "Maximum",
+  "calendarLeadingNutrient": "Nutriment dominant",
+  "calendarMinimum": "Minimum",
+  "alimentJsonEditorTitle": "Éditeur JSON d'aliment",
+  "alimentEditorTitle": "Éditeur d'aliment",
+  "alimentEditorGenericTitle": "Éditeur",
+  "alimentEditorSaveChangesTitle": "Enregistrer les modifications ?",
+  "alimentEditorSaveChangesMessage": "Voulez-vous enregistrer cet aliment ?",
+  "alimentEditorAddAliment": "Ajouter un aliment",
+  "alimentEditorSearchAliment": "Rechercher un aliment",
+  "alimentEditorServedAmount": "Quantité servie :",
+  "alimentEditorSelectorTitle": "Sélecteur d'aliments",
+  "alimentEditorNewUnit": "Nouvelle unité",
+  "alimentEditorUnitName": "Nom de l'unité",
+  "alimentEditorAmount": "Quantité",
+  "alimentEditorAddSynonym": "Ajouter un synonyme",
+  "alimentEditorDeleteSynonym": "Supprimer le synonyme",
+  "alimentEditorEnterLabel": "Saisir {label}",
+  "@alimentEditorEnterLabel": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "mealsJournalDeleteMealTitle": "Supprimer le repas ?",
+  "mealsJournalDeleteMealMessage": "Voulez-vous vraiment supprimer ce repas ?",
+  "mealsJournalTitle": "Journal des repas",
+  "mealsJournalBreakfast": "Petit-déjeuner",
+  "mealsJournalLunch": "Déjeuner",
+  "mealsJournalDinner": "Dîner",
+  "mealsJournalAddMeal": "Ajouter un repas",
+  "mealsJournalAddAliment": "Ajouter un aliment",
+  "mealsJournalAddTemporaryAliment": "Ajouter un aliment temporaire",
+  "mealsJournalShowNotification": "Afficher la notification",
+  "mealsJournalAliments": "Aliments",
+  "mealsJournalCalories": "{count, plural, =1{1 calorie} other{{count} calories}}",
+  "@mealsJournalCalories": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mealsJournalNotificationTitle": "{mealName} : {count, plural, =1{1 aliment} other{{count} aliments}}",
+  "@mealsJournalNotificationTitle": {
+    "placeholders": {
+      "mealName": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mealsJournalNotificationChannel": "Résumé du repas",
+  "mealsJournalNotificationChannelDescription": "Notification textuelle avec une liste d'aliments",
+  "mealsJournalNotificationSummary": "Résumé du repas",
+  "mealsJournalNotificationBody": "Développez pour voir les aliments",
+  "superSearchSearchAliments": "Rechercher des aliments",
+  "superSearchAliments": "Aliments",
+  "superSearchNoAlimentsFound": "Aucun aliment trouvé",
+  "superSearchTryAnotherName": "Essayez un autre nom ou vérifiez l'orthographe.",
+  "superSearchAddToMeal": "Ajouter au repas",
+  "superSearchWriteAlimentFirst": "Saisissez d'abord l'aliment dans la barre de recherche.",
+  "superSearchAddAliments": "{count, plural, =1{Ajouter un aliment} other{Ajouter {count} aliments}}",
+  "@superSearchAddAliments": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "superSearchResultCount": "{count, plural, =0{Aucun résultat} =1{1 résultat} other{{count} résultats}}",
+  "@superSearchResultCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "nutrientDisplayTitle": "Nutriments",
+  "nutrientDisplayAddNewNutrient": "Ajouter un nutriment",
+  "nutrientDisplayAmount": "Quantité :",
+  "nutrientDisplayLowerLimit": "Limite inférieure :",
+  "nutrientDisplayUpperLimit": "Limite supérieure :",
+  "nutrientDisplayTopSources": "Principales sources",
+  "nutrientDisplayIntake": "Apport en {nutrient}",
+  "@nutrientDisplayIntake": {
+    "placeholders": {
+      "nutrient": {
+        "type": "String"
+      }
+    }
+  },
+  "nutrientDisplayAmountValue": "Quantité : {amount}",
+  "@nutrientDisplayAmountValue": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "nutrientDisplayLowerLimitValue": "Limite inférieure : {value}",
+  "@nutrientDisplayLowerLimitValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "nutrientDisplayUpperLimitValue": "Limite supérieure : {value}",
+  "@nutrientDisplayUpperLimitValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "ratioBarsTitle": "Barres de répartition",
+  "reportsNoData": "Aucune donnée",
+  "reportsPreviousWeek": "Semaine précédente",
+  "reportsCurrentWeek": "Semaine en cours",
+  "reportsConsistency": "Régularité",
+  "reportsAverageDailyCalories": "Calories quotidiennes moyennes",
+  "reportsWeekReportTitle": "Rapport de la semaine {number}",
+  "@reportsWeekReportTitle": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "reportsWeekRange": "{start} – {end}",
+  "@reportsWeekRange": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsDaysOnTarget": "{count} / {total, plural, =1{1 jour} other{{total} jours}} dans l'objectif",
+  "@reportsDaysOnTarget": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "reportsMondayShort": "L",
+  "reportsTuesdayShort": "M",
+  "reportsWednesdayShort": "M",
+  "reportsThursdayShort": "J",
+  "reportsFridayShort": "V",
+  "reportsSaturdayShort": "S",
+  "reportsSundayShort": "D",
+  "settingsTitle": "Paramètres",
+  "settingsDocuments": "Documents",
+  "settingsPrivacyPolicy": "Politique de confidentialité",
+  "settingsTermsOfUse": "Conditions d'utilisation",
+  "settingsSendFeedback": "Envoyer des commentaires",
+  "settingsDataDeletion": "Suppression des données",
+  "settingsConnectWithGoogle": "Se connecter avec Google",
+  "settingsGoogleBackupMessage": "Sauvegardez vos fichiers dans le cloud ou restaurez vos données en vous connectant à Google.",
+  "settingsUseMonthDayFormat": "Utiliser le format mois/jour",
+  "settingsUseComplexCalendar": "Utiliser la vue calendrier détaillée",
+  "settingsShowMacroDistribution": "Afficher la répartition des macronutriments",
+  "settingsShowOmegaBalance": "Afficher l'équilibre Oméga-3 / Oméga-6",
+  "settingsAccountDeletion": "Suppression du compte",
+  "settingsAccountAndDataDeletion": "Suppression du compte et des données",
+  "settingsPermanentlyDeleteOnlineData": "Supprimer définitivement les données en ligne",
+  "settingsPermanentlyDeleteAllData": "Supprimer définitivement toutes les données",
+  "settingsReauthenticateMessage": "Vous devez d'abord vous authentifier à nouveau avant de pouvoir supprimer votre compte associé à Google.",
+  "settingsReauthenticateAndDelete": "Se réauthentifier et supprimer",
+  "settingsDeleteAllDescription": "Vous pouvez supprimer votre compte et toutes les données stockées en ligne et sur votre appareil à l'aide du bouton ci-dessous. Cette action supprimera définitivement tout ce qui est lié à votre compte et réinitialisera l'application.",
+  "settingsDeleteAllConfirmation": "Voulez-vous vraiment supprimer votre compte et toutes les données associées ? Vos données en ligne et votre stockage local seront effacés. Cette action est définitive et irréversible.",
+  "settingsDeleteOnlineDescription": "Vous pouvez supprimer votre compte et toutes les données stockées en ligne à l'aide du bouton ci-dessous. Vos données seront définitivement supprimées de nos serveurs, mais les paramètres de l'application et le stockage local resteront sur votre appareil.",
+  "settingsDeleteOnlineConfirmation": "Voulez-vous vraiment supprimer votre compte et toutes les données stockées en ligne ? Cette action est définitive et irréversible.",
+  "settingsDeletionFailed": "Échec de la suppression, rien n'a été supprimé.",
+  "legalClosingApp": "Fermeture de l'application...",
+  "legalExitApp": "Quitter l'application",
+  "legalAgree": "J'accepte"
+}

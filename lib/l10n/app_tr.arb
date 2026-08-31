@@ -1,0 +1,299 @@
+{
+  "@@locale": "tr",
+  "actionSave": "Kaydet",
+  "actionCancel": "İptal",
+  "actionDelete": "Sil",
+  "actionContinue": "Devam et",
+  "actionTryAgain": "Tekrar dene",
+  "actionRestore": "Geri yükle",
+  "nutrientKcals": "Kalori",
+  "nutrientProtein": "Protein",
+  "nutrientCarbs": "Karbonhidrat",
+  "nutrientSugars": "Şekerler",
+  "nutrientFibers": "Lif",
+  "nutrientFats": "Yağlar",
+  "nutrientOmega3": "Omega-3",
+  "nutrientOmega6": "Omega-6",
+  "nutrientSaturatedFats": "Doymuş yağlar",
+  "nutrientCholesterol": "Kolesterol",
+  "nutrientSodium": "Sodyum",
+  "nutrientPotassium": "Potasyum",
+  "nutrientVitaminA": "A Vitamini (Retinol)",
+  "nutrientVitaminB1": "B1 Vitamini (Tiamin)",
+  "nutrientVitaminB2": "B2 Vitamini (Riboflavin)",
+  "nutrientVitaminB3": "B3 Vitamini (Niasin)",
+  "nutrientVitaminB4": "B4 Vitamini (Kolin)",
+  "nutrientVitaminB5": "B5 Vitamini (Pantotenik asit)",
+  "nutrientVitaminB6": "B6 Vitamini (Piridoksin)",
+  "nutrientVitaminB7": "B7 Vitamini (Biyotin)",
+  "nutrientVitaminB9": "B9 Vitamini (Folat)",
+  "nutrientVitaminB12": "B12 Vitamini (Kobalamin)",
+  "nutrientVitaminC": "C Vitamini (Askorbik asit)",
+  "nutrientVitaminD2": "D2 Vitamini (Ergokalsiferol)",
+  "nutrientVitaminD3": "D3 Vitamini (Kolekalsiferol)",
+  "nutrientVitaminE": "E Vitamini (Alfa-tokoferol)",
+  "nutrientVitaminK1": "K1 Vitamini (Filokinon)",
+  "nutrientVitaminK2": "K2 Vitamini (Menakinon)",
+  "nutrientCalcium": "Kalsiyum",
+  "nutrientIron": "Demir",
+  "nutrientMagnesium": "Magnezyum",
+  "nutrientZinc": "Çinko",
+  "onboardingGoalQuestion": "Ana hedefiniz nedir?",
+  "onboardingGoalOptionLoseWeight": "Kilo vermek",
+  "onboardingGoalOptionBuildMuscle": "Kas yapmak",
+  "onboardingGoalOptionImproveHealth": "Sağlığı iyileştirmek",
+  "onboardingGoalOptionImprovePerformance": "Performansı artırmak",
+  "onboardingNutrientsQuestion": "Kalorilerin yanı sıra başka neleri takip ediyorsunuz?",
+  "onboardingNutrientsOptionMacrosTitle": "Makrolar",
+  "onboardingNutrientsOptionMacrosFooter": "Protein · Karbonhidrat · Yağ",
+  "onboardingNutrientsOptionRiskFactorsTitle": "Risk faktörleri",
+  "onboardingNutrientsOptionRiskFactorsFooter": "Doymuş yağ · Kolesterol",
+  "onboardingNutrientsOptionElectrolytesTitle": "Elektrolitler",
+  "onboardingNutrientsOptionElectrolytesFooter": "Sodyum · Potasyum",
+  "onboardingNutrientsOptionVitaminsTitle": "Vitaminler",
+  "onboardingNutrientsOptionVitaminsFooter": "A · B Kompleksi · C · D · E · K",
+  "onboardingNutrientsOptionMineralsTitle": "Mineraller",
+  "onboardingNutrientsOptionMineralsFooter": "Demir · Kalsiyum · Magnezyum · Çinko",
+  "onboardingStreakQuestion": "Seri tutmayı seviyor musunuz?",
+  "onboardingStreakOptionShowTitle": "Evet! Serileri seviyorum!",
+  "onboardingStreakOptionShowFooter": "Her gün düzenli kalmama yardımcı ol",
+  "onboardingStreakOptionHideTitle": "Hayır, onları rahatsız edici buluyorum.",
+  "onboardingStreakOptionHideFooter": "Sadece ilerlememi takip et",
+  "noConnectionDialogTitle": "İnternet erişimi yok",
+  "noConnectionDialogMessage": "Şartlar ve Koşullarımızı ve Gizlilik Politikamızı kabul etmek için lütfen internete bağlanın.",
+  "googleConnectionDialogAccountNotFoundTitle": "Hesap bulunamadı",
+  "googleConnectionDialogAccountNotFoundMessage": "Bu Google hesabına bağlı bir Live Vitalist hesabı bulamadık. Lütfen önce kurulumu tamamlayın.",
+  "googleConnectionDialogConnectionFailedTitle": "Google bağlantısı başarısız",
+  "googleConnectionDialogConnectionFailedMessage": "Google'a bağlanamadık. İnternet bağlantınızı kontrol edip tekrar deneyin.",
+  "welcomeScreenTitle": "Live Vitalist'e hoş geldiniz",
+  "welcomeScreenSubtitle": "Beslenme ve fitness yolculuğunuzu size özel hâle getirmek için profilinizi oluşturalım.",
+  "welcomeScreenExistingAccount": "Zaten bir hesabınız var mı? {googleLink}.",
+  "@welcomeScreenExistingAccount": {
+    "placeholders": {
+      "googleLink": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeScreenGoogleLink": "Google ile bağlan",
+  "termsScreenTitle": "Her şey hazır",
+  "termsScreenAgreement": "Devam ederek şu belgeleri kabul etmiş olursunuz: {termsLink} ve {privacyLink}.",
+  "@termsScreenAgreement": {
+    "placeholders": {
+      "termsLink": {
+        "type": "String"
+      },
+      "privacyLink": {
+        "type": "String"
+      }
+    }
+  },
+  "termsScreenTermsLink": "Şartlar ve Koşullar",
+  "termsScreenPrivacyLink": "Gizlilik Politikası",
+  "legalDialogTitle": "Lütfen şartlarımızı kabul edin",
+  "legalPrerequisites": "Live Vitalist’i kullanmadan önce lütfen şu belgeleri inceleyip kabul edin: {privacyLink} ve {termsLink}.",
+  "@legalPrerequisites": {
+    "placeholders": {
+      "privacyLink": {
+        "type": "String"
+      },
+      "termsLink": {
+        "type": "String"
+      }
+    }
+  },
+  "legalPrivacyPolicy": "Gizlilik Politikası",
+  "legalTermsOfUse": "Kullanım Koşulları",
+  "legalSettingsHint": "Gizlilik Politikası ve Kullanım Koşullarını, uygulamanın sağ üst köşesindeki ⋮ menüsünden erişilebilen Ayarlar'da istediğiniz zaman inceleyebilirsiniz.",
+  "appRoutingErrorMessage": "İstenen sayfa açılamadı.",
+  "appInitializationErrorMessage": "Uygulama başlatılamadı.",
+  "calendarTitle": "Takvim",
+  "calendarMaximum": "Maksimum",
+  "calendarLeadingNutrient": "Öne çıkan besin öğesi",
+  "calendarMinimum": "Minimum",
+  "alimentJsonEditorTitle": "Besin JSON Düzenleyicisi",
+  "alimentEditorTitle": "Besin Düzenleyicisi",
+  "alimentEditorGenericTitle": "Düzenleyici",
+  "alimentEditorSaveChangesTitle": "Değişiklikler kaydedilsin mi?",
+  "alimentEditorSaveChangesMessage": "Bu besin kaydedilsin mi?",
+  "alimentEditorAddAliment": "Besin ekle",
+  "alimentEditorSearchAliment": "Besin ara",
+  "alimentEditorServedAmount": "Porsiyon miktarı:",
+  "alimentEditorSelectorTitle": "Besin seçici",
+  "alimentEditorNewUnit": "Yeni birim",
+  "alimentEditorUnitName": "Birim adı",
+  "alimentEditorAmount": "Miktar",
+  "alimentEditorAddSynonym": "Eş anlamlı ekle",
+  "alimentEditorDeleteSynonym": "Eş anlamlıyı sil",
+  "alimentEditorEnterLabel": "{label} girin",
+  "@alimentEditorEnterLabel": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "mealsJournalDeleteMealTitle": "Öğün silinsin mi?",
+  "mealsJournalDeleteMealMessage": "Bu öğünü silmek istediğinizden emin misiniz?",
+  "mealsJournalTitle": "Öğün Günlüğü",
+  "mealsJournalBreakfast": "Kahvaltı",
+  "mealsJournalLunch": "Öğle yemeği",
+  "mealsJournalDinner": "Akşam yemeği",
+  "mealsJournalAddMeal": "Öğün ekle",
+  "mealsJournalAddAliment": "Besin ekle",
+  "mealsJournalAddTemporaryAliment": "Geçici besin ekle",
+  "mealsJournalShowNotification": "Bildirimi göster",
+  "mealsJournalAliments": "Besinler",
+  "mealsJournalCalories": "{count, plural, =1{1 kalori} other{{count} kalori}}",
+  "@mealsJournalCalories": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mealsJournalNotificationTitle": "{mealName}: {count, plural, =1{1 besin} other{{count} besin}}",
+  "@mealsJournalNotificationTitle": {
+    "placeholders": {
+      "mealName": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mealsJournalNotificationChannel": "Öğün özeti",
+  "mealsJournalNotificationChannelDescription": "Besin listesi içeren metin bildirimi",
+  "mealsJournalNotificationSummary": "Öğün özeti",
+  "mealsJournalNotificationBody": "Besinleri görmek için genişletin",
+  "superSearchSearchAliments": "Besin ara",
+  "superSearchAliments": "Besinler",
+  "superSearchNoAlimentsFound": "Besin bulunamadı",
+  "superSearchTryAnotherName": "Başka bir ad deneyin veya yazımı kontrol edin.",
+  "superSearchAddToMeal": "Öğüne ekle",
+  "superSearchWriteAlimentFirst": "Önce arama çubuğuna besini yazın.",
+  "superSearchAddAliments": "{count, plural, =1{Besin ekle} other{{count} besin ekle}}",
+  "@superSearchAddAliments": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "superSearchResultCount": "{count, plural, =0{Sonuç yok} =1{1 sonuç} other{{count} sonuç}}",
+  "@superSearchResultCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "nutrientDisplayTitle": "Besin öğeleri",
+  "nutrientDisplayAddNewNutrient": "Yeni besin öğesi ekle",
+  "nutrientDisplayAmount": "Miktar:",
+  "nutrientDisplayLowerLimit": "Alt sınır:",
+  "nutrientDisplayUpperLimit": "Üst sınır:",
+  "nutrientDisplayTopSources": "Başlıca kaynaklar",
+  "nutrientDisplayIntake": "{nutrient} alımı",
+  "@nutrientDisplayIntake": {
+    "placeholders": {
+      "nutrient": {
+        "type": "String"
+      }
+    }
+  },
+  "nutrientDisplayAmountValue": "Miktar: {amount}",
+  "@nutrientDisplayAmountValue": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "nutrientDisplayLowerLimitValue": "Alt sınır: {value}",
+  "@nutrientDisplayLowerLimitValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "nutrientDisplayUpperLimitValue": "Üst sınır: {value}",
+  "@nutrientDisplayUpperLimitValue": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "ratioBarsTitle": "Dağılım çubukları",
+  "reportsNoData": "Veri yok",
+  "reportsPreviousWeek": "Önceki hafta",
+  "reportsCurrentWeek": "Bu hafta",
+  "reportsConsistency": "Düzenlilik",
+  "reportsAverageDailyCalories": "Günlük ortalama kalori",
+  "reportsWeekReportTitle": "{number}. hafta raporu",
+  "@reportsWeekReportTitle": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "reportsWeekRange": "{start} – {end}",
+  "@reportsWeekRange": {
+    "placeholders": {
+      "start": {
+        "type": "String"
+      },
+      "end": {
+        "type": "String"
+      }
+    }
+  },
+  "reportsDaysOnTarget": "Hedefte: {count} / {total, plural, =1{1 gün} other{{total} gün}}",
+  "@reportsDaysOnTarget": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "reportsMondayShort": "P",
+  "reportsTuesdayShort": "S",
+  "reportsWednesdayShort": "Ç",
+  "reportsThursdayShort": "P",
+  "reportsFridayShort": "C",
+  "reportsSaturdayShort": "C",
+  "reportsSundayShort": "P",
+  "settingsTitle": "Ayarlar",
+  "settingsDocuments": "Belgeler",
+  "settingsPrivacyPolicy": "Gizlilik Politikası",
+  "settingsTermsOfUse": "Kullanım Koşulları",
+  "settingsSendFeedback": "Geri bildirim gönder",
+  "settingsDataDeletion": "Veri silme",
+  "settingsConnectWithGoogle": "Google ile bağlan",
+  "settingsGoogleBackupMessage": "Google ile bağlanarak dosyalarınızı buluta yedekleyin veya verilerinizi geri yükleyin.",
+  "settingsUseMonthDayFormat": "Ay/Gün biçimini kullan",
+  "settingsUseComplexCalendar": "Ayrıntılı takvim görünümünü kullan",
+  "settingsShowMacroDistribution": "Makro dağılımını göster",
+  "settingsShowOmegaBalance": "Omega-3 / Omega-6 dengesini göster",
+  "settingsAccountDeletion": "Hesap silme",
+  "settingsAccountAndDataDeletion": "Hesap ve veri silme",
+  "settingsPermanentlyDeleteOnlineData": "Çevrimiçi verileri kalıcı olarak sil",
+  "settingsPermanentlyDeleteAllData": "Tüm verileri kalıcı olarak sil",
+  "settingsReauthenticateMessage": "Google ile ilişkili hesabınızı silmeden önce yeniden kimlik doğrulaması yapmalısınız.",
+  "settingsReauthenticateAndDelete": "Yeniden doğrula ve sil",
+  "settingsDeleteAllDescription": "Aşağıdaki düğmeyi kullanarak hesabınızı ve hem çevrimiçi hem cihazınızda saklanan tüm verileri silebilirsiniz. Bu işlem hesabınızla bağlantılı her şeyi kalıcı olarak kaldırır ve uygulamayı sıfırlar.",
+  "settingsDeleteAllConfirmation": "Hesabınızı ve ilişkili tüm verileri silmek istediğinizden emin misiniz? Çevrimiçi verileriniz ve yerel depolama silinecek. Bu işlem kalıcıdır ve geri alınamaz.",
+  "settingsDeleteOnlineDescription": "Aşağıdaki düğmeyi kullanarak hesabınızı ve çevrimiçi saklanan tüm verileri silebilirsiniz. Verileriniz sunucularımızdan kalıcı olarak silinir, ancak uygulama ayarları ve yerel depolama cihazınızda kalır.",
+  "settingsDeleteOnlineConfirmation": "Hesabınızı ve çevrimiçi saklanan tüm verileri silmek istediğinizden emin misiniz? Bu işlem kalıcıdır ve geri alınamaz.",
+  "settingsDeletionFailed": "Silme başarısız oldu, hiçbir şey kaldırılmadı.",
+  "legalClosingApp": "Uygulama kapatılıyor...",
+  "legalExitApp": "Uygulamadan çık",
+  "legalAgree": "Kabul ediyorum"
+}
