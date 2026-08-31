@@ -5,6 +5,7 @@ import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
 import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/aliment_data_editor.dart';
+import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/temporary_aliment_editor.dart';
 import 'package:live_vitalist/features/day/data/day_provider.dart';
 import 'package:live_vitalist/features/super_search/data/aliment_generator.dart';
 import 'package:live_vitalist/features/super_search/domain/pending_aliment.dart';
@@ -53,7 +54,7 @@ abstract final class AddAlimentActions {
     final newData = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AlimentDataEditor(
+        builder: (context) => TemporaryAlimentEditor(
             initialData: initialData ?? newAliment.alimentData),
       ),
     );

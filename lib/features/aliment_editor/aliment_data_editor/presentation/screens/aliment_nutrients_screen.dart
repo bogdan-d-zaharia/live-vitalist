@@ -15,11 +15,8 @@ class AlimentNutrientsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final nutrients = ref.watch(nutrientsProvider);
-    final selectedNutrients = nutrients.order.where(
-      (key) =>
-          key != 'kcals' &&
-          !nutrients.data[key]!.tags.contains('disabled'),
-    );
+    final selectedNutrients = nutrients.order.where((key) =>
+        key != 'kcals' && !nutrients.data[key]!.tags.contains('disabled'));
 
     return ListView(
       padding: EdgeInsets.symmetric(horizontal: 24.0),

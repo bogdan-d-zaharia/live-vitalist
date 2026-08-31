@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
 import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/aliment_data_editor.dart';
+import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/temporary_aliment_editor.dart';
 import 'package:live_vitalist/features/aliment_editor/instance_editor/instance_editor.dart';
 
 extension InstanceEditing on InstancedAliment {
@@ -22,7 +23,7 @@ extension TemporaryEditing on TemporaryAliment {
     final newData = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AlimentDataEditor(
+        builder: (context) => TemporaryAlimentEditor(
           initialData: alimentData,
         ),
       ),

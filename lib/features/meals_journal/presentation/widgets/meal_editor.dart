@@ -49,11 +49,9 @@ class MealEditor extends ConsumerWidget {
               bankNotifier.setAliment(aliment.alimentID, newData);
             }
           } else if (aliment is TemporaryAliment) {
-            final newData =
-                await aliment.alimentData.pushEditingScreen(context);
-            if (newData != null) {
-              dayNotifier.updateAliment(date, mealName, aliment,
-                  aliment.copyWith(alimentData: newData));
+            final newTemp = await aliment.pushEditingScreen(context);
+            if (newTemp != null) {
+              dayNotifier.updateAliment(date, mealName, aliment, newTemp);
             }
           }
         },
