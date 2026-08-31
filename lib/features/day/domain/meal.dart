@@ -7,20 +7,20 @@ import 'package:live_vitalist/features/aliment/domain/aliment.dart';
 @immutable
 class Meal {
   Meal({
-    required this.name,
+    required this.key,
     List<Aliment>? aliments,
   }) : aliments = aliments ?? [];
 
-  final String name;
+  final String key;
   final List<Aliment> aliments;
 
   Map<String, dynamic> toJson() => {
-        'name': name,
+        'key': key,
         'aliments': aliments.map((a) => a.toJson()).toList(),
       };
 
   factory Meal.fromJson(Map<String, dynamic> json) => Meal(
-        name: json['name'],
+        key: (json['key'] ?? json['name']) as String,
         aliments: ((json['aliments'] ?? []) as List<dynamic>).map((e) {
           final el = (e as Map).cast<String, dynamic>();
           return el.containsKey('alimentID')

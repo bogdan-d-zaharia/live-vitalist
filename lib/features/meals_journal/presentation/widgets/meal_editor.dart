@@ -5,6 +5,7 @@ import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment.dart';
 import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
 import 'package:live_vitalist/features/day/data/day_provider.dart';
+import 'package:live_vitalist/features/day/presentation/meal_localizations.dart';
 import 'package:live_vitalist/features/meals_journal/presentation/aliment_editing_extensions.dart';
 import 'package:live_vitalist/features/meals_journal/presentation/widgets/aliment_widget.dart';
 import 'package:live_vitalist/features/meals_journal/presentation/widgets/custom_divider.dart';
@@ -14,12 +15,12 @@ import 'package:live_vitalist/features/super_search/presentation/utils/super_sea
 
 class MealEditor extends ConsumerWidget {
   const MealEditor({
-    required this.mealName,
+    required this.mealKey,
     required this.date,
     super.key,
   });
 
-  final String mealName;
+  final String mealKey;
   final DateTime date;
 
   @override
@@ -27,7 +28,7 @@ class MealEditor extends ConsumerWidget {
     final l = AppLocalizations.of(context);
     final day = ref.watch(dayCacheProvider)[date]!;
     final dayNotifier = ref.read(dayCacheProvider.notifier);
-    final meal = day.meals.firstWhere((m) => m.name == mealName);
+    final meal = day.meals.firstWhere((m) => m.key == mealKey);
     final bank = ref.watch(alimentBankProvider);
     final bankNotifier = ref.read(alimentBankProvider.notifier);
 
@@ -35,12 +36,12 @@ class MealEditor extends ConsumerWidget {
       return AlimentWidget(
         aliment: aliment,
         deleteAliment: () {
-          dayNotifier.removeAliment(date, mealName, aliment);
+          dayNotifier.removeAliment(date, mealKey, aliment);
         },
         onTap: () async {
           final newAliment = await aliment.pushEditingScreen(context);
           if (newAliment != null) {
-            dayNotifier.updateAliment(date, mealName, aliment, newAliment);
+            dayNotifier.updateAliment(date, mealKey, aliment, newAliment);
           }
         },
         onLongPress: () async {
@@ -53,7 +54,7 @@ class MealEditor extends ConsumerWidget {
           } else if (aliment is TemporaryAliment) {
             final newTemp = await aliment.pushEditingScreen(context);
             if (newTemp != null) {
-              dayNotifier.updateAliment(date, mealName, aliment, newTemp);
+              dayNotifier.updateAliment(date, mealKey, aliment, newTemp);
             }
           }
         },
@@ -64,7 +65,7 @@ class MealEditor extends ConsumerWidget {
       title: l.mealsJournalAddAliment,
       subTitle: '',
       onTap: () => SuperSearchNavigation.open(context, ref,
-          date: date, mealName: meal.name),
+          date: date, mealName: meal.key),
       additional: [],
     );
 
@@ -76,7 +77,7 @@ class MealEditor extends ConsumerWidget {
             await TemporaryAliment.empty.pushEditingScreen(context);
 
         if (newAliment != null) {
-          dayNotifier.addAliment(date, mealName, newAliment);
+          dayNotifier.addAliment(date, mealKey, newAliment);
         }
       },
       additional: [],
@@ -91,11 +92,11 @@ class MealEditor extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(mealName),
+        title: Text(meal.displayName(l)),
         actions: [
           TextButton(
             onPressed: () => NotificationHandler.showListNotification(
-                meal.aliments, bank, mealName, l),
+                meal.aliments, bank, meal.displayName(l), l),
             child: Text(l.mealsJournalShowNotification),
           ),
           SizedBox(width: 12.0),

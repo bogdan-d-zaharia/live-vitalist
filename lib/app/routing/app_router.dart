@@ -72,10 +72,10 @@ GoRouter appRouter(Ref ref) {
               onOpenSettings: () async {
                 await context.push(AppRoutes.settings);
               },
-              onOpenMeal: (mealName, date) async {
+              onOpenMeal: (mealKey, date) async {
                 await context.push(
                   AppRoutes.mealEditorLocation(
-                    mealName: mealName,
+                    mealKey: mealKey,
                     date: date,
                   ),
                 );
@@ -89,12 +89,13 @@ GoRouter appRouter(Ref ref) {
               GoRoute(
                 path: AppRoutes.mealEditorPath,
                 builder: (_, state) {
-                  final mealName = state.uri.queryParameters['mealName'];
+                  final mealKey = state.uri.queryParameters['mealKey'] ??
+                      state.uri.queryParameters['mealName'];
                   final date = DateTime.tryParse(
                     state.uri.queryParameters['date'] ?? '',
                   );
 
-                  if (mealName == null || date == null) {
+                  if (mealKey == null || date == null) {
                     return AppRoutingErrorScreen(
                       error: FormatException(
                         'Meal editor route parameters are invalid.',
@@ -102,7 +103,7 @@ GoRouter appRouter(Ref ref) {
                     );
                   }
 
-                  return MealEditor(mealName: mealName, date: date);
+                  return MealEditor(mealKey: mealKey, date: date);
                 },
               ),
             ],

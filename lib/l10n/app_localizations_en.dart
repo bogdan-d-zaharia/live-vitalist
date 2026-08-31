@@ -338,6 +338,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mealsJournalTitle => 'Meals Journal';
 
   @override
+  String get mealsJournalBreakfast => 'Breakfast';
+
+  @override
+  String get mealsJournalLunch => 'Lunch';
+
+  @override
+  String get mealsJournalDinner => 'Dinner';
+
+  @override
   String get mealsJournalAddMeal => 'Add Meal';
 
   @override

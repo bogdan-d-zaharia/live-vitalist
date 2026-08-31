@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/l10n/app_localizations.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_extensions.dart';
 import 'package:live_vitalist/features/day/domain/meal.dart';
+import 'package:live_vitalist/features/day/presentation/meal_localizations.dart';
 import 'package:live_vitalist/features/meals_journal/presentation/widgets/custom_divider.dart';
 import 'package:live_vitalist/features/meals_journal/presentation/widgets/meal_element.dart';
 import 'package:live_vitalist/features/super_search/presentation/utils/super_search_navigation.dart';
@@ -14,7 +15,7 @@ import '../day/data/day_provider.dart';
 import '../../core/presentation/widgets/data_input/string_input.dart';
 
 class MealsJournal extends ConsumerWidget {
-  final Future<void> Function(String mealName, DateTime date) onOpenMeal;
+  final Future<void> Function(String mealKey, DateTime date) onOpenMeal;
 
   const MealsJournal({
     super.key,
@@ -33,9 +34,9 @@ class MealsJournal extends ConsumerWidget {
         final Map<String, double> values = meal.aliments.summedFields(bank);
         final int kcals = values['kcals']?.round() ?? 0;
         return MealElement(
-          title: meal.name,
+          title: meal.displayName(l),
           subtitle: l.mealsJournalCalories(kcals),
-          onTap: () => onOpenMeal(meal.name, date),
+          onTap: () => onOpenMeal(meal.key, date),
           onLongPress: () async {
             final isDelete = await showDialog<bool>(
               context: context,
@@ -56,11 +57,11 @@ class MealsJournal extends ConsumerWidget {
             );
 
             if (isDelete == true) {
-              dayNotifier.removeMeal(date, meal.name);
+              dayNotifier.removeMeal(date, meal.key);
             }
           },
           onAdd: () => SuperSearchNavigation.open(context, ref,
-              date: date, mealName: meal.name),
+              date: date, mealName: meal.key),
         );
       },
     ).toList();
@@ -95,8 +96,8 @@ class MealsJournal extends ConsumerWidget {
               );
               if (newMealName == null) return;
 
-              if (!day.meals.map((e) => e.name).contains(newMealName)) {
-                dayNotifier.addMeal(date, Meal(name: newMealName));
+              if (!day.meals.map((e) => e.key).contains(newMealName)) {
+                dayNotifier.addMeal(date, Meal(key: newMealName));
               }
             },
             label: Text(l.mealsJournalAddMeal),

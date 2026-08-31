@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/features/day/data/day_provider.dart';
 import 'package:live_vitalist/features/day/domain/day.dart';
+import 'package:live_vitalist/features/day/presentation/meal_localizations.dart';
 import 'package:live_vitalist/l10n/app_localizations.dart';
 
 /// Asks in which meal the aliments go; pops with the meal name.
@@ -28,8 +29,8 @@ class MealPickerDialog extends ConsumerWidget {
               width: 160.0,
               height: 40.0,
               child: ElevatedButton(
-                onPressed: () => Navigator.pop(context, meal.name),
-                child: Center(child: Text(meal.name)),
+                onPressed: () => Navigator.pop(context, meal.key),
+                child: Center(child: Text(meal.displayName(l))),
               ),
             ),
           ),

@@ -57,9 +57,9 @@ class DayCache extends _$DayCache {
     await ref.read(storageProvider.notifier).saveJson(path, day.toJson());
   }
 
-  Future<void> removeMeal(DateTime date, String mealName) async {
+  Future<void> removeMeal(DateTime date, String mealKey) async {
     final day = await load(date);
-    final meals = [...day.meals]..removeWhere((e) => e.name == mealName);
+    final meals = [...day.meals]..removeWhere((e) => e.key == mealKey);
     _save(date, Day(meals: meals));
   }
 
@@ -74,18 +74,18 @@ class DayCache extends _$DayCache {
   // trebuie rezolvat dupa ce Meal devine @freezed.
 
   Future<void> addAliment(
-      DateTime date, String mealName, Aliment aliment) async {
+      DateTime date, String mealKey, Aliment aliment) async {
     final day = await load(date);
-    final meal = day.meals.firstWhere((meal) => meal.name == mealName);
+    final meal = day.meals.firstWhere((meal) => meal.key == mealKey);
     meal.aliments.add(aliment);
     final meals = [...day.meals];
     _save(date, Day(meals: meals));
   }
 
   Future<void> removeAliment(
-      DateTime date, String mealName, Aliment aliment) async {
+      DateTime date, String mealKey, Aliment aliment) async {
     final day = await load(date);
-    final meal = day.meals.firstWhere((meal) => meal.name == mealName);
+    final meal = day.meals.firstWhere((meal) => meal.key == mealKey);
     meal.aliments.remove(aliment);
     final meals = [...day.meals];
     _save(date, Day(meals: meals));
@@ -93,12 +93,12 @@ class DayCache extends _$DayCache {
 
   Future<void> updateAliment(
     DateTime date,
-    String mealName,
+    String mealKey,
     Aliment oldAliment,
     Aliment newAliment,
   ) async {
     final day = await load(date);
-    final meal = day.meals.firstWhere((meal) => meal.name == mealName);
+    final meal = day.meals.firstWhere((meal) => meal.key == mealKey);
     final idx = meal.aliments.indexOf(oldAliment);
     meal.aliments
       ..removeAt(idx)

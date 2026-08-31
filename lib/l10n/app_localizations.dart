@@ -706,6 +706,24 @@ abstract class AppLocalizations {
   /// **'Meals Journal'**
   String get mealsJournalTitle;
 
+  /// No description provided for @mealsJournalBreakfast.
+  ///
+  /// In en, this message translates to:
+  /// **'Breakfast'**
+  String get mealsJournalBreakfast;
+
+  /// No description provided for @mealsJournalLunch.
+  ///
+  /// In en, this message translates to:
+  /// **'Lunch'**
+  String get mealsJournalLunch;
+
+  /// No description provided for @mealsJournalDinner.
+  ///
+  /// In en, this message translates to:
+  /// **'Dinner'**
+  String get mealsJournalDinner;
+
   /// No description provided for @mealsJournalAddMeal.
   ///
   /// In en, this message translates to:

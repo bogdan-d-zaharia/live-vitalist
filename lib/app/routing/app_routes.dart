@@ -11,13 +11,13 @@ abstract final class AppRoutes {
   static const initializationError = '/initialization-error';
 
   static String mealEditorLocation({
-    required String mealName,
+    required String mealKey,
     required DateTime date,
   }) {
     return Uri(
       path: mealEditor,
       queryParameters: {
-        'mealName': mealName,
+        'mealKey': mealKey,
         'date': date.toIso8601String(),
       },
     ).toString();

@@ -10,10 +10,10 @@ extension DaysGroupAnalysis on List<Day> {
 
     for (final day in this) {
       for (final meal in day.meals) {
-        merged.putIfAbsent(meal.name, () => Meal(name: meal.name));
+        merged.putIfAbsent(meal.key, () => Meal(key: meal.key));
         /* Creates a copy of the map aliment to solve the problem where
              the aliment was mutated when averaging multiple days. */
-        merged[meal.name]!
+        merged[meal.key]!
             .aliments
             .addAll(meal.aliments.map((e) => e.copyWith()));
       }
@@ -28,7 +28,7 @@ extension DaysGroupAnalysis on List<Day> {
     final averagedMeals = sum.meals
         .map(
           (meal) => Meal(
-            name: meal.name,
+            key: meal.key,
             aliments: meal.aliments
                 .map((aliment) =>
                     aliment.copyWith(servingSize: aliment.servingSize / length))

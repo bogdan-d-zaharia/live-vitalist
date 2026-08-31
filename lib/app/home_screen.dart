@@ -14,7 +14,7 @@ import 'package:live_vitalist/features/nutrient_circle/nutrient_circle.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   final Future<void> Function() onOpenSettings;
-  final Future<void> Function(String mealName, DateTime date) onOpenMeal;
+  final Future<void> Function(String mealKey, DateTime date) onOpenMeal;
 
   const HomeScreen({
     super.key,
