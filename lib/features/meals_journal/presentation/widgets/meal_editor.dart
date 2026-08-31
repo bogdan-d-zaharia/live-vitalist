@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment.dart';
 import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
@@ -23,6 +24,7 @@ class MealEditor extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context);
     final day = ref.watch(dayCacheProvider)[date]!;
     final dayNotifier = ref.read(dayCacheProvider.notifier);
     final meal = day.meals.firstWhere((m) => m.name == mealName);
@@ -59,7 +61,7 @@ class MealEditor extends ConsumerWidget {
     }
 
     final addInstanced = ElementWidget(
-      title: 'Add aliment',
+      title: l.mealsJournalAddAliment,
       subTitle: '',
       onTap: () => SuperSearchNavigation.open(context, ref,
           date: date, mealName: meal.name),
@@ -67,7 +69,7 @@ class MealEditor extends ConsumerWidget {
     );
 
     final addTemporary = ElementWidget(
-      title: 'Add temporary aliment',
+      title: l.mealsJournalAddTemporaryAliment,
       subTitle: '',
       onTap: () async {
         final TemporaryAliment? newAliment =
@@ -93,8 +95,8 @@ class MealEditor extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () => NotificationHandler.showListNotification(
-                meal.aliments, bank, mealName),
-            child: Text('Show Notification'),
+                meal.aliments, bank, mealName, l),
+            child: Text(l.mealsJournalShowNotification),
           ),
           SizedBox(width: 12.0),
         ],
@@ -104,7 +106,7 @@ class MealEditor extends ConsumerWidget {
         child: ListView(
           children: [
             CustomCard(
-              title: 'Aliments',
+              title: l.mealsJournalAliments,
               child: Column(children: elements),
             ),
             SizedBox(height: 12.0),

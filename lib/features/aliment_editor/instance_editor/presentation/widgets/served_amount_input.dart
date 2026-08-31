@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:live_vitalist/core/presentation/widgets/data_input/number_input.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class ServedAmountInput extends StatelessWidget {
   final double Function() getValue;
@@ -13,9 +14,11 @@ class ServedAmountInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return Row(
       children: [
-        Text('Served amount:', style: Theme.of(context).textTheme.bodyLarge),
+        Text(l.alimentEditorServedAmount,
+            style: Theme.of(context).textTheme.bodyLarge),
         Expanded(
           child: Center(
             child: NumberInput(

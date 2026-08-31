@@ -1,5 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:live_vitalist/core/presentation/widgets/localized_rich_text.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LegalPrerequisitesText extends StatelessWidget {
@@ -7,12 +9,12 @@ class LegalPrerequisitesText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text.rich(
-      TextSpan(
-        text: 'Before using Live Vitalist, please review and accept our ',
-        children: [
-          TextSpan(
-            text: 'Privacy Policy',
+    final l = AppLocalizations.of(context);
+    return LocalizedRichText(
+      text: l.legalPrerequisites('{privacyLink}', '{termsLink}'),
+      replacements: {
+        '{privacyLink}': TextSpan(
+            text: l.legalPrivacyPolicy,
             style: TextStyle(
                 color: Colors.blue, decoration: TextDecoration.underline),
             recognizer: TapGestureRecognizer()
@@ -22,9 +24,8 @@ class LegalPrerequisitesText extends StatelessWidget {
                 await launchUrl(url, mode: LaunchMode.externalApplication);
               },
           ),
-          TextSpan(text: ' and '),
-          TextSpan(
-            text: 'Terms of Use',
+        '{termsLink}': TextSpan(
+            text: l.legalTermsOfUse,
             style: TextStyle(
                 color: Colors.blue, decoration: TextDecoration.underline),
             recognizer: TapGestureRecognizer()
@@ -34,9 +35,7 @@ class LegalPrerequisitesText extends StatelessWidget {
                 await launchUrl(url, mode: LaunchMode.externalApplication);
               },
           ),
-          TextSpan(text: '.'),
-        ],
-      ),
+      },
       textAlign: TextAlign.start,
     );
   }

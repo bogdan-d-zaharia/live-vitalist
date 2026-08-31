@@ -13,6 +13,7 @@ import 'package:live_vitalist/features/super_search/presentation/widgets/empty_s
 import 'package:live_vitalist/features/super_search/presentation/widgets/meal_picker_dialog.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/search_header.dart';
 import 'package:live_vitalist/features/super_search/super_search_constants.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class SearchOverlay extends ConsumerWidget {
   const SearchOverlay({super.key});
@@ -39,6 +40,7 @@ class SearchOverlay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context);
     final searchState = ref.watch(superSearchProvider);
     final bank = ref.watch(alimentBankProvider);
 
@@ -49,8 +51,7 @@ class SearchOverlay extends ConsumerWidget {
     }).toList();
 
     final selectedCount = searchState.selection.length;
-    final selectionLabel =
-        selectedCount == 1 ? 'Add aliment' : 'Add $selectedCount aliments';
+    final selectionLabel = l.superSearchAddAliments(selectedCount);
 
     return ClipRRect(
       child: BackdropFilter(

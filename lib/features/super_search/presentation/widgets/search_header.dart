@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class SearchHeader extends StatelessWidget {
   const SearchHeader({
@@ -12,8 +13,9 @@ class SearchHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final theme = Theme.of(context);
-    final resultLabel = resultCount == 1 ? '1 result' : '$resultCount results';
+    final resultLabel = l.superSearchResultCount(resultCount);
     final doShowCount = query.trim().isNotEmpty;
 
     return Row(
@@ -21,7 +23,7 @@ class SearchHeader extends StatelessWidget {
         Icon(Icons.search_rounded),
         SizedBox(width: 8.0),
         Text(
-          'Aliments',
+          l.superSearchAliments,
           style: theme.textTheme.bodyLarge
               ?.copyWith(color: theme.colorScheme.onSurface),
         ),

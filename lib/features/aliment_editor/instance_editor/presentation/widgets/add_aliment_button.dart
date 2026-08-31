@@ -3,6 +3,7 @@ import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
 import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/aliment_data_editor.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class AddAlimentButton extends StatelessWidget {
   final AlimentBank notifier;
@@ -16,6 +17,7 @@ class AddAlimentButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return MiniCard(
       child: InkWell(
         onTap: () async {
@@ -33,9 +35,10 @@ class AddAlimentButton extends StatelessWidget {
           onAdded();
         },
         child: Row(
-          children: const [
-            SizedBox(width: 42.0, height: 42.0, child: Icon(Icons.add_rounded)),
-            Text('Add Aliment'),
+          children: [
+            const SizedBox(
+                width: 42.0, height: 42.0, child: Icon(Icons.add_rounded)),
+            Text(l.alimentEditorAddAliment),
           ],
         ),
       ),

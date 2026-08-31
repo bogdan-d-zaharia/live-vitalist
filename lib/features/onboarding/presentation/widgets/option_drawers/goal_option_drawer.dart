@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:live_vitalist/core/theme/custom_icons.dart';
 import 'package:live_vitalist/features/onboarding/domain/options/goal_option.dart';
 import 'package:live_vitalist/features/onboarding/presentation/widgets/option_card.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class GoalOptionDrawer extends StatelessWidget {
   final GoalOption goal;
@@ -17,6 +18,7 @@ class GoalOptionDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final icon = switch (goal) {
       GoalOption.loseWeight => CustomIcons.weight,
       GoalOption.buildMuscle => CustomIcons.muscle,
@@ -25,10 +27,10 @@ class GoalOptionDrawer extends StatelessWidget {
       // _ => Icons.account_balance_rounded,
     };
     final title = switch (goal) {
-      GoalOption.loseWeight => "Lose Weight",
-      GoalOption.buildMuscle => "Build Muscle",
-      GoalOption.improveHealth => "Improve Health",
-      GoalOption.improvePerformance => "Improve Performance",
+      GoalOption.loseWeight => l.onboardingGoalOptionLoseWeight,
+      GoalOption.buildMuscle => l.onboardingGoalOptionBuildMuscle,
+      GoalOption.improveHealth => l.onboardingGoalOptionImproveHealth,
+      GoalOption.improvePerformance => l.onboardingGoalOptionImprovePerformance,
     };
 
     return OptionCard(

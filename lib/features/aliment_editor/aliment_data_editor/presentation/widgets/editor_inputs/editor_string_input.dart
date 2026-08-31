@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/widgets/editor_inputs/editor_input_decoration.dart';
 
 class EditorStringInput extends StatelessWidget {
@@ -37,7 +38,8 @@ class EditorStringInput extends StatelessWidget {
             onChanged: onChanged,
             decoration: editorInputDecoration(
               context,
-              hintText: 'Enter ${label.toLowerCase()}',
+              hintText: AppLocalizations.of(context)
+                  .alimentEditorEnterLabel(label.toLowerCase()),
               icon: label == 'Name'
                   ? Icons.restaurant_menu_rounded
                   : Icons.straighten_rounded,

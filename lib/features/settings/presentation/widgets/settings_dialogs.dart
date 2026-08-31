@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class ReauthenticateDialog extends StatelessWidget {
   const ReauthenticateDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return Dialog(
       backgroundColor: Colors.transparent,
       child: CustomCard(
@@ -13,15 +15,15 @@ class ReauthenticateDialog extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text(
-              'You must authenticate first before we can delete your account associated with Google.',
-              style: TextStyle(fontSize: 16.0),
+            Text(
+              l.settingsReauthenticateMessage,
+              style: const TextStyle(fontSize: 16.0),
             ),
             const SizedBox(height: 12.0),
             ElevatedButton.icon(
               onPressed: () => Navigator.pop(context, true),
               icon: const Icon(Icons.delete, color: Colors.white),
-              label: const Text("Re-authenticate and delete"),
+              label: Text(l.settingsReauthenticateAndDelete),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
                 foregroundColor: Colors.white,
@@ -48,6 +50,7 @@ class ConfirmDeletionDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return Dialog(
       backgroundColor: Colors.transparent,
       child: CustomCard(
@@ -64,7 +67,7 @@ class ConfirmDeletionDialog extends StatelessWidget {
                   width: 100.0,
                   child: ElevatedButton.icon(
                     onPressed: () => Navigator.pop(context),
-                    label: const Text("Cancel"),
+                    label: Text(l.actionCancel),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
                       foregroundColor: Colors.white,
@@ -82,7 +85,7 @@ class ConfirmDeletionDialog extends StatelessWidget {
                       onConfirm();
                     },
                     icon: const Icon(Icons.delete, color: Colors.white),
-                    label: const Text("Delete"),
+                    label: Text(l.actionDelete),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
                       foregroundColor: Colors.white,

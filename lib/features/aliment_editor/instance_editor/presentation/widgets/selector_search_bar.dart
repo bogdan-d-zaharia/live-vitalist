@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class SelectorSearchBar extends StatelessWidget {
   final TextEditingController controller;
@@ -13,6 +14,7 @@ class SelectorSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return MiniCard(
       child: Row(
         children: [
@@ -24,8 +26,8 @@ class SelectorSearchBar extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: controller,
-              decoration: const InputDecoration(
-                hintText: 'Search aliment',
+              decoration: InputDecoration(
+                hintText: l.alimentEditorSearchAliment,
                 border: InputBorder.none,
               ),
               onChanged: onChanged,

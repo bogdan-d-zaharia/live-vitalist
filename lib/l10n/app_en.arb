@@ -1,5 +1,13 @@
 {
   "@@locale": "en",
+
+  "actionSave": "Save",
+  "actionCancel": "Cancel",
+  "actionDelete": "Delete",
+  "actionContinue": "Continue",
+  "actionTryAgain": "Try again",
+  "actionRestore": "Restore",
+
   "nutrientKcals": "Calories",
   "nutrientProtein": "Protein",
   "nutrientCarbs": "Carbohydrates",
@@ -31,5 +39,227 @@
   "nutrientCalcium": "Calcium",
   "nutrientIron": "Iron",
   "nutrientMagnesium": "Magnesium",
-  "nutrientZinc": "Zinc"
+  "nutrientZinc": "Zinc",
+
+  "onboardingGoalQuestion": "What is your main goal?",
+  "onboardingGoalOptionLoseWeight": "Lose Weight",
+  "onboardingGoalOptionBuildMuscle": "Build Muscle",
+  "onboardingGoalOptionImproveHealth": "Improve Health",
+  "onboardingGoalOptionImprovePerformance": "Improve Performance",
+
+  "onboardingNutrientsQuestion": "What else are you tracking besides calories?",
+  "onboardingNutrientsOptionMacrosTitle": "Macros",
+  "onboardingNutrientsOptionMacrosFooter": "Protein · Carbs · Fats",
+  "onboardingNutrientsOptionRiskFactorsTitle": "Risk Factors",
+  "onboardingNutrientsOptionRiskFactorsFooter": "Sat. Fats · Cholesterol",
+  "onboardingNutrientsOptionElectrolytesTitle": "Electrolytes",
+  "onboardingNutrientsOptionElectrolytesFooter": "Sodium · Potassium",
+  "onboardingNutrientsOptionVitaminsTitle": "Vitamins",
+  "onboardingNutrientsOptionVitaminsFooter": "A · B-Complex · C · D · E · K",
+  "onboardingNutrientsOptionMineralsTitle": "Minerals",
+  "onboardingNutrientsOptionMineralsFooter": "Iron · Calcium · Magnesium · Zinc",
+
+  "onboardingStreakQuestion": "Do you like having a streak?",
+  "onboardingStreakOptionShowTitle": "Yes! I love streaks!",
+  "onboardingStreakOptionShowFooter": "Keep me accountable daily",
+  "onboardingStreakOptionHideTitle": "No, I find them annoying.",
+  "onboardingStreakOptionHideFooter": "Just track my progress",
+
+  "noConnectionDialogTitle": "No internet access",
+  "noConnectionDialogMessage": "Please connect to the internet in order to accept our Terms and Conditions, and with our Privacy Policy.",
+
+  "googleConnectionDialogAccountNotFoundTitle": "Account not found",
+  "googleConnectionDialogAccountNotFoundMessage": "We could not find a Live Vitalist account connected to this Google account. Please complete the onboarding first.",
+  "googleConnectionDialogConnectionFailedTitle": "Google connection failed",
+  "googleConnectionDialogConnectionFailedMessage": "We could not connect with Google. Please check your internet connection and try again.",
+
+  "welcomeScreenTitle": "Welcome to Live Vitalist",
+  "welcomeScreenSubtitle": "Let's set up your profile so we can tailor your nutrition and fitness journey to you.",
+  "welcomeScreenExistingAccount": "Have an account? {googleLink} instead.",
+  "@welcomeScreenExistingAccount": {
+    "placeholders": {
+      "googleLink": {
+        "type": "String"
+      }
+    }
+  },
+  "welcomeScreenGoogleLink": "Connect with Google",
+
+  "termsScreenTitle": "You're all set",
+  "termsScreenAgreement": "If you continue, you agree with our {termsLink} and {privacyLink}.",
+  "@termsScreenAgreement": {
+    "placeholders": {
+      "termsLink": {
+        "type": "String"
+      },
+      "privacyLink": {
+        "type": "String"
+      }
+    }
+  },
+  "termsScreenTermsLink": "Terms and Conditions",
+  "termsScreenPrivacyLink": "Privacy Policy",
+
+  "legalDialogTitle": "Please Accept Our Terms",
+  "legalPrerequisites": "Before using Live Vitalist, please review and accept our {privacyLink} and {termsLink}.",
+  "@legalPrerequisites": {
+    "placeholders": {
+      "privacyLink": {"type": "String"},
+      "termsLink": {"type": "String"}
+    }
+  },
+  "legalPrivacyPolicy": "Privacy Policy",
+  "legalTermsOfUse": "Terms of Use",
+  "legalSettingsHint": "You can review the Privacy Policy and Terms of Use at any time from the app's Settings, accessible via the ⋮ menu in the top-right corner.",
+
+  "appRoutingErrorMessage": "The requested page could not be opened.",
+
+  "appInitializationErrorMessage": "The application could not be initialized.",
+
+  "calendarTitle": "Calendar",
+  "calendarMaximum": "Maximum",
+  "calendarLeadingNutrient": "Leading nutrient",
+  "calendarMinimum": "Minimum",
+
+  "alimentJsonEditorTitle": "Aliment Json Editor",
+
+  "alimentEditorTitle": "Aliment Editor",
+  "alimentEditorGenericTitle": "Editor",
+  "alimentEditorSaveChangesTitle": "Save changes?",
+  "alimentEditorSaveChangesMessage": "Do you want to save this aliment?",
+  "alimentEditorAddAliment": "Add Aliment",
+  "alimentEditorSearchAliment": "Search aliment",
+  "alimentEditorServedAmount": "Served amount:",
+  "alimentEditorSelectorTitle": "Aliment Selector",
+  "alimentEditorNewUnit": "New unit",
+  "alimentEditorUnitName": "Unit name",
+  "alimentEditorAmount": "Amount",
+  "alimentEditorAddSynonym": "Add synonym",
+  "alimentEditorDeleteSynonym": "Delete synonym",
+  "alimentEditorEnterLabel": "Enter {label}",
+  "@alimentEditorEnterLabel": {
+    "placeholders": {"label": {"type": "String"}}
+  },
+
+  "mealsJournalDeleteMealTitle": "Delete meal?",
+  "mealsJournalDeleteMealMessage": "Are you sure you want to delete this meal?",
+  "mealsJournalTitle": "Meals Journal",
+  "mealsJournalAddMeal": "Add Meal",
+  "mealsJournalAddAliment": "Add aliment",
+  "mealsJournalAddTemporaryAliment": "Add temporary aliment",
+  "mealsJournalShowNotification": "Show Notification",
+  "mealsJournalAliments": "Aliments",
+  "mealsJournalCalories": "{count, plural, =1{1 calorie} other{{count} calories}}",
+  "@mealsJournalCalories": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "mealsJournalNotificationTitle": "{mealName}: {count, plural, =1{1 aliment} other{{count} aliments}}",
+  "@mealsJournalNotificationTitle": {
+    "placeholders": {
+      "mealName": {"type": "String"},
+      "count": {"type": "int"}
+    }
+  },
+  "mealsJournalNotificationChannel": "Meal Summary",
+  "mealsJournalNotificationChannelDescription": "Text-based notification with a list of aliments",
+  "mealsJournalNotificationSummary": "Meal summary",
+  "mealsJournalNotificationBody": "Expand to view aliments",
+
+  "superSearchSearchAliments": "Search aliments",
+  "superSearchAliments": "Aliments",
+  "superSearchNoAlimentsFound": "No aliments found",
+  "superSearchTryAnotherName": "Try another name or check the spelling.",
+  "superSearchAddToMeal": "Add to meal",
+  "superSearchWriteAlimentFirst": "Write the aliment in the search bar first.",
+  "superSearchAddAliments": "{count, plural, =1{Add aliment} other{Add {count} aliments}}",
+  "@superSearchAddAliments": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "superSearchResultCount": "{count, plural, =0{No results} =1{1 result} other{{count} results}}",
+  "@superSearchResultCount": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+
+  "nutrientDisplayTitle": "Nutrients",
+  "nutrientDisplayAddNewNutrient": "Add new nutrient",
+  "nutrientDisplayAmount": "Amount:",
+  "nutrientDisplayLowerLimit": "Lower Limit:",
+  "nutrientDisplayUpperLimit": "Upper Limit:",
+  "nutrientDisplayTopSources": "Top Sources",
+  "nutrientDisplayIntake": "{nutrient} intake",
+  "@nutrientDisplayIntake": {"placeholders": {"nutrient": {"type": "String"}}},
+  "nutrientDisplayAmountValue": "Amount: {amount}",
+  "@nutrientDisplayAmountValue": {"placeholders": {"amount": {"type": "String"}}},
+  "nutrientDisplayLowerLimitValue": "Lower Limit: {value}",
+  "@nutrientDisplayLowerLimitValue": {"placeholders": {"value": {"type": "String"}}},
+  "nutrientDisplayUpperLimitValue": "Upper Limit: {value}",
+  "@nutrientDisplayUpperLimitValue": {"placeholders": {"value": {"type": "String"}}},
+
+  "ratioBarsTitle": "Distribution Bars",
+
+  "reportsNoData": "No data",
+  "reportsPreviousWeek": "Previous Week",
+  "reportsCurrentWeek": "Current Week",
+  "reportsConsistency": "Consistency",
+  "reportsAverageDailyCalories": "Average daily calories",
+  "reportsWeekReportTitle": "Week {number} Report",
+  "@reportsWeekReportTitle": {
+    "placeholders": {
+      "number": {"type": "int"}
+    }
+  },
+  "reportsWeekRange": "{start} – {end}",
+  "@reportsWeekRange": {
+    "placeholders": {
+      "start": {"type": "String"},
+      "end": {"type": "String"}
+    }
+  },
+  "reportsDaysOnTarget": "{count} / {total, plural, =1{1 day} other{{total} days}} on target",
+  "@reportsDaysOnTarget": {
+    "placeholders": {
+      "count": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+  "reportsMondayShort": "M",
+  "reportsTuesdayShort": "T",
+  "reportsWednesdayShort": "W",
+  "reportsThursdayShort": "T",
+  "reportsFridayShort": "F",
+  "reportsSaturdayShort": "S",
+  "reportsSundayShort": "S",
+
+  "settingsTitle": "Settings",
+  "settingsDocuments": "Documents",
+  "settingsPrivacyPolicy": "Privacy Policy",
+  "settingsTermsOfUse": "Terms of Use",
+  "settingsSendFeedback": "Send Feedback",
+  "settingsDataDeletion": "Data Deletion",
+  "settingsConnectWithGoogle": "Connect with Google",
+  "settingsGoogleBackupMessage": "Backup your files to cloud or restore your data by connecting with Google.",
+  "settingsUseMonthDayFormat": "Use M/D format",
+  "settingsUseComplexCalendar": "Use complex calendar view",
+  "settingsShowMacroDistribution": "Show macro distribution",
+  "settingsShowOmegaBalance": "Show Omega-3 to Omega-6 balance",
+  "settingsAccountDeletion": "Account Deletion",
+  "settingsAccountAndDataDeletion": "Account and data deletion",
+  "settingsPermanentlyDeleteOnlineData": "Permanently delete online data",
+  "settingsPermanentlyDeleteAllData": "Permanently delete all data",
+  "settingsReauthenticateMessage": "You must authenticate first before we can delete your account associated with Google.",
+  "settingsReauthenticateAndDelete": "Re-authenticate and delete",
+  "settingsDeleteAllDescription": "You can delete your account and all data stored both online and on your device by using the button below. This will permanently remove everything linked to your account and reset the app.",
+  "settingsDeleteAllConfirmation": "Are you sure you want to delete your account and all associated data? This will erase your online data and local storage. This action is permanent and cannot be undone.",
+  "settingsDeleteOnlineDescription": "You can delete your account and all data stored online by using the button below. Your data will be permanently removed from our servers, but app settings and local storage will remain on your device.",
+  "settingsDeleteOnlineConfirmation": "Are you sure you want to delete your account and all data stored online? This action is permanent and cannot be undone.",
+  "settingsDeletionFailed": "Deletion failed, nothing was removed.",
+  "legalClosingApp": "Closing the app...",
+  "legalExitApp": "Exit App",
+  "legalAgree": "I Agree"
 }

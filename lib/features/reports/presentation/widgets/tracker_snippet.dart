@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 import 'package:live_vitalist/core/domain/intervals.dart';
 import 'package:live_vitalist/core/presentation/widgets/target_bar/target_bar.dart';
 import 'package:live_vitalist/core/presentation/widgets/target_bar/target_bar_draw_data.dart';
@@ -12,6 +13,7 @@ class TrackerSnippet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final rangeStyle = ReportStyles.dayViewLabel.copyWith(height: 1.0);
     final counterColor = Theme.of(context).colorScheme.onSurface;
     return Container(
@@ -23,7 +25,8 @@ class TrackerSnippet extends StatelessWidget {
       ),
       padding: EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0),
       child: intake == null
-          ? Center(child: Text('No data', style: ReportStyles.dayViewBold))
+          ? Center(child: Text(l.reportsNoData,
+              style: ReportStyles.dayViewBold))
           : Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.stretch,

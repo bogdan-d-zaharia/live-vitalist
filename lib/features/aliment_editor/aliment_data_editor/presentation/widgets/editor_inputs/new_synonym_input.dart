@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/widgets/editor_inputs/editor_input_decoration.dart';
 
 class NewSynonymInput extends StatelessWidget {
@@ -26,7 +27,7 @@ class NewSynonymInput extends StatelessWidget {
               textInputAction: TextInputAction.next,
               decoration: editorInputDecoration(
                 context,
-                hintText: 'New unit',
+                hintText: AppLocalizations.of(context).alimentEditorNewUnit,
                 icon: Icons.add_circle_outline_rounded,
               ),
             ),
@@ -41,13 +42,13 @@ class NewSynonymInput extends StatelessWidget {
               onSubmitted: (_) => onAdd(),
               decoration: editorInputDecoration(
                 context,
-                hintText: 'Amount',
+                hintText: AppLocalizations.of(context).alimentEditorAmount,
               ),
             ),
           ),
           SizedBox(width: 8.0),
           IconButton.filled(
-            tooltip: 'Add synonym',
+            tooltip: AppLocalizations.of(context).alimentEditorAddSynonym,
             icon: Icon(Icons.add_rounded),
             onPressed: onAdd,
           )

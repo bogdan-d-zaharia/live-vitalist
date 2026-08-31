@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
 import 'package:live_vitalist/features/nutrient_display/presentation/ui_helpers/nutrient_extensions.dart';
 import 'package:live_vitalist/features/nutrient_display/presentation/ui_helpers/nutrients_editing_logic.dart';
 import 'package:live_vitalist/features/nutrient_display/presentation/widgets/dimmed_parentheses_text.dart';
-import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class NutrientDisplayEdit extends ConsumerWidget {
   const NutrientDisplayEdit({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context);
     final nutrientsState = ref.watch(nutrientsProvider);
     final nutrientsNotifier = ref.read(nutrientsProvider.notifier);
     final localization = AppLocalizations.of(context);
@@ -61,7 +62,7 @@ class NutrientDisplayEdit extends ConsumerWidget {
           width: double.infinity,
           child: TextButton(
             onPressed: () => showNewNutrientDialog(context),
-            child: const Text('Add new nutrient'),
+            child: Text(l.nutrientDisplayAddNewNutrient),
           ),
         ),
       ],

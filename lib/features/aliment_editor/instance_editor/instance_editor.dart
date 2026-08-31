@@ -10,6 +10,7 @@ import 'package:live_vitalist/features/aliment_editor/instance_editor/presentati
 import 'package:live_vitalist/features/aliment_editor/instance_editor/presentation/widgets/aliment_selector.dart';
 import 'package:live_vitalist/features/aliment_editor/instance_editor/presentation/widgets/served_amount_input.dart';
 import 'package:live_vitalist/features/aliment_editor/instance_editor/presentation/widgets/unit_dropdown.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class InstanceEditor extends ConsumerStatefulWidget {
   const InstanceEditor({required this.initialAliment, super.key});
@@ -62,6 +63,7 @@ class _InstanceEditorState extends ConsumerState<InstanceEditor> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final data = selectedAliment;
 
     return PopScope(
@@ -71,7 +73,7 @@ class _InstanceEditorState extends ConsumerState<InstanceEditor> {
         _pop();
       },
       child: Scaffold(
-        appBar: AppBar(title: const Text('Editor')),
+        appBar: AppBar(title: Text(l.alimentEditorGenericTitle)),
         body: GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () => FocusManager.instance.primaryFocus?.unfocus(),

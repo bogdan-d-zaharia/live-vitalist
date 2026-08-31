@@ -6,6 +6,7 @@ import 'package:live_vitalist/features/settings/presentation/controllers/setting
 import 'package:live_vitalist/features/settings/presentation/widgets/data_deletion_page.dart';
 import 'package:live_vitalist/features/settings/data/settings_data.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -23,18 +24,19 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final isFirebase =
         ref.watch(settingsControllerProvider.notifier).isFirebase;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: Text(l.settingsTitle),
         actions: [
           PopupMenuButton<String>(
-            icon: const Row(
+            icon: Row(
               children: [
-                Text('Documents'),
-                SizedBox(
+                Text(l.settingsDocuments),
+                const SizedBox(
                     width: 32.0,
                     height: 32.0,
                     child: Icon(Icons.more_vert_rounded)),
@@ -50,28 +52,28 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
                     Uri.parse(
                         'https://live-vitalist.notion.site/Privacy-Policy-Live-Vitalist-1d612e3b9fc280d1be5cd9a718709560'),
                     mode: LaunchMode.externalApplication),
-                child: const Text('Privacy Policy'),
+                child: Text(l.settingsPrivacyPolicy),
               ),
               PopupMenuItem(
                 onTap: () => launchUrl(
                     Uri.parse(
                         'https://live-vitalist.notion.site/Terms-of-Use-Live-Vitalist-1d612e3b9fc28053a196f93d6c739858'),
                     mode: LaunchMode.externalApplication),
-                child: const Text('Terms of Use'),
+                child: Text(l.settingsTermsOfUse),
               ),
               PopupMenuItem(
                 onTap: () => launchUrl(Uri(
                     scheme: 'mailto',
                     path: 'livevitalist@gmail.com',
                     query: Uri.encodeFull('subject=Feedback&body=Hello!'))),
-                child: const Text('Send Feedback'),
+                child: Text(l.settingsSendFeedback),
               ),
               PopupMenuItem(
                 onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => const DataDeletionPage())),
-                child: const Text('Data Deletion'),
+                child: Text(l.settingsDataDeletion),
               ),
             ],
           ),
@@ -84,16 +86,15 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
             if (!isFirebase)
               CustomCard(
                 logo: const Icon(Icons.cloud_upload_rounded),
-                title: 'Connect with Google',
+                title: l.settingsConnectWithGoogle,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                        'Backup your files to cloud or restore your data by connecting with Google.'),
+                    Text(l.settingsGoogleBackupMessage),
                     const SizedBox(height: 12.0),
                     TextButton(
                         onPressed: _handleGoogleConnection,
-                        child: const Text('Connect with Google')),
+                        child: Text(l.settingsConnectWithGoogle)),
                   ],
                 ),
               ),
@@ -109,7 +110,7 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
                       }
                     },
                   ),
-                  const Text('Use M/D format'),
+                  Text(l.settingsUseMonthDayFormat),
                 ],
               ),
             ),
@@ -125,7 +126,7 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
                       }
                     },
                   ),
-                  const Text('Use complex calendar view'),
+                  Text(l.settingsUseComplexCalendar),
                 ],
               ),
             ),
@@ -142,7 +143,7 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
                       }
                     },
                   ),
-                  const Text('Show macro distribution'),
+                  Text(l.settingsShowMacroDistribution),
                 ],
               ),
             ),
@@ -158,7 +159,7 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
                       }
                     },
                   ),
-                  const Text('Show Omega-3 to Omega-6 balance'),
+                  Text(l.settingsShowOmegaBalance),
                 ],
               ),
             ),

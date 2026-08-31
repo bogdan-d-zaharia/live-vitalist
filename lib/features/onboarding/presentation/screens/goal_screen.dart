@@ -4,12 +4,14 @@ import 'package:live_vitalist/features/onboarding/domain/options/goal_option.dar
 import 'package:live_vitalist/features/onboarding/presentation/controllers/onboarding_controller.dart';
 import 'package:live_vitalist/features/onboarding/presentation/screens/selectable_screen.dart';
 import 'package:live_vitalist/features/onboarding/presentation/widgets/option_drawers/goal_option_drawer.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class GoalScreen extends ConsumerWidget {
   const GoalScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context);
     final goalProvider = onboardingControllerProvider
         .select((onboardingState) => onboardingState.data.goal);
     final controllerNotifier = ref.read(onboardingControllerProvider.notifier);
@@ -23,7 +25,7 @@ class GoalScreen extends ConsumerWidget {
         .toList();
 
     return SelectableScreen(
-      question: "What is your main goal?",
+      question: l.onboardingGoalQuestion,
       options: options,
     );
   }

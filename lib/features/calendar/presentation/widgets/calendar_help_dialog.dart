@@ -4,12 +4,14 @@ import 'package:live_vitalist/features/calendar/domain/calendar_constants.dart';
 import 'package:live_vitalist/features/calendar/presentation/widgets/simple_calendar_item.dart';
 import 'package:live_vitalist/core/presentation/widgets/labels_widget.dart';
 import 'package:live_vitalist/features/settings/data/settings_data.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class CalendarHelpDialog extends StatelessWidget {
   const CalendarHelpDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return Center(
       child: MiniCard(
         child: Padding(
@@ -21,9 +23,10 @@ class CalendarHelpDialog extends StatelessWidget {
               LabelsWidget(
                 map: {
                   if (SettingsData.isComplexCalendar)
-                    'Maximum': Colors.lightGreen.withValues(alpha: 0.4),
-                  'Leading nutrient': Colors.lightGreen,
-                  if (SettingsData.isComplexCalendar) 'Minimum': Colors.green,
+                    l.calendarMaximum: Colors.lightGreen.withValues(alpha: 0.4),
+                  l.calendarLeadingNutrient: Colors.lightGreen,
+                  if (SettingsData.isComplexCalendar)
+                    l.calendarMinimum: Colors.green,
                 },
               ),
               const SizedBox(width: 24.0),

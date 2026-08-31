@@ -3,6 +3,7 @@ import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
 import 'package:live_vitalist/core/presentation/widgets/labels_widget.dart';
 import 'package:live_vitalist/features/ratio_bars/presentation/widgets/bar.dart';
 import 'package:live_vitalist/features/ratio_bars/presentation/widgets/ratio_bars_models.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class RatioBars extends StatelessWidget {
   const RatioBars({
@@ -14,6 +15,7 @@ class RatioBars extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final children = bars
         .expand((bar) => [
               Text(bar.text),
@@ -32,7 +34,7 @@ class RatioBars extends StatelessWidget {
 
     return CustomCard(
       logo: Icon(Icons.stacked_bar_chart_rounded),
-      title: 'Distribution Bars',
+      title: l.ratioBarsTitle,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: children,

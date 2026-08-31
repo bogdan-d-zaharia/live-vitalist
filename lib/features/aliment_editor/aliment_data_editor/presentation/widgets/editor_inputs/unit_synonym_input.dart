@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/widgets/editor_inputs/editor_input_decoration.dart';
 
 class UnitSynonymInput extends StatelessWidget {
@@ -36,7 +37,7 @@ class UnitSynonymInput extends StatelessWidget {
               textInputAction: TextInputAction.next,
               decoration: editorInputDecoration(
                 context,
-                hintText: 'Unit name',
+                hintText: AppLocalizations.of(context).alimentEditorUnitName,
                 icon: Icons.sell_outlined,
               ),
               onSubmitted: onRename,
@@ -51,14 +52,14 @@ class UnitSynonymInput extends StatelessWidget {
               textInputAction: TextInputAction.done,
               decoration: editorInputDecoration(
                 context,
-                hintText: 'Amount',
+                hintText: AppLocalizations.of(context).alimentEditorAmount,
               ),
               onSubmitted: submitValue,
             ),
           ),
           SizedBox(width: 8.0),
           IconButton.filledTonal(
-            tooltip: 'Delete synonym',
+            tooltip: AppLocalizations.of(context).alimentEditorDeleteSynonym,
             icon: Icon(Icons.delete_outline_rounded),
             onPressed: onDelete,
           ),

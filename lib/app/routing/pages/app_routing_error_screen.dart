@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class AppRoutingErrorScreen extends StatelessWidget {
   const AppRoutingErrorScreen({super.key, this.error});
@@ -7,6 +8,7 @@ class AppRoutingErrorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -14,7 +16,7 @@ class AppRoutingErrorScreen extends StatelessWidget {
             padding: EdgeInsets.all(24.0),
             child: Text(
               error == null
-                  ? 'The requested page could not be opened.'
+                  ? l.appRoutingErrorMessage
                   : 'The requested page could not be opened:\n$error',
               textAlign: TextAlign.center,
             ),

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:live_vitalist/core/domain/intervals.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
 import 'package:live_vitalist/core/theme/app_colors_theme.dart';
+import 'package:live_vitalist/features/reports/domain/date_utils.dart';
 import 'package:live_vitalist/features/reports/presentation/theme/report_styles.dart';
 import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
 import 'package:live_vitalist/features/nutrient_display/domain/intake.dart';
@@ -23,8 +25,9 @@ class WeekReportOverlay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context);
     final nutrients = ref.watch(nutrientsProvider).data;
-    final localization = AppLocalizations.of(context);
+    final localization = l;
     final localeCode = Localizations.localeOf(context).languageCode;
     final intakes = weekReport.currentWeek.averageIntake.map(
       (key, value) {
@@ -60,6 +63,17 @@ class WeekReportOverlay extends ConsumerWidget {
     );
     final averageCalories = intakes.remove('kcals')?.current;
     final evolutions = intakes.values.toList(); // the remaining
+    final weekStart = isoWeekStart(
+      DateTime.now().year,
+      weekReport.currentWeek.number,
+    );
+    final weekEnd = weekStart.add(Duration(days: 6));
+    final dateFormat =
+        DateFormat.MMMd(Localizations.localeOf(context).toString());
+    final weekRange = l.reportsWeekRange(
+      dateFormat.format(weekStart),
+      dateFormat.format(weekEnd),
+    );
     final maxHeight = MediaQuery.sizeOf(context).height * 0.9;
     return Dialog(
       backgroundColor: Colors.transparent,
@@ -87,7 +101,8 @@ class WeekReportOverlay extends ConsumerWidget {
                       SizedBox(width: 12.0),
                       Expanded(
                         child: Text(
-                          'Week ${weekReport.currentWeek.number} Report',
+                          l.reportsWeekReportTitle(
+                              weekReport.currentWeek.number),
                           style: Theme.of(context)
                               .textTheme
                               .bodyLarge
@@ -97,7 +112,7 @@ class WeekReportOverlay extends ConsumerWidget {
                     ],
                   ),
                   SizedBox(height: 4.0),
-                  Text('Jul 14 - Jul 20', style: ReportStyles.monitor),
+                  Text(weekRange, style: ReportStyles.monitor),
                   SizedBox(height: 20.0),
                   if (averageCalories != null) ...[
                     CaloriesHero(

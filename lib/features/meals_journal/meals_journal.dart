@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_extensions.dart';
 import 'package:live_vitalist/features/day/domain/meal.dart';
 import 'package:live_vitalist/features/meals_journal/presentation/widgets/custom_divider.dart';
@@ -10,10 +11,7 @@ import '../aliment/data/aliment_bank.dart';
 import '../../core/presentation/widgets/custom_card.dart';
 import '../day/domain/day.dart';
 import '../day/data/day_provider.dart';
-import '../nutrient/data/nutrient_provider.dart';
-import '../nutrient_display/presentation/ui_helpers/nutrient_extensions.dart';
 import '../../core/presentation/widgets/data_input/string_input.dart';
-import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class MealsJournal extends ConsumerWidget {
   final Future<void> Function(String mealName, DateTime date) onOpenMeal;
@@ -25,42 +23,33 @@ class MealsJournal extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context);
     final day = ref.watch(syncSelectedDaysProvider)?.firstOrNull ?? Day();
     final dayNotifier = ref.read(dayCacheProvider.notifier);
     final date = ref.watch(selectedDatesProvider).first;
     final bank = ref.watch(alimentBankProvider);
-    final nutrients = ref.watch(nutrientsProvider).data;
-    final localization = AppLocalizations.of(context);
-    final localeCode = Localizations.localeOf(context).languageCode;
-    final kcalsLabel = nutrients['kcals']?.resolveNutrientLabel(
-          localization: localization,
-          nutrientKey: 'kcals',
-          localeCode: localeCode,
-        ) ??
-        'Calories';
-
     final List<Widget> elements = day.meals.map<Widget>(
       (meal) {
         final Map<String, double> values = meal.aliments.summedFields(bank);
         final int kcals = values['kcals']?.round() ?? 0;
         return MealElement(
           title: meal.name,
-          subtitle: '$kcals ${kcalsLabel.toLowerCase()}',
+          subtitle: l.mealsJournalCalories(kcals),
           onTap: () => onOpenMeal(meal.name, date),
           onLongPress: () async {
             final isDelete = await showDialog<bool>(
               context: context,
               builder: (context) => AlertDialog(
-                title: Text('Delete meal?'),
-                content: Text('Are you sure you want to delete this meal?'),
+                title: Text(l.mealsJournalDeleteMealTitle),
+                content: Text(l.mealsJournalDeleteMealMessage),
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.pop(context),
-                    child: const Text('Cancel'),
+                    child: Text(l.actionCancel),
                   ),
                   ElevatedButton(
                     onPressed: () => Navigator.pop(context, true),
-                    child: const Text('Delete'),
+                    child: Text(l.actionDelete),
                   ),
                 ],
               ),
@@ -82,7 +71,7 @@ class MealsJournal extends ConsumerWidget {
 
     return CustomCard(
       logo: Icon(Icons.menu_book_rounded),
-      title: 'Meals Journal',
+      title: l.mealsJournalTitle,
       action: SizedBox(
         height: 36.0,
         child: Center(
@@ -110,7 +99,7 @@ class MealsJournal extends ConsumerWidget {
                 dayNotifier.addMeal(date, Meal(name: newMealName));
               }
             },
-            label: Text('Add Meal'),
+            label: Text(l.mealsJournalAddMeal),
             icon: Icon(Icons.add_rounded),
             iconAlignment: IconAlignment.end,
             style: ButtonStyle(

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 import 'package:live_vitalist/core/presentation/widgets/animated_navigation_buttons.dart';
 import 'package:live_vitalist/core/presentation/widgets/completion_widget.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
@@ -109,7 +110,7 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Aliment Editor'),
+          title: Text(AppLocalizations.of(context).alimentEditorTitle),
           actions: [
             JsonEditorButton(
               data: data,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 import 'package:live_vitalist/core/domain/intervals.dart';
 import 'package:live_vitalist/core/presentation/widgets/target_bar/target_bar.dart';
 import 'package:live_vitalist/core/presentation/widgets/target_bar/target_bar_draw_data.dart';
@@ -11,13 +12,15 @@ class CaloriesHero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final rangeStyle = ReportStyles.dayViewLabel.copyWith(height: 1.0);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Row(
           children: [
-            Text('Average daily calories', style: ReportStyles.dayViewBold),
+            Text(l.reportsAverageDailyCalories,
+                style: ReportStyles.dayViewBold),
             Spacer(),
             Text(
               '${interval.value.toStringAsFixed(0)} kcal',

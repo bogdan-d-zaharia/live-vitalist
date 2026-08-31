@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class EmptySearch extends StatelessWidget {
   const EmptySearch({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final theme = Theme.of(context);
 
     return Center(
@@ -21,13 +23,13 @@ class EmptySearch extends StatelessWidget {
             ),
             SizedBox(height: 16.0),
             Text(
-              'No aliments found',
+              l.superSearchNoAlimentsFound,
               textAlign: TextAlign.center,
               style: theme.textTheme.titleMedium,
             ),
             SizedBox(height: 6.0),
             Text(
-              'Try another name or check the spelling.',
+              l.superSearchTryAnotherName,
               textAlign: TextAlign.center,
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,

@@ -11,6 +11,7 @@ import 'package:live_vitalist/features/onboarding/presentation/screens/streak_sc
 import 'package:live_vitalist/features/onboarding/presentation/screens/terms_screen.dart';
 import 'package:live_vitalist/features/onboarding/presentation/screens/welcome_screen.dart';
 import 'package:live_vitalist/features/onboarding/presentation/widgets/no_connection_dialog.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class OnboardingScreen extends ConsumerStatefulWidget {
   const OnboardingScreen({super.key});
@@ -63,6 +64,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final indexProvider =
         onboardingControllerProvider.select((state) => state.stepIndex);
     final stepIndex = ref.watch(indexProvider);
@@ -105,6 +107,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
                     child: AnimatedNavigationButtons(
                       onNext: controllerNotifier.nextStep,
+                      nextLabel: l.actionContinue,
                       onPrevious: stepIndex > 0
                           ? controllerNotifier.previousStep
                           : null,

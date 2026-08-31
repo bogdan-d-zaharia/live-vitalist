@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
 import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/widgets/editor_inputs/editor_string_input.dart';
 import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/widgets/editor_inputs/nutrient_input.dart';
@@ -75,7 +76,7 @@ class _TemporaryAlimentEditorState
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Aliment Editor'),
+          title: Text(AppLocalizations.of(context).alimentEditorTitle),
           actions: [
             JsonEditorButton(
               data: data,
@@ -118,7 +119,7 @@ class _TemporaryAlimentEditorState
                   width: double.infinity,
                   child: FilledButton(
                     onPressed: _popSave,
-                    child: const Text('Save'),
+                    child: Text(AppLocalizations.of(context).actionSave),
                   ),
                 ),
               ),

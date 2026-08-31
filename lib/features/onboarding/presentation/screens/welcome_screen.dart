@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:live_vitalist/core/presentation/widgets/app_logo.dart';
+import 'package:live_vitalist/core/presentation/widgets/localized_rich_text.dart';
 import 'package:live_vitalist/core/storage/data/sync_service.dart';
 import 'package:live_vitalist/features/app_initialization/presentation/controllers/app_initialization_provider.dart';
 import 'package:live_vitalist/features/notifications/data/notifications_api.dart';
 import 'package:live_vitalist/features/onboarding/presentation/widgets/google_connection_dialog.dart';
 import 'package:live_vitalist/features/settings/data/settings_data.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 enum GoogleConnectionResult {
   connected,
@@ -115,6 +117,7 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
     final linkStyle = TextStyle(
@@ -138,12 +141,12 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
                     child: AppLogo(),
                   ),
                   Text(
-                    'Welcome to Live Vitalist',
+                    l.welcomeScreenTitle,
                     textAlign: TextAlign.center,
                     style: textTheme.headlineSmall,
                   ),
                   Text(
-                    "Let's set up your profile so we can tailor your nutrition and fitness journey to you.",
+                    l.welcomeScreenSubtitle,
                     textAlign: TextAlign.center,
                     style: textTheme.bodyMedium,
                   ),
@@ -151,20 +154,17 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
               ),
             ),
           ),
-          Text.rich(
-            TextSpan(
-              text: 'Have an account? ',
-              style: textTheme.bodyMedium,
-              children: [
-                TextSpan(
-                  text: 'Connect with Google',
-                  style: linkStyle,
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = _connectWithGoogle,
-                ),
-                TextSpan(text: ' instead.'),
-              ],
-            ),
+          LocalizedRichText(
+            text: l.welcomeScreenExistingAccount('{googleLink}'),
+            replacements: {
+              '{googleLink}': TextSpan(
+                text: l.welcomeScreenGoogleLink,
+                style: linkStyle,
+                recognizer: TapGestureRecognizer()
+                  ..onTap = _connectWithGoogle,
+              ),
+            },
+            style: textTheme.bodyMedium,
             textAlign: TextAlign.center,
           ),
         ],

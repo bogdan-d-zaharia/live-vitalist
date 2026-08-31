@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 enum GoogleConnectionDialogType {
   accountNotFound,
@@ -12,14 +13,15 @@ class GoogleConnectionDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final (title, message) = switch (type) {
       GoogleConnectionDialogType.accountNotFound => (
-          'Account not found',
-          'We could not find a Live Vitalist account connected to this Google account. Please complete the onboarding first.',
+          l.googleConnectionDialogAccountNotFoundTitle,
+          l.googleConnectionDialogAccountNotFoundMessage,
         ),
       GoogleConnectionDialogType.connectionFailed => (
-          'Google connection failed',
-          'We could not connect with Google. Please check your internet connection and try again.',
+          l.googleConnectionDialogConnectionFailedTitle,
+          l.googleConnectionDialogConnectionFailedMessage,
         ),
     };
 
@@ -41,7 +43,7 @@ class GoogleConnectionDialog extends StatelessWidget {
               onPressed: () => Navigator.pop(context),
               child: SizedBox(
                 width: double.infinity,
-                child: Center(child: Text('Continue')),
+                child: Center(child: Text(l.actionContinue)),
               ),
             ),
           ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
 import 'package:live_vitalist/features/nutrient_display/domain/intake.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class DetailDialog extends StatelessWidget {
   final Intake intake;
@@ -11,6 +12,8 @@ class DetailDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+    final amount = intake.amount.toStringAsFixed(2);
     return GestureDetector(
       onTap: () => Navigator.pop(context),
       child: Center(
@@ -25,19 +28,19 @@ class DetailDialog extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 24.0),
-                    Text('${intake.label} intake',
+                    Text(l.nutrientDisplayIntake(intake.label),
                         style: TextStyle(fontSize: 24.0)),
-                    Text('Amount: '
-                        '${intake.amount.toStringAsFixed(2)}'),
+                    Text(l.nutrientDisplayAmountValue(amount)),
                     if (intake.lowerLimit != null)
-                      Text('Lower Limit: '
-                          '${intake.lowerLimit!.toStringAsFixed(2)}'),
+                      Text(l.nutrientDisplayLowerLimitValue(
+                          intake.lowerLimit!.toStringAsFixed(2))),
                     if (intake.upperLimit != null)
-                      Text('Upper Limit: '
-                          '${intake.upperLimit!.toStringAsFixed(2)}'),
+                      Text(l.nutrientDisplayUpperLimitValue(
+                          intake.upperLimit!.toStringAsFixed(2))),
                     if (topSources.isNotEmpty) ...[
                       Divider(height: 24.0),
-                      Text('Top Sources', style: TextStyle(fontSize: 20.0)),
+                      Text(l.nutrientDisplayTopSources,
+                          style: TextStyle(fontSize: 20.0)),
                       for (final entry in topSources.entries)
                         Padding(
                           padding: EdgeInsets.symmetric(vertical: 4.0),

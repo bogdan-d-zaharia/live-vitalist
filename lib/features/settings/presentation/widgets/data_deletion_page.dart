@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
-import 'package:live_vitalist/features/settings/data/settings_constants.dart';
 import 'package:live_vitalist/features/settings/presentation/controllers/settings_controller.dart';
 import 'package:live_vitalist/features/settings/presentation/widgets/settings_dialogs.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class DataDeletionPage extends ConsumerWidget {
   const DataDeletionPage({super.key});
@@ -27,8 +27,8 @@ class DataDeletionPage extends ConsumerWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
             content: Text(deleted
-                ? 'Closing the app...'
-                : 'Deletion failed, nothing was removed.'),
+                ? AppLocalizations.of(context).legalClosingApp
+                : AppLocalizations.of(context).settingsDeletionFailed),
             duration: const Duration(seconds: 2)),
       );
     }
@@ -40,10 +40,11 @@ class DataDeletionPage extends ConsumerWidget {
   }
 
   void _showDeleteInternetConfirmation(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context);
     showDialog(
       context: context,
       builder: (context) => ConfirmDeletionDialog(
-        text: SettingsConstants.deleteInternet2,
+        text: l.settingsDeleteOnlineConfirmation,
         onConfirm: () async {
           final reauth = await showDialog<bool>(
             context: context,
@@ -61,11 +62,12 @@ class DataDeletionPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context);
     final isFirebase =
         ref.watch(settingsControllerProvider.notifier).isFirebase;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Account Deletion')),
+      appBar: AppBar(title: Text(l.settingsAccountDeletion)),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: ListView(
@@ -74,36 +76,36 @@ class DataDeletionPage extends ConsumerWidget {
             if (isFirebase)
               CustomCard(
                 logo: const Icon(Icons.no_accounts_rounded),
-                title: 'Account and data deletion',
+                title: l.settingsAccountAndDataDeletion,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(SettingsConstants.deleteInternet1),
+                    Text(l.settingsDeleteOnlineDescription),
                     TextButton(
                       onPressed: () =>
                           _showDeleteInternetConfirmation(context, ref),
-                      child: const Text('Permanently delete online data'),
+                      child: Text(l.settingsPermanentlyDeleteOnlineData),
                     ),
                   ],
                 ),
               ),
             CustomCard(
               logo: const Icon(Icons.no_accounts_rounded),
-              title: 'Account and data deletion',
+              title: l.settingsAccountAndDataDeletion,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(SettingsConstants.deleteAll1),
+                  Text(l.settingsDeleteAllDescription),
                   TextButton(
                     onPressed: () => showDialog(
                       context: context,
                       builder: (context) => ConfirmDeletionDialog(
-                        text: SettingsConstants.deleteAll2,
+                        text: l.settingsDeleteAllConfirmation,
                         onConfirm: () =>
                             _executeDeleteEverythingWorkflow(context, ref),
                       ),
                     ),
-                    child: const Text('Permanently delete all data'),
+                    child: Text(l.settingsPermanentlyDeleteAllData),
                   ),
                 ],
               ),

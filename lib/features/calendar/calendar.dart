@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
@@ -15,13 +16,14 @@ class WeekCalendar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context);
     final now = DateTime.now().normalized;
     final dates = ref.watch(selectedDatesProvider);
     final datesNotifier = ref.read(selectedDatesProvider.notifier);
 
     return CustomCard(
       logo: const Icon(Icons.view_week),
-      title: "Calendar",
+      title: l.calendarTitle,
       action: CustomIconButton(
         icon: const Icon(Icons.help_outline_rounded, size: 22.0),
         onTap: () => showDialog(

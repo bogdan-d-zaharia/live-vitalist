@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
 import 'package:live_vitalist/features/nutrient_display/presentation/widgets/action_buttons.dart';
@@ -11,11 +12,12 @@ class NutrientDisplay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context);
     final state = ref.watch(nutrientDisplayControllerProvider);
 
     return CustomCard(
       logo: const Icon(Icons.bar_chart_rounded),
-      title: 'Nutrients',
+      title: l.nutrientDisplayTitle,
       action: ActionButtons(),
       child: state.isEditMode ? NutrientDisplayEdit() : NutrientDisplayView(),
     );

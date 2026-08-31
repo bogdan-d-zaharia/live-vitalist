@@ -11,6 +11,7 @@ import 'package:live_vitalist/features/super_search/data/aliment_generator.dart'
 import 'package:live_vitalist/features/super_search/domain/pending_aliment.dart';
 import 'package:live_vitalist/features/super_search/presentation/controllers/super_search_controller.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/meal_picker_dialog.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 abstract final class AddAlimentActions {
   /// Creates a new aliment in the bank, so it can be instanced afterwards.
@@ -80,8 +81,9 @@ abstract final class AddAlimentActions {
   }) async {
     if (input.trim() == '') {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text('Write the aliment in the search bar first.')),
+        SnackBar(
+            content: Text(
+                AppLocalizations.of(context).superSearchWriteAlimentFirst)),
       );
       return;
     }

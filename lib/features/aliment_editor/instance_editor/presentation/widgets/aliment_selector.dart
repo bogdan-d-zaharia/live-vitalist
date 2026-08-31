@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 import 'package:diacritic/diacritic.dart';
 
 import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
@@ -25,6 +26,7 @@ class _SelectorState extends ConsumerState<Selector> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final bank = ref.watch(alimentBankProvider);
     final notifier = ref.read(alimentBankProvider.notifier);
 
@@ -40,9 +42,10 @@ class _SelectorState extends ConsumerState<Selector> {
         child: Column(
           children: [
             Row(
-              children: const [
+              children: [
                 BackButton(),
-                Text('Aliment Selector', style: TextStyle(fontSize: 20.0)),
+                Text(l.alimentEditorSelectorTitle,
+                    style: TextStyle(fontSize: 20.0)),
               ],
             ),
             SelectorSearchBar(

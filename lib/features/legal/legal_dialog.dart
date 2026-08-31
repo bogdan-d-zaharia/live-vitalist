@@ -6,6 +6,7 @@ import 'package:live_vitalist/features/legal/domain/legal_types.dart';
 import 'package:live_vitalist/features/legal/presentation/widgets/legal_dialog_button.dart';
 import 'package:live_vitalist/features/legal/presentation/widgets/legal_prerequisites_text.dart';
 import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class LegalDialog extends ConsumerWidget {
   final List<LegalRequirement> requirements;
@@ -13,6 +14,7 @@ class LegalDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context);
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -21,13 +23,12 @@ class LegalDialog extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                'Please Accept Our Terms',
+                l.legalDialogTitle,
                 style: TextStyle(fontSize: 24.0),
               ),
               SizedBox(height: 12.0),
               LegalPrerequisitesText(),
-              Text(
-                  'You can review the Privacy Policy and Terms of Use at any time from the app\'s Settings, accessible via the ⋮ menu in the top-right corner.'),
+              Text(l.legalSettingsHint),
               SizedBox(height: 12.0),
               Row(
                 mainAxisSize: MainAxisSize.min,
@@ -36,14 +37,14 @@ class LegalDialog extends ConsumerWidget {
                     onPressed: () async {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('Closing the app...'),
+                          content: Text(l.legalClosingApp),
                           duration: Duration(seconds: 2),
                         ),
                       );
                       await Future.delayed(Duration(seconds: 3));
                       SystemNavigator.pop();
                     },
-                    label: Text("Exit App"),
+                    label: Text(l.legalExitApp),
                     backgroundColor: Colors.red,
                   ),
                   SizedBox(width: 12.0),
@@ -52,7 +53,7 @@ class LegalDialog extends ConsumerWidget {
                       await ref.read(legalHandlerProvider).accept(requirements);
                       if (context.mounted) Navigator.pop(context, true);
                     },
-                    label: Text("I Agree"),
+                    label: Text(l.legalAgree),
                     backgroundColor: Colors.blue,
                   ),
                   SizedBox(width: 6.0),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 import 'package:flutter/services.dart';
 import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/widgets/editor_inputs/editor_input_decoration.dart';
 
@@ -92,7 +93,8 @@ class _EditorNumberInputState extends State<EditorNumberInput> {
             onChanged: _setValue,
             decoration: editorInputDecoration(
               context,
-              hintText: 'Enter ${widget.label.toLowerCase()}',
+              hintText: AppLocalizations.of(context)
+                  .alimentEditorEnterLabel(widget.label.toLowerCase()),
               icon: Icons.numbers_rounded,
               suffix: widget.unit == null
                   ? null

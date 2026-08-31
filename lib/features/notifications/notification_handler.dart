@@ -4,6 +4,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart'
 import 'package:live_vitalist/features/aliment/domain/aliment.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_bank_state.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 typedef NotifPlugin = ntf.FlutterLocalNotificationsPlugin;
 typedef AndroidSettings = ntf.AndroidInitializationSettings;
@@ -31,7 +32,10 @@ class NotificationHandler {
   }
 
   static Future<void> showListNotification(
-      List<Aliment> list, AlimentBankState bank, String mealName) async {
+      List<Aliment> list,
+      AlimentBankState bank,
+      String mealName,
+      AppLocalizations localization) async {
     final status = await Permission.notification.status;
     if (status.isDenied || status.isRestricted) {
       await Permission.notification.request();
@@ -39,11 +43,14 @@ class NotificationHandler {
 
     String alimentToLine(Aliment e) => _alimentToLine(e, bank);
     List<String> lines = list.map<String>(alimentToLine).toList();
+    final title =
+        localization.mealsJournalNotificationTitle(mealName, list.length);
 
     final androidDetails = AndroidDetails(
       'meal_summary',
-      'Meal Summary',
-      channelDescription: 'Text-based notification with a list of aliments',
+      localization.mealsJournalNotificationChannel,
+      channelDescription:
+          localization.mealsJournalNotificationChannelDescription,
       importance: ntf.Importance.max,
       priority: ntf.Priority.high,
       ticker: 'ticker',
@@ -51,8 +58,8 @@ class NotificationHandler {
       colorized: true,
       styleInformation: ntf.BigTextStyleInformation(
         lines.join('\n'),
-        contentTitle: '$mealName aliments',
-        summaryText: 'Meal summary',
+        contentTitle: title,
+        summaryText: localization.mealsJournalNotificationSummary,
       ),
     );
 
@@ -60,8 +67,8 @@ class NotificationHandler {
 
     await _notificationsPlugin.show(
       id: 0,
-      title: '$mealName aliments',
-      body: 'Expand to view aliments',
+      title: title,
+      body: localization.mealsJournalNotificationBody,
       notificationDetails: notificationDetails,
     );
   }

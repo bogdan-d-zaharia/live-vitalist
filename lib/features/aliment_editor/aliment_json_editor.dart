@@ -8,6 +8,7 @@ import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
 import 'package:live_vitalist/features/aliment/data/aliment_data_extensions.dart';
 import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
 import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class AlimentJsonEditor extends ConsumerStatefulWidget {
   final AlimentData initialData;
@@ -62,9 +63,10 @@ class _AlimentJsonEditorState extends ConsumerState<AlimentJsonEditor> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Aliment Json Editor'),
+        title: Text(l.alimentJsonEditorTitle),
       ),
       body: GestureDetector(
         behavior: HitTestBehavior.translucent,
@@ -106,14 +108,14 @@ class _AlimentJsonEditorState extends ConsumerState<AlimentJsonEditor> {
                 children: [
                   ElevatedButton.icon(
                     icon: Icon(Icons.restore),
-                    label: Text('restore'),
+                    label: Text(l.actionRestore),
                     onPressed: () =>
                         setState(() => controller.text = originalText),
                   ),
                   Spacer(),
                   ElevatedButton.icon(
                     icon: Icon(Icons.edit_rounded),
-                    label: Text('save'),
+                    label: Text(l.actionSave),
                     onPressed: popSave,
                   ),
                 ],

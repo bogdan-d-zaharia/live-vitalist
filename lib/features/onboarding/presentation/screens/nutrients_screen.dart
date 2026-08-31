@@ -4,12 +4,14 @@ import 'package:live_vitalist/features/onboarding/domain/options/nutrients_optio
 import 'package:live_vitalist/features/onboarding/presentation/controllers/onboarding_controller.dart';
 import 'package:live_vitalist/features/onboarding/presentation/screens/selectable_screen.dart';
 import 'package:live_vitalist/features/onboarding/presentation/widgets/option_drawers/nutrients_option_drawer.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class NutrientsScreen extends ConsumerWidget {
   const NutrientsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context);
     final nutrientsProvider = onboardingControllerProvider
         .select((onboardingState) => onboardingState.data.nutrients);
     final controllerNotifier = ref.read(onboardingControllerProvider.notifier);
@@ -23,7 +25,7 @@ class NutrientsScreen extends ConsumerWidget {
         .toList();
 
     return SelectableScreen(
-      question: "What else are you tracking besides calories?",
+      question: l.onboardingNutrientsQuestion,
       options: options,
     );
   }
