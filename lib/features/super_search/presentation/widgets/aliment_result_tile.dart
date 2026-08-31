@@ -72,6 +72,7 @@ class _AlimentResultTileState extends ConsumerState<AlimentResultTile> {
     return Row(
       children: [
         NumberInput(
+          inputWidth: 70.0,
           getValue: () => pending.servingSize,
           setValue: (val) {
             if (val >= 0.0) pending.servingSize = val;

@@ -9,6 +9,7 @@ class NumberInput extends StatefulWidget {
     this.showHandles = true,
     this.isEmpty = false,
     this.isTurnedOff = false,
+    this.inputWidth,
     super.key,
   });
 
@@ -17,6 +18,7 @@ class NumberInput extends StatefulWidget {
   final bool showHandles;
   final bool isEmpty;
   final bool isTurnedOff;
+  final double? inputWidth;
 
   @override
   State<NumberInput> createState() => _NumberInputState();
@@ -80,7 +82,7 @@ class _NumberInputState extends State<NumberInput> {
             ),
           if (widget.showHandles) divider(),
           SizedBox(
-            width: 2.0 * height,
+            width: widget.inputWidth ?? 2.0 * height,
             height: height,
             child: !widget.isTurnedOff
                 ? TextField(
