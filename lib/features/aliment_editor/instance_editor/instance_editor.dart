@@ -72,34 +72,39 @@ class _InstanceEditorState extends ConsumerState<InstanceEditor> {
       },
       child: Scaffold(
         appBar: AppBar(title: const Text('Editor')),
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                AlimentPickerField(
-                  alimentName: data?.name,
-                  onTap: _selectAliment,
-                ),
-                ServedAmountInput(
-                  getValue: () => aliment.servingSize,
-                  setValue: (val) {
-                    if (val >= 0.0) {
-                      aliment = aliment.copyWith(servingSize: val);
-                    }
-                  },
-                ),
-                if (data != null) ...[
-                  SizedBox(height: 4.0),
-                  UnitDropdown(
-                    data: data,
-                    currentUnit: aliment.unit,
-                    onChanged: (unit) =>
-                        setState(() => aliment = aliment.copyWith(unit: unit)),
+        body: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AlimentPickerField(
+                    alimentName: data?.name,
+                    onTap: _selectAliment,
                   ),
-                ]
-              ],
+                  ServedAmountInput(
+                    getValue: () => aliment.servingSize,
+                    setValue: (val) {
+                      if (val >= 0.0) {
+                        aliment = aliment.copyWith(servingSize: val);
+                      }
+                    },
+                  ),
+                  if (data != null) ...[
+                    SizedBox(height: 4.0),
+                    UnitDropdown(
+                      data: data,
+                      currentUnit: aliment.unit,
+                      onChanged: (unit) => setState(
+                        () => aliment = aliment.copyWith(unit: unit),
+                      ),
+                    ),
+                  ]
+                ],
+              ),
             ),
           ),
         ),

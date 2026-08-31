@@ -66,56 +66,60 @@ class _AlimentJsonEditorState extends ConsumerState<AlimentJsonEditor> {
       appBar: AppBar(
         title: Text('Aliment Json Editor'),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(12.0).copyWith(bottom: 0.0),
-        child: ListView(
-          clipBehavior: Clip.none,
-          children: [
-            Container(
-              height: 400.0,
-              clipBehavior: Clip.hardEdge,
-              decoration: BoxDecoration(
-                color: artaTheme['root']!.backgroundColor,
-                borderRadius: BorderRadius.circular(24.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.8),
-                    blurRadius: 6.0,
-                    offset: Offset(0.0, 2.0),
-                  )
-                ],
-              ),
-              child: CodeTheme(
-                data: CodeThemeData(styles: artaTheme),
-                child: SingleChildScrollView(
-                  child: CodeField(
-                    controller: controller,
-                    textStyle: TextStyle(fontSize: 13.5),
-                    gutterStyle: GutterStyle(
-                      showLineNumbers: false,
+      body: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: Padding(
+          padding: EdgeInsets.all(12.0).copyWith(bottom: 0.0),
+          child: ListView(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                height: 400.0,
+                clipBehavior: Clip.hardEdge,
+                decoration: BoxDecoration(
+                  color: artaTheme['root']!.backgroundColor,
+                  borderRadius: BorderRadius.circular(24.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.8),
+                      blurRadius: 6.0,
+                      offset: Offset(0.0, 2.0),
+                    )
+                  ],
+                ),
+                child: CodeTheme(
+                  data: CodeThemeData(styles: artaTheme),
+                  child: SingleChildScrollView(
+                    child: CodeField(
+                      controller: controller,
+                      textStyle: TextStyle(fontSize: 13.5),
+                      gutterStyle: GutterStyle(
+                        showLineNumbers: false,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(height: 12.0),
-            Row(
-              children: [
-                ElevatedButton.icon(
-                  icon: Icon(Icons.restore),
-                  label: Text('restore'),
-                  onPressed: () =>
-                      setState(() => controller.text = originalText),
-                ),
-                Spacer(),
-                ElevatedButton.icon(
-                  icon: Icon(Icons.edit_rounded),
-                  label: Text('save'),
-                  onPressed: popSave,
-                ),
-              ],
-            ),
-          ],
+              SizedBox(height: 12.0),
+              Row(
+                children: [
+                  ElevatedButton.icon(
+                    icon: Icon(Icons.restore),
+                    label: Text('restore'),
+                    onPressed: () =>
+                        setState(() => controller.text = originalText),
+                  ),
+                  Spacer(),
+                  ElevatedButton.icon(
+                    icon: Icon(Icons.edit_rounded),
+                    label: Text('save'),
+                    onPressed: popSave,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

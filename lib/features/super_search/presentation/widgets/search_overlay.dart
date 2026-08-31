@@ -55,29 +55,30 @@ class SearchOverlay extends ConsumerWidget {
     return ClipRRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () {
-            FocusManager.instance.primaryFocus?.unfocus();
-            SuperSearchNavigation.close(context);
-          },
-          child: Padding(
-            padding: EdgeInsets.only(
-              left: 16.0,
-              right: 16.0,
-              bottom: SuperSearchConstants.overlayBottomInset,
-            ),
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () {},
-              child: MiniCard(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 25.0,
-                    vertical: 20.0,
-                  ),
-                  child: Column(
-                    children: [
+        child: SafeArea(
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+              SuperSearchNavigation.close(context);
+            },
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: 16.0,
+                right: 16.0,
+                bottom: SuperSearchConstants.overlayBottomInset,
+              ),
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+                child: MiniCard(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 25.0,
+                      vertical: 20.0,
+                    ),
+                    child: Column(
+                      children: [
                       SearchHeader(
                         query: searchState.query,
                         resultCount: filteredKeys.length,
@@ -124,7 +125,8 @@ class SearchOverlay extends ConsumerWidget {
                                 ),
                               ),
                       ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),

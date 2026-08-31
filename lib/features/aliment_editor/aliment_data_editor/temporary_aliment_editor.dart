@@ -86,11 +86,14 @@ class _TemporaryAlimentEditorState
             ),
           ],
         ),
-        body: SafeArea(
-          top: false,
-          child: Column(
-            children: [
-              Expanded(
+        body: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          child: SafeArea(
+            top: false,
+            child: Column(
+              children: [
+                Expanded(
                 child: ListView(
                   padding: EdgeInsets.symmetric(horizontal: 24.0),
                   children: [
@@ -109,7 +112,7 @@ class _TemporaryAlimentEditorState
                   ],
                 ),
               ),
-              Padding(
+                Padding(
                 padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
                 child: SizedBox(
                   width: double.infinity,
@@ -119,7 +122,8 @@ class _TemporaryAlimentEditorState
                   ),
                 ),
               ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

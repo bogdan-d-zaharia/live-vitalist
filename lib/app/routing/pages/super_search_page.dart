@@ -31,6 +31,6 @@ class _SuperSearchRoute extends PageRoute<void>
 
   @override
   Widget buildContent(BuildContext context) {
-    return const SafeArea(child: SearchOverlay());
+    return const SearchOverlay();
   }
 }

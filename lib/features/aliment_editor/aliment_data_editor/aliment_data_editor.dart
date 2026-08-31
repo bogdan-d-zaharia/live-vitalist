@@ -120,11 +120,14 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
             ),
           ],
         ),
-        body: SafeArea(
-          top: false,
-          child: Column(
-            children: [
-              Padding(
+        body: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          child: SafeArea(
+            top: false,
+            child: Column(
+              children: [
+                Padding(
                 padding: EdgeInsets.all(16.0),
                 child: SizedBox(
                   width: 128.0,
@@ -135,7 +138,7 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
                   ),
                 ),
               ),
-              Expanded(
+                Expanded(
                 child: PageView(
                   controller: _pageController,
                   physics: NeverScrollableScrollPhysics(),
@@ -158,7 +161,7 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
                   ],
                 ),
               ),
-              Padding(
+                Padding(
                 padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
                 child: AnimatedNavigationButtons(
                   onNext: _nextPage,
@@ -168,7 +171,8 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
                       _pageIndex == _pageCount - 1 ? 'Save' : 'Continue',
                 ),
               ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
