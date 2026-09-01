@@ -8,7 +8,7 @@ import 'package:live_vitalist/features/meals_journal/presentation/widgets/custom
 import 'package:live_vitalist/features/meals_journal/presentation/widgets/meal_element.dart';
 import 'package:live_vitalist/features/super_search/presentation/utils/super_search_navigation.dart';
 
-import '../aliment/data/aliment_bank.dart';
+import '../aliment_bank/data/aliment_bank.dart';
 import '../../core/presentation/widgets/custom_card.dart';
 import '../day/domain/day.dart';
 import '../day/data/day_provider.dart';

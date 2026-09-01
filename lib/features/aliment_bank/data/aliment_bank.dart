@@ -1,5 +1,5 @@
-import 'package:live_vitalist/features/aliment/domain/aliment_bank_state.dart';
-import 'package:live_vitalist/features/aliment/domain/aliment_constants.dart';
+import 'package:live_vitalist/features/aliment_bank/domain/aliment_bank_state.dart';
+import 'package:live_vitalist/features/aliment_bank/domain/aliment_bank_constants.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
 import 'package:live_vitalist/core/storage/data/storage_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -34,13 +34,13 @@ class AlimentBank extends _$AlimentBank {
   Future<void> save() {
     return ref
         .read(storageProvider.notifier)
-        .saveJson(AlimentConstants.alimentBankPath, state.toJson());
+        .saveJson(AlimentBankConstants.alimentBankPath, state.toJson());
   }
 
   Future<void> load() async {
     final json = await ref
         .read(storageProvider.notifier)
-        .loadJson(AlimentConstants.alimentBankPath);
+        .loadJson(AlimentBankConstants.alimentBankPath);
     if (json != null) state = AlimentBankState.fromJson(json);
   }
 

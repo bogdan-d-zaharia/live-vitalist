@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/l10n/app_localizations.dart';
 import 'package:diacritic/diacritic.dart';
 
-import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
+import 'package:live_vitalist/features/aliment_bank/data/aliment_bank.dart';
 import 'package:live_vitalist/features/aliment_editor/instance_editor/presentation/widgets/add_aliment_button.dart';
 import 'package:live_vitalist/features/aliment_editor/instance_editor/presentation/widgets/selector_search_bar.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';

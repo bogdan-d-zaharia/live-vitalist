@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
 
 import 'package:live_vitalist/features/aliment/domain/aliment.dart';
-import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
+import 'package:live_vitalist/features/aliment_bank/data/aliment_bank.dart';
 import 'package:live_vitalist/features/aliment_editor/instance_editor/presentation/widgets/aliment_picker_field.dart';
 import 'package:live_vitalist/features/aliment_editor/instance_editor/presentation/widgets/aliment_selector.dart';
 import 'package:live_vitalist/features/aliment_editor/instance_editor/presentation/widgets/served_amount_input.dart';

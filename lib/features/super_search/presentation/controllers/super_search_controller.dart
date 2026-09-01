@@ -1,4 +1,4 @@
-import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
+import 'package:live_vitalist/features/aliment_bank/data/aliment_bank.dart';
 import 'package:live_vitalist/features/day/data/day_provider.dart';
 import 'package:live_vitalist/features/super_search/domain/pending_aliment.dart';
 import 'package:live_vitalist/features/super_search/domain/super_search_state.dart';
