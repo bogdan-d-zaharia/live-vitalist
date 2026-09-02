@@ -148,7 +148,7 @@ class AlimentBankController extends _$AlimentBankController {
       aliments: customAliments,
       order: order.toList(),
     );
-    return ref.read(alimentBankControllerProvider.notifier).saveBank(saveData);
+    return saveBank(saveData);
   }
 
   void invalidate() {
