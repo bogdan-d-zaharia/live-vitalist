@@ -109,7 +109,7 @@ abstract class _$CustomAliments extends $Notifier<Map<String, AlimentData>> {
 final alimentCatalogsProvider = AlimentCatalogsProvider._();
 
 final class AlimentCatalogsProvider
-    extends $NotifierProvider<AlimentCatalogs, List<AlimentCatalog>> {
+    extends $NotifierProvider<AlimentCatalogs, Map<String, AlimentCatalog>> {
   AlimentCatalogsProvider._()
       : super(
           from: null,
@@ -129,25 +129,27 @@ final class AlimentCatalogsProvider
   AlimentCatalogs create() => AlimentCatalogs();
 
   /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(List<AlimentCatalog> value) {
+  Override overrideWithValue(Map<String, AlimentCatalog> value) {
     return $ProviderOverride(
       origin: this,
-      providerOverride: $SyncValueProvider<List<AlimentCatalog>>(value),
+      providerOverride: $SyncValueProvider<Map<String, AlimentCatalog>>(value),
     );
   }
 }
 
-String _$alimentCatalogsHash() => r'448e7cae1545eb3dbf42a0b4e71c36c9aaa4ca7c';
+String _$alimentCatalogsHash() => r'db411960059ad68e0029e4778cadbbf33d90ae44';
 
-abstract class _$AlimentCatalogs extends $Notifier<List<AlimentCatalog>> {
-  List<AlimentCatalog> build();
+abstract class _$AlimentCatalogs
+    extends $Notifier<Map<String, AlimentCatalog>> {
+  Map<String, AlimentCatalog> build();
   @$mustCallSuper
   @override
   WhenComplete runBuild() {
-    final ref = this.ref as $Ref<List<AlimentCatalog>, List<AlimentCatalog>>;
+    final ref = this.ref
+        as $Ref<Map<String, AlimentCatalog>, Map<String, AlimentCatalog>>;
     final element = ref.element as $ClassProviderElement<
-        AnyNotifier<List<AlimentCatalog>, List<AlimentCatalog>>,
-        List<AlimentCatalog>,
+        AnyNotifier<Map<String, AlimentCatalog>, Map<String, AlimentCatalog>>,
+        Map<String, AlimentCatalog>,
         Object?,
         Object?>;
     return element.handleCreate(ref, build);
@@ -192,7 +194,7 @@ final class AlimentBankProvider extends $FunctionalProvider<AlimentBankState,
   }
 }
 
-String _$alimentBankHash() => r'ff92ab993d455e855996b8ca8447b84a6200945c';
+String _$alimentBankHash() => r'b78947180dc51381eb5b4f97f95385048a6e6bfc';
 
 @ProviderFor(AlimentBankController)
 final alimentBankControllerProvider = AlimentBankControllerProvider._();

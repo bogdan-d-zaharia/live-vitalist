@@ -24,11 +24,26 @@ class _AlimentResultTileState extends ConsumerState<AlimentResultTile> {
   Widget build(BuildContext context) {
     final languageCode = ref.watch(localizationProvider);
     final bank = ref.watch(alimentBankProvider);
+    final catalogs = ref.watch(alimentCatalogsProvider);
     final searchState = ref.watch(superSearchProvider);
     final notifier = ref.read(superSearchProvider.notifier);
 
     final data = bank.aliments[widget.alimentID];
     if (data == null) return const SizedBox.shrink();
+
+    final catalogKey = widget.alimentID.split('-').first;
+    final catalog = catalogs[catalogKey];
+    final presentation = catalog?.presentations[languageCode] ??
+        catalog?.presentations['en'] ??
+        catalog?.presentations.values.firstOrNull;
+    final sourceTitle = presentation?.sourceTitle.trim();
+    final name = data.readName(languageCode);
+    final sourceStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
+          color: Theme.of(context)
+              .colorScheme
+              .onSurfaceVariant
+              .withValues(alpha: 0.6),
+        );
 
     final pending = searchState.selection
         .where((item) => item.alimentID == widget.alimentID)
@@ -50,7 +65,16 @@ class _AlimentResultTileState extends ConsumerState<AlimentResultTile> {
               child: Row(
                 children: [
                   Expanded(
-                      child: Text(data.readName(languageCode), softWrap: true)),
+                    child: Wrap(
+                      spacing: 4.0,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        Text(name),
+                        if (sourceTitle != null && sourceTitle.isNotEmpty)
+                          Text(sourceTitle, style: sourceStyle),
+                      ],
+                    ),
+                  ),
                   if (pending != null)
                     Icon(
                       Icons.check_rounded,

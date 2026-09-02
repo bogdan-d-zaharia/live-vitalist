@@ -34,7 +34,7 @@ class CustomAliments extends _$CustomAliments {
 @Riverpod(keepAlive: true)
 class AlimentCatalogs extends _$AlimentCatalogs {
   @override
-  List<AlimentCatalog> build() => [];
+  Map<String, AlimentCatalog> build() => {};
 
   Future<void> load() async {
     final storage = ref.read(storageProvider.notifier);
@@ -42,26 +42,26 @@ class AlimentCatalogs extends _$AlimentCatalogs {
     state = catalogs;
   }
 
-  Future<AlimentCatalog?> _loadCatalog(
-      Future<Map<String, dynamic>?> future) async {
+  Future<MapEntry<String, AlimentCatalog>?> _loadCatalog(
+      String key, Future<Map<String, dynamic>?> future) async {
     final json = await future;
     if (json == null) return null;
-    return AlimentCatalog.fromJson(json);
+    return MapEntry(key, AlimentCatalog.fromJson(json));
   }
 
-  Future<AlimentCatalog?> _saveCatalog(
-      Future<dynamic> future, Storage storage, String path) async {
+  Future<MapEntry<String, AlimentCatalog>?> _saveCatalog(
+      String key, Future<dynamic> future, Storage storage, String path) async {
     final obj = await future;
     final json = Map<String, dynamic>.from(obj ?? {});
     await storage.saveJson(path, json);
     if (obj == null) return null;
-    return AlimentCatalog.fromJson(json);
+    return MapEntry(key, AlimentCatalog.fromJson(json));
   }
 
   /// If a catalog's version is the same, it loads from file.
   /// If a catalog is updated online, it is downloaded.
   /// If a catalog is deleted online, it is deleted locally as well.
-  Future<List<AlimentCatalog>> _loadCatalogs(Storage storage) async {
+  Future<Map<String, AlimentCatalog>> _loadCatalogs(Storage storage) async {
     final versionsPath = AlimentBankConstants.catalogVersionsPath;
     final c = storage.loadCloud(versionsPath);
     final l = storage.loadLocal(versionsPath);
@@ -70,16 +70,18 @@ class AlimentCatalogs extends _$AlimentCatalogs {
     final cloudVersions = Map<String, String>.from(cloudJson ?? {});
     final localVersions = Map<String, String>.from(localJson ?? {});
     final keys = localVersions.keys.toSet().union(cloudVersions.keys.toSet());
-    final List<Future<AlimentCatalog?>> result = [];
+    final List<Future<MapEntry<String, AlimentCatalog>?>> result = [];
     for (var key in keys) {
       final path = '${AlimentBankConstants.catalogsPath}/$key';
-      final catalog = localVersions[key] == cloudVersions[key]
-          ? _loadCatalog(storage.loadJson(path))
-          : _saveCatalog(storage.loadCloud(path), storage, path);
-      result.add(catalog);
+      final catalogEntry = localVersions[key] == cloudVersions[key]
+          ? _loadCatalog(key, storage.loadJson(path))
+          : _saveCatalog(key, storage.loadCloud(path), storage, path);
+      result.add(catalogEntry);
     }
     if (cloudJson != null) await storage.saveJson(versionsPath, cloudVersions);
-    return (await Future.wait(result)).whereType<AlimentCatalog>().toList();
+    final entriesOrNull = await Future.wait(result);
+    final entries = entriesOrNull.whereType<MapEntry<String, AlimentCatalog>>();
+    return Map.fromEntries(entries);
   }
 }
 
@@ -90,7 +92,7 @@ AlimentBankState alimentBank(Ref ref) {
 
   final catalogs = ref.watch(alimentCatalogsProvider);
   final catalogAliments = Map.fromEntries(
-      catalogs.expand((catalog) => catalog.original.aliments.entries));
+      catalogs.values.expand((catalog) => catalog.original.aliments.entries));
 
   final saveData = AlimentBankState(
     aliments: customAliments,

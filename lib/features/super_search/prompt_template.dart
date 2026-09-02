@@ -19,28 +19,29 @@ Acesta este modelul de JSON peste care să construiești. Vreau să îți zic c�
     "kcals": null, // kcal
     "protein": null, // g
     "fats": null, // g
-    "satFats": null, // g
+    "sat_fats": null, // g
     "carbs": null, // g
     "sugars": null, // g
     "fibers": null, // g
     "cholesterol": null, // mg
     "omega3": null, // g
     "omega6": null, // g
-    "vitaminA": null, // mcg
-    "vitaminB1": null, // mg
-    "vitaminB2": null, // mg
-    "vitaminB3": null, // mg
-    "vitaminB4": null, // mg
-    "vitaminB5": null, // mg
-    "vitaminB6": null, // mg
-    "vitaminB7": null, // mcg
-    "vitaminB9": null, // mcg
-    "vitaminB12": null, // mcg
-    "vitaminC": null, // mg
-    "vitaminD3": null, // mcg
-    "vitaminE": null, // mg
-    "vitaminK1": null, // mcg
-    "vitaminK2": null, // mcg
+    "vitamin_a": null, // mcg
+    "vitamin_b1": null, // mg
+    "vitamin_b2": null, // mg
+    "vitamin_b3": null, // mg
+    "vitamin_b4": null, // mg
+    "vitamin_b5": null, // mg
+    "vitamin_b6": null, // mg
+    "vitamin_b7": null, // mcg
+    "vitamin_b9": null, // mcg
+    "vitamin_b12": null, // mcg
+    "vitamin_c": null, // mg
+    "vitamin_d2": null, // mcg
+    "vitamin_d3": null, // mcg
+    "vitamin_e": null, // mg
+    "vitamin_k1": null, // mcg
+    "vitamin_k2": null, // mcg
     "calcium": null, // mg
     "sodium": null, // mg
     "potassium": null, // mg
