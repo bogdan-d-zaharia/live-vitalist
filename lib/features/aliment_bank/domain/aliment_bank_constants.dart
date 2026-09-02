@@ -1,3 +1,3 @@
-abstract final class AlimentConstants {
+abstract final class AlimentBankConstants {
   static const String alimentBankPath = 'aliment_bank';
 }

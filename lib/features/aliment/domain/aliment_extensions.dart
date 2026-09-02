@@ -1,5 +1,5 @@
 import 'package:live_vitalist/features/aliment/domain/aliment.dart';
-import 'package:live_vitalist/features/aliment/domain/aliment_bank_state.dart';
+import 'package:live_vitalist/features/aliment_bank/domain/aliment_bank_state.dart';
 
 extension AlimentDataReadUtils on Aliment {
   /// Tolerable to errors,

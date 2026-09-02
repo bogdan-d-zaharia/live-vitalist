@@ -41,7 +41,7 @@ final class AlimentBankProvider
   }
 }
 
-String _$alimentBankHash() => r'52f5a4f19109ea7f58dde8ef07d34d75913464b9';
+String _$alimentBankHash() => r'4461fe034b9e6b87c750859978432d7a1d61b8f3';
 
 abstract class _$AlimentBank extends $Notifier<AlimentBankState> {
   AlimentBankState build();

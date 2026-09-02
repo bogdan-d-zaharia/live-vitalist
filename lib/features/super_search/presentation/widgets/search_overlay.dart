@@ -4,7 +4,7 @@ import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
-import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
+import 'package:live_vitalist/features/aliment_bank/data/aliment_bank.dart';
 import 'package:live_vitalist/features/day/data/day_provider.dart';
 import 'package:live_vitalist/features/super_search/presentation/controllers/super_search_controller.dart';
 import 'package:live_vitalist/features/super_search/presentation/utils/super_search_navigation.dart';
@@ -80,52 +80,52 @@ class SearchOverlay extends ConsumerWidget {
                     ),
                     child: Column(
                       children: [
-                      SearchHeader(
-                        query: searchState.query,
-                        resultCount: filteredKeys.length,
-                      ),
-                      Divider(
-                        height: 24.0,
-                        color: Theme.of(context).dividerColor,
-                      ),
-                      Expanded(
-                        child: AnimatedSwitcher(
-                          duration: SuperSearchConstants.overlayFadeDuration,
-                          child: filteredKeys.isEmpty
-                              ? EmptySearch()
-                              : ListView.builder(
-                                  key: const ValueKey('search-results'),
-                                  padding: EdgeInsets.zero,
-                                  itemCount: filteredKeys.length,
-                                  itemBuilder: (context, index) {
-                                    final id = filteredKeys[index];
-                                    return AlimentResultTile(
-                                      key: ValueKey(id),
-                                      alimentID: id,
-                                    );
-                                  },
-                                ),
+                        SearchHeader(
+                          query: searchState.query,
+                          resultCount: filteredKeys.length,
                         ),
-                      ),
-                      AnimatedSize(
-                        duration: SuperSearchConstants.overlayFadeDuration,
-                        curve: Curves.easeOut,
-                        child: searchState.selection.isEmpty
-                            ? SizedBox.shrink()
-                            : Padding(
-                                padding: EdgeInsets.only(top: 12.0),
-                                child: SizedBox(
-                                  width: double.infinity,
-                                  height: 48.0,
-                                  child: FilledButton.icon(
-                                    onPressed: () =>
-                                        _commitSelection(context, ref),
-                                    icon: Icon(Icons.add_rounded),
-                                    label: Text(selectionLabel),
+                        Divider(
+                          height: 24.0,
+                          color: Theme.of(context).dividerColor,
+                        ),
+                        Expanded(
+                          child: AnimatedSwitcher(
+                            duration: SuperSearchConstants.overlayFadeDuration,
+                            child: filteredKeys.isEmpty
+                                ? EmptySearch()
+                                : ListView.builder(
+                                    key: const ValueKey('search-results'),
+                                    padding: EdgeInsets.zero,
+                                    itemCount: filteredKeys.length,
+                                    itemBuilder: (context, index) {
+                                      final id = filteredKeys[index];
+                                      return AlimentResultTile(
+                                        key: ValueKey(id),
+                                        alimentID: id,
+                                      );
+                                    },
+                                  ),
+                          ),
+                        ),
+                        AnimatedSize(
+                          duration: SuperSearchConstants.overlayFadeDuration,
+                          curve: Curves.easeOut,
+                          child: searchState.selection.isEmpty
+                              ? SizedBox.shrink()
+                              : Padding(
+                                  padding: EdgeInsets.only(top: 12.0),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    height: 48.0,
+                                    child: FilledButton.icon(
+                                      onPressed: () =>
+                                          _commitSelection(context, ref),
+                                      icon: Icon(Icons.add_rounded),
+                                      label: Text(selectionLabel),
+                                    ),
                                   ),
                                 ),
-                              ),
-                      ),
+                        ),
                       ],
                     ),
                   ),

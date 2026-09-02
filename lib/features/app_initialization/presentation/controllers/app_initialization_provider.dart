@@ -2,7 +2,7 @@ import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
+import 'package:live_vitalist/features/aliment_bank/data/aliment_bank.dart';
 import 'package:live_vitalist/features/app_initialization/domain/app_initialization_state.dart';
 import 'package:live_vitalist/features/legal/data/legal_handler.dart';
 import 'package:live_vitalist/features/notifications/notification_handler.dart';
