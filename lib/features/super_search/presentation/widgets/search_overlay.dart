@@ -7,6 +7,7 @@ import 'package:live_vitalist/core/localization/localization_provider.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
 import 'package:live_vitalist/features/aliment/data/aliment_data_extensions.dart';
 import 'package:live_vitalist/features/aliment_bank/data/aliment_bank.dart';
+import 'package:live_vitalist/features/aliment_bank/data/aliment_bank_state_extensions.dart';
 import 'package:live_vitalist/features/day/data/day_provider.dart';
 import 'package:live_vitalist/features/super_search/presentation/controllers/super_search_controller.dart';
 import 'package:live_vitalist/features/super_search/presentation/utils/super_search_navigation.dart';
@@ -49,7 +50,7 @@ class SearchOverlay extends ConsumerWidget {
     final bank = ref.watch(alimentBankProvider);
 
     final filteredKeys = bank.order.where((id) {
-      final name = bank.aliments[id]!.readName(languageCode);
+      final name = bank.getAliment(id).readName(languageCode);
       return removeDiacritics(name.toLowerCase())
           .contains(removeDiacritics(searchState.query.toLowerCase()));
     }).toList();

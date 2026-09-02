@@ -98,4 +98,12 @@ class AlimentData {
     referenceFields: {},
     unitSynonyms: {},
   );
+
+  static const errorPlaceholder = AlimentData(
+    name: {'_': 'ERROR 404'},
+    unit: 'ERROR 404',
+    referenceSize: 404,
+    referenceFields: {},
+    unitSynonyms: {},
+  );
 }

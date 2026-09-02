@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:live_vitalist/features/aliment_bank/data/aliment_bank_state_extensions.dart';
 import 'package:live_vitalist/features/aliment_bank/domain/aliment_bank_state.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
 

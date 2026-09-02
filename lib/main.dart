@@ -1,7 +1,12 @@
+import 'dart:ui';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/app/my_app.dart';
 import 'package:live_vitalist/features/settings/data/settings_data.dart';
+import 'package:live_vitalist/firebase_options.dart';
 
 // Fetching announcements from localhost works
 // by using ngrok with the port.
@@ -17,6 +22,22 @@ import 'package:live_vitalist/features/settings/data/settings_data.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  FlutterError.onError =
+      FirebaseCrashlytics.instance.recordFlutterFatalError;
+  PlatformDispatcher.instance.onError = (error, stackTrace) {
+    FirebaseCrashlytics.instance.recordError(
+      error,
+      stackTrace,
+      fatal: true,
+    );
+    return true;
+  };
+
   await SettingsData.init();
 
   runApp(ProviderScope(child: MyApp()));

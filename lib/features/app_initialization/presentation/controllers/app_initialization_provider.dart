@@ -1,6 +1,5 @@
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
@@ -14,7 +13,6 @@ import 'package:live_vitalist/features/notifications/notification_handler.dart';
 import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
 import 'package:live_vitalist/features/onboarding/domain/onboarding_data.dart';
 import 'package:live_vitalist/features/settings/data/settings_data.dart';
-import 'package:live_vitalist/firebase_options.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'app_initialization_provider.g.dart';
@@ -48,9 +46,6 @@ class AppInitialization extends _$AppInitialization {
   }
 
   Future<void> _initFirebase() async {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
     await FirebaseAppCheck.instance.activate(
       providerAndroid:
           kDebugMode ? AndroidDebugProvider() : AndroidPlayIntegrityProvider(),

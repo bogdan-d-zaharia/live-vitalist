@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/core/localization/localization_provider.dart';
 import 'package:live_vitalist/features/aliment/data/aliment_data_extensions.dart';
+import 'package:live_vitalist/features/aliment_bank/data/aliment_bank_state_extensions.dart';
 import 'package:live_vitalist/l10n/app_localizations.dart';
 import 'package:diacritic/diacritic.dart';
 
@@ -35,7 +36,7 @@ class _SelectorState extends ConsumerState<Selector> {
     final notifier = ref.read(customAlimentsProvider.notifier);
 
     final filteredKeys = bank.order.where((id) {
-      final name = bank.aliments[id]!.readName(languageCode);
+      final name = bank.getAliment(id).readName(languageCode);
       return removeDiacritics(name.toLowerCase())
           .contains(removeDiacritics(searchTerm.toLowerCase()));
     }).toList();
@@ -71,7 +72,7 @@ class _SelectorState extends ConsumerState<Selector> {
             Expanded(
               child: ListView(
                 children: filteredKeys.map((id) {
-                  final name = bank.aliments[id]!.readName(languageCode);
+                  final name = bank.getAliment(id).readName(languageCode);
                   return MiniCard(
                     child: InkWell(
                       onTap: () => Navigator.pop(context, id),
