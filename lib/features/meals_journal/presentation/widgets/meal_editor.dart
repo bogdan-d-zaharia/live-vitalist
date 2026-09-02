@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/core/localization/localization_provider.dart';
 import 'package:live_vitalist/l10n/app_localizations.dart';
 import 'package:live_vitalist/features/aliment_bank/data/aliment_bank.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment.dart';
@@ -26,6 +27,8 @@ class MealEditor extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
+    final languageCode = ref.watch(localizationProvider);
+
     final day = ref.watch(dayCacheProvider)[date]!;
     final dayNotifier = ref.read(dayCacheProvider.notifier);
     final meal = day.meals.firstWhere((m) => m.key == mealKey);
@@ -96,7 +99,7 @@ class MealEditor extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () => NotificationHandler.showListNotification(
-                meal.aliments, bank, meal.displayName(l), l),
+                meal.aliments, bank, meal.displayName(l), l, languageCode),
             child: Text(l.mealsJournalShowNotification),
           ),
           SizedBox(width: 12.0),

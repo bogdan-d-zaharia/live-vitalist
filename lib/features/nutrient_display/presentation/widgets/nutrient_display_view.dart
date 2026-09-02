@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/core/localization/localization_provider.dart';
 import 'package:live_vitalist/features/aliment_bank/data/aliment_bank.dart';
 import 'package:live_vitalist/features/day/data/day_provider.dart';
 import 'package:live_vitalist/features/day/domain/day_extensions.dart';
@@ -14,6 +15,8 @@ class NutrientDisplayView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final languageCode = ref.watch(localizationProvider);
+
     final avgDay = ref.watch(syncAverageDayProvider);
     final bank = ref.watch(alimentBankProvider);
     // final state = ref.watch(nutrientsProvider);
@@ -41,6 +44,7 @@ class NutrientDisplayView extends ConsumerWidget {
         nutrientName: key,
         bank: bank,
         day: avgDay,
+        languageCode: languageCode,
       );
     }).toList();
 

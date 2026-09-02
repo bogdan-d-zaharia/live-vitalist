@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 @immutable
 class AlimentData {
-  final String name;
+  final Map<String, String> name;
   final String unit;
   final double referenceSize;
   final Map<String, double> referenceFields;
@@ -16,9 +16,13 @@ class AlimentData {
     required this.unitSynonyms,
   });
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson({String? languageCode}) {
+    if (name.keys.length > 1) name.remove('_');
+    final newName = languageCode == null
+        ? name
+        : name[languageCode] ?? name['en'] ?? name.values.first;
     return {
-      'name': name,
+      'name': newName,
       'unit': unit,
       'referenceSize': referenceSize,
       if (referenceFields.isNotEmpty) 'referenceFields': referenceFields,
@@ -26,8 +30,17 @@ class AlimentData {
     };
   }
 
-  factory AlimentData.fromJson(Map<String, dynamic> json) {
-    final name = json['name'] ?? '';
+  factory AlimentData.fromJson(
+    Map<String, dynamic> json, {
+    String? languageCode,
+  }) {
+    final nameData = json['name'];
+    final Map<String, String> name = switch (nameData) {
+      Map<String, String> _ => nameData,
+      String _ => {languageCode ?? '_': nameData},
+      _ => {'_': ''},
+    };
+
     late final String unit;
     final referenceSize = (json['referenceSize'] as num? ?? 0.0).toDouble();
     final Map<String, double> referenceFields =
@@ -62,7 +75,7 @@ class AlimentData {
   }
 
   AlimentData copyWith({
-    String? name,
+    Map<String, String>? name,
     String? unit,
     double? referenceSize,
     Map<String, double>? referenceFields,
@@ -78,7 +91,7 @@ class AlimentData {
   }
 
   static const empty = AlimentData(
-    name: '',
+    name: {'_': ''},
     unit: 'g',
     referenceSize: 100.0,
     referenceFields: {},

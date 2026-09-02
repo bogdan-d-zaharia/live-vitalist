@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/core/localization/localization_provider.dart';
+import 'package:live_vitalist/features/aliment/data/aliment_data_extensions.dart';
 import 'package:live_vitalist/l10n/app_localizations.dart';
 import 'package:live_vitalist/core/presentation/widgets/animated_navigation_buttons.dart';
 import 'package:live_vitalist/core/presentation/widgets/completion_widget.dart';
@@ -23,6 +25,7 @@ class AlimentDataEditor extends ConsumerStatefulWidget {
 class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
   AlimentData data = AlimentData.empty;
 
+  late final String languageCode;
   late final TextEditingController _nameController;
   late final TextEditingController _unitController;
   final PageController _pageController = PageController();
@@ -34,6 +37,7 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
   void initState() {
     super.initState();
     data = AlimentData.fromJson(widget.initialData.toJson());
+    languageCode = ref.read(localizationProvider);
     _nameController = TextEditingController();
     _unitController = TextEditingController();
     _updateControllers();
@@ -48,7 +52,7 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
   }
 
   void _updateControllers() {
-    _nameController.text = data.name;
+    _nameController.text = data.readName(languageCode);
     _unitController.text = data.unit;
   }
 
@@ -114,6 +118,7 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
           actions: [
             JsonEditorButton(
               data: data,
+              languageCode: languageCode,
               onResult: (newData) {
                 data = newData;
                 setState(() => _updateControllers());
@@ -129,49 +134,50 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
             child: Column(
               children: [
                 Padding(
-                padding: EdgeInsets.all(16.0),
-                child: SizedBox(
-                  width: 128.0,
-                  height: 6.0,
-                  child: CompletionWidget(
-                    count: _pageCount,
-                    index: _pageIndex,
+                  padding: EdgeInsets.all(16.0),
+                  child: SizedBox(
+                    width: 128.0,
+                    height: 6.0,
+                    child: CompletionWidget(
+                      count: _pageCount,
+                      index: _pageIndex,
+                    ),
                   ),
                 ),
-              ),
                 Expanded(
-                child: PageView(
-                  controller: _pageController,
-                  physics: NeverScrollableScrollPhysics(),
-                  children: [
-                    AlimentDetailsScreen(
-                      data: data,
-                      nameController: _nameController,
-                      unitController: _unitController,
-                      onDataChanged: (newData) {
-                        setState(() => data = newData);
-                      },
-                    ),
-                    AlimentNutrientsScreen(data: data),
-                    AlimentSynonymsScreen(
-                      data: data,
-                      onDataChanged: (newData) {
-                        setState(() => data = newData);
-                      },
-                    ),
-                  ],
+                  child: PageView(
+                    controller: _pageController,
+                    physics: NeverScrollableScrollPhysics(),
+                    children: [
+                      AlimentDetailsScreen(
+                        data: data,
+                        nameController: _nameController,
+                        unitController: _unitController,
+                        languageCode: languageCode,
+                        onDataChanged: (newData) {
+                          setState(() => data = newData);
+                        },
+                      ),
+                      AlimentNutrientsScreen(data: data),
+                      AlimentSynonymsScreen(
+                        data: data,
+                        onDataChanged: (newData) {
+                          setState(() => data = newData);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
                 Padding(
-                padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-                child: AnimatedNavigationButtons(
-                  onNext: _nextPage,
-                  onPrevious: _pageIndex > 0 ? _previousPage : null,
-                  onSkip: _popSave,
-                  nextLabel:
-                      _pageIndex == _pageCount - 1 ? 'Save' : 'Continue',
+                  padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+                  child: AnimatedNavigationButtons(
+                    onNext: _nextPage,
+                    onPrevious: _pageIndex > 0 ? _previousPage : null,
+                    onSkip: _popSave,
+                    nextLabel:
+                        _pageIndex == _pageCount - 1 ? 'Save' : 'Continue',
+                  ),
                 ),
-              ),
               ],
             ),
           ),

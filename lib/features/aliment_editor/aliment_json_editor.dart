@@ -12,7 +12,13 @@ import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class AlimentJsonEditor extends ConsumerStatefulWidget {
   final AlimentData initialData;
-  const AlimentJsonEditor({required this.initialData, super.key});
+  final String languageCode;
+
+  const AlimentJsonEditor({
+    required this.initialData,
+    required this.languageCode,
+    super.key,
+  });
 
   @override
   ConsumerState<AlimentJsonEditor> createState() => _AlimentJsonEditorState();
@@ -25,8 +31,10 @@ class _AlimentJsonEditorState extends ConsumerState<AlimentJsonEditor> {
   @override
   void initState() {
     super.initState();
-    originalText =
-        widget.initialData.toExpandedWithUnitsJson(ref.read(nutrientsProvider));
+    originalText = widget.initialData.toExpandedWithUnitsJson(
+      ref.read(nutrientsProvider),
+      languageCode: widget.languageCode,
+    );
     controller = CodeController(language: json, text: originalText);
   }
 
@@ -42,8 +50,15 @@ class _AlimentJsonEditorState extends ConsumerState<AlimentJsonEditor> {
     if (!isModified) return Navigator.pop(context, null);
 
     try {
-      final data = AlimentData.fromJson(widget.initialData
-          .fromExpandedJsonWithCommentsToJsonMap(controller.text));
+      final editedData = AlimentData.fromJson(
+        widget.initialData
+            .fromExpandedJsonWithCommentsToJsonMap(controller.text),
+        languageCode: widget.languageCode,
+      );
+      final data = editedData.copyWith(name: {
+        ...widget.initialData.name,
+        ...editedData.name,
+      });
       Navigator.pop(context, data);
     } catch (e) {
       showDialog(

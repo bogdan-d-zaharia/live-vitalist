@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/core/localization/localization_provider.dart';
+import 'package:live_vitalist/features/aliment/data/aliment_data_extensions.dart';
 import 'package:live_vitalist/l10n/app_localizations.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
 import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/widgets/editor_inputs/editor_string_input.dart';
@@ -24,13 +26,17 @@ class _TemporaryAlimentEditorState
     extends ConsumerState<TemporaryAlimentEditor> {
   AlimentData data = AlimentData.empty;
 
+  late final String languageCode;
   late final TextEditingController _nameController;
+
+  String get dataName => data.readName(languageCode);
 
   @override
   void initState() {
     super.initState();
     data = AlimentData.fromJson(widget.initialData.toJson());
-    _nameController = TextEditingController(text: data.name);
+    languageCode = ref.read(localizationProvider);
+    _nameController = TextEditingController(text: dataName);
   }
 
   @override
@@ -80,9 +86,10 @@ class _TemporaryAlimentEditorState
           actions: [
             JsonEditorButton(
               data: data,
+              languageCode: languageCode,
               onResult: (newData) {
                 data = newData;
-                setState(() => _nameController.text = data.name);
+                setState(() => _nameController.text = dataName);
               },
             ),
           ],
@@ -95,34 +102,37 @@ class _TemporaryAlimentEditorState
             child: Column(
               children: [
                 Expanded(
-                child: ListView(
-                  padding: EdgeInsets.symmetric(horizontal: 24.0),
-                  children: [
-                    EditorStringInput(
-                      'Name',
-                      data.name,
-                      (value) {
-                        setState(() => data = data.copyWith(name: value));
-                      },
-                      _nameController,
-                    ),
-                    NutrientInput('kcals', nutrients, data),
-                    ...selectedNutrients.map(
-                      (key) => NutrientInput(key, nutrients, data),
-                    ),
-                  ],
-                ),
-              ),
-                Padding(
-                padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: FilledButton(
-                    onPressed: _popSave,
-                    child: Text(AppLocalizations.of(context).actionSave),
+                  child: ListView(
+                    padding: EdgeInsets.symmetric(horizontal: 24.0),
+                    children: [
+                      EditorStringInput(
+                        'Name',
+                        dataName,
+                        (value) {
+                          setState(() => data = data.copyWith(name: {
+                                ...data.name,
+                                languageCode: value,
+                              }));
+                        },
+                        _nameController,
+                      ),
+                      NutrientInput('kcals', nutrients, data),
+                      ...selectedNutrients.map(
+                        (key) => NutrientInput(key, nutrients, data),
+                      ),
+                    ],
                   ),
                 ),
-              ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: FilledButton(
+                      onPressed: _popSave,
+                      child: Text(AppLocalizations.of(context).actionSave),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

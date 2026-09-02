@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/features/aliment/data/aliment_data_extensions.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
 import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/widgets/editor_inputs/editor_number_input.dart';
 import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/widgets/editor_inputs/editor_string_input.dart';
@@ -11,12 +12,14 @@ class AlimentDetailsScreen extends ConsumerWidget {
   final TextEditingController nameController;
   final TextEditingController unitController;
   final ValueChanged<AlimentData> onDataChanged;
+  final String languageCode;
 
   const AlimentDetailsScreen({
     required this.data,
     required this.nameController,
     required this.unitController,
     required this.onDataChanged,
+    required this.languageCode,
     super.key,
   });
 
@@ -29,8 +32,11 @@ class AlimentDetailsScreen extends ConsumerWidget {
       children: [
         EditorStringInput(
           'Name',
-          data.name,
-          (value) => onDataChanged(data.copyWith(name: value)),
+          data.readName(languageCode),
+          (value) => onDataChanged(data.copyWith(name: {
+            ...data.name,
+            languageCode: value,
+          })),
           nameController,
         ),
         EditorStringInput(

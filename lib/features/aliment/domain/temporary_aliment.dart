@@ -45,7 +45,7 @@ class TemporaryAliment extends Aliment {
 
   static const empty = TemporaryAliment(
     alimentData: AlimentData(
-      name: '',
+      name: {'_': ''},
       unit: 'portion',
       referenceSize: 1.0,
       referenceFields: {},

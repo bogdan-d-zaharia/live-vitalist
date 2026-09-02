@@ -3,7 +3,9 @@ import 'dart:ui';
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/core/localization/localization_provider.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
+import 'package:live_vitalist/features/aliment/data/aliment_data_extensions.dart';
 import 'package:live_vitalist/features/aliment_bank/data/aliment_bank.dart';
 import 'package:live_vitalist/features/day/data/day_provider.dart';
 import 'package:live_vitalist/features/super_search/presentation/controllers/super_search_controller.dart';
@@ -41,11 +43,13 @@ class SearchOverlay extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
+    final languageCode = ref.watch(localizationProvider);
+
     final searchState = ref.watch(superSearchProvider);
     final bank = ref.watch(alimentBankProvider);
 
     final filteredKeys = bank.order.where((id) {
-      final name = bank.aliments[id]!.name;
+      final name = bank.aliments[id]!.readName(languageCode);
       return removeDiacritics(name.toLowerCase())
           .contains(removeDiacritics(searchState.query.toLowerCase()));
     }).toList();
