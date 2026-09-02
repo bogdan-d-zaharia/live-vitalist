@@ -698,6 +698,66 @@ abstract class AppLocalizations {
   /// **'Enter {label}'**
   String alimentEditorEnterLabel(String label);
 
+  /// No description provided for @alimentImagePickerChooseTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an image'**
+  String get alimentImagePickerChooseTitle;
+
+  /// No description provided for @alimentImagePickerImageCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 food image} other{{count} food images}}'**
+  String alimentImagePickerImageCount(int count);
+
+  /// No description provided for @alimentImagePickerSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search images by name'**
+  String get alimentImagePickerSearchHint;
+
+  /// No description provided for @alimentImagePickerCloseTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get alimentImagePickerCloseTooltip;
+
+  /// No description provided for @alimentImagePickerClearSearchTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get alimentImagePickerClearSearchTooltip;
+
+  /// No description provided for @alimentImagePickerEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No images found'**
+  String get alimentImagePickerEmptyTitle;
+
+  /// No description provided for @alimentImagePickerEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Try another name instead of “{query}”.'**
+  String alimentImagePickerEmptyMessage(String query);
+
+  /// No description provided for @alimentImagePickerChooseTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a food image'**
+  String get alimentImagePickerChooseTooltip;
+
+  /// No description provided for @alimentImagePickerChangeTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Change {name} image'**
+  String alimentImagePickerChangeTooltip(String name);
+
+  /// No description provided for @alimentImageName.
+  ///
+  /// In en, this message translates to:
+  /// **'{key, select, apple{Apple} banana{Banana} orange{Orange} lemon{Lemon} strawberry{Strawberry} grapes{Grapes} watermelon{Watermelon} peach{Peach} cherries{Cherries} pineapple{Pineapple} pear{Pear} kiwi{Kiwi} blueberries{Blueberries} mango{Mango} coconut{Coconut} avocado{Avocado} tomato{Tomato} carrot{Carrot} broccoli{Broccoli} corn{Corn} mushroom{Mushroom} potato{Potato} cucumber{Cucumber} pepper{Pepper} onion{Onion} garlic{Garlic} peas{Peas} leafy_greens{Leafy greens} olives{Olives} bread{Bread} croissant{Croissant} pancakes{Pancakes} oatmeal{Oatmeal} cereal{Cereal} cheese{Cheese} egg{Egg} milk{Milk} yogurt{Yogurt} butter{Butter} nuts{Nuts} beans{Beans} protein_shake{Protein shake} smoothie{Smoothie} protein_bar{Protein bar} chicken{Chicken} meat{Meat} bacon{Bacon} sausage{Sausage} roast{Roast} fish{Fish} shrimp{Shrimp} rice{Rice} pasta{Pasta} wrap{Wrap} sushi{Sushi} ramen{Ramen} curry{Curry} pizza{Pizza} burger{Burger} salad{Salad} soup{Soup} sandwich{Sandwich} taco{Taco} pretzel{Pretzel} popcorn{Popcorn} chocolate{Chocolate} cookie{Cookie} cake{Cake} ice_cream{Ice cream} honey{Honey} coffee{Coffee} tea{Tea} juice{Juice} water{Water} dessert{Dessert} other{Food}}'**
+  String alimentImageName(String key);
+
   /// No description provided for @mealsJournalDeleteMealTitle.
   ///
   /// In en, this message translates to:

@@ -1,8 +1,11 @@
 import 'package:flutter/foundation.dart';
 
+const _keepExistingImage = Object();
+
 @immutable
 class AlimentData {
   final String name;
+  final String? image;
   final String unit;
   final double referenceSize;
   final Map<String, double> referenceFields;
@@ -10,6 +13,7 @@ class AlimentData {
 
   const AlimentData({
     required this.name,
+    this.image,
     required this.unit,
     required this.referenceSize,
     required this.referenceFields,
@@ -19,6 +23,7 @@ class AlimentData {
   Map<String, dynamic> toJson() {
     return {
       'name': name,
+      if (image != null && image!.isNotEmpty) 'image': image,
       'unit': unit,
       'referenceSize': referenceSize,
       if (referenceFields.isNotEmpty) 'referenceFields': referenceFields,
@@ -54,6 +59,7 @@ class AlimentData {
 
     return AlimentData(
       name: name,
+      image: json['image'] as String?,
       unit: unit,
       referenceSize: referenceSize,
       referenceFields: referenceFields,
@@ -63,6 +69,7 @@ class AlimentData {
 
   AlimentData copyWith({
     String? name,
+    Object? image = _keepExistingImage,
     String? unit,
     double? referenceSize,
     Map<String, double>? referenceFields,
@@ -70,6 +77,8 @@ class AlimentData {
   }) {
     return AlimentData(
       name: name ?? this.name,
+      image:
+          identical(image, _keepExistingImage) ? this.image : image as String?,
       unit: unit ?? this.unit,
       referenceSize: referenceSize ?? this.referenceSize,
       referenceFields: referenceFields ?? this.referenceFields,

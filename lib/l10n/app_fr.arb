@@ -133,6 +133,28 @@
       }
     }
   },
+  "alimentImagePickerChooseTitle": "Choisir une image",
+  "alimentImagePickerImageCount": "{count, plural, =1{1 image d’aliment} other{{count} images d’aliments}}",
+  "@alimentImagePickerImageCount": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "alimentImagePickerSearchHint": "Rechercher des images par nom",
+  "alimentImagePickerCloseTooltip": "Fermer",
+  "alimentImagePickerClearSearchTooltip": "Effacer la recherche",
+  "alimentImagePickerEmptyTitle": "Aucune image trouvée",
+  "alimentImagePickerEmptyMessage": "Essayez un autre nom au lieu de « {query} ».",
+  "@alimentImagePickerEmptyMessage": {
+    "placeholders": {"query": {"type": "String"}}
+  },
+  "alimentImagePickerChooseTooltip": "Choisir une image d’aliment",
+  "alimentImagePickerChangeTooltip": "Changer l’image de {name}",
+  "@alimentImagePickerChangeTooltip": {
+    "placeholders": {"name": {"type": "String"}}
+  },
+  "alimentImageName": "{key, select, apple{Pomme} banana{Banane} orange{Orange} lemon{Citron} strawberry{Fraise} grapes{Raisins} watermelon{Pastèque} peach{Pêche} cherries{Cerises} pineapple{Ananas} pear{Poire} kiwi{Kiwi} blueberries{Myrtilles} mango{Mangue} coconut{Noix de coco} avocado{Avocat} tomato{Tomate} carrot{Carotte} broccoli{Brocoli} corn{Maïs} mushroom{Champignon} potato{Pomme de terre} cucumber{Concombre} pepper{Poivron} onion{Oignon} garlic{Ail} peas{Petits pois} leafy_greens{Légumes verts} olives{Olives} bread{Pain} croissant{Croissant} pancakes{Crêpes} oatmeal{Porridge} cereal{Céréales} cheese{Fromage} egg{Œuf} milk{Lait} yogurt{Yaourt} butter{Beurre} nuts{Noix} beans{Haricots} protein_shake{Shake protéiné} smoothie{Smoothie} protein_bar{Barre protéinée} chicken{Poulet} meat{Viande} bacon{Bacon} sausage{Saucisse} roast{Rôti} fish{Poisson} shrimp{Crevettes} rice{Riz} pasta{Pâtes} wrap{Wrap} sushi{Sushi} ramen{Ramen} curry{Curry} pizza{Pizza} burger{Burger} salad{Salade} soup{Soupe} sandwich{Sandwich} taco{Taco} pretzel{Bretzel} popcorn{Pop-corn} chocolate{Chocolat} cookie{Biscuit} cake{Gâteau} ice_cream{Glace} honey{Miel} coffee{Café} tea{Thé} juice{Jus} water{Eau} dessert{Dessert} other{Aliment}}",
+  "@alimentImageName": {
+    "placeholders": {"key": {"type": "String"}}
+  },
   "mealsJournalDeleteMealTitle": "Supprimer le repas ?",
   "mealsJournalDeleteMealMessage": "Voulez-vous vraiment supprimer ce repas ?",
   "mealsJournalTitle": "Journal des repas",

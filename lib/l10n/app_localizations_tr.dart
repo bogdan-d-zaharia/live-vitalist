@@ -327,6 +327,125 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String get alimentImagePickerChooseTitle => 'Bir görsel seçin';
+
+  @override
+  String alimentImagePickerImageCount(int count) {
+    return '$count yiyecek görseli';
+  }
+
+  @override
+  String get alimentImagePickerSearchHint => 'Görselleri ada göre arayın';
+
+  @override
+  String get alimentImagePickerCloseTooltip => 'Kapat';
+
+  @override
+  String get alimentImagePickerClearSearchTooltip => 'Aramayı temizle';
+
+  @override
+  String get alimentImagePickerEmptyTitle => 'Görsel bulunamadı';
+
+  @override
+  String alimentImagePickerEmptyMessage(String query) {
+    return '“$query” yerine başka bir ad deneyin.';
+  }
+
+  @override
+  String get alimentImagePickerChooseTooltip => 'Yiyecek görseli seçin';
+
+  @override
+  String alimentImagePickerChangeTooltip(String name) {
+    return '$name görselini değiştir';
+  }
+
+  @override
+  String alimentImageName(String key) {
+    String _temp0 = intl.Intl.selectLogic(
+      key,
+      {
+        'apple': 'Elma',
+        'banana': 'Muz',
+        'orange': 'Portakal',
+        'lemon': 'Limon',
+        'strawberry': 'Çilek',
+        'grapes': 'Üzüm',
+        'watermelon': 'Karpuz',
+        'peach': 'Şeftali',
+        'cherries': 'Kiraz',
+        'pineapple': 'Ananas',
+        'pear': 'Armut',
+        'kiwi': 'Kivi',
+        'blueberries': 'Yaban mersini',
+        'mango': 'Mango',
+        'coconut': 'Hindistan cevizi',
+        'avocado': 'Avokado',
+        'tomato': 'Domates',
+        'carrot': 'Havuç',
+        'broccoli': 'Brokoli',
+        'corn': 'Mısır',
+        'mushroom': 'Mantar',
+        'potato': 'Patates',
+        'cucumber': 'Salatalık',
+        'pepper': 'Biber',
+        'onion': 'Soğan',
+        'garlic': 'Sarımsak',
+        'peas': 'Bezelye',
+        'leafy_greens': 'Yeşillikler',
+        'olives': 'Zeytin',
+        'bread': 'Ekmek',
+        'croissant': 'Kruvasan',
+        'pancakes': 'Krep',
+        'oatmeal': 'Yulaf ezmesi',
+        'cereal': 'Tahıl',
+        'cheese': 'Peynir',
+        'egg': 'Yumurta',
+        'milk': 'Süt',
+        'yogurt': 'Yoğurt',
+        'butter': 'Tereyağı',
+        'nuts': 'Kuruyemiş',
+        'beans': 'Fasulye',
+        'protein_shake': 'Protein içeceği',
+        'smoothie': 'Smoothie',
+        'protein_bar': 'Protein barı',
+        'chicken': 'Tavuk',
+        'meat': 'Et',
+        'bacon': 'Pastırma',
+        'sausage': 'Sosis',
+        'roast': 'Rosto',
+        'fish': 'Balık',
+        'shrimp': 'Karides',
+        'rice': 'Pirinç',
+        'pasta': 'Makarna',
+        'wrap': 'Dürüm',
+        'sushi': 'Suşi',
+        'ramen': 'Ramen',
+        'curry': 'Köri',
+        'pizza': 'Pizza',
+        'burger': 'Burger',
+        'salad': 'Salata',
+        'soup': 'Çorba',
+        'sandwich': 'Sandviç',
+        'taco': 'Taco',
+        'pretzel': 'Simit',
+        'popcorn': 'Patlamış mısır',
+        'chocolate': 'Çikolata',
+        'cookie': 'Kurabiye',
+        'cake': 'Pasta',
+        'ice_cream': 'Dondurma',
+        'honey': 'Bal',
+        'coffee': 'Kahve',
+        'tea': 'Çay',
+        'juice': 'Meyve suyu',
+        'water': 'Su',
+        'dessert': 'Tatlı',
+        'other': 'Yiyecek',
+      },
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get mealsJournalDeleteMealTitle => 'Öğün silinsin mi?';
 
   @override

@@ -333,6 +333,131 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String get alimentImagePickerChooseTitle => 'Choisir une image';
+
+  @override
+  String alimentImagePickerImageCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count images d’aliments',
+      one: '1 image d’aliment',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get alimentImagePickerSearchHint => 'Rechercher des images par nom';
+
+  @override
+  String get alimentImagePickerCloseTooltip => 'Fermer';
+
+  @override
+  String get alimentImagePickerClearSearchTooltip => 'Effacer la recherche';
+
+  @override
+  String get alimentImagePickerEmptyTitle => 'Aucune image trouvée';
+
+  @override
+  String alimentImagePickerEmptyMessage(String query) {
+    return 'Essayez un autre nom au lieu de « $query ».';
+  }
+
+  @override
+  String get alimentImagePickerChooseTooltip => 'Choisir une image d’aliment';
+
+  @override
+  String alimentImagePickerChangeTooltip(String name) {
+    return 'Changer l’image de $name';
+  }
+
+  @override
+  String alimentImageName(String key) {
+    String _temp0 = intl.Intl.selectLogic(
+      key,
+      {
+        'apple': 'Pomme',
+        'banana': 'Banane',
+        'orange': 'Orange',
+        'lemon': 'Citron',
+        'strawberry': 'Fraise',
+        'grapes': 'Raisins',
+        'watermelon': 'Pastèque',
+        'peach': 'Pêche',
+        'cherries': 'Cerises',
+        'pineapple': 'Ananas',
+        'pear': 'Poire',
+        'kiwi': 'Kiwi',
+        'blueberries': 'Myrtilles',
+        'mango': 'Mangue',
+        'coconut': 'Noix de coco',
+        'avocado': 'Avocat',
+        'tomato': 'Tomate',
+        'carrot': 'Carotte',
+        'broccoli': 'Brocoli',
+        'corn': 'Maïs',
+        'mushroom': 'Champignon',
+        'potato': 'Pomme de terre',
+        'cucumber': 'Concombre',
+        'pepper': 'Poivron',
+        'onion': 'Oignon',
+        'garlic': 'Ail',
+        'peas': 'Petits pois',
+        'leafy_greens': 'Légumes verts',
+        'olives': 'Olives',
+        'bread': 'Pain',
+        'croissant': 'Croissant',
+        'pancakes': 'Crêpes',
+        'oatmeal': 'Porridge',
+        'cereal': 'Céréales',
+        'cheese': 'Fromage',
+        'egg': 'Œuf',
+        'milk': 'Lait',
+        'yogurt': 'Yaourt',
+        'butter': 'Beurre',
+        'nuts': 'Noix',
+        'beans': 'Haricots',
+        'protein_shake': 'Shake protéiné',
+        'smoothie': 'Smoothie',
+        'protein_bar': 'Barre protéinée',
+        'chicken': 'Poulet',
+        'meat': 'Viande',
+        'bacon': 'Bacon',
+        'sausage': 'Saucisse',
+        'roast': 'Rôti',
+        'fish': 'Poisson',
+        'shrimp': 'Crevettes',
+        'rice': 'Riz',
+        'pasta': 'Pâtes',
+        'wrap': 'Wrap',
+        'sushi': 'Sushi',
+        'ramen': 'Ramen',
+        'curry': 'Curry',
+        'pizza': 'Pizza',
+        'burger': 'Burger',
+        'salad': 'Salade',
+        'soup': 'Soupe',
+        'sandwich': 'Sandwich',
+        'taco': 'Taco',
+        'pretzel': 'Bretzel',
+        'popcorn': 'Pop-corn',
+        'chocolate': 'Chocolat',
+        'cookie': 'Biscuit',
+        'cake': 'Gâteau',
+        'ice_cream': 'Glace',
+        'honey': 'Miel',
+        'coffee': 'Café',
+        'tea': 'Thé',
+        'juice': 'Jus',
+        'water': 'Eau',
+        'dessert': 'Dessert',
+        'other': 'Aliment',
+      },
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get mealsJournalDeleteMealTitle => 'Supprimer le repas ?';
 
   @override

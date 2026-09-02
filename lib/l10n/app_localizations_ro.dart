@@ -330,6 +330,132 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
+  String get alimentImagePickerChooseTitle => 'Alege o imagine';
+
+  @override
+  String alimentImagePickerImageCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count imagini de alimente',
+      one: 'O imagine de aliment',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get alimentImagePickerSearchHint => 'Caută imagini după nume';
+
+  @override
+  String get alimentImagePickerCloseTooltip => 'Închide';
+
+  @override
+  String get alimentImagePickerClearSearchTooltip => 'Șterge căutarea';
+
+  @override
+  String get alimentImagePickerEmptyTitle => 'Nu am găsit imagini';
+
+  @override
+  String alimentImagePickerEmptyMessage(String query) {
+    return 'Încearcă alt nume în loc de „$query”.';
+  }
+
+  @override
+  String get alimentImagePickerChooseTooltip =>
+      'Alege o imagine pentru aliment';
+
+  @override
+  String alimentImagePickerChangeTooltip(String name) {
+    return 'Schimbă imaginea $name';
+  }
+
+  @override
+  String alimentImageName(String key) {
+    String _temp0 = intl.Intl.selectLogic(
+      key,
+      {
+        'apple': 'Măr',
+        'banana': 'Banană',
+        'orange': 'Portocală',
+        'lemon': 'Lămâie',
+        'strawberry': 'Căpșună',
+        'grapes': 'Struguri',
+        'watermelon': 'Pepene',
+        'peach': 'Piersică',
+        'cherries': 'Cireșe',
+        'pineapple': 'Ananas',
+        'pear': 'Pară',
+        'kiwi': 'Kiwi',
+        'blueberries': 'Afine',
+        'mango': 'Mango',
+        'coconut': 'Nucă de cocos',
+        'avocado': 'Avocado',
+        'tomato': 'Roșie',
+        'carrot': 'Morcov',
+        'broccoli': 'Broccoli',
+        'corn': 'Porumb',
+        'mushroom': 'Ciupercă',
+        'potato': 'Cartof',
+        'cucumber': 'Castravete',
+        'pepper': 'Ardei',
+        'onion': 'Ceapă',
+        'garlic': 'Usturoi',
+        'peas': 'Mazăre',
+        'leafy_greens': 'Verdețuri',
+        'olives': 'Măsline',
+        'bread': 'Pâine',
+        'croissant': 'Croissant',
+        'pancakes': 'Clătite',
+        'oatmeal': 'Terci de ovăz',
+        'cereal': 'Cereale',
+        'cheese': 'Brânză',
+        'egg': 'Ou',
+        'milk': 'Lapte',
+        'yogurt': 'Iaurt',
+        'butter': 'Unt',
+        'nuts': 'Nuci',
+        'beans': 'Fasole',
+        'protein_shake': 'Shake proteic',
+        'smoothie': 'Smoothie',
+        'protein_bar': 'Baton proteic',
+        'chicken': 'Pui',
+        'meat': 'Carne',
+        'bacon': 'Bacon',
+        'sausage': 'Cârnat',
+        'roast': 'Friptură',
+        'fish': 'Pește',
+        'shrimp': 'Creveți',
+        'rice': 'Orez',
+        'pasta': 'Paste',
+        'wrap': 'Lipie',
+        'sushi': 'Sushi',
+        'ramen': 'Ramen',
+        'curry': 'Curry',
+        'pizza': 'Pizza',
+        'burger': 'Burger',
+        'salad': 'Salată',
+        'soup': 'Supă',
+        'sandwich': 'Sandviș',
+        'taco': 'Taco',
+        'pretzel': 'Covrig',
+        'popcorn': 'Popcorn',
+        'chocolate': 'Ciocolată',
+        'cookie': 'Biscuit',
+        'cake': 'Prăjitură',
+        'ice_cream': 'Înghețată',
+        'honey': 'Miere',
+        'coffee': 'Cafea',
+        'tea': 'Ceai',
+        'juice': 'Suc',
+        'water': 'Apă',
+        'dessert': 'Desert',
+        'other': 'Aliment',
+      },
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get mealsJournalDeleteMealTitle => 'Ștergi masa?';
 
   @override

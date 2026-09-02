@@ -4,6 +4,7 @@ import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_extensions.dart';
 import 'package:live_vitalist/features/meals_journal/presentation/widgets/element_widget.dart';
+import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/widgets/food_image_picker.dart';
 import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
 import 'package:live_vitalist/features/nutrient_display/presentation/ui_helpers/nutrient_extensions.dart';
 import 'package:live_vitalist/l10n/app_localizations.dart';
@@ -34,10 +35,15 @@ class AlimentWidget extends ConsumerWidget {
         'Calories';
 
     final values = aliment.readFields(bank);
+    final data = aliment.readDataRef(bank);
     return ElementWidget(
-      title: aliment.readDataRef(bank).name,
+      title: data.name,
       subTitle:
           '${values['kcals']?.round() ?? 0} ${kcalsLabel.toLowerCase()}, ${aliment.servingSize} ${aliment.unit}',
+      leading: FoodImageThumbnail(
+        imageKey: data.image,
+        fallbackName: data.name,
+      ),
       onTap: onTap,
       onLongPress: onLongPress,
       additional: [

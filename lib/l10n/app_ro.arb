@@ -133,6 +133,28 @@
       }
     }
   },
+  "alimentImagePickerChooseTitle": "Alege o imagine",
+  "alimentImagePickerImageCount": "{count, plural, =1{O imagine de aliment} other{{count} imagini de alimente}}",
+  "@alimentImagePickerImageCount": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "alimentImagePickerSearchHint": "Caută imagini după nume",
+  "alimentImagePickerCloseTooltip": "Închide",
+  "alimentImagePickerClearSearchTooltip": "Șterge căutarea",
+  "alimentImagePickerEmptyTitle": "Nu am găsit imagini",
+  "alimentImagePickerEmptyMessage": "Încearcă alt nume în loc de „{query}”.",
+  "@alimentImagePickerEmptyMessage": {
+    "placeholders": {"query": {"type": "String"}}
+  },
+  "alimentImagePickerChooseTooltip": "Alege o imagine pentru aliment",
+  "alimentImagePickerChangeTooltip": "Schimbă imaginea {name}",
+  "@alimentImagePickerChangeTooltip": {
+    "placeholders": {"name": {"type": "String"}}
+  },
+  "alimentImageName": "{key, select, apple{Măr} banana{Banană} orange{Portocală} lemon{Lămâie} strawberry{Căpșună} grapes{Struguri} watermelon{Pepene} peach{Piersică} cherries{Cireșe} pineapple{Ananas} pear{Pară} kiwi{Kiwi} blueberries{Afine} mango{Mango} coconut{Nucă de cocos} avocado{Avocado} tomato{Roșie} carrot{Morcov} broccoli{Broccoli} corn{Porumb} mushroom{Ciupercă} potato{Cartof} cucumber{Castravete} pepper{Ardei} onion{Ceapă} garlic{Usturoi} peas{Mazăre} leafy_greens{Verdețuri} olives{Măsline} bread{Pâine} croissant{Croissant} pancakes{Clătite} oatmeal{Terci de ovăz} cereal{Cereale} cheese{Brânză} egg{Ou} milk{Lapte} yogurt{Iaurt} butter{Unt} nuts{Nuci} beans{Fasole} protein_shake{Shake proteic} smoothie{Smoothie} protein_bar{Baton proteic} chicken{Pui} meat{Carne} bacon{Bacon} sausage{Cârnat} roast{Friptură} fish{Pește} shrimp{Creveți} rice{Orez} pasta{Paste} wrap{Lipie} sushi{Sushi} ramen{Ramen} curry{Curry} pizza{Pizza} burger{Burger} salad{Salată} soup{Supă} sandwich{Sandviș} taco{Taco} pretzel{Covrig} popcorn{Popcorn} chocolate{Ciocolată} cookie{Biscuit} cake{Prăjitură} ice_cream{Înghețată} honey{Miere} coffee{Cafea} tea{Ceai} juice{Suc} water{Apă} dessert{Desert} other{Aliment}}",
+  "@alimentImageName": {
+    "placeholders": {"key": {"type": "String"}}
+  },
   "mealsJournalDeleteMealTitle": "Ștergi masa?",
   "mealsJournalDeleteMealMessage": "Sigur vrei să ștergi această masă?",
   "mealsJournalTitle": "Jurnal de mese",

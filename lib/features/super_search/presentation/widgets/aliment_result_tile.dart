@@ -7,6 +7,7 @@ import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
 import 'package:live_vitalist/features/super_search/domain/pending_aliment.dart';
 import 'package:live_vitalist/features/super_search/presentation/controllers/super_search_controller.dart';
+import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/widgets/food_image_picker.dart';
 
 class AlimentResultTile extends ConsumerStatefulWidget {
   const AlimentResultTile({required this.alimentID, super.key});
@@ -46,6 +47,11 @@ class _AlimentResultTileState extends ConsumerState<AlimentResultTile> {
               padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
               child: Row(
                 children: [
+                  FoodImageThumbnail(
+                    imageKey: data.image,
+                    fallbackName: data.name,
+                  ),
+                  SizedBox(width: 14.0),
                   Expanded(child: Text(data.name, softWrap: true)),
                   if (pending != null)
                     Icon(

@@ -6,6 +6,7 @@ class ElementWidget extends StatelessWidget {
     required this.subTitle,
     required this.onTap,
     this.onLongPress,
+    this.leading,
     required this.additional,
     super.key,
   });
@@ -14,6 +15,7 @@ class ElementWidget extends StatelessWidget {
   final String subTitle;
   final void Function() onTap;
   final void Function()? onLongPress;
+  final Widget? leading;
   final List<Widget> additional;
 
   @override
@@ -27,25 +29,38 @@ class ElementWidget extends StatelessWidget {
               onLongPress: onLongPress,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Row(
                   children: [
-                    Text(
-                      title,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(fontSize: 16.0, letterSpacing: -0.5),
-                    ),
-                    if (subTitle != '')
-                      Text(
-                        subTitle,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 12.0,
-                          color: Colors.grey,
-                        ),
+                    if (leading != null) ...[
+                      leading!,
+                      const SizedBox(width: 12.0),
+                    ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            title,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  fontSize: 16.0,
+                                  letterSpacing: -0.5,
+                                ),
+                          ),
+                          if (subTitle != '')
+                            Text(
+                              subTitle,
+                              style: TextStyle(
+                                fontSize: 12.0,
+                                color: Colors.grey,
+                              ),
+                            ),
+                        ],
                       ),
+                    ),
                   ],
                 ),
               ),

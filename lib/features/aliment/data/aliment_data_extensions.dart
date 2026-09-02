@@ -40,6 +40,7 @@ extension AlimentJsonExtension on AlimentData {
     }
 
     writeField('name', expandedJson['name']);
+    writeField('image', expandedJson['image'] ?? 'null');
     writeField('unit', expandedJson['unit']);
     writeField('referenceSize', expandedJson['referenceSize']);
 

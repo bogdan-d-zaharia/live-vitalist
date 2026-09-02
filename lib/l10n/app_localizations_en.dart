@@ -328,6 +328,131 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get alimentImagePickerChooseTitle => 'Choose an image';
+
+  @override
+  String alimentImagePickerImageCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count food images',
+      one: '1 food image',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get alimentImagePickerSearchHint => 'Search images by name';
+
+  @override
+  String get alimentImagePickerCloseTooltip => 'Close';
+
+  @override
+  String get alimentImagePickerClearSearchTooltip => 'Clear search';
+
+  @override
+  String get alimentImagePickerEmptyTitle => 'No images found';
+
+  @override
+  String alimentImagePickerEmptyMessage(String query) {
+    return 'Try another name instead of “$query”.';
+  }
+
+  @override
+  String get alimentImagePickerChooseTooltip => 'Choose a food image';
+
+  @override
+  String alimentImagePickerChangeTooltip(String name) {
+    return 'Change $name image';
+  }
+
+  @override
+  String alimentImageName(String key) {
+    String _temp0 = intl.Intl.selectLogic(
+      key,
+      {
+        'apple': 'Apple',
+        'banana': 'Banana',
+        'orange': 'Orange',
+        'lemon': 'Lemon',
+        'strawberry': 'Strawberry',
+        'grapes': 'Grapes',
+        'watermelon': 'Watermelon',
+        'peach': 'Peach',
+        'cherries': 'Cherries',
+        'pineapple': 'Pineapple',
+        'pear': 'Pear',
+        'kiwi': 'Kiwi',
+        'blueberries': 'Blueberries',
+        'mango': 'Mango',
+        'coconut': 'Coconut',
+        'avocado': 'Avocado',
+        'tomato': 'Tomato',
+        'carrot': 'Carrot',
+        'broccoli': 'Broccoli',
+        'corn': 'Corn',
+        'mushroom': 'Mushroom',
+        'potato': 'Potato',
+        'cucumber': 'Cucumber',
+        'pepper': 'Pepper',
+        'onion': 'Onion',
+        'garlic': 'Garlic',
+        'peas': 'Peas',
+        'leafy_greens': 'Leafy greens',
+        'olives': 'Olives',
+        'bread': 'Bread',
+        'croissant': 'Croissant',
+        'pancakes': 'Pancakes',
+        'oatmeal': 'Oatmeal',
+        'cereal': 'Cereal',
+        'cheese': 'Cheese',
+        'egg': 'Egg',
+        'milk': 'Milk',
+        'yogurt': 'Yogurt',
+        'butter': 'Butter',
+        'nuts': 'Nuts',
+        'beans': 'Beans',
+        'protein_shake': 'Protein shake',
+        'smoothie': 'Smoothie',
+        'protein_bar': 'Protein bar',
+        'chicken': 'Chicken',
+        'meat': 'Meat',
+        'bacon': 'Bacon',
+        'sausage': 'Sausage',
+        'roast': 'Roast',
+        'fish': 'Fish',
+        'shrimp': 'Shrimp',
+        'rice': 'Rice',
+        'pasta': 'Pasta',
+        'wrap': 'Wrap',
+        'sushi': 'Sushi',
+        'ramen': 'Ramen',
+        'curry': 'Curry',
+        'pizza': 'Pizza',
+        'burger': 'Burger',
+        'salad': 'Salad',
+        'soup': 'Soup',
+        'sandwich': 'Sandwich',
+        'taco': 'Taco',
+        'pretzel': 'Pretzel',
+        'popcorn': 'Popcorn',
+        'chocolate': 'Chocolate',
+        'cookie': 'Cookie',
+        'cake': 'Cake',
+        'ice_cream': 'Ice cream',
+        'honey': 'Honey',
+        'coffee': 'Coffee',
+        'tea': 'Tea',
+        'juice': 'Juice',
+        'water': 'Water',
+        'dessert': 'Dessert',
+        'other': 'Food',
+      },
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get mealsJournalDeleteMealTitle => 'Delete meal?';
 
   @override

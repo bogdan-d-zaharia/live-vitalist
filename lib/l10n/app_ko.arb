@@ -133,6 +133,28 @@
       }
     }
   },
+  "alimentImagePickerChooseTitle": "이미지 선택",
+  "alimentImagePickerImageCount": "음식 이미지 {count}개",
+  "@alimentImagePickerImageCount": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "alimentImagePickerSearchHint": "이름으로 이미지 검색",
+  "alimentImagePickerCloseTooltip": "닫기",
+  "alimentImagePickerClearSearchTooltip": "검색 지우기",
+  "alimentImagePickerEmptyTitle": "이미지를 찾을 수 없습니다",
+  "alimentImagePickerEmptyMessage": "“{query}” 대신 다른 이름을 사용해 보세요.",
+  "@alimentImagePickerEmptyMessage": {
+    "placeholders": {"query": {"type": "String"}}
+  },
+  "alimentImagePickerChooseTooltip": "음식 이미지 선택",
+  "alimentImagePickerChangeTooltip": "{name} 이미지 변경",
+  "@alimentImagePickerChangeTooltip": {
+    "placeholders": {"name": {"type": "String"}}
+  },
+  "alimentImageName": "{key, select, apple{사과} banana{바나나} orange{오렌지} lemon{레몬} strawberry{딸기} grapes{포도} watermelon{수박} peach{복숭아} cherries{체리} pineapple{파인애플} pear{배} kiwi{키위} blueberries{블루베리} mango{망고} coconut{코코넛} avocado{아보카도} tomato{토마토} carrot{당근} broccoli{브로콜리} corn{옥수수} mushroom{버섯} potato{감자} cucumber{오이} pepper{피망} onion{양파} garlic{마늘} peas{완두콩} leafy_greens{잎채소} olives{올리브} bread{빵} croissant{크루아상} pancakes{팬케이크} oatmeal{오트밀} cereal{시리얼} cheese{치즈} egg{달걀} milk{우유} yogurt{요거트} butter{버터} nuts{견과류} beans{콩} protein_shake{단백질 셰이크} smoothie{스무디} protein_bar{단백질 바} chicken{닭고기} meat{고기} bacon{베이컨} sausage{소시지} roast{로스트} fish{생선} shrimp{새우} rice{밥} pasta{파스타} wrap{랩} sushi{초밥} ramen{라멘} curry{카레} pizza{피자} burger{버거} salad{샐러드} soup{수프} sandwich{샌드위치} taco{타코} pretzel{프레첼} popcorn{팝콘} chocolate{초콜릿} cookie{쿠키} cake{케이크} ice_cream{아이스크림} honey{꿀} coffee{커피} tea{차} juice{주스} water{물} dessert{디저트} other{음식}}",
+  "@alimentImageName": {
+    "placeholders": {"key": {"type": "String"}}
+  },
   "mealsJournalDeleteMealTitle": "식사를 삭제할까요?",
   "mealsJournalDeleteMealMessage": "이 식사를 삭제하시겠습니까?",
   "mealsJournalTitle": "식사 일지",

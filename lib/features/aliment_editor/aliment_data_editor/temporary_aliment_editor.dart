@@ -6,6 +6,7 @@ import 'package:live_vitalist/l10n/app_localizations.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
 import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/widgets/editor_inputs/editor_string_input.dart';
 import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/widgets/editor_inputs/nutrient_input.dart';
+import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/widgets/food_image_picker.dart';
 import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/widgets/json_editor_button.dart';
 import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/widgets/save_alert.dart';
 import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
@@ -25,11 +26,13 @@ class _TemporaryAlimentEditorState
   AlimentData data = AlimentData.empty;
 
   late final TextEditingController _nameController;
+  late bool _imageWasManuallySelected;
 
   @override
   void initState() {
     super.initState();
     data = AlimentData.fromJson(widget.initialData.toJson());
+    _imageWasManuallySelected = data.image != null;
     _nameController = TextEditingController(text: data.name);
   }
 
@@ -81,8 +84,11 @@ class _TemporaryAlimentEditorState
             JsonEditorButton(
               data: data,
               onResult: (newData) {
-                data = newData;
-                setState(() => _nameController.text = data.name);
+                setState(() {
+                  data = newData;
+                  _imageWasManuallySelected = newData.image != null;
+                  _nameController.text = data.name;
+                });
               },
             ),
           ],
@@ -95,34 +101,51 @@ class _TemporaryAlimentEditorState
             child: Column(
               children: [
                 Expanded(
-                child: ListView(
-                  padding: EdgeInsets.symmetric(horizontal: 24.0),
-                  children: [
-                    EditorStringInput(
-                      'Name',
-                      data.name,
-                      (value) {
-                        setState(() => data = data.copyWith(name: value));
-                      },
-                      _nameController,
-                    ),
-                    NutrientInput('kcals', nutrients, data),
-                    ...selectedNutrients.map(
-                      (key) => NutrientInput(key, nutrients, data),
-                    ),
-                  ],
-                ),
-              ),
-                Padding(
-                padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: FilledButton(
-                    onPressed: _popSave,
-                    child: Text(AppLocalizations.of(context).actionSave),
+                  child: ListView(
+                    padding: EdgeInsets.symmetric(horizontal: 24.0),
+                    children: [
+                      FoodImagePicker(
+                        selectedKey: data.image,
+                        onChanged: (image) {
+                          setState(() {
+                            _imageWasManuallySelected = true;
+                            data = data.copyWith(image: image);
+                          });
+                        },
+                      ),
+                      EditorStringInput(
+                        'Name',
+                        data.name,
+                        (value) {
+                          final suggestedImage = _imageWasManuallySelected
+                              ? data.image
+                              : suggestFoodImageForName(value)?.key;
+                          setState(() {
+                            data = data.copyWith(
+                              name: value,
+                              image: suggestedImage,
+                            );
+                          });
+                        },
+                        _nameController,
+                      ),
+                      NutrientInput('kcals', nutrients, data),
+                      ...selectedNutrients.map(
+                        (key) => NutrientInput(key, nutrients, data),
+                      ),
+                    ],
                   ),
                 ),
-              ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: FilledButton(
+                      onPressed: _popSave,
+                      child: Text(AppLocalizations.of(context).actionSave),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

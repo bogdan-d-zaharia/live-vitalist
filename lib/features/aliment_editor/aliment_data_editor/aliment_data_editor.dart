@@ -25,6 +25,7 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
 
   late final TextEditingController _nameController;
   late final TextEditingController _unitController;
+  late bool _imageWasManuallySelected;
   final PageController _pageController = PageController();
   int _pageIndex = 0;
 
@@ -34,6 +35,7 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
   void initState() {
     super.initState();
     data = AlimentData.fromJson(widget.initialData.toJson());
+    _imageWasManuallySelected = data.image != null;
     _nameController = TextEditingController();
     _unitController = TextEditingController();
     _updateControllers();
@@ -115,8 +117,11 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
             JsonEditorButton(
               data: data,
               onResult: (newData) {
-                data = newData;
-                setState(() => _updateControllers());
+                setState(() {
+                  data = newData;
+                  _imageWasManuallySelected = newData.image != null;
+                  _updateControllers();
+                });
               },
             ),
           ],
@@ -129,49 +134,56 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
             child: Column(
               children: [
                 Padding(
-                padding: EdgeInsets.all(16.0),
-                child: SizedBox(
-                  width: 128.0,
-                  height: 6.0,
-                  child: CompletionWidget(
-                    count: _pageCount,
-                    index: _pageIndex,
+                  padding: EdgeInsets.all(16.0),
+                  child: SizedBox(
+                    width: 128.0,
+                    height: 6.0,
+                    child: CompletionWidget(
+                      count: _pageCount,
+                      index: _pageIndex,
+                    ),
                   ),
                 ),
-              ),
                 Expanded(
-                child: PageView(
-                  controller: _pageController,
-                  physics: NeverScrollableScrollPhysics(),
-                  children: [
-                    AlimentDetailsScreen(
-                      data: data,
-                      nameController: _nameController,
-                      unitController: _unitController,
-                      onDataChanged: (newData) {
-                        setState(() => data = newData);
-                      },
-                    ),
-                    AlimentNutrientsScreen(data: data),
-                    AlimentSynonymsScreen(
-                      data: data,
-                      onDataChanged: (newData) {
-                        setState(() => data = newData);
-                      },
-                    ),
-                  ],
+                  child: PageView(
+                    controller: _pageController,
+                    physics: NeverScrollableScrollPhysics(),
+                    children: [
+                      AlimentDetailsScreen(
+                        data: data,
+                        nameController: _nameController,
+                        unitController: _unitController,
+                        imageWasManuallySelected: _imageWasManuallySelected,
+                        onImageSelected: (image) {
+                          setState(() {
+                            _imageWasManuallySelected = true;
+                            data = data.copyWith(image: image);
+                          });
+                        },
+                        onDataChanged: (newData) {
+                          setState(() => data = newData);
+                        },
+                      ),
+                      AlimentNutrientsScreen(data: data),
+                      AlimentSynonymsScreen(
+                        data: data,
+                        onDataChanged: (newData) {
+                          setState(() => data = newData);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
-              ),
                 Padding(
-                padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-                child: AnimatedNavigationButtons(
-                  onNext: _nextPage,
-                  onPrevious: _pageIndex > 0 ? _previousPage : null,
-                  onSkip: _popSave,
-                  nextLabel:
-                      _pageIndex == _pageCount - 1 ? 'Save' : 'Continue',
+                  padding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
+                  child: AnimatedNavigationButtons(
+                    onNext: _nextPage,
+                    onPrevious: _pageIndex > 0 ? _previousPage : null,
+                    onSkip: _popSave,
+                    nextLabel:
+                        _pageIndex == _pageCount - 1 ? 'Save' : 'Continue',
+                  ),
                 ),
-              ),
               ],
             ),
           ),

@@ -6,6 +6,7 @@ import 'package:diacritic/diacritic.dart';
 import 'package:live_vitalist/features/aliment/data/aliment_bank.dart';
 import 'package:live_vitalist/features/aliment_editor/instance_editor/presentation/widgets/add_aliment_button.dart';
 import 'package:live_vitalist/features/aliment_editor/instance_editor/presentation/widgets/selector_search_bar.dart';
+import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/widgets/food_image_picker.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
 
 class Selector extends ConsumerStatefulWidget {
@@ -67,24 +68,74 @@ class _SelectorState extends ConsumerState<Selector> {
             Expanded(
               child: ListView(
                 children: filteredKeys.map((id) {
-                  final name = bank.aliments[id]!.name;
-                  return MiniCard(
-                    child: InkWell(
-                      onTap: () => Navigator.pop(context, id),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 12.0),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(name),
-                        ),
-                      ),
-                    ),
+                  final aliment = bank.aliments[id]!;
+                  return _AlimentTile(
+                    name: aliment.name,
+                    imageKey: aliment.image,
+                    onTap: () => Navigator.pop(context, id),
                   );
                 }).toList(),
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AlimentTile extends StatelessWidget {
+  const _AlimentTile({
+    required this.name,
+    required this.imageKey,
+    required this.onTap,
+  });
+
+  final String name;
+  final String? imageKey;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+
+    return MiniCard(
+      child: Semantics(
+        button: true,
+        label: name,
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(10.0, 10.0, 14.0, 10.0),
+            child: Row(
+              children: [
+                FoodImageThumbnail(
+                  imageKey: imageKey,
+                  fallbackName: name,
+                  size: 56.0,
+                ),
+                const SizedBox(width: 14.0),
+                Expanded(
+                  child: Text(
+                    name,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      height: 1.15,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8.0),
+                Icon(
+                  Icons.chevron_right_rounded,
+                  size: 22.0,
+                  color: colors.onSurfaceVariant.withValues(alpha: 0.65),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
