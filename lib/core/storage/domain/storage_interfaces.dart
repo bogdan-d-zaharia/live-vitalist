@@ -4,6 +4,7 @@ abstract interface class IStorageHandler {
 }
 
 abstract interface class ILocalDeletion {
+  Future<dynamic> loadLocal(String path);
   Future<bool> deleteLocal();
 }
 

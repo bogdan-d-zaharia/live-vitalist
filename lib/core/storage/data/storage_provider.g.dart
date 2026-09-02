@@ -40,7 +40,7 @@ final class StorageProvider extends $NotifierProvider<Storage, void> {
   }
 }
 
-String _$storageHash() => r'9261617e7d57e7ba2a1a0425ebb7470a2ade54ec';
+String _$storageHash() => r'd0af7b03762eb6c0457581842bddb180a4a8f265';
 
 abstract class _$Storage extends $Notifier<void> {
   void build();

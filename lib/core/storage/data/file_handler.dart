@@ -43,7 +43,7 @@ final class FileHandler implements IStorageHandler, ILocalDeletion {
   }
 
   @override
-  Future<Map<String, dynamic>?> loadJson(String path) async {
+  Future<dynamic> loadLocal(String path) async {
     final File? file = await _getFile(path);
     String? str = (await file?.readAsString());
 
@@ -65,6 +65,10 @@ final class FileHandler implements IStorageHandler, ILocalDeletion {
     } finally {}
     return null;
   }
+
+  @override
+  Future<Map<String, dynamic>?> loadJson(String path) async =>
+      await loadLocal(path);
 
   @override
   Future<bool> deleteLocal() async {

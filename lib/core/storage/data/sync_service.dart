@@ -24,21 +24,21 @@ class SyncService extends _$SyncService {
   }
 
   List<String> _popLocalOrder() {
-    final localAlimentBank = ref.read(alimentBankProvider);
-    final localOrder = List.of(localAlimentBank.order);
-    ref.read(alimentBankControllerProvider.notifier).setState(
-        AlimentBankState(aliments: localAlimentBank.aliments, order: []));
-    return localOrder;
+    final order = ref.read(alimentOrderProvider);
+    ref
+        .read(alimentOrderProvider.notifier)
+        .load(AlimentBankState(aliments: {}, order: []));
+    return order.toList();
   }
 
   void _pushLocalOrder(List<String> localOrder) {
-    final oldState = ref.read(alimentBankProvider);
+    final oldAliments = ref.read(customAlimentsProvider);
+    final oldOrder = ref.read(alimentOrderProvider);
     final bank = AlimentBankState(
-      aliments: oldState.aliments,
-      order: [...localOrder, ...oldState.order],
+      aliments: oldAliments,
+      order: [...localOrder, ...oldOrder],
     );
-    ref.read(customAlimentsProvider.notifier).load(bank);
-    ref.read(alimentOrderProvider.notifier).load(bank);
+    ref.read(alimentBankControllerProvider.notifier).setState(bank);
   }
 
   Future<void> _saveProviders() async {

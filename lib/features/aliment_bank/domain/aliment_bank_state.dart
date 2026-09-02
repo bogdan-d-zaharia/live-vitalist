@@ -23,12 +23,6 @@ class AlimentBankState {
             id as String, AlimentData.fromJson(Map<String, dynamic>.from(d))));
 
     final List<String> parsedOrder = List<String>.from(json['order'] ?? []);
-
-    final fullOrder = {
-      ...parsedOrder,
-      ...parsedAliments.keys,
-    }.toList();
-
-    return AlimentBankState(aliments: parsedAliments, order: fullOrder);
+    return AlimentBankState(aliments: parsedAliments, order: parsedOrder);
   }
 }

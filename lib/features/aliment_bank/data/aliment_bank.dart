@@ -38,7 +38,8 @@ class AlimentCatalogs extends _$AlimentCatalogs {
 
   Future<void> load() async {
     final storage = ref.read(storageProvider.notifier);
-    state = await _loadCatalogs(storage);
+    final catalogs = await _loadCatalogs(storage);
+    state = catalogs;
   }
 
   Future<AlimentCatalog?> _loadCatalog(
@@ -63,7 +64,7 @@ class AlimentCatalogs extends _$AlimentCatalogs {
   Future<List<AlimentCatalog>> _loadCatalogs(Storage storage) async {
     final versionsPath = AlimentBankConstants.catalogVersionsPath;
     final c = storage.loadCloud(versionsPath);
-    final l = storage.loadJson(versionsPath);
+    final l = storage.loadLocal(versionsPath);
     final cloudJson = await c;
     final localJson = await l;
     final cloudVersions = Map<String, String>.from(cloudJson ?? {});
@@ -85,9 +86,9 @@ class AlimentCatalogs extends _$AlimentCatalogs {
 @Riverpod(keepAlive: true)
 AlimentBankState alimentBank(Ref ref) {
   final customAliments = ref.watch(customAlimentsProvider);
-  final catalogs = ref.watch(alimentCatalogsProvider);
   final order = ref.watch(alimentOrderProvider);
 
+  final catalogs = ref.watch(alimentCatalogsProvider);
   final catalogAliments = Map.fromEntries(
       catalogs.expand((catalog) => catalog.original.aliments.entries));
 

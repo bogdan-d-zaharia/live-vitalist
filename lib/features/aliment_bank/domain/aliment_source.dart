@@ -9,7 +9,11 @@ class AlimentSource {
   factory AlimentSource.fromJson(dynamic json) {
     return AlimentSource(
       aliments: json is Map
-          ? json.map((key, value) => MapEntry(key, AlimentData.fromJson(value)))
+          ? json.map((key, value) {
+              final alimentJson = Map<String, dynamic>.from(value as Map);
+              final alimentData = AlimentData.fromJson(alimentJson);
+              return MapEntry(key.toString(), alimentData);
+            })
           : {},
     );
   }

@@ -18,8 +18,13 @@ class AlimentCatalog {
     return AlimentCatalog(
       original: AlimentSource.fromJson(json['original']),
       aiEnhanced: AlimentSource.fromJson(json['ai_enhanced']),
-      presentations: Map.from(json['presentation'] ?? {}).map(
-          (key, value) => MapEntry(key, CatalogPresentation.fromJson(value))),
+      presentations: Map.from(json['presentation'] ?? {}).map((key, value) {
+        final presentationJson = Map<String, dynamic>.from(value as Map);
+        return MapEntry(
+          key.toString(),
+          CatalogPresentation.fromJson(presentationJson),
+        );
+      }),
     );
   }
 }

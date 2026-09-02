@@ -36,7 +36,8 @@ class AlimentData {
   }) {
     final nameData = json['name'];
     final Map<String, String> name = switch (nameData) {
-      Map<String, String> _ => nameData,
+      Map _ => nameData
+          .map((key, value) => MapEntry(key.toString(), value.toString())),
       String _ => {languageCode ?? '_': nameData},
       _ => {'_': ''},
     };

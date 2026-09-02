@@ -54,4 +54,9 @@ class Storage extends _$Storage
   Future<dynamic> loadCloud(String path) {
     return _firebaseHlr.loadCloud(path);
   }
+
+  @override
+  Future<dynamic> loadLocal(String path) {
+    return _fileHlr.loadLocal(path);
+  }
 }
