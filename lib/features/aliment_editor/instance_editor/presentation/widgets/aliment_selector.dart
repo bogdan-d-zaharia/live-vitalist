@@ -28,7 +28,7 @@ class _SelectorState extends ConsumerState<Selector> {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     final bank = ref.watch(alimentBankProvider);
-    final notifier = ref.read(alimentBankProvider.notifier);
+    final notifier = ref.read(customAlimentsProvider.notifier);
 
     final filteredKeys = bank.order.where((id) {
       final name = bank.aliments[id]!.name;

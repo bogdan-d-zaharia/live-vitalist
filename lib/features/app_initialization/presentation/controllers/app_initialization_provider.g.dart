@@ -20,7 +20,7 @@ final class AppInitializationProvider
           argument: null,
           retry: null,
           name: r'appInitializationProvider',
-          isAutoDispose: true,
+          isAutoDispose: false,
           dependencies: null,
           $allTransitiveDependencies: null,
         );
@@ -33,7 +33,7 @@ final class AppInitializationProvider
   AppInitialization create() => AppInitialization();
 }
 
-String _$appInitializationHash() => r'c367e606dacb595dbeb81da4b9e2d27170482af1';
+String _$appInitializationHash() => r'363d460e83acc42fbb6ae8f8e0ac727cce626235';
 
 abstract class _$AppInitialization extends $AsyncNotifier<AppInitState> {
   FutureOr<AppInitState> build();

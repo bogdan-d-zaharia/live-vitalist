@@ -14,7 +14,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'app_initialization_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class AppInitialization extends _$AppInitialization {
   late Future<void> _firebaseFuture;
 
@@ -52,7 +52,7 @@ class AppInitialization extends _$AppInitialization {
         ref
             .read(nutrientsProvider.notifier)
             .loadFromOnboarding(onboardingData.nutrients),
-        ref.read(alimentBankProvider.notifier).load(),
+        ref.read(alimentBankControllerProvider.notifier).load(),
       ]);
       SettingsData.hasCompletedOnboarding = true;
       return AppInitState.ready;
@@ -65,7 +65,7 @@ class AppInitialization extends _$AppInitialization {
     await _firebaseFuture;
     await Future.wait([
       ref.read(nutrientsProvider.notifier).load(),
-      ref.read(alimentBankProvider.notifier).load(),
+      ref.read(alimentBankControllerProvider.notifier).load(),
     ]);
   }
 

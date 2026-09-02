@@ -30,7 +30,7 @@ abstract final class AddAlimentActions {
     if (aliment == null) return;
 
     final id = aliment.hashCode.toString();
-    ref.read(alimentBankProvider.notifier).setAliment(id, aliment);
+    ref.read(customAlimentsProvider.notifier).setAliment(id, aliment);
 
     final notifier = ref.read(superSearchProvider.notifier);
     notifier.toggle(

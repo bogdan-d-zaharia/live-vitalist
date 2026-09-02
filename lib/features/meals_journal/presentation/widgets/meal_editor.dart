@@ -30,7 +30,7 @@ class MealEditor extends ConsumerWidget {
     final dayNotifier = ref.read(dayCacheProvider.notifier);
     final meal = day.meals.firstWhere((m) => m.key == mealKey);
     final bank = ref.watch(alimentBankProvider);
-    final bankNotifier = ref.read(alimentBankProvider.notifier);
+    final bankNotifier = ref.read(customAlimentsProvider.notifier);
 
     Widget alimentToWidget(Aliment aliment) {
       return AlimentWidget(

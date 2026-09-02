@@ -7,6 +7,7 @@ abstract interface class ILocalDeletion {
   Future<bool> deleteLocal();
 }
 
-abstract interface class ICloudDeletion {
+abstract interface class ICloudHandler {
+  Future<dynamic> loadCloud(String path);
   Future<bool> deleteAccount();
 }

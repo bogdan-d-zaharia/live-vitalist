@@ -6,7 +6,7 @@ import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
 import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class AddAlimentButton extends StatelessWidget {
-  final AlimentBank notifier;
+  final CustomAliments notifier;
   final Function() onAdded;
 
   const AddAlimentButton({
