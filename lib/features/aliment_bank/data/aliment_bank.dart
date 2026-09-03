@@ -53,7 +53,7 @@ class AlimentCatalogs extends _$AlimentCatalogs {
       String key, Future<dynamic> future, Storage storage, String path) async {
     final obj = await future;
     final json = Map<String, dynamic>.from(obj ?? {});
-    await storage.saveJson(path, json);
+    await storage.saveLocal(path, json);
     if (obj == null) return null;
     return MapEntry(key, AlimentCatalog.fromJson(json));
   }
@@ -82,7 +82,7 @@ class AlimentCatalogs extends _$AlimentCatalogs {
           : _saveCatalog(key, storage.loadCloud(path), storage, path);
       result.add(catalogEntry);
     }
-    if (cloudJson != null) await storage.saveJson(versionsPath, cloudVersions);
+    if (cloudJson != null) await storage.saveLocal(versionsPath, cloudVersions);
     final entriesOrNull = await Future.wait(result);
     final entries = entriesOrNull.whereType<MapEntry<String, AlimentCatalog>>();
     return Map.fromEntries(entries);

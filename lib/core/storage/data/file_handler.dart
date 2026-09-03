@@ -5,7 +5,7 @@ import 'package:live_vitalist/core/utils/json_handler.dart';
 import 'package:live_vitalist/core/storage/domain/storage_interfaces.dart';
 import 'package:path_provider/path_provider.dart';
 
-final class FileHandler implements IStorageHandler, ILocalDeletion {
+final class FileHandler implements IStorageHandler, ILocalHandler {
   // @override
   // late IStorageHandler? nextHandler;
   // FileHandler(this.nextHandler);
@@ -29,7 +29,7 @@ final class FileHandler implements IStorageHandler, ILocalDeletion {
   }
 
   @override
-  Future<bool> saveJson(String path, Map<String, dynamic> json) async {
+  Future<bool> saveLocal(String path, Map<String, dynamic> json) async {
     final File file = (await _getFile(path, doCreate: true))!;
     if (json.isEmpty) {
       file.deleteSync();
@@ -41,6 +41,10 @@ final class FileHandler implements IStorageHandler, ILocalDeletion {
     await file.writeAsString(str);
     return true;
   }
+
+  @override
+  Future<bool> saveJson(String path, Map<String, dynamic> json) =>
+      saveLocal(path, json);
 
   @override
   Future<dynamic> loadLocal(String path) async {
