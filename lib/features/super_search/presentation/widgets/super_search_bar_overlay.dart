@@ -20,8 +20,7 @@ class SuperSearchBarOverlay extends ConsumerStatefulWidget {
       _SuperSearchBarOverlayState();
 }
 
-class _SuperSearchBarOverlayState
-    extends ConsumerState<SuperSearchBarOverlay> {
+class _SuperSearchBarOverlayState extends ConsumerState<SuperSearchBarOverlay> {
   final TextEditingController _searchController = TextEditingController();
   bool _isOpeningSearch = false;
 
@@ -54,6 +53,8 @@ class _SuperSearchBarOverlayState
   @override
   Widget build(BuildContext context) {
     final isActive = widget.isSearchRoute;
+    final hasThreeButtonNavigation =
+        MediaQuery.viewPaddingOf(context).bottom >= 40.0;
 
     return SafeArea(
       child: Stack(
@@ -65,7 +66,8 @@ class _SuperSearchBarOverlayState
             right: 12.0,
             bottom: switch (true) {
               _ when isActive => 20.0,
-              _ when widget.isHomeRoute => 0.0,
+              _ when widget.isHomeRoute =>
+                hasThreeButtonNavigation ? 20.0 : 0.0,
               _ => -80.0,
             },
             child: TextFieldTapRegion(
