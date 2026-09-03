@@ -46,8 +46,8 @@ app.post('/api/trigger-report', async (req: Request, res: Response) => {
 app.get('/api/load-legal-versions', async (req: Request, res: Response) => {
     try {
         res.status(200).json({
-            termsOfUse: "2025_04_15",
-            privacyPolicy: "2025_04_15",
+            termsOfUse: "2026_09_03",
+            privacyPolicy: "2026_09_03",
         });
     } catch (error) {
         console.error('API Error:', error);
