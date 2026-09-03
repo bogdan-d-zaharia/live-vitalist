@@ -58,6 +58,11 @@ abstract final class SettingsData {
   static set isShowCalorieDistribution(bool val) =>
       _prefs.setBool('isShowCalorieDistribution', val);
 
+  static bool get hasAcceptedAiAlimentDisclaimer =>
+      _prefs.getBool('hasAcceptedAiAlimentDisclaimer') ?? false;
+  static set hasAcceptedAiAlimentDisclaimer(bool val) =>
+      _prefs.setBool('hasAcceptedAiAlimentDisclaimer', val);
+
   static DateTime? get lastWeekReportReadDate {
     final str = _prefs.getString('lastWeekReportReadDate');
     return DateFormat('yyyy-MM-dd').tryParse(str ?? '');

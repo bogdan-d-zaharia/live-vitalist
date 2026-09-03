@@ -172,6 +172,9 @@
   "superSearchNoAlimentsFound": "Nu au fost găsite alimente",
   "superSearchTryAnotherName": "Încearcă un alt nume sau verifică ortografia.",
   "superSearchAddToMeal": "Adaugă la masă",
+  "superSearchAiDisclaimerTitle": "Date alimentare generate cu AI",
+  "superSearchAiDisclaimerMessage": "Unele alimente selectate conțin date generate sau îmbunătățite cu ajutorul inteligenței artificiale. Aceste informații pot fi incomplete sau inexacte și nu înlocuiesc recomandările nutriționale sau medicale verificate.",
+  "superSearchAiDisclaimerAgreeAndDoNotShowAgain": "Sunt de acord și nu mai afișa",
   "superSearchWriteAlimentFirst": "Scrie mai întâi alimentul în bara de căutare.",
   "superSearchAddAliments": "{count, plural, =1{Adaugă aliment} other{Adaugă {count} alimente}}",
   "@superSearchAddAliments": {

@@ -73,6 +73,10 @@ class AlimentCatalogs extends _$AlimentCatalogs {
     final List<Future<MapEntry<String, AlimentCatalog>?>> result = [];
     for (var key in keys) {
       final path = '${AlimentBankConstants.catalogsPath}/$key';
+      if (!cloudVersions.containsKey(key)) {
+        _saveCatalog(key, Future.value(null), storage, path);
+        continue;
+      }
       final catalogEntry = localVersions[key] == cloudVersions[key]
           ? _loadCatalog(key, storage.loadJson(path))
           : _saveCatalog(key, storage.loadCloud(path), storage, path);
@@ -91,8 +95,10 @@ AlimentBankState alimentBank(Ref ref) {
   final order = ref.watch(alimentOrderProvider);
 
   final catalogs = ref.watch(alimentCatalogsProvider);
-  final catalogAliments = Map.fromEntries(
-      catalogs.values.expand((catalog) => catalog.original.aliments.entries));
+  final catalogAliments = Map.fromEntries(catalogs.values.expand((catalog) => [
+        ...catalog.original.aliments.entries,
+        ...catalog.aiEnhanced.aliments.entries
+      ]));
 
   final saveData = AlimentBankState(
     aliments: customAliments,
@@ -100,17 +106,16 @@ AlimentBankState alimentBank(Ref ref) {
   );
   ref.read(alimentBankControllerProvider.notifier).saveBank(saveData);
 
-  return AlimentBankState(
-    aliments: {
-      ...customAliments,
-      ...catalogAliments,
-    },
-    order: {
-      ...order,
-      ...customAliments.keys,
-      ...catalogAliments.keys,
-    }.toList(),
-  );
+  final displayAliments = {
+    ...customAliments,
+    ...catalogAliments,
+  };
+  final displayOrder = {
+    ...order.where((id) => displayAliments.containsKey(id)),
+    ...customAliments.keys,
+    ...catalogAliments.keys,
+  }.toList();
+  return AlimentBankState(aliments: displayAliments, order: displayOrder);
 }
 
 @Riverpod(keepAlive: true)

@@ -175,6 +175,9 @@
   "superSearchNoAlimentsFound": "No aliments found",
   "superSearchTryAnotherName": "Try another name or check the spelling.",
   "superSearchAddToMeal": "Add to meal",
+  "superSearchAiDisclaimerTitle": "AI-generated aliment data",
+  "superSearchAiDisclaimerMessage": "Some selected aliments contain data generated or enhanced by artificial intelligence. This information may be incomplete or inaccurate and should not replace verified nutritional or medical guidance.",
+  "superSearchAiDisclaimerAgreeAndDoNotShowAgain": "Agree and don't show again",
   "superSearchWriteAlimentFirst": "Write the aliment in the search bar first.",
   "superSearchAddAliments": "{count, plural, =1{Add aliment} other{Add {count} aliments}}",
   "@superSearchAddAliments": {

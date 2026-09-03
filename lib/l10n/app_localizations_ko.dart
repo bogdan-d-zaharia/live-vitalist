@@ -401,6 +401,16 @@ class AppLocalizationsKo extends AppLocalizations {
   String get superSearchAddToMeal => '식사에 추가';
 
   @override
+  String get superSearchAiDisclaimerTitle => 'AI로 생성된 식품 데이터';
+
+  @override
+  String get superSearchAiDisclaimerMessage =>
+      '선택한 일부 식품에는 인공지능으로 생성되거나 개선된 데이터가 포함되어 있습니다. 이 정보는 불완전하거나 부정확할 수 있으며 검증된 영양 또는 의료 조언을 대신할 수 없습니다.';
+
+  @override
+  String get superSearchAiDisclaimerAgreeAndDoNotShowAgain => '동의하고 다시 표시하지 않기';
+
+  @override
   String get superSearchWriteAlimentFirst => '먼저 검색창에 식품을 입력해 주세요.';
 
   @override

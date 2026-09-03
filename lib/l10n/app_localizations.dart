@@ -830,6 +830,24 @@ abstract class AppLocalizations {
   /// **'Add to meal'**
   String get superSearchAddToMeal;
 
+  /// No description provided for @superSearchAiDisclaimerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AI-generated aliment data'**
+  String get superSearchAiDisclaimerTitle;
+
+  /// No description provided for @superSearchAiDisclaimerMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Some selected aliments contain data generated or enhanced by artificial intelligence. This information may be incomplete or inaccurate and should not replace verified nutritional or medical guidance.'**
+  String get superSearchAiDisclaimerMessage;
+
+  /// No description provided for @superSearchAiDisclaimerAgreeAndDoNotShowAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Agree and don\'t show again'**
+  String get superSearchAiDisclaimerAgreeAndDoNotShowAgain;
+
   /// No description provided for @superSearchWriteAlimentFirst.
   ///
   /// In en, this message translates to:

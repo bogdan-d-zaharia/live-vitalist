@@ -419,6 +419,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get superSearchAddToMeal => 'Ajouter au repas';
 
   @override
+  String get superSearchAiDisclaimerTitle =>
+      'Données alimentaires créées par IA';
+
+  @override
+  String get superSearchAiDisclaimerMessage =>
+      'Certains aliments sélectionnés contiennent des données générées ou améliorées par l’intelligence artificielle. Ces informations peuvent être incomplètes ou inexactes et ne remplacent pas des conseils nutritionnels ou médicaux vérifiés.';
+
+  @override
+  String get superSearchAiDisclaimerAgreeAndDoNotShowAgain =>
+      'Accepter et ne plus afficher';
+
+  @override
   String get superSearchWriteAlimentFirst =>
       'Saisissez d\'abord l\'aliment dans la barre de recherche.';
 

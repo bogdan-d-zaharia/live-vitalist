@@ -31,19 +31,16 @@ class _AlimentResultTileState extends ConsumerState<AlimentResultTile> {
     final data = bank.aliments[widget.alimentID];
     if (data == null) return const SizedBox.shrink();
 
-    final catalogKey = widget.alimentID.split('-').first;
+    final idSegments = widget.alimentID.split('-');
+    final catalogKey = idSegments.first;
+    final isAiEnhanced = idSegments.length > 1 && idSegments[1] == 'ai';
+
     final catalog = catalogs[catalogKey];
     final presentation = catalog?.presentations[languageCode] ??
         catalog?.presentations['en'] ??
         catalog?.presentations.values.firstOrNull;
     final sourceTitle = presentation?.sourceTitle.trim();
     final name = data.readName(languageCode);
-    final sourceStyle = Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: Theme.of(context)
-              .colorScheme
-              .onSurfaceVariant
-              .withValues(alpha: 0.6),
-        );
 
     final pending = searchState.selection
         .where((item) => item.alimentID == widget.alimentID)
@@ -67,11 +64,15 @@ class _AlimentResultTileState extends ConsumerState<AlimentResultTile> {
                   Expanded(
                     child: Wrap(
                       spacing: 4.0,
+                      alignment: WrapAlignment.spaceBetween,
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         Text(name),
                         if (sourceTitle != null && sourceTitle.isNotEmpty)
-                          Text(sourceTitle, style: sourceStyle),
+                          _AlimentSource(
+                            sourceTitle: sourceTitle,
+                            isAiEnhanced: isAiEnhanced,
+                          ),
                       ],
                     ),
                   ),
@@ -124,6 +125,43 @@ class _AlimentResultTileState extends ConsumerState<AlimentResultTile> {
             },
           ),
         ),
+      ],
+    );
+  }
+}
+
+class _AlimentSource extends StatelessWidget {
+  const _AlimentSource({
+    required this.sourceTitle,
+    required this.isAiEnhanced,
+  });
+
+  final String sourceTitle;
+  final bool isAiEnhanced;
+
+  @override
+  Widget build(BuildContext context) {
+    final style = Theme.of(context).textTheme.bodySmall?.copyWith(
+          color: Theme.of(context)
+              .colorScheme
+              .onSurfaceVariant
+              .withValues(alpha: 0.6),
+        );
+
+    final text = Text(sourceTitle, style: style);
+    if (!isAiEnhanced) return text;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (isAiEnhanced) ...[
+          Icon(
+            Icons.auto_awesome_rounded,
+            size: 14.0,
+            color: style?.color,
+          ),
+          SizedBox(width: 2.0),
+        ],
+        text,
       ],
     );
   }

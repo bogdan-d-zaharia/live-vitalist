@@ -412,6 +412,18 @@ class AppLocalizationsTr extends AppLocalizations {
   String get superSearchAddToMeal => 'Öğüne ekle';
 
   @override
+  String get superSearchAiDisclaimerTitle =>
+      'Yapay zekâ üretimi besin verileri';
+
+  @override
+  String get superSearchAiDisclaimerMessage =>
+      'Seçilen bazı besinler yapay zekâ tarafından oluşturulan veya geliştirilen veriler içerir. Bu bilgiler eksik ya da hatalı olabilir ve doğrulanmış beslenme veya tıbbi tavsiyelerin yerini tutmaz.';
+
+  @override
+  String get superSearchAiDisclaimerAgreeAndDoNotShowAgain =>
+      'Kabul et ve tekrar gösterme';
+
+  @override
   String get superSearchWriteAlimentFirst =>
       'Önce arama çubuğuna besini yazın.';
 

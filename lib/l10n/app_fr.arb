@@ -172,6 +172,9 @@
   "superSearchNoAlimentsFound": "Aucun aliment trouvé",
   "superSearchTryAnotherName": "Essayez un autre nom ou vérifiez l'orthographe.",
   "superSearchAddToMeal": "Ajouter au repas",
+  "superSearchAiDisclaimerTitle": "Données alimentaires créées par IA",
+  "superSearchAiDisclaimerMessage": "Certains aliments sélectionnés contiennent des données générées ou améliorées par l’intelligence artificielle. Ces informations peuvent être incomplètes ou inexactes et ne remplacent pas des conseils nutritionnels ou médicaux vérifiés.",
+  "superSearchAiDisclaimerAgreeAndDoNotShowAgain": "Accepter et ne plus afficher",
   "superSearchWriteAlimentFirst": "Saisissez d'abord l'aliment dans la barre de recherche.",
   "superSearchAddAliments": "{count, plural, =1{Ajouter un aliment} other{Ajouter {count} aliments}}",
   "@superSearchAddAliments": {

@@ -11,6 +11,7 @@ import 'package:live_vitalist/features/aliment_bank/data/aliment_bank_state_exte
 import 'package:live_vitalist/features/day/data/day_provider.dart';
 import 'package:live_vitalist/features/super_search/presentation/controllers/super_search_controller.dart';
 import 'package:live_vitalist/features/super_search/presentation/utils/super_search_navigation.dart';
+import 'package:live_vitalist/features/super_search/presentation/widgets/ai_aliment_disclaimer_page.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/aliment_result_tile.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/empty_search.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/meal_picker_dialog.dart';
@@ -27,6 +28,16 @@ class SearchOverlay extends ConsumerWidget {
     final searchState = ref.read(superSearchProvider);
     var date = searchState.date;
     var mealName = searchState.mealName;
+
+    final containsAiAliment = searchState.selection.any((aliment) {
+      final idSegments = aliment.alimentID.split('-');
+      return idSegments.length > 1 && idSegments[1] == 'ai';
+    });
+
+    if (containsAiAliment) {
+      final accepted = await showAiAlimentDisclaimer(context);
+      if (!context.mounted || !accepted) return;
+    }
 
     if (date == null || mealName == null) {
       mealName = await showMealPicker(context);

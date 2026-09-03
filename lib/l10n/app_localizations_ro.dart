@@ -416,6 +416,17 @@ class AppLocalizationsRo extends AppLocalizations {
   String get superSearchAddToMeal => 'Adaugă la masă';
 
   @override
+  String get superSearchAiDisclaimerTitle => 'Date alimentare generate cu AI';
+
+  @override
+  String get superSearchAiDisclaimerMessage =>
+      'Unele alimente selectate conțin date generate sau îmbunătățite cu ajutorul inteligenței artificiale. Aceste informații pot fi incomplete sau inexacte și nu înlocuiesc recomandările nutriționale sau medicale verificate.';
+
+  @override
+  String get superSearchAiDisclaimerAgreeAndDoNotShowAgain =>
+      'Sunt de acord și nu mai afișa';
+
+  @override
   String get superSearchWriteAlimentFirst =>
       'Scrie mai întâi alimentul în bara de căutare.';
 

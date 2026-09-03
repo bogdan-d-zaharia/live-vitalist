@@ -413,6 +413,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get superSearchAddToMeal => 'Add to meal';
 
   @override
+  String get superSearchAiDisclaimerTitle => 'AI-generated aliment data';
+
+  @override
+  String get superSearchAiDisclaimerMessage =>
+      'Some selected aliments contain data generated or enhanced by artificial intelligence. This information may be incomplete or inaccurate and should not replace verified nutritional or medical guidance.';
+
+  @override
+  String get superSearchAiDisclaimerAgreeAndDoNotShowAgain =>
+      'Agree and don\'t show again';
+
+  @override
   String get superSearchWriteAlimentFirst =>
       'Write the aliment in the search bar first.';
 

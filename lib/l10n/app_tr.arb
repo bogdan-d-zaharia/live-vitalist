@@ -172,6 +172,9 @@
   "superSearchNoAlimentsFound": "Besin bulunamadı",
   "superSearchTryAnotherName": "Başka bir ad deneyin veya yazımı kontrol edin.",
   "superSearchAddToMeal": "Öğüne ekle",
+  "superSearchAiDisclaimerTitle": "Yapay zekâ üretimi besin verileri",
+  "superSearchAiDisclaimerMessage": "Seçilen bazı besinler yapay zekâ tarafından oluşturulan veya geliştirilen veriler içerir. Bu bilgiler eksik ya da hatalı olabilir ve doğrulanmış beslenme veya tıbbi tavsiyelerin yerini tutmaz.",
+  "superSearchAiDisclaimerAgreeAndDoNotShowAgain": "Kabul et ve tekrar gösterme",
   "superSearchWriteAlimentFirst": "Önce arama çubuğuna besini yazın.",
   "superSearchAddAliments": "{count, plural, =1{Besin ekle} other{{count} besin ekle}}",
   "@superSearchAddAliments": {
