@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/features/super_search/presentation/controllers/super_search_controller.dart';
-import 'package:live_vitalist/features/super_search/presentation/utils/add_aliment_actions.dart';
+import 'package:live_vitalist/features/super_search/presentation/controllers/add_aliment_controller.dart';
 import 'package:live_vitalist/features/super_search/presentation/utils/super_search_navigation.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/super_bar.dart';
 
@@ -78,20 +78,9 @@ class _SuperSearchBarOverlayState extends ConsumerState<SuperSearchBarOverlay> {
                 onExit: () => SuperSearchNavigation.close(context),
                 onChanged: (query) =>
                     ref.read(superSearchProvider.notifier).setQuery(query),
-                onAdd: (isTemp, isGen) {
-                  if (isGen) {
-                    AddAlimentActions.addGenerated(
-                      context,
-                      ref,
-                      _searchController.text,
-                      isTemp: isTemp,
-                    );
-                  } else if (isTemp) {
-                    AddAlimentActions.addTemporary(context, ref);
-                  } else {
-                    AddAlimentActions.addInstanced(context, ref);
-                  }
-                },
+                onAdd: () => ref
+                    .read(addAlimentProvider.notifier)
+                    .add(context, _searchController.text),
               ),
             ),
           ),

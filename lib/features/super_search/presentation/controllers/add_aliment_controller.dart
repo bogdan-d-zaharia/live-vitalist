@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
-import 'package:live_vitalist/features/aliment_bank/data/aliment_bank.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
+import 'package:live_vitalist/features/aliment_bank/data/aliment_bank.dart';
 import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/aliment_data_editor.dart';
 import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/temporary_aliment_editor.dart';
 import 'package:live_vitalist/features/day/data/day_provider.dart';
@@ -12,12 +11,52 @@ import 'package:live_vitalist/features/super_search/domain/pending_aliment.dart'
 import 'package:live_vitalist/features/super_search/presentation/controllers/super_search_controller.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/meal_picker_dialog.dart';
 import 'package:live_vitalist/l10n/app_localizations.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-abstract final class AddAlimentActions {
+part 'add_aliment_controller.g.dart';
+
+class AddAlimentState {
+  final bool isTemp;
+  final bool isGen;
+
+  const AddAlimentState({
+    this.isTemp = false,
+    this.isGen = false,
+  });
+
+  AddAlimentState copyWith({
+    bool? isTemp,
+    bool? isGen,
+  }) {
+    return AddAlimentState(
+      isTemp: isTemp ?? this.isTemp,
+      isGen: isGen ?? this.isGen,
+    );
+  }
+}
+
+@riverpod
+class AddAliment extends _$AddAliment {
+  @override
+  AddAlimentState build() => const AddAlimentState();
+
+  void toggleTemp() => state = state.copyWith(isTemp: !state.isTemp);
+
+  void toggleGen() => state = state.copyWith(isGen: !state.isGen);
+
+  Future<void> add(BuildContext context, String input) {
+    if (state.isGen) {
+      return addGenerated(context, input, isTemp: state.isTemp);
+    } else if (state.isTemp) {
+      return addTemporary(context);
+    } else {
+      return addInstanced(context);
+    }
+  }
+
   /// Creates a new aliment in the bank, so it can be instanced afterwards.
-  static Future<void> addInstanced(
-    BuildContext context,
-    WidgetRef ref, {
+  Future<void> addInstanced(
+    BuildContext context, {
     AlimentData? initialData,
   }) async {
     final AlimentData? aliment = await Navigator.push(
@@ -32,22 +71,20 @@ abstract final class AddAlimentActions {
     final id = aliment.hashCode.toString();
     ref.read(customAlimentsProvider.notifier).setAliment(id, aliment);
 
-    final notifier = ref.read(superSearchProvider.notifier);
-    notifier.toggle(
-      PendingAliment(
-        alimentID: id,
-        servingSize: 1.0,
-        unit: aliment.unitSynonyms.isNotEmpty
-            ? aliment.unitSynonyms.keys.first
-            : aliment.unit,
-      ),
-    );
+    ref.read(superSearchProvider.notifier).toggle(
+          PendingAliment(
+            alimentID: id,
+            servingSize: 1.0,
+            unit: aliment.unitSynonyms.isNotEmpty
+                ? aliment.unitSynonyms.keys.first
+                : aliment.unit,
+          ),
+        );
   }
 
   /// Creates a one-off aliment and puts it straight into a meal.
-  static Future<void> addTemporary(
-    BuildContext context,
-    WidgetRef ref, {
+  Future<void> addTemporary(
+    BuildContext context, {
     AlimentData? initialData,
   }) async {
     final TemporaryAliment newAliment = TemporaryAliment.empty;
@@ -56,7 +93,8 @@ abstract final class AddAlimentActions {
       context,
       MaterialPageRoute(
         builder: (context) => TemporaryAlimentEditor(
-            initialData: initialData ?? newAliment.alimentData),
+          initialData: initialData ?? newAliment.alimentData,
+        ),
       ),
     );
     if (newData == null || newData.name == '') return;
@@ -73,17 +111,18 @@ abstract final class AddAlimentActions {
   /// Asks Gemini (through Firebase AI Logic) to fill in the nutritional
   /// data for the searched text, then continues with the usual
   /// instanced/temporary flow, prefilled.
-  static Future<void> addGenerated(
+  Future<void> addGenerated(
     BuildContext context,
-    WidgetRef ref,
     String input, {
     required bool isTemp,
   }) async {
     if (input.trim() == '') {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            content: Text(
-                AppLocalizations.of(context).superSearchWriteAlimentFirst)),
+          content: Text(
+            AppLocalizations.of(context).superSearchWriteAlimentFirst,
+          ),
+        ),
       );
       return;
     }
@@ -101,6 +140,7 @@ abstract final class AddAlimentActions {
     } catch (e) {
       error = e;
     }
+    if (!context.mounted) return;
     Navigator.pop(context);
 
     if (generated == null) {
@@ -118,9 +158,9 @@ abstract final class AddAlimentActions {
     }
 
     if (isTemp) {
-      await addTemporary(context, ref, initialData: generated);
+      await addTemporary(context, initialData: generated);
     } else {
-      await addInstanced(context, ref, initialData: generated);
+      await addInstanced(context, initialData: generated);
     }
   }
 }

@@ -10,6 +10,7 @@ import 'package:live_vitalist/features/aliment_bank/data/aliment_bank.dart';
 import 'package:live_vitalist/features/aliment_bank/data/aliment_bank_state_extensions.dart';
 import 'package:live_vitalist/features/day/data/day_provider.dart';
 import 'package:live_vitalist/features/super_search/presentation/controllers/super_search_controller.dart';
+import 'package:live_vitalist/features/super_search/presentation/controllers/add_aliment_controller.dart';
 import 'package:live_vitalist/features/super_search/presentation/utils/super_search_navigation.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/ai_aliment_disclaimer_page.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/aliment_result_tile.dart';
@@ -108,7 +109,11 @@ class SearchOverlay extends ConsumerWidget {
                           child: AnimatedSwitcher(
                             duration: SuperSearchConstants.overlayFadeDuration,
                             child: filteredKeys.isEmpty
-                                ? EmptySearch()
+                                ? EmptySearch(
+                                    onCreateAliment: () => ref
+                                        .read(addAlimentProvider.notifier)
+                                        .add(context, searchState.query),
+                                  )
                                 : ListView.builder(
                                     key: const ValueKey('search-results'),
                                     padding: EdgeInsets.zero,

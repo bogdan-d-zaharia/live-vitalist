@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/core/presentation/widgets/selectable_icon_button.dart';
 import 'package:live_vitalist/core/presentation/widgets/sized_icon_button.dart';
 import 'package:live_vitalist/features/super_search/domain/super_bar_suggestion.dart';
+import 'package:live_vitalist/features/super_search/presentation/controllers/add_aliment_controller.dart';
 import 'package:live_vitalist/features/super_search/presentation/controllers/suggestion_controller.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/animated_suggestion_hint.dart';
 import 'package:live_vitalist/features/super_search/super_search_constants.dart';
@@ -30,7 +31,7 @@ class SuperBar extends ConsumerStatefulWidget {
   final void Function()? onEnter;
   final void Function()? onExit;
   final void Function(String)? onChanged;
-  final void Function(bool isTemp, bool isGen)? onAdd;
+  final VoidCallback? onAdd;
 
   const SuperBar({
     super.key,
@@ -49,8 +50,6 @@ class SuperBar extends ConsumerStatefulWidget {
 
 class _SuperBarState extends ConsumerState<SuperBar> {
   final FocusNode _focusNode = FocusNode();
-  bool isTemp = false;
-  bool isGen = false;
 
   @override
   void didUpdateWidget(covariant SuperBar oldWidget) {
@@ -68,22 +67,11 @@ class _SuperBarState extends ConsumerState<SuperBar> {
     super.dispose();
   }
 
-  void onTemp() {
-    setState(() {
-      isTemp = !isTemp;
-    });
-  }
-
-  void onGen() {
-    setState(() {
-      isGen = !isGen;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     final suggestions = widget.suggestions ?? _suggestions(l);
+    final addAlimentState = ref.watch(addAlimentProvider);
 
     final colorScheme = Theme.of(context).colorScheme;
     final barColor = Color.alphaBlend(
@@ -157,15 +145,17 @@ class _SuperBarState extends ConsumerState<SuperBar> {
                   ),
                 ),
                 leading: SizedIconButton(
-                  onPressed: () => widget.onAdd?.call(isTemp, isGen),
+                  onPressed: widget.onAdd,
                   icon: Icon(Icons.add_rounded),
                   buttonSize: SuperSearchConstants.barButtonSize,
                   iconSize: SuperSearchConstants.barIconSize,
                 ),
                 trailing: [
                   SelectableIconButton(
-                    isSelected: isTemp,
-                    onPressed: onTemp,
+                    isSelected: addAlimentState.isTemp,
+                    onPressed: () => ref
+                        .read(addAlimentProvider.notifier)
+                        .toggleTemp(),
                     icon: Icon(Icons.history_toggle_off_rounded),
                     selectedColor: Colors.black,
                     buttonSize: SuperSearchConstants.barButtonSize,
@@ -173,8 +163,10 @@ class _SuperBarState extends ConsumerState<SuperBar> {
                   ),
                   SizedBox(width: SuperSearchConstants.barButtonPadding),
                   SelectableIconButton(
-                    isSelected: isGen,
-                    onPressed: onGen,
+                    isSelected: addAlimentState.isGen,
+                    onPressed: () => ref
+                        .read(addAlimentProvider.notifier)
+                        .toggleGen(),
                     icon: Icon(Icons.auto_awesome_rounded),
                     selectedColor: Colors.deepPurple,
                     buttonSize: SuperSearchConstants.barButtonSize,
