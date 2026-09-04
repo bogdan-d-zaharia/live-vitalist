@@ -137,7 +137,7 @@ final class AlimentCatalogsProvider
   }
 }
 
-String _$alimentCatalogsHash() => r'db411960059ad68e0029e4778cadbbf33d90ae44';
+String _$alimentCatalogsHash() => r'42d037bdc96b905adbb8329c55223eac9dbda44f';
 
 abstract class _$AlimentCatalogs
     extends $Notifier<Map<String, AlimentCatalog>> {
@@ -194,7 +194,7 @@ final class AlimentBankProvider extends $FunctionalProvider<AlimentBankState,
   }
 }
 
-String _$alimentBankHash() => r'b78947180dc51381eb5b4f97f95385048a6e6bfc';
+String _$alimentBankHash() => r'196f0867584568a34f2295806851c177923979bf';
 
 @ProviderFor(AlimentBankController)
 final alimentBankControllerProvider = AlimentBankControllerProvider._();

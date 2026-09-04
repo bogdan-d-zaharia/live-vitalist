@@ -16,7 +16,7 @@ class LegalDialog extends ConsumerWidget {
     final l = AppLocalizations.of(context);
     return CustomAlertDialog(
       icon: Icon(Icons.gavel_rounded),
-      // title: Text(l.legalDialogTitle),
+      title: Text(l.legalDialogTitle),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
