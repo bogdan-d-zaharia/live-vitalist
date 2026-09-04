@@ -53,8 +53,9 @@ class _SuperSearchBarOverlayState extends ConsumerState<SuperSearchBarOverlay> {
   @override
   Widget build(BuildContext context) {
     final isActive = widget.isSearchRoute;
-    final hasThreeButtonNavigation =
-        MediaQuery.viewPaddingOf(context).bottom >= 40.0;
+    final mediaQuery = MediaQuery.of(context);
+    final needsHomeBottomSpacing = mediaQuery.viewPadding.bottom == 0.0 ||
+        mediaQuery.systemGestureInsets.bottom == 0.0;
 
     return SafeArea(
       child: Stack(
@@ -66,8 +67,7 @@ class _SuperSearchBarOverlayState extends ConsumerState<SuperSearchBarOverlay> {
             right: 12.0,
             bottom: switch (true) {
               _ when isActive => 20.0,
-              _ when widget.isHomeRoute =>
-                hasThreeButtonNavigation ? 20.0 : 0.0,
+              _ when widget.isHomeRoute => needsHomeBottomSpacing ? 20.0 : 0.0,
               _ => -80.0,
             },
             child: TextFieldTapRegion(

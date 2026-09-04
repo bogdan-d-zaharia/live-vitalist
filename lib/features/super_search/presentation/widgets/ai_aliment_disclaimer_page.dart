@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
+import 'package:live_vitalist/core/presentation/widgets/custom_alert_dialog.dart';
 import 'package:live_vitalist/features/settings/data/settings_data.dart';
 import 'package:live_vitalist/l10n/app_localizations.dart';
 
@@ -27,18 +27,15 @@ class AiAlimentDisclaimerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
 
-    return Dialog(
-      backgroundColor: Colors.transparent,
-      insetPadding: EdgeInsets.all(24.0),
-      child: CustomCard(
-        logo: Icon(Icons.warning_amber_rounded),
-        title: l.superSearchAiDisclaimerTitle,
-        child: Column(
+    return CustomAlertDialog(
+      icon: Icon(Icons.warning_amber_rounded),
+      title: Text(l.superSearchAiDisclaimerTitle),
+      content: Text(l.superSearchAiDisclaimerMessage),
+      actions: [
+        Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(l.superSearchAiDisclaimerMessage),
-            SizedBox(height: 8.0),
             Align(
               alignment: Alignment.centerRight,
               child: TextButton(
@@ -51,14 +48,14 @@ class AiAlimentDisclaimerPage extends StatelessWidget {
                 ),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+            Wrap(
+              alignment: WrapAlignment.end,
+              spacing: 8.0,
               children: [
                 FilledButton.tonal(
                   onPressed: () => Navigator.pop(context),
                   child: Text(l.actionCancel),
                 ),
-                SizedBox(width: 8.0),
                 FilledButton(
                   onPressed: () => Navigator.pop(
                     context,
@@ -70,7 +67,7 @@ class AiAlimentDisclaimerPage extends StatelessWidget {
             ),
           ],
         ),
-      ),
+      ],
     );
   }
 }
