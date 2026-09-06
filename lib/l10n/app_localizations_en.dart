@@ -280,10 +280,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calendarMinimum => 'Minimum';
 
   @override
-  String get alimentJsonEditorTitle => 'Aliment Json Editor';
+  String get alimentJsonEditorTitle => 'Food JSON Editor';
 
   @override
-  String get alimentEditorTitle => 'Aliment Editor';
+  String get alimentEditorTitle => 'Food Editor';
 
   @override
   String get alimentEditorGenericTitle => 'Editor';
@@ -293,19 +293,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get alimentEditorSaveChangesMessage =>
-      'Do you want to save this aliment?';
+      'Do you want to save this food?';
 
   @override
-  String get alimentEditorAddAliment => 'Add Aliment';
+  String get alimentEditorAddAliment => 'Add Food';
 
   @override
-  String get alimentEditorSearchAliment => 'Search aliment';
+  String get alimentEditorSearchAliment => 'Search food';
 
   @override
   String get alimentEditorServedAmount => 'Served amount:';
 
   @override
-  String get alimentEditorSelectorTitle => 'Aliment Selector';
+  String get alimentEditorSelectorTitle => 'Food Selector';
 
   @override
   String get alimentEditorNewUnit => 'New unit';
@@ -350,16 +350,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mealsJournalAddMeal => 'Add Meal';
 
   @override
-  String get mealsJournalAddAliment => 'Add aliment';
+  String get mealsJournalAddAliment => 'Add food';
 
   @override
-  String get mealsJournalAddTemporaryAliment => 'Add temporary aliment';
+  String get mealsJournalAddTemporaryAliment => 'Add temporary food';
 
   @override
   String get mealsJournalShowNotification => 'Show Notification';
 
   @override
-  String get mealsJournalAliments => 'Aliments';
+  String get mealsJournalAliments => 'Foods';
 
   @override
   String mealsJournalCalories(int count) {
@@ -377,8 +377,8 @@ class AppLocalizationsEn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count aliments',
-      one: '1 aliment',
+      other: '$count foods',
+      one: '1 food',
     );
     return '$mealName: $_temp0';
   }
@@ -388,22 +388,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mealsJournalNotificationChannelDescription =>
-      'Text-based notification with a list of aliments';
+      'Text-based notification with a list of foods';
 
   @override
   String get mealsJournalNotificationSummary => 'Meal summary';
 
   @override
-  String get mealsJournalNotificationBody => 'Expand to view aliments';
+  String get mealsJournalNotificationBody => 'Expand to view foods';
 
   @override
-  String get superSearchSearchAliments => 'Search aliments';
+  String get superSearchSearchAliments => 'Search foods';
 
   @override
-  String get superSearchAliments => 'Aliments';
+  String get superSearchAliments => 'Foods';
 
   @override
-  String get superSearchNoAlimentsFound => 'No aliments found';
+  String get superSearchNoAlimentsFound => 'No foods found';
 
   @override
   String get superSearchTryAnotherName =>
@@ -413,11 +413,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get superSearchAddToMeal => 'Add to meal';
 
   @override
-  String get superSearchAiDisclaimerTitle => 'AI-generated aliment data';
+  String get superSearchAiDisclaimerTitle => 'AI-generated food data';
 
   @override
   String get superSearchAiDisclaimerMessage =>
-      'Some selected aliments contain data generated or enhanced by artificial intelligence. This information may be incomplete or inaccurate and should not replace verified nutritional or medical guidance.';
+      'Some selected foods contain data generated or enhanced by artificial intelligence. This information may be incomplete or inaccurate and should not replace verified nutritional or medical guidance.';
 
   @override
   String get superSearchAiDisclaimerAgreeAndDoNotShowAgain =>
@@ -425,15 +425,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get superSearchWriteAlimentFirst =>
-      'Write the aliment in the search bar first.';
+      'Write the food in the search bar first.';
 
   @override
   String superSearchAddAliments(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Add $count aliments',
-      one: 'Add aliment',
+      other: 'Add $count foods',
+      one: 'Add food',
     );
     return '$_temp0';
   }
