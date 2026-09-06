@@ -230,6 +230,24 @@
       }
     }
   },
+  "nutrientDisplayNutrientLeft": "{value} {unit} kaldı",
+  "@nutrientDisplayNutrientLeft": {"placeholders": {
+    "value": {"type": "String"},
+    "unit": {"type": "String"}
+  }},
+  "nutrientDisplayNutrientRemaining": "{value} {unit} kaldı",
+  "@nutrientDisplayNutrientRemaining": {"placeholders": {
+    "value": {"type": "String"},
+    "unit": {"type": "String"}
+  }},
+  "nutrientDisplayNutrientOver": "Sınırın {value} {unit} üzerinde",
+  "@nutrientDisplayNutrientOver": {"placeholders": {
+    "value": {"type": "String"},
+    "unit": {"type": "String"}
+  }},
+  "nutrientDisplayGoalReached": "Hedefe ulaşıldı",
+  "nutrientDisplayWithinTarget": "Hedef aralığında",
+
   "ratioBarsTitle": "Dağılım çubukları",
   "reportsNoData": "Veri yok",
   "reportsPreviousWeek": "Önceki hafta",
@@ -285,6 +303,7 @@
   "settingsUseComplexCalendar": "Ayrıntılı takvim görünümünü kullan",
   "settingsShowMacroDistribution": "Makro dağılımını göster",
   "settingsShowOmegaBalance": "Omega-3 / Omega-6 dengesini göster",
+  "settingsShowNutrientProgress": "Kalan besin miktarını ve yüzdesini göster",
   "settingsAccountDeletion": "Hesap silme",
   "settingsAccountAndDataDeletion": "Hesap ve veri silme",
   "settingsPermanentlyDeleteOnlineData": "Çevrimiçi verileri kalıcı olarak sil",

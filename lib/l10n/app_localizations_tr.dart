@@ -489,6 +489,27 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String nutrientDisplayNutrientLeft(String value, String unit) {
+    return '$value $unit kaldı';
+  }
+
+  @override
+  String nutrientDisplayNutrientRemaining(String value, String unit) {
+    return '$value $unit kaldı';
+  }
+
+  @override
+  String nutrientDisplayNutrientOver(String value, String unit) {
+    return 'Sınırın $value $unit üzerinde';
+  }
+
+  @override
+  String get nutrientDisplayGoalReached => 'Hedefe ulaşıldı';
+
+  @override
+  String get nutrientDisplayWithinTarget => 'Hedef aralığında';
+
+  @override
   String get ratioBarsTitle => 'Dağılım çubukları';
 
   @override
@@ -584,6 +605,10 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get settingsShowOmegaBalance => 'Omega-3 / Omega-6 dengesini göster';
+
+  @override
+  String get settingsShowNutrientProgress =>
+      'Kalan besin miktarını ve yüzdesini göster';
 
   @override
   String get settingsAccountDeletion => 'Hesap silme';

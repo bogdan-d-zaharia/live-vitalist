@@ -230,6 +230,24 @@
       }
     }
   },
+  "nutrientDisplayNutrientLeft": "Mai ai {value} {unit}",
+  "@nutrientDisplayNutrientLeft": {"placeholders": {
+    "value": {"type": "String"},
+    "unit": {"type": "String"}
+  }},
+  "nutrientDisplayNutrientRemaining": "Au rămas {value} {unit}",
+  "@nutrientDisplayNutrientRemaining": {"placeholders": {
+    "value": {"type": "String"},
+    "unit": {"type": "String"}
+  }},
+  "nutrientDisplayNutrientOver": "{value} {unit} peste limită",
+  "@nutrientDisplayNutrientOver": {"placeholders": {
+    "value": {"type": "String"},
+    "unit": {"type": "String"}
+  }},
+  "nutrientDisplayGoalReached": "Obiectiv atins",
+  "nutrientDisplayWithinTarget": "În intervalul țintă",
+
   "ratioBarsTitle": "Bare de distribuție",
   "reportsNoData": "Fără date",
   "reportsPreviousWeek": "Săptămâna anterioară",
@@ -285,6 +303,7 @@
   "settingsUseComplexCalendar": "Folosește vizualizarea detaliată a calendarului",
   "settingsShowMacroDistribution": "Afișează distribuția macronutrienților",
   "settingsShowOmegaBalance": "Afișează raportul Omega-3/Omega-6",
+  "settingsShowNutrientProgress": "Afișează cantitatea rămasă și procentul nutrienților",
   "settingsAccountDeletion": "Ștergerea contului",
   "settingsAccountAndDataDeletion": "Ștergerea contului și datelor",
   "settingsPermanentlyDeleteOnlineData": "Șterge permanent datele online",

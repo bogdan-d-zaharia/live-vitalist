@@ -489,6 +489,27 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String nutrientDisplayNutrientLeft(String value, String unit) {
+    return '$value $unit left';
+  }
+
+  @override
+  String nutrientDisplayNutrientRemaining(String value, String unit) {
+    return '$value $unit remaining';
+  }
+
+  @override
+  String nutrientDisplayNutrientOver(String value, String unit) {
+    return '$value $unit over limit';
+  }
+
+  @override
+  String get nutrientDisplayGoalReached => 'Goal reached';
+
+  @override
+  String get nutrientDisplayWithinTarget => 'Within target';
+
+  @override
   String get ratioBarsTitle => 'Distribution Bars';
 
   @override
@@ -584,6 +605,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsShowOmegaBalance => 'Show Omega-3 to Omega-6 balance';
+
+  @override
+  String get settingsShowNutrientProgress =>
+      'Show nutrient remaining and percentage';
 
   @override
   String get settingsAccountDeletion => 'Account Deletion';

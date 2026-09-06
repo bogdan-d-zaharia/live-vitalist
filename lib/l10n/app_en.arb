@@ -206,6 +206,23 @@
   "@nutrientDisplayLowerLimitValue": {"placeholders": {"value": {"type": "String"}}},
   "nutrientDisplayUpperLimitValue": "Upper Limit: {value}",
   "@nutrientDisplayUpperLimitValue": {"placeholders": {"value": {"type": "String"}}},
+  "nutrientDisplayNutrientLeft": "{value} {unit} left",
+  "@nutrientDisplayNutrientLeft": {"placeholders": {
+    "value": {"type": "String"},
+    "unit": {"type": "String"}
+  }},
+  "nutrientDisplayNutrientRemaining": "{value} {unit} remaining",
+  "@nutrientDisplayNutrientRemaining": {"placeholders": {
+    "value": {"type": "String"},
+    "unit": {"type": "String"}
+  }},
+  "nutrientDisplayNutrientOver": "{value} {unit} over limit",
+  "@nutrientDisplayNutrientOver": {"placeholders": {
+    "value": {"type": "String"},
+    "unit": {"type": "String"}
+  }},
+  "nutrientDisplayGoalReached": "Goal reached",
+  "nutrientDisplayWithinTarget": "Within target",
 
   "ratioBarsTitle": "Distribution Bars",
 
@@ -250,10 +267,13 @@
   "settingsDataDeletion": "Data Deletion",
   "settingsConnectWithGoogle": "Connect with Google",
   "settingsGoogleBackupMessage": "Backup your files to cloud or restore your data by connecting with Google.",
+  
   "settingsUseMonthDayFormat": "Use M/D format",
   "settingsUseComplexCalendar": "Use complex calendar view",
   "settingsShowMacroDistribution": "Show macro distribution",
   "settingsShowOmegaBalance": "Show Omega-3 to Omega-6 balance",
+  "settingsShowNutrientProgress": "Show nutrient remaining and percentage",
+  
   "settingsAccountDeletion": "Account Deletion",
   "settingsAccountAndDataDeletion": "Account and data deletion",
   "settingsPermanentlyDeleteOnlineData": "Permanently delete online data",

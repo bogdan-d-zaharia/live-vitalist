@@ -496,6 +496,27 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String nutrientDisplayNutrientLeft(String value, String unit) {
+    return '$value $unit restants';
+  }
+
+  @override
+  String nutrientDisplayNutrientRemaining(String value, String unit) {
+    return '$value $unit restants';
+  }
+
+  @override
+  String nutrientDisplayNutrientOver(String value, String unit) {
+    return '$value $unit au-dessus de la limite';
+  }
+
+  @override
+  String get nutrientDisplayGoalReached => 'Objectif atteint';
+
+  @override
+  String get nutrientDisplayWithinTarget => 'Dans l’objectif';
+
+  @override
   String get ratioBarsTitle => 'Barres de répartition';
 
   @override
@@ -594,6 +615,10 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get settingsShowOmegaBalance =>
       'Afficher l\'équilibre Oméga-3 / Oméga-6';
+
+  @override
+  String get settingsShowNutrientProgress =>
+      'Afficher la quantité restante et le pourcentage des nutriments';
 
   @override
   String get settingsAccountDeletion => 'Suppression du compte';

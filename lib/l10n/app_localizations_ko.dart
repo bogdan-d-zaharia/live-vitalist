@@ -475,6 +475,27 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String nutrientDisplayNutrientLeft(String value, String unit) {
+    return '$value $unit 남음';
+  }
+
+  @override
+  String nutrientDisplayNutrientRemaining(String value, String unit) {
+    return '$value $unit 남음';
+  }
+
+  @override
+  String nutrientDisplayNutrientOver(String value, String unit) {
+    return '한도 $value $unit 초과';
+  }
+
+  @override
+  String get nutrientDisplayGoalReached => '목표 달성';
+
+  @override
+  String get nutrientDisplayWithinTarget => '목표 범위 내';
+
+  @override
   String get ratioBarsTitle => '분포 막대';
 
   @override
@@ -570,6 +591,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get settingsShowOmegaBalance => '오메가-3와 오메가-6 균형 표시';
+
+  @override
+  String get settingsShowNutrientProgress => '영양소 잔여량 및 백분율 표시';
 
   @override
   String get settingsAccountDeletion => '계정 삭제';

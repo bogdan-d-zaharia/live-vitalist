@@ -492,6 +492,27 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
+  String nutrientDisplayNutrientLeft(String value, String unit) {
+    return 'Mai ai $value $unit';
+  }
+
+  @override
+  String nutrientDisplayNutrientRemaining(String value, String unit) {
+    return 'Au rămas $value $unit';
+  }
+
+  @override
+  String nutrientDisplayNutrientOver(String value, String unit) {
+    return '$value $unit peste limită';
+  }
+
+  @override
+  String get nutrientDisplayGoalReached => 'Obiectiv atins';
+
+  @override
+  String get nutrientDisplayWithinTarget => 'În intervalul țintă';
+
+  @override
   String get ratioBarsTitle => 'Bare de distribuție';
 
   @override
@@ -589,6 +610,10 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get settingsShowOmegaBalance => 'Afișează raportul Omega-3/Omega-6';
+
+  @override
+  String get settingsShowNutrientProgress =>
+      'Afișează cantitatea rămasă și procentul nutrienților';
 
   @override
   String get settingsAccountDeletion => 'Ștergerea contului';

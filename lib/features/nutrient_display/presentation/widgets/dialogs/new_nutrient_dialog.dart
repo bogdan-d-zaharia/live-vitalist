@@ -14,25 +14,23 @@ class NewNutrientDialog extends ConsumerWidget {
     return Dialog(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
-        child: Expanded(
-          child: StringInput(
-            initString: 'new_nutrient_key',
-            submit: (newKey) {
-              final key = newKey.trim();
-              if (key.isEmpty) return;
+        child: StringInput(
+          initString: 'new_nutrient_key',
+          submit: (newKey) {
+            final key = newKey.trim();
+            if (key.isEmpty) return;
 
-              final newNutrient = Nutrient(
-                unit: 'g',
-                lowerLimit: null,
-                upperLimit: null,
-                tags: [],
-                translationOverrides: {localeCode: key},
-              );
+            final newNutrient = Nutrient(
+              unit: 'g',
+              lowerLimit: null,
+              upperLimit: null,
+              tags: [],
+              translationOverrides: {localeCode: key},
+            );
 
-              nutrientNotifier.addNutrient(key, newNutrient);
-              Navigator.pop(context);
-            },
-          ),
+            nutrientNotifier.addNutrient(key, newNutrient);
+            Navigator.pop(context);
+          },
         ),
       ),
     );

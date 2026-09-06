@@ -926,6 +926,36 @@ abstract class AppLocalizations {
   /// **'Upper Limit: {value}'**
   String nutrientDisplayUpperLimitValue(String value);
 
+  /// No description provided for @nutrientDisplayNutrientLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} {unit} left'**
+  String nutrientDisplayNutrientLeft(String value, String unit);
+
+  /// No description provided for @nutrientDisplayNutrientRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} {unit} remaining'**
+  String nutrientDisplayNutrientRemaining(String value, String unit);
+
+  /// No description provided for @nutrientDisplayNutrientOver.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} {unit} over limit'**
+  String nutrientDisplayNutrientOver(String value, String unit);
+
+  /// No description provided for @nutrientDisplayGoalReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal reached'**
+  String get nutrientDisplayGoalReached;
+
+  /// No description provided for @nutrientDisplayWithinTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'Within target'**
+  String get nutrientDisplayWithinTarget;
+
   /// No description provided for @ratioBarsTitle.
   ///
   /// In en, this message translates to:
@@ -1093,6 +1123,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show Omega-3 to Omega-6 balance'**
   String get settingsShowOmegaBalance;
+
+  /// No description provided for @settingsShowNutrientProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Show nutrient remaining and percentage'**
+  String get settingsShowNutrientProgress;
 
   /// No description provided for @settingsAccountDeletion.
   ///

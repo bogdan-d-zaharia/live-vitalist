@@ -157,12 +157,26 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
                   Checkbox(
                     value: SettingsData.isShowOmegaBalance,
                     onChanged: (val) {
-                      if (val != null) {
-                        setState(() => SettingsData.isShowOmegaBalance = val);
-                      }
+                      if (val == null) return;
+                      setState(() => SettingsData.isShowOmegaBalance = val);
                     },
                   ),
                   Text(l.settingsShowOmegaBalance),
+                ],
+              ),
+            ),
+            MiniCard(
+              child: Row(
+                children: [
+                  const SizedBox(width: 16.0),
+                  Checkbox(
+                    value: SettingsData.isShowNutrientProgress,
+                    onChanged: (val) {
+                      if (val == null) return;
+                      setState(() => SettingsData.isShowNutrientProgress = val);
+                    },
+                  ),
+                  Text(l.settingsShowNutrientProgress),
                 ],
               ),
             ),

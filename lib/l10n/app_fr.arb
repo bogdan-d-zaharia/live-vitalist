@@ -230,6 +230,24 @@
       }
     }
   },
+  "nutrientDisplayNutrientLeft": "{value} {unit} restants",
+  "@nutrientDisplayNutrientLeft": {"placeholders": {
+    "value": {"type": "String"},
+    "unit": {"type": "String"}
+  }},
+  "nutrientDisplayNutrientRemaining": "{value} {unit} restants",
+  "@nutrientDisplayNutrientRemaining": {"placeholders": {
+    "value": {"type": "String"},
+    "unit": {"type": "String"}
+  }},
+  "nutrientDisplayNutrientOver": "{value} {unit} au-dessus de la limite",
+  "@nutrientDisplayNutrientOver": {"placeholders": {
+    "value": {"type": "String"},
+    "unit": {"type": "String"}
+  }},
+  "nutrientDisplayGoalReached": "Objectif atteint",
+  "nutrientDisplayWithinTarget": "Dans l’objectif",
+
   "ratioBarsTitle": "Barres de répartition",
   "reportsNoData": "Aucune donnée",
   "reportsPreviousWeek": "Semaine précédente",
@@ -285,6 +303,7 @@
   "settingsUseComplexCalendar": "Utiliser la vue calendrier détaillée",
   "settingsShowMacroDistribution": "Afficher la répartition des macronutriments",
   "settingsShowOmegaBalance": "Afficher l'équilibre Oméga-3 / Oméga-6",
+  "settingsShowNutrientProgress": "Afficher la quantité restante et le pourcentage des nutriments",
   "settingsAccountDeletion": "Suppression du compte",
   "settingsAccountAndDataDeletion": "Suppression du compte et des données",
   "settingsPermanentlyDeleteOnlineData": "Supprimer définitivement les données en ligne",

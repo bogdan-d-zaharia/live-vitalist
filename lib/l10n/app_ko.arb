@@ -230,6 +230,24 @@
       }
     }
   },
+  "nutrientDisplayNutrientLeft": "{value} {unit} 남음",
+  "@nutrientDisplayNutrientLeft": {"placeholders": {
+    "value": {"type": "String"},
+    "unit": {"type": "String"}
+  }},
+  "nutrientDisplayNutrientRemaining": "{value} {unit} 남음",
+  "@nutrientDisplayNutrientRemaining": {"placeholders": {
+    "value": {"type": "String"},
+    "unit": {"type": "String"}
+  }},
+  "nutrientDisplayNutrientOver": "한도 {value} {unit} 초과",
+  "@nutrientDisplayNutrientOver": {"placeholders": {
+    "value": {"type": "String"},
+    "unit": {"type": "String"}
+  }},
+  "nutrientDisplayGoalReached": "목표 달성",
+  "nutrientDisplayWithinTarget": "목표 범위 내",
+
   "ratioBarsTitle": "분포 막대",
   "reportsNoData": "데이터 없음",
   "reportsPreviousWeek": "지난주",
@@ -285,6 +303,7 @@
   "settingsUseComplexCalendar": "상세 캘린더 보기 사용",
   "settingsShowMacroDistribution": "다량 영양소 분포 표시",
   "settingsShowOmegaBalance": "오메가-3와 오메가-6 균형 표시",
+  "settingsShowNutrientProgress": "영양소 잔여량 및 백분율 표시",
   "settingsAccountDeletion": "계정 삭제",
   "settingsAccountAndDataDeletion": "계정 및 데이터 삭제",
   "settingsPermanentlyDeleteOnlineData": "온라인 데이터 영구 삭제",
