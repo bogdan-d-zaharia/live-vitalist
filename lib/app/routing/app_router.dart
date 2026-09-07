@@ -18,13 +18,21 @@ part 'app_router.g.dart';
 
 @riverpod
 GoRouter appRouter(Ref ref) {
+  final splashToHomeStopwatch = Stopwatch();
   final router = GoRouter(
     initialLocation: AppRoutes.root,
     overridePlatformDefaultLocation: true,
     routes: [
       GoRoute(
         path: AppRoutes.root,
-        builder: (_, __) => SplashScreen(),
+        builder: (_, __) {
+          if (!splashToHomeStopwatch.isRunning &&
+              splashToHomeStopwatch.elapsedMicroseconds == 0) {
+            splashToHomeStopwatch.start();
+          }
+
+          return SplashScreen();
+        },
         routes: [
           GoRoute(
             path: AppRoutes.onboardingPath,
@@ -68,19 +76,31 @@ GoRouter appRouter(Ref ref) {
           GoRoute(
             path: AppRoutes.home,
             // TODO: Move onOpenSettings, onOpenMeal to providers.
-            builder: (context, __) => HomeScreen(
-              onOpenSettings: () async {
-                await context.push(AppRoutes.settings);
-              },
-              onOpenMeal: (mealKey, date) async {
-                await context.push(
-                  AppRoutes.mealEditorLocation(
-                    mealKey: mealKey,
-                    date: date,
-                  ),
-                );
-              },
-            ),
+            builder: (context, __) {
+              if (splashToHomeStopwatch.isRunning) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  splashToHomeStopwatch.stop();
+                  debugPrint(
+                    '[ INIT OPTIMIZATION ] Splash to home: '
+                    '${splashToHomeStopwatch.elapsedMilliseconds} ms',
+                  );
+                });
+              }
+
+              return HomeScreen(
+                onOpenSettings: () async {
+                  await context.push(AppRoutes.settings);
+                },
+                onOpenMeal: (mealKey, date) async {
+                  await context.push(
+                    AppRoutes.mealEditorLocation(
+                      mealKey: mealKey,
+                      date: date,
+                    ),
+                  );
+                },
+              );
+            },
             routes: [
               GoRoute(
                 path: AppRoutes.settingsPath,

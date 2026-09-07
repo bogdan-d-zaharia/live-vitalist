@@ -21,6 +21,7 @@ import 'package:live_vitalist/firebase_options.dart';
 // TODO: Bug: Closing super search with gesture after closing the meal selector closes the app
 
 Future<void> main() async {
+  final startupStopwatch = Stopwatch()..start();
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
@@ -41,4 +42,15 @@ Future<void> main() async {
   await SettingsData.init();
 
   runApp(ProviderScope(child: MyApp()));
+
+  assert(() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      startupStopwatch.stop();
+      debugPrint(
+        '[ INIT OPTIMIZATION ] App startup to first frame: '
+        '${startupStopwatch.elapsedMilliseconds} ms',
+      );
+    });
+    return true;
+  }());
 }
