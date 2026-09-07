@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:live_vitalist/features/aliment_bank/domain/aliment_bank_state.dart';
 import 'package:live_vitalist/features/aliment_bank/domain/aliment_bank_constants.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
@@ -36,14 +37,25 @@ class AlimentCatalogs extends _$AlimentCatalogs {
   @override
   Map<String, AlimentCatalog> build() => {};
 
+  /// If a catalog's version is the same, it loads from file.
+  /// If a catalog is updated online, it is downloaded.
+  /// If a catalog is deleted online, it is deleted locally as well.
   Future<void> load() async {
     final storage = ref.read(storageProvider.notifier);
-    final catalogs = await _loadCatalogs(storage);
-    state = catalogs;
+    final versionsPath = AlimentBankConstants.catalogVersionsPath;
+    final l = storage.loadLocal(versionsPath);
+    final c = storage.loadCloud(versionsPath);
+
+    final localJson = await l;
+    final localVersions = Map<String, String>.from(localJson ?? {});
+    state = await _loadLocal(storage, localVersions);
+
+    _updateWithCloud(storage, localVersions, c, versionsPath);
+    return;
   }
 
   Future<MapEntry<String, AlimentCatalog>?> _loadCatalog(
-      String key, Future<Map<String, dynamic>?> future) async {
+      String key, Future<dynamic> future) async {
     final json = await future;
     if (json == null) return null;
     return MapEntry(key, AlimentCatalog.fromJson(json));
@@ -58,34 +70,50 @@ class AlimentCatalogs extends _$AlimentCatalogs {
     return MapEntry(key, AlimentCatalog.fromJson(json));
   }
 
-  /// If a catalog's version is the same, it loads from file.
-  /// If a catalog is updated online, it is downloaded.
-  /// If a catalog is deleted online, it is deleted locally as well.
-  Future<Map<String, AlimentCatalog>> _loadCatalogs(Storage storage) async {
-    final versionsPath = AlimentBankConstants.catalogVersionsPath;
-    final c = storage.loadCloud(versionsPath);
-    final l = storage.loadLocal(versionsPath);
-    final cloudJson = await c;
-    final localJson = await l;
-    final cloudVersions = Map<String, String>.from(cloudJson ?? {});
-    final localVersions = Map<String, String>.from(localJson ?? {});
-    final keys = localVersions.keys.toSet().union(cloudVersions.keys.toSet());
+  Future<Map<String, AlimentCatalog>> _loadLocal(
+      Storage storage, Map<String, String> localVersions) async {
     final List<Future<MapEntry<String, AlimentCatalog>?>> result = [];
-    for (var key in keys) {
+    for (var key in localVersions.keys) {
       final path = '${AlimentBankConstants.catalogsPath}/$key';
-      if (!cloudVersions.containsKey(key)) {
-        _saveCatalog(key, Future.value(null), storage, path);
-        continue;
-      }
-      final catalogEntry = localVersions[key] == cloudVersions[key]
-          ? _loadCatalog(key, storage.loadJson(path))
-          : _saveCatalog(key, storage.loadCloud(path), storage, path);
+      final catalogEntry = _loadCatalog(key, storage.loadLocal(path));
       result.add(catalogEntry);
     }
-    if (cloudJson != null) await storage.saveLocal(versionsPath, cloudVersions);
     final entriesOrNull = await Future.wait(result);
     final entries = entriesOrNull.whereType<MapEntry<String, AlimentCatalog>>();
     return Map.fromEntries(entries);
+  }
+
+  /// Fire & Forget
+  Future<void> _updateWithCloud(
+      Storage storage,
+      Map<String, String> localVersions,
+      Future<dynamic> c,
+      String versionsPath) async {
+    final cloudJson = await c;
+    if (cloudJson == null) return;
+    final cloudVersions = Map<String, String>.from(cloudJson);
+    if (mapEquals(localVersions, cloudVersions)) return;
+
+    final keys = localVersions.keys.toSet().union(cloudVersions.keys.toSet());
+    final Set<String> deleted = {};
+    final List<Future<MapEntry<String, AlimentCatalog>?>> updateFtr = [];
+    for (var key in keys) {
+      final path = '${AlimentBankConstants.catalogsPath}/$key';
+      if (!cloudVersions.containsKey(key)) {
+        deleted.add(key);
+      } else if (cloudVersions[key] != localVersions[key]) {
+        final future = storage.loadCloud(path);
+        final catalogEntry = _saveCatalog(key, future, storage, path);
+        updateFtr.add(catalogEntry);
+      }
+    }
+    await storage.saveLocal(versionsPath, cloudVersions);
+    final entriesOrNull = await Future.wait(updateFtr);
+    final entries = entriesOrNull.whereType<MapEntry<String, AlimentCatalog>>();
+    final update = Map.fromEntries(entries);
+    state = state
+      ..removeWhere((key, value) => deleted.contains(key))
+      ..updateAll((key, value) => update[key] ?? value);
   }
 }
 

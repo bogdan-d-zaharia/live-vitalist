@@ -98,8 +98,10 @@ class MealEditor extends ConsumerWidget {
         title: Text(meal.displayName(l)),
         actions: [
           TextButton(
-            onPressed: () => NotificationHandler.showListNotification(
-                meal.aliments, bank, meal.displayName(l), l, languageCode),
+            onPressed: () => ref
+                .read(notificationHandlerProvider.notifier)
+                .showListNotification(
+                    meal.aliments, bank, meal.displayName(l), l, languageCode),
             child: Text(l.mealsJournalShowNotification),
           ),
           SizedBox(width: 12.0),

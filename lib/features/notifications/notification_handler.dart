@@ -6,6 +6,9 @@ import 'package:live_vitalist/features/aliment/domain/aliment.dart';
 import 'package:live_vitalist/features/aliment_bank/domain/aliment_bank_state.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:live_vitalist/l10n/app_localizations.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'notification_handler.g.dart';
 
 typedef NotifPlugin = ntf.FlutterLocalNotificationsPlugin;
 typedef AndroidSettings = ntf.AndroidInitializationSettings;
@@ -13,17 +16,18 @@ typedef InitSettings = ntf.InitializationSettings;
 typedef NotifDetails = ntf.NotificationDetails;
 typedef AndroidDetails = ntf.AndroidNotificationDetails;
 
-class NotificationHandler {
-  static final _notificationsPlugin = NotifPlugin();
+@Riverpod(keepAlive: true)
+class NotificationHandler extends _$NotificationHandler {
+  final _notificationsPlugin = NotifPlugin();
 
-  static Future<void> initialize() async {
+  @override
+  Future<bool?> build() async {
     const androidInitSettings = AndroidSettings('ic_notification');
     const initSettings = InitSettings(android: androidInitSettings);
-    await _notificationsPlugin.initialize(settings: initSettings);
+    return _notificationsPlugin.initialize(settings: initSettings);
   }
 
-  static String _alimentToLine(
-      Aliment e, AlimentBankState bank, String languageCode) {
+  String _alimentToLine(Aliment e, AlimentBankState bank, String languageCode) {
     final String name = e.readDataRef(bank).readName(languageCode);
     final String servingSize = e.servingSize % 1 == 0
         ? e.servingSize.toInt().toString()
@@ -33,13 +37,16 @@ class NotificationHandler {
     return s.length < 54 ? s : s.substring(0, 54);
   }
 
-  static Future<void> showListNotification(
+  Future<void> showListNotification(
     List<Aliment> list,
     AlimentBankState bank,
     String mealName,
     AppLocalizations localization,
     String languageCode,
   ) async {
+    final r = await future;
+    if (r == null || r == false) return;
+
     final status = await Permission.notification.status;
     if (status.isDenied || status.isRestricted) {
       await Permission.notification.request();
