@@ -137,7 +137,7 @@ final class AlimentCatalogsProvider
   }
 }
 
-String _$alimentCatalogsHash() => r'42d037bdc96b905adbb8329c55223eac9dbda44f';
+String _$alimentCatalogsHash() => r'661425e50af81b1437e3b9859a49fc57e97b51fb';
 
 abstract class _$AlimentCatalogs
     extends $Notifier<Map<String, AlimentCatalog>> {

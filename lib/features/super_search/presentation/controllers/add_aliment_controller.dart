@@ -136,7 +136,8 @@ class AddAliment extends _$AddAliment {
     AlimentData? generated;
     Object? error;
     try {
-      generated = await AlimentGenerator.generate(input);
+      generated =
+          await ref.read(alimentGeneratorProvider.notifier).generate(input);
     } catch (e) {
       error = e;
     }
