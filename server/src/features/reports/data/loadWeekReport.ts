@@ -25,16 +25,16 @@ async function loadWeekData(userId: string, date: Date): Promise<WeekData> {
 
     // See [lib\features\aliment_bank\data\aliment_bank.dart]
     const userBank = await fbh.loadJson(`users/${userId}/aliment_bank`) as AlimentBankState;
-    const customAliments = userBank.aliments;
-    const order = userBank.order;
+    const customAliments = userBank.aliments ?? {};
+    const order = userBank.order ?? [];
 
     const catalogs = await fbh.loadJson(`resources/catalogs`) as Record<string, AlimentCatalog>;
     const catalogAliments: Record<string, AlimentData> = Object.fromEntries(Object.values(catalogs).flatMap((catalog) => [
-        ...Object.entries(catalog.original.aliments),
-        ...Object.entries(catalog.aiEnhanced.aliments),
+        ...Object.entries(catalog.original.aliments ?? {}),
+        ...Object.entries(catalog.aiEnhanced.aliments ?? {}),
     ]));
     const displayAliments = {
-        ...userBank.aliments,
+        ...customAliments,
         ...catalogAliments,
     };
     const displayOrder = {
