@@ -27,6 +27,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get actionRestore => 'Geri yükle';
 
   @override
+  String get actionIUnderstand => 'Anlıyorum';
+
+  @override
   String get nutrientKcals => 'Kalori';
 
   @override

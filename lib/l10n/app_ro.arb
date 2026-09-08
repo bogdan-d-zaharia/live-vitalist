@@ -1,11 +1,13 @@
 {
   "@@locale": "ro",
+
   "actionSave": "Salvează",
   "actionCancel": "Anulează",
   "actionDelete": "Șterge",
   "actionContinue": "Continuă",
   "actionTryAgain": "Încearcă din nou",
   "actionRestore": "Restaurează",
+  "actionIUnderstand": "Am înțeles",
   "nutrientKcals": "Calorii",
   "nutrientProtein": "Proteine",
   "nutrientCarbs": "Carbohidrați",

@@ -27,6 +27,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get actionRestore => '복원';
 
   @override
+  String get actionIUnderstand => '이해했습니다';
+
+  @override
   String get nutrientKcals => '칼로리';
 
   @override

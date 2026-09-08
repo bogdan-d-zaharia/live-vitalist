@@ -1,11 +1,13 @@
 {
   "@@locale": "ko",
+
   "actionSave": "저장",
   "actionCancel": "취소",
   "actionDelete": "삭제",
   "actionContinue": "계속",
   "actionTryAgain": "다시 시도",
   "actionRestore": "복원",
+  "actionIUnderstand": "이해했습니다",
   "nutrientKcals": "칼로리",
   "nutrientProtein": "단백질",
   "nutrientCarbs": "탄수화물",
