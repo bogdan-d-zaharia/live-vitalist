@@ -30,8 +30,8 @@ async function loadWeekData(userId: string, date: Date): Promise<WeekData> {
 
     const catalogs = await fbh.loadJson(`resources/catalogs`) as Record<string, AlimentCatalog>;
     const catalogAliments: Record<string, AlimentData> = Object.fromEntries(Object.values(catalogs).flatMap((catalog) => [
-        ...Object.entries(catalog?.original?.aliments ?? {}),
-        ...Object.entries(catalog?.aiEnhanced?.aliments ?? {}),
+        ...Object.entries(catalog?.original ?? {}),
+        ...Object.entries(catalog?.ai_enhanced ?? {}),
     ]));
     const displayAliments = {
         ...customAliments,
