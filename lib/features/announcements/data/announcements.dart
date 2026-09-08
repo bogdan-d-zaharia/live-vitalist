@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:live_vitalist/core/presentation/widgets/custom_alert_dialog.dart';
 import 'package:live_vitalist/features/legal/domain/legal_types.dart';
 import 'package:live_vitalist/features/legal/legal_dialog.dart';
 import 'package:live_vitalist/features/reports/domain/entities/week_report.dart';
 import 'package:live_vitalist/features/reports/presentation/widgets/week_report_overlay.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 sealed class IAnnouncement {
   Future<void> pushAnnouncementPopup(BuildContext context);
@@ -30,5 +32,35 @@ class LegalAnnouncement implements IAnnouncement {
   Future<void> pushAnnouncementPopup(BuildContext context) async {
     if (!context.mounted) return;
     await showLegalDialog(context, requirements);
+  }
+}
+
+class ErrorAnnouncement implements IAnnouncement {
+  final Object? error;
+  final String? title;
+  const ErrorAnnouncement(this.error, {this.title});
+
+  @override
+  Future<void> pushAnnouncementPopup(BuildContext context) async {
+    if (!context.mounted) return;
+
+    final l = AppLocalizations.of(context);
+    final title = this.title ?? error.runtimeType.toString();
+    final message = error.toString();
+
+    await showDialog(
+      context: context,
+      builder: (context) => CustomAlertDialog(
+        icon: Icon(Icons.error_outline_rounded),
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          FilledButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(l.actionIUnderstand),
+          )
+        ],
+      ),
+    );
   }
 }

@@ -27,6 +27,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get actionRestore => 'Restaurează';
 
   @override
+  String get actionIUnderstand => 'Am înțeles';
+
+  @override
   String get nutrientKcals => 'Calorii';
 
   @override

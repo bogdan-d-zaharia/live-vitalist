@@ -140,6 +140,12 @@ abstract class AppLocalizations {
   /// **'Restore'**
   String get actionRestore;
 
+  /// No description provided for @actionIUnderstand.
+  ///
+  /// In en, this message translates to:
+  /// **'I understand'**
+  String get actionIUnderstand;
+
   /// No description provided for @nutrientKcals.
   ///
   /// In en, this message translates to:

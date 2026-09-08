@@ -1,11 +1,13 @@
 {
   "@@locale": "tr",
+
   "actionSave": "Kaydet",
   "actionCancel": "İptal",
   "actionDelete": "Sil",
   "actionContinue": "Devam et",
   "actionTryAgain": "Tekrar dene",
   "actionRestore": "Geri yükle",
+  "actionIUnderstand": "Anlıyorum",
   "nutrientKcals": "Kalori",
   "nutrientProtein": "Protein",
   "nutrientCarbs": "Karbonhidrat",

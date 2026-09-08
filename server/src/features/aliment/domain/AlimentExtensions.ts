@@ -1,5 +1,5 @@
 import { Aliment, InstancedAliment, TemporaryAliment } from "./Aliment";
-import { AlimentBankState } from "./AlimentBankState";
+import { AlimentBankState } from "../../aliment_bank/domain/AlimentBankState";
 import { AlimentData } from "./AlimentData";
 
 export function readDataRef(

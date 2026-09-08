@@ -1,7 +1,9 @@
 import { FirebaseStorageHandler } from "../../../core/storage/data/FirebaseHandler";
 import { IStorageHandler } from "../../../core/storage/domain/StorageInterfaces";
 import { addToDate, getISOWeek, lastDay } from "../../../core/utils/DateUtils";
-import { AlimentBankState } from "../../aliment/domain/AlimentBankState";
+import { AlimentData } from "../../aliment/domain/AlimentData";
+import { AlimentBankState } from "../../aliment_bank/domain/AlimentBankState";
+import { AlimentCatalog } from "../../aliment_bank/domain/AlimentCatalog";
 import { Day } from "../../day/domain/Day";
 import { averageDays, readDayIntake } from "../../day/domain/DayExtensions";
 import { WeekData, WeekReport } from "../domain/WeekReport";
@@ -20,7 +22,30 @@ async function loadWeekData(userId: string, date: Date): Promise<WeekData> {
             `${date.getFullYear()}`);
     const daysPromise = paths.map(path => fbh.loadJson(path));
     const days = (await Promise.all(daysPromise)) as (Day | null)[];
-    const bank = await fbh.loadJson(`users/${userId}/aliment_bank`) as AlimentBankState;
+
+    // See [lib\features\aliment_bank\data\aliment_bank.dart]
+    const userBank = await fbh.loadJson(`users/${userId}/aliment_bank`) as AlimentBankState;
+    const customAliments = userBank.aliments;
+    const order = userBank.order;
+
+    const catalogs = await fbh.loadJson(`resources/catalogs`) as Record<string, AlimentCatalog>;
+    const catalogAliments: Record<string, AlimentData> = Object.fromEntries(Object.values(catalogs).flatMap((catalog) => [
+        ...Object.entries(catalog.original.aliments),
+        ...Object.entries(catalog.aiEnhanced.aliments),
+    ]));
+    const displayAliments = {
+        ...userBank.aliments,
+        ...catalogAliments,
+    };
+    const displayOrder = {
+        ...order.filter((id) => Object.hasOwn(displayAliments, id)),
+        ...Object.keys(customAliments),
+        ...Object.keys(catalogAliments),
+    };
+    const bank: AlimentBankState = {
+        aliments: displayAliments,
+        order: displayOrder,
+    };
 
     const strictDays = days.filter(Boolean) as Day[];
     const averageDay = averageDays(strictDays);

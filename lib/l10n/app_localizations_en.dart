@@ -27,6 +27,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get actionRestore => 'Restore';
 
   @override
+  String get actionIUnderstand => 'I understand';
+
+  @override
   String get nutrientKcals => 'Calories';
 
   @override
