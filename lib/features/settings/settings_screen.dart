@@ -115,7 +115,8 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
                       setState(() => SettingsData.isMonthDay = val);
                     },
                   ),
-                  Text(l.settingsUseMonthDayFormat),
+                  Expanded(child: Text(l.settingsUseMonthDayFormat)),
+                  const SizedBox(width: 12.0),
                 ],
               ),
             ),
@@ -130,7 +131,8 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
                       setState(() => SettingsData.isComplexCalendar = val);
                     },
                   ),
-                  Text(l.settingsUseComplexCalendar),
+                  Expanded(child: Text(l.settingsUseComplexCalendar)),
+                  const SizedBox(width: 12.0),
                 ],
               ),
             ),
@@ -146,7 +148,8 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
                           () => SettingsData.isShowCalorieDistribution = val);
                     },
                   ),
-                  Text(l.settingsShowMacroDistribution),
+                  Expanded(child: Text(l.settingsShowMacroDistribution)),
+                  const SizedBox(width: 12.0),
                 ],
               ),
             ),
@@ -161,7 +164,8 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
                       setState(() => SettingsData.isShowOmegaBalance = val);
                     },
                   ),
-                  Text(l.settingsShowOmegaBalance),
+                  Expanded(child: Text(l.settingsShowOmegaBalance)),
+                  const SizedBox(width: 12.0),
                 ],
               ),
             ),
@@ -176,7 +180,8 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
                       setState(() => SettingsData.isShowNutrientProgress = val);
                     },
                   ),
-                  Text(l.settingsShowNutrientProgress),
+                  Expanded(child: Text(l.settingsShowNutrientProgress)),
+                  const SizedBox(width: 12.0),
                 ],
               ),
             ),
