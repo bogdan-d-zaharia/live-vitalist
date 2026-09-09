@@ -200,6 +200,7 @@
   },
   "nutrientDisplayTitle": "Besin öğeleri",
   "nutrientDisplayAddNewNutrient": "Yeni besin öğesi ekle",
+  "nutrientDisplayNewNutrient": "Yeni besin öğesi",
   "nutrientDisplayAmount": "Miktar:",
   "nutrientDisplayLowerLimit": "Alt sınır:",
   "nutrientDisplayUpperLimit": "Üst sınır:",

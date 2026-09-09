@@ -204,6 +204,7 @@
 
   "nutrientDisplayTitle": "Nutrients",
   "nutrientDisplayAddNewNutrient": "Add new nutrient",
+  "nutrientDisplayNewNutrient": "New nutrient",
   "nutrientDisplayAmount": "Amount:",
   "nutrientDisplayLowerLimit": "Lower Limit:",
   "nutrientDisplayUpperLimit": "Upper Limit:",

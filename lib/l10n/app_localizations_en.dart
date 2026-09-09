@@ -476,6 +476,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nutrientDisplayAddNewNutrient => 'Add new nutrient';
 
   @override
+  String get nutrientDisplayNewNutrient => 'New nutrient';
+
+  @override
   String get nutrientDisplayAmount => 'Amount:';
 
   @override

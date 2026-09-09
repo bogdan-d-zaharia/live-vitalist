@@ -908,6 +908,12 @@ abstract class AppLocalizations {
   /// **'Add new nutrient'**
   String get nutrientDisplayAddNewNutrient;
 
+  /// No description provided for @nutrientDisplayNewNutrient.
+  ///
+  /// In en, this message translates to:
+  /// **'New nutrient'**
+  String get nutrientDisplayNewNutrient;
+
   /// No description provided for @nutrientDisplayAmount.
   ///
   /// In en, this message translates to:

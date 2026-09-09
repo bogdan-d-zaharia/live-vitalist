@@ -476,6 +476,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get nutrientDisplayAddNewNutrient => 'Yeni besin öğesi ekle';
 
   @override
+  String get nutrientDisplayNewNutrient => 'Yeni besin öğesi';
+
+  @override
   String get nutrientDisplayAmount => 'Miktar:';
 
   @override

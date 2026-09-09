@@ -462,6 +462,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get nutrientDisplayAddNewNutrient => '새 영양소 추가';
 
   @override
+  String get nutrientDisplayNewNutrient => '새 영양소';
+
+  @override
   String get nutrientDisplayAmount => '양:';
 
   @override

@@ -200,6 +200,7 @@
   },
   "nutrientDisplayTitle": "Nutrienți",
   "nutrientDisplayAddNewNutrient": "Adaugă nutrient nou",
+  "nutrientDisplayNewNutrient": "Nutrient nou",
   "nutrientDisplayAmount": "Cantitate:",
   "nutrientDisplayLowerLimit": "Limită inferioară:",
   "nutrientDisplayUpperLimit": "Limită superioară:",

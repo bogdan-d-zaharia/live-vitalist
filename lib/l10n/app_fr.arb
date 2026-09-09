@@ -201,6 +201,7 @@
   },
   "nutrientDisplayTitle": "Nutriments",
   "nutrientDisplayAddNewNutrient": "Ajouter un nutriment",
+  "nutrientDisplayNewNutrient": "Nouveau nutriment",
   "nutrientDisplayAmount": "Quantité :",
   "nutrientDisplayLowerLimit": "Limite inférieure :",
   "nutrientDisplayUpperLimit": "Limite supérieure :",

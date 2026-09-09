@@ -200,6 +200,7 @@
   },
   "nutrientDisplayTitle": "영양소",
   "nutrientDisplayAddNewNutrient": "새 영양소 추가",
+  "nutrientDisplayNewNutrient": "새 영양소",
   "nutrientDisplayAmount": "양:",
   "nutrientDisplayLowerLimit": "하한:",
   "nutrientDisplayUpperLimit": "상한:",
