@@ -340,6 +340,11 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mealsJournalDinner => '저녁 식사';
 
   @override
+  String mealsJournalDefaultMealName(int number) {
+    return '$number번째 식사';
+  }
+
+  @override
   String get mealsJournalAddMeal => '식사 추가';
 
   @override

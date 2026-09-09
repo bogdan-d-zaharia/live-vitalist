@@ -142,6 +142,7 @@
   "mealsJournalBreakfast": "Petit-déjeuner",
   "mealsJournalLunch": "Déjeuner",
   "mealsJournalDinner": "Dîner",
+  "mealsJournalDefaultMealName": "Repas n° {number}",
   "mealsJournalAddMeal": "Ajouter un repas",
   "mealsJournalAddAliment": "Ajouter un aliment",
   "mealsJournalAddTemporaryAliment": "Ajouter un aliment temporaire",

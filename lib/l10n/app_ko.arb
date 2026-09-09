@@ -141,6 +141,7 @@
   "mealsJournalBreakfast": "아침 식사",
   "mealsJournalLunch": "점심 식사",
   "mealsJournalDinner": "저녁 식사",
+  "mealsJournalDefaultMealName": "{number}번째 식사",
   "mealsJournalAddMeal": "식사 추가",
   "mealsJournalAddAliment": "식품 추가",
   "mealsJournalAddTemporaryAliment": "임시 식품 추가",

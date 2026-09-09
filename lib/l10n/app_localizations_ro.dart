@@ -352,6 +352,11 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mealsJournalDinner => 'Cină';
 
   @override
+  String mealsJournalDefaultMealName(int number) {
+    return 'Masa nr. $number';
+  }
+
+  @override
   String get mealsJournalAddMeal => 'Adaugă masă';
 
   @override

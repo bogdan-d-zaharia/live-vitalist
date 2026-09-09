@@ -148,6 +148,12 @@
   "mealsJournalBreakfast": "Breakfast",
   "mealsJournalLunch": "Lunch",
   "mealsJournalDinner": "Dinner",
+  "mealsJournalDefaultMealName": "Meal #{number}",
+  "@mealsJournalDefaultMealName": {
+    "placeholders": {
+      "number": {"type": "int"}
+    }
+  },
   "mealsJournalAddMeal": "Add Meal",
   "mealsJournalAddAliment": "Add food",
   "mealsJournalAddTemporaryAliment": "Add temporary food",

@@ -141,6 +141,7 @@
   "mealsJournalBreakfast": "Mic dejun",
   "mealsJournalLunch": "Prânz",
   "mealsJournalDinner": "Cină",
+  "mealsJournalDefaultMealName": "Masa nr. {number}",
   "mealsJournalAddMeal": "Adaugă masă",
   "mealsJournalAddAliment": "Adaugă aliment",
   "mealsJournalAddTemporaryAliment": "Adaugă aliment temporar",

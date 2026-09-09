@@ -355,6 +355,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mealsJournalDinner => 'Dîner';
 
   @override
+  String mealsJournalDefaultMealName(int number) {
+    return 'Repas n° $number';
+  }
+
+  @override
   String get mealsJournalAddMeal => 'Ajouter un repas';
 
   @override

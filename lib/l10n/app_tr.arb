@@ -141,6 +141,7 @@
   "mealsJournalBreakfast": "Kahvaltı",
   "mealsJournalLunch": "Öğle yemeği",
   "mealsJournalDinner": "Akşam yemeği",
+  "mealsJournalDefaultMealName": "{number}. Öğün",
   "mealsJournalAddMeal": "Öğün ekle",
   "mealsJournalAddAliment": "Besin ekle",
   "mealsJournalAddTemporaryAliment": "Geçici besin ekle",

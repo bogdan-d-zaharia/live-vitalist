@@ -349,6 +349,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mealsJournalDinner => 'Akşam yemeği';
 
   @override
+  String mealsJournalDefaultMealName(int number) {
+    return '$number. Öğün';
+  }
+
+  @override
   String get mealsJournalAddMeal => 'Öğün ekle';
 
   @override

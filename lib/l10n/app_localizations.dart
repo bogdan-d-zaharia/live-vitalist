@@ -740,6 +740,12 @@ abstract class AppLocalizations {
   /// **'Dinner'**
   String get mealsJournalDinner;
 
+  /// No description provided for @mealsJournalDefaultMealName.
+  ///
+  /// In en, this message translates to:
+  /// **'Meal #{number}'**
+  String mealsJournalDefaultMealName(int number);
+
   /// No description provided for @mealsJournalAddMeal.
   ///
   /// In en, this message translates to:
