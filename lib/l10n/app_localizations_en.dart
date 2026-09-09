@@ -524,6 +524,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nutrientDisplayWithinTarget => 'Within target';
 
   @override
+  String get nutrientDisplayEditorLabel => 'Label';
+
+  @override
+  String get nutrientDisplayEditorUpperLimit => 'Upper Limit';
+
+  @override
+  String get nutrientDisplayEditorLowerLimit => 'Lower Limit';
+
+  @override
+  String get nutrientDisplayEditorUnit => 'Unit';
+
+  @override
   String get ratioBarsTitle => 'Distribution Bars';
 
   @override

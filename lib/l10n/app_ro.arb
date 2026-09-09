@@ -252,6 +252,10 @@
   }},
   "nutrientDisplayGoalReached": "Obiectiv atins",
   "nutrientDisplayWithinTarget": "În intervalul țintă",
+  "nutrientDisplayEditorLabel": "Etichetă",
+  "nutrientDisplayEditorUpperLimit": "Limită superioară",
+  "nutrientDisplayEditorLowerLimit": "Limită inferioară",
+  "nutrientDisplayEditorUnit": "Unitate",
 
   "ratioBarsTitle": "Bare de distribuție",
   "reportsNoData": "Fără date",

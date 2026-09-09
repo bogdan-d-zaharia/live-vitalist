@@ -510,6 +510,18 @@ class AppLocalizationsKo extends AppLocalizations {
   String get nutrientDisplayWithinTarget => '목표 범위 내';
 
   @override
+  String get nutrientDisplayEditorLabel => '라벨';
+
+  @override
+  String get nutrientDisplayEditorUpperLimit => '상한';
+
+  @override
+  String get nutrientDisplayEditorLowerLimit => '하한';
+
+  @override
+  String get nutrientDisplayEditorUnit => '단위';
+
+  @override
   String get ratioBarsTitle => '분포 막대';
 
   @override

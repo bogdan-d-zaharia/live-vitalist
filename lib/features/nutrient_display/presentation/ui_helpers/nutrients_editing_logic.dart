@@ -23,7 +23,7 @@ Future<Nutrient?> editNutrient(
   };
 
   final isModified =
-      await _pushFieldsEditor(context, fields, labelHint) ?? false;
+      await _pushFieldsEditor(context, fields, labelHint, localization) ?? false;
   _setEmptyToNull(fields, 'Label');
   _setZeroToNull(fields, 'Lower limit');
   _setZeroToNull(fields, 'Upper limit');
@@ -51,6 +51,7 @@ Future<bool?> _pushFieldsEditor(
   BuildContext context,
   Map<String, dynamic> fields,
   String labelHint,
+  AppLocalizations localization,
 ) {
   return Navigator.push(
     context,
@@ -64,6 +65,12 @@ Future<bool?> _pushFieldsEditor(
         ),
         body: FieldsInput(
           fields: fields,
+          labels: {
+            'Label': localization.nutrientDisplayEditorLabel,
+            'Upper limit': localization.nutrientDisplayEditorUpperLimit,
+            'Lower limit': localization.nutrientDisplayEditorLowerLimit,
+            'Unit': localization.nutrientDisplayEditorUnit,
+          },
           hints: {'Label': labelHint},
         ),
       ),

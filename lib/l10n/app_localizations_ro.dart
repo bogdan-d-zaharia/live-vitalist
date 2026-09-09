@@ -527,6 +527,18 @@ class AppLocalizationsRo extends AppLocalizations {
   String get nutrientDisplayWithinTarget => 'În intervalul țintă';
 
   @override
+  String get nutrientDisplayEditorLabel => 'Etichetă';
+
+  @override
+  String get nutrientDisplayEditorUpperLimit => 'Limită superioară';
+
+  @override
+  String get nutrientDisplayEditorLowerLimit => 'Limită inferioară';
+
+  @override
+  String get nutrientDisplayEditorUnit => 'Unitate';
+
+  @override
   String get ratioBarsTitle => 'Bare de distribuție';
 
   @override

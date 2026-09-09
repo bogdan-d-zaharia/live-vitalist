@@ -524,6 +524,18 @@ class AppLocalizationsTr extends AppLocalizations {
   String get nutrientDisplayWithinTarget => 'Hedef aralığında';
 
   @override
+  String get nutrientDisplayEditorLabel => 'Etiket';
+
+  @override
+  String get nutrientDisplayEditorUpperLimit => 'Üst sınır';
+
+  @override
+  String get nutrientDisplayEditorLowerLimit => 'Alt sınır';
+
+  @override
+  String get nutrientDisplayEditorUnit => 'Birim';
+
+  @override
   String get ratioBarsTitle => 'Dağılım çubukları';
 
   @override

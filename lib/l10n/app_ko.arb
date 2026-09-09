@@ -252,6 +252,10 @@
   }},
   "nutrientDisplayGoalReached": "목표 달성",
   "nutrientDisplayWithinTarget": "목표 범위 내",
+  "nutrientDisplayEditorLabel": "라벨",
+  "nutrientDisplayEditorUpperLimit": "상한",
+  "nutrientDisplayEditorLowerLimit": "하한",
+  "nutrientDisplayEditorUnit": "단위",
 
   "ratioBarsTitle": "분포 막대",
   "reportsNoData": "데이터 없음",

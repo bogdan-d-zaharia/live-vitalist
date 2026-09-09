@@ -980,6 +980,30 @@ abstract class AppLocalizations {
   /// **'Within target'**
   String get nutrientDisplayWithinTarget;
 
+  /// No description provided for @nutrientDisplayEditorLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Label'**
+  String get nutrientDisplayEditorLabel;
+
+  /// No description provided for @nutrientDisplayEditorUpperLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Upper Limit'**
+  String get nutrientDisplayEditorUpperLimit;
+
+  /// No description provided for @nutrientDisplayEditorLowerLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Lower Limit'**
+  String get nutrientDisplayEditorLowerLimit;
+
+  /// No description provided for @nutrientDisplayEditorUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit'**
+  String get nutrientDisplayEditorUnit;
+
   /// No description provided for @ratioBarsTitle.
   ///
   /// In en, this message translates to:

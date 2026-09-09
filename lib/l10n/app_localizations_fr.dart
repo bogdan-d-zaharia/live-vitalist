@@ -531,6 +531,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get nutrientDisplayWithinTarget => 'Dans l’objectif';
 
   @override
+  String get nutrientDisplayEditorLabel => 'Libellé';
+
+  @override
+  String get nutrientDisplayEditorUpperLimit => 'Limite supérieure';
+
+  @override
+  String get nutrientDisplayEditorLowerLimit => 'Limite inférieure';
+
+  @override
+  String get nutrientDisplayEditorUnit => 'Unité';
+
+  @override
   String get ratioBarsTitle => 'Barres de répartition';
 
   @override

@@ -227,6 +227,10 @@
   }},
   "nutrientDisplayGoalReached": "Goal reached",
   "nutrientDisplayWithinTarget": "Within target",
+  "nutrientDisplayEditorLabel": "Label",
+  "nutrientDisplayEditorUpperLimit": "Upper Limit",
+  "nutrientDisplayEditorLowerLimit": "Lower Limit",
+  "nutrientDisplayEditorUnit": "Unit",
 
   "ratioBarsTitle": "Distribution Bars",
 
