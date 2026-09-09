@@ -59,11 +59,12 @@ class AddAliment extends _$AddAliment {
     BuildContext context, {
     AlimentData? initialData,
   }) async {
-    final AlimentData? aliment = await Navigator.push(
-      context,
+    final AlimentData? aliment =
+        await Navigator.of(context, rootNavigator: true).push(
       MaterialPageRoute(
-        builder: (context) =>
-            AlimentDataEditor(initialData: initialData ?? AlimentData.empty),
+        builder: (context) => AlimentDataEditor(
+          initialData: initialData ?? AlimentData.empty,
+        ),
       ),
     );
     if (aliment == null) return;
@@ -89,8 +90,10 @@ class AddAliment extends _$AddAliment {
   }) async {
     final TemporaryAliment newAliment = TemporaryAliment.empty;
 
-    final newData = await Navigator.push(
+    final newData = await Navigator.of(
       context,
+      rootNavigator: true,
+    ).push(
       MaterialPageRoute(
         builder: (context) => TemporaryAlimentEditor(
           initialData: initialData ?? newAliment.alimentData,
