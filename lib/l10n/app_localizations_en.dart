@@ -427,6 +427,17 @@ class AppLocalizationsEn extends AppLocalizations {
       'Agree and don\'t show again';
 
   @override
+  String get superSearchCouldNotGenerateTitle => 'Couldn\'t generate';
+
+  @override
+  String get superSearchAiUnavailableMessage =>
+      'The AI model is currently experiencing high demand and cannot generate this food right now. Please try again in a few moments.';
+
+  @override
+  String get superSearchAiRequestTimedOutMessage =>
+      'The AI request took too long to complete. Please try again.';
+
+  @override
   String get superSearchWriteAlimentFirst =>
       'Write the food in the search bar first.';
 

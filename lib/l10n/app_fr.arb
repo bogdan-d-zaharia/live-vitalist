@@ -178,6 +178,9 @@
   "superSearchAiDisclaimerTitle": "Données alimentaires créées par IA",
   "superSearchAiDisclaimerMessage": "Certains aliments sélectionnés contiennent des données générées ou améliorées par l’intelligence artificielle. Ces informations peuvent être incomplètes ou inexactes et ne remplacent pas des conseils nutritionnels ou médicaux vérifiés.",
   "superSearchAiDisclaimerAgreeAndDoNotShowAgain": "Accepter et ne plus afficher",
+  "superSearchCouldNotGenerateTitle": "Impossible de générer",
+  "superSearchAiUnavailableMessage": "Le modèle d’IA est actuellement très sollicité et ne peut pas générer cet aliment. Veuillez réessayer dans quelques instants.",
+  "superSearchAiRequestTimedOutMessage": "La requête à l’IA a pris trop de temps. Veuillez réessayer.",
   "superSearchWriteAlimentFirst": "Saisissez d'abord l'aliment dans la barre de recherche.",
   "superSearchAddAliments": "{count, plural, =1{Ajouter un aliment} other{Ajouter {count} aliments}}",
   "@superSearchAddAliments": {

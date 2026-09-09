@@ -177,6 +177,9 @@
   "superSearchAiDisclaimerTitle": "Yapay zekâ üretimi besin verileri",
   "superSearchAiDisclaimerMessage": "Seçilen bazı besinler yapay zekâ tarafından oluşturulan veya geliştirilen veriler içerir. Bu bilgiler eksik ya da hatalı olabilir ve doğrulanmış beslenme veya tıbbi tavsiyelerin yerini tutmaz.",
   "superSearchAiDisclaimerAgreeAndDoNotShowAgain": "Kabul et ve tekrar gösterme",
+  "superSearchCouldNotGenerateTitle": "Oluşturulamadı",
+  "superSearchAiUnavailableMessage": "Yapay zekâ modeli şu anda yoğun talep görüyor ve bu besini oluşturamıyor. Lütfen birkaç dakika sonra tekrar deneyin.",
+  "superSearchAiRequestTimedOutMessage": "Yapay zekâ isteğinin tamamlanması çok uzun sürdü. Lütfen tekrar deneyin.",
   "superSearchWriteAlimentFirst": "Önce arama çubuğuna besini yazın.",
   "superSearchAddAliments": "{count, plural, =1{Besin ekle} other{{count} besin ekle}}",
   "@superSearchAddAliments": {

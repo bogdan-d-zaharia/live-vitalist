@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
+import 'package:live_vitalist/core/presentation/widgets/custom_alert_dialog.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
 import 'package:live_vitalist/features/aliment_bank/data/aliment_bank.dart';
@@ -138,23 +138,72 @@ class AddAliment extends _$AddAliment {
 
     AlimentData? generated;
     Object? error;
+    var isGenerationUnavailable = false;
+    var hasGenerationTimedOut = false;
     try {
       generated = await AlimentGenerator.generate(input);
+    } on AlimentGenerationUnavailableException {
+      isGenerationUnavailable = true;
+    } on AlimentGenerationTimeoutException {
+      hasGenerationTimedOut = true;
     } catch (e) {
       error = e;
     }
     if (!context.mounted) return;
     Navigator.pop(context);
 
-    if (generated == null) {
+    if (isGenerationUnavailable) {
+      final l = AppLocalizations.of(context);
       showDialog(
         context: context,
-        builder: (context) => Dialog(
-          backgroundColor: Colors.transparent,
-          child: CustomCard(
-            headerSpace: 0.0,
-            child: Text('${error.toString()}\n'),
-          ),
+        builder: (context) => CustomAlertDialog(
+          icon: const Icon(Icons.cloud_off_rounded),
+          title: Text(l.superSearchCouldNotGenerateTitle),
+          content: Text(l.superSearchAiUnavailableMessage),
+          actions: [
+            FilledButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(l.actionIUnderstand),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
+    if (hasGenerationTimedOut) {
+      final l = AppLocalizations.of(context);
+      showDialog(
+        context: context,
+        builder: (context) => CustomAlertDialog(
+          icon: const Icon(Icons.timer_off_rounded),
+          title: Text(l.superSearchCouldNotGenerateTitle),
+          content: Text(l.superSearchAiRequestTimedOutMessage),
+          actions: [
+            FilledButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(l.actionIUnderstand),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
+    if (generated == null) {
+      final l = AppLocalizations.of(context);
+      showDialog(
+        context: context,
+        builder: (context) => CustomAlertDialog(
+          icon: const Icon(Icons.error_outline_rounded),
+          title: Text(l.superSearchCouldNotGenerateTitle),
+          content: Text(error.toString()),
+          actions: [
+            FilledButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(l.actionIUnderstand),
+            ),
+          ],
         ),
       );
       return;

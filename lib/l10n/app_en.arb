@@ -179,6 +179,9 @@
   "superSearchAiDisclaimerTitle": "AI-generated food data",
   "superSearchAiDisclaimerMessage": "Some selected foods contain data generated or enhanced by artificial intelligence. This information may be incomplete or inaccurate and should not replace verified nutritional or medical guidance.",
   "superSearchAiDisclaimerAgreeAndDoNotShowAgain": "Agree and don't show again",
+  "superSearchCouldNotGenerateTitle": "Couldn't generate",
+  "superSearchAiUnavailableMessage": "The AI model is currently experiencing high demand and cannot generate this food right now. Please try again in a few moments.",
+  "superSearchAiRequestTimedOutMessage": "The AI request took too long to complete. Please try again.",
   "superSearchWriteAlimentFirst": "Write the food in the search bar first.",
   "superSearchAddAliments": "{count, plural, =1{Add food} other{Add {count} foods}}",
   "@superSearchAddAliments": {

@@ -427,6 +427,17 @@ class AppLocalizationsTr extends AppLocalizations {
       'Kabul et ve tekrar gösterme';
 
   @override
+  String get superSearchCouldNotGenerateTitle => 'Oluşturulamadı';
+
+  @override
+  String get superSearchAiUnavailableMessage =>
+      'Yapay zekâ modeli şu anda yoğun talep görüyor ve bu besini oluşturamıyor. Lütfen birkaç dakika sonra tekrar deneyin.';
+
+  @override
+  String get superSearchAiRequestTimedOutMessage =>
+      'Yapay zekâ isteğinin tamamlanması çok uzun sürdü. Lütfen tekrar deneyin.';
+
+  @override
   String get superSearchWriteAlimentFirst =>
       'Önce arama çubuğuna besini yazın.';
 

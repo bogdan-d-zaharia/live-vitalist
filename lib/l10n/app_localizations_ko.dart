@@ -414,6 +414,17 @@ class AppLocalizationsKo extends AppLocalizations {
   String get superSearchAiDisclaimerAgreeAndDoNotShowAgain => '동의하고 다시 표시하지 않기';
 
   @override
+  String get superSearchCouldNotGenerateTitle => '생성할 수 없음';
+
+  @override
+  String get superSearchAiUnavailableMessage =>
+      '현재 AI 모델에 요청이 몰려 이 식품을 생성할 수 없습니다. 잠시 후 다시 시도해 주세요.';
+
+  @override
+  String get superSearchAiRequestTimedOutMessage =>
+      'AI 요청을 완료하는 데 너무 오래 걸렸습니다. 다시 시도해 주세요.';
+
+  @override
   String get superSearchWriteAlimentFirst => '먼저 검색창에 식품을 입력해 주세요.';
 
   @override

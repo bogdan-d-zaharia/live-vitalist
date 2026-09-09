@@ -854,6 +854,24 @@ abstract class AppLocalizations {
   /// **'Agree and don\'t show again'**
   String get superSearchAiDisclaimerAgreeAndDoNotShowAgain;
 
+  /// No description provided for @superSearchCouldNotGenerateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t generate'**
+  String get superSearchCouldNotGenerateTitle;
+
+  /// No description provided for @superSearchAiUnavailableMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The AI model is currently experiencing high demand and cannot generate this food right now. Please try again in a few moments.'**
+  String get superSearchAiUnavailableMessage;
+
+  /// No description provided for @superSearchAiRequestTimedOutMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The AI request took too long to complete. Please try again.'**
+  String get superSearchAiRequestTimedOutMessage;
+
   /// No description provided for @superSearchWriteAlimentFirst.
   ///
   /// In en, this message translates to:

@@ -430,6 +430,17 @@ class AppLocalizationsRo extends AppLocalizations {
       'Sunt de acord și nu mai afișa';
 
   @override
+  String get superSearchCouldNotGenerateTitle => 'Nu s-a putut genera';
+
+  @override
+  String get superSearchAiUnavailableMessage =>
+      'Modelul AI este solicitat intens momentan și nu poate genera acest aliment acum. Încearcă din nou peste câteva momente.';
+
+  @override
+  String get superSearchAiRequestTimedOutMessage =>
+      'Cererea către AI a durat prea mult. Încearcă din nou.';
+
+  @override
   String get superSearchWriteAlimentFirst =>
       'Scrie mai întâi alimentul în bara de căutare.';
 

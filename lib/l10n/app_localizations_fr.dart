@@ -434,6 +434,17 @@ class AppLocalizationsFr extends AppLocalizations {
       'Accepter et ne plus afficher';
 
   @override
+  String get superSearchCouldNotGenerateTitle => 'Impossible de générer';
+
+  @override
+  String get superSearchAiUnavailableMessage =>
+      'Le modèle d’IA est actuellement très sollicité et ne peut pas générer cet aliment. Veuillez réessayer dans quelques instants.';
+
+  @override
+  String get superSearchAiRequestTimedOutMessage =>
+      'La requête à l’IA a pris trop de temps. Veuillez réessayer.';
+
+  @override
   String get superSearchWriteAlimentFirst =>
       'Saisissez d\'abord l\'aliment dans la barre de recherche.';
 

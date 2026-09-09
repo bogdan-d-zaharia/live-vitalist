@@ -177,6 +177,9 @@
   "superSearchAiDisclaimerTitle": "Date alimentare generate cu AI",
   "superSearchAiDisclaimerMessage": "Unele alimente selectate conțin date generate sau îmbunătățite cu ajutorul inteligenței artificiale. Aceste informații pot fi incomplete sau inexacte și nu înlocuiesc recomandările nutriționale sau medicale verificate.",
   "superSearchAiDisclaimerAgreeAndDoNotShowAgain": "Sunt de acord și nu mai afișa",
+  "superSearchCouldNotGenerateTitle": "Nu s-a putut genera",
+  "superSearchAiUnavailableMessage": "Modelul AI este solicitat intens momentan și nu poate genera acest aliment acum. Încearcă din nou peste câteva momente.",
+  "superSearchAiRequestTimedOutMessage": "Cererea către AI a durat prea mult. Încearcă din nou.",
   "superSearchWriteAlimentFirst": "Scrie mai întâi alimentul în bara de căutare.",
   "superSearchAddAliments": "{count, plural, =1{Adaugă aliment} other{Adaugă {count} alimente}}",
   "@superSearchAddAliments": {

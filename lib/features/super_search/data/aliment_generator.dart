@@ -16,6 +16,9 @@ abstract final class AlimentGenerator {
   /// Base wait between attempts; grows with each retry.
   static const Duration _retryBaseDelay = Duration(seconds: 2);
 
+  /// Maximum time allowed for a single AI request.
+  static const Duration _requestTimeout = Duration(seconds: 20);
+
   static Future<AlimentData> generate(String input) async {
     final prompt = promptTemplate.replaceFirst('<<input-ul>>', input);
 
@@ -45,9 +48,17 @@ abstract final class AlimentGenerator {
   ) async {
     for (var attempt = 1;; attempt++) {
       try {
-        return await model.generateContent(content);
-      } on ServerException {
-        if (attempt >= _maxAttempts) rethrow;
+        return await model.generateContent(content).timeout(
+              _requestTimeout,
+              onTimeout: () => throw const AlimentGenerationTimeoutException(),
+            );
+      } on ServerException catch (error) {
+        if (attempt >= _maxAttempts) {
+          if (error.message.contains('currently experiencing high demand')) {
+            throw const AlimentGenerationUnavailableException();
+          }
+          rethrow;
+        }
         await Future.delayed(_retryBaseDelay * attempt);
       }
     }
@@ -63,4 +74,12 @@ abstract final class AlimentGenerator {
     }
     return text.substring(start, end + 1);
   }
+}
+
+class AlimentGenerationUnavailableException implements Exception {
+  const AlimentGenerationUnavailableException();
+}
+
+class AlimentGenerationTimeoutException implements Exception {
+  const AlimentGenerationTimeoutException();
 }
