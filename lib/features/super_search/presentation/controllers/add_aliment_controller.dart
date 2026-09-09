@@ -130,8 +130,10 @@ class AddAliment extends _$AddAliment {
       return;
     }
 
+    final rootNavigator = Navigator.of(context, rootNavigator: true);
     showDialog(
       context: context,
+      useRootNavigator: true,
       barrierDismissible: false,
       builder: (_) => const Center(child: CircularProgressIndicator()),
     );
@@ -149,20 +151,23 @@ class AddAliment extends _$AddAliment {
     } catch (e) {
       error = e;
     }
+    if (rootNavigator.mounted && rootNavigator.canPop()) {
+      rootNavigator.pop();
+    }
     if (!context.mounted) return;
-    Navigator.pop(context);
 
     if (isGenerationUnavailable) {
       final l = AppLocalizations.of(context);
       showDialog(
         context: context,
+        useRootNavigator: true,
         builder: (context) => CustomAlertDialog(
           icon: const Icon(Icons.cloud_off_rounded),
           title: Text(l.superSearchCouldNotGenerateTitle),
           content: Text(l.superSearchAiUnavailableMessage),
           actions: [
             FilledButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
               child: Text(l.actionIUnderstand),
             ),
           ],
@@ -175,13 +180,14 @@ class AddAliment extends _$AddAliment {
       final l = AppLocalizations.of(context);
       showDialog(
         context: context,
+        useRootNavigator: true,
         builder: (context) => CustomAlertDialog(
           icon: const Icon(Icons.timer_off_rounded),
           title: Text(l.superSearchCouldNotGenerateTitle),
           content: Text(l.superSearchAiRequestTimedOutMessage),
           actions: [
             FilledButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
               child: Text(l.actionIUnderstand),
             ),
           ],
@@ -194,13 +200,14 @@ class AddAliment extends _$AddAliment {
       final l = AppLocalizations.of(context);
       showDialog(
         context: context,
+        useRootNavigator: true,
         builder: (context) => CustomAlertDialog(
           icon: const Icon(Icons.error_outline_rounded),
           title: Text(l.superSearchCouldNotGenerateTitle),
           content: Text(error.toString()),
           actions: [
             FilledButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
               child: Text(l.actionIUnderstand),
             ),
           ],

@@ -11,13 +11,13 @@ abstract final class AlimentGenerator {
 
   /// Number of attempts before giving up when the model is momentarily
   /// unavailable (transient 500/503 server errors).
-  static const int _maxAttempts = 3;
+  static const int _maxAttempts = 2;
 
   /// Base wait between attempts; grows with each retry.
   static const Duration _retryBaseDelay = Duration(seconds: 2);
 
   /// Maximum time allowed for a single AI request.
-  static const Duration _requestTimeout = Duration(seconds: 20);
+  static const Duration _requestTimeout = Duration(seconds: 40);
 
   static Future<AlimentData> generate(String input) async {
     final prompt = promptTemplate.replaceFirst('<<input-ul>>', input);
