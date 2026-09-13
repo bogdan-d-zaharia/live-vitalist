@@ -311,6 +311,18 @@ class AppLocalizationsKo extends AppLocalizations {
   String get alimentEditorAmount => '수량';
 
   @override
+  String get alimentEditorName => '이름';
+
+  @override
+  String get alimentEditorUnit => '단위';
+
+  @override
+  String get alimentEditorPerAmount => '기준량';
+
+  @override
+  String get alimentEditorUnitSynonyms => '단위 동의어';
+
+  @override
   String get alimentEditorAddSynonym => '동의어 추가';
 
   @override

@@ -6,6 +6,7 @@ import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presen
 import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/widgets/editor_inputs/editor_string_input.dart';
 import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/widgets/editor_inputs/nutrient_input.dart';
 import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class AlimentDetailsScreen extends ConsumerWidget {
   final AlimentData data;
@@ -25,28 +26,31 @@ class AlimentDetailsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l = AppLocalizations.of(context);
     final nutrients = ref.watch(nutrientsProvider);
 
     return ListView(
       padding: EdgeInsets.symmetric(horizontal: 24.0),
       children: [
         EditorStringInput(
-          'Name',
+          l.alimentEditorName,
           data.readName(languageCode),
           (value) => onDataChanged(data.copyWith(name: {
             ...data.name,
             languageCode: value,
           })),
           nameController,
+          icon: Icons.restaurant_menu_rounded,
         ),
         EditorStringInput(
-          'Unit',
+          l.alimentEditorUnit,
           data.unit,
           (value) => onDataChanged(data.copyWith(unit: value)),
           unitController,
+          icon: Icons.straighten_rounded,
         ),
         EditorNumberInput(
-          'Per amount',
+          l.alimentEditorPerAmount,
           () => data.referenceSize,
           (value) => onDataChanged(data.copyWith(referenceSize: value)),
           unit: data.unit,

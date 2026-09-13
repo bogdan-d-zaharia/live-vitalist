@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
 import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/widgets/unit_synonyms_editor.dart';
+import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class AlimentSynonymsScreen extends StatelessWidget {
   final AlimentData data;
@@ -14,11 +15,13 @@ class AlimentSynonymsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+
     return ListView(
       padding: EdgeInsets.symmetric(horizontal: 24.0),
       children: [
         Text(
-          'Unit synonyms',
+          l.alimentEditorUnitSynonyms,
           style: Theme.of(context).textTheme.titleMedium,
         ),
         SizedBox(height: 12.0),

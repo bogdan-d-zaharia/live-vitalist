@@ -102,6 +102,8 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, _) {
@@ -114,7 +116,7 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context).alimentEditorTitle),
+          title: Text(l.alimentEditorTitle),
           actions: [
             JsonEditorButton(
               data: data,
@@ -174,8 +176,9 @@ class _AlimentDataEditorState extends ConsumerState<AlimentDataEditor> {
                     onNext: _nextPage,
                     onPrevious: _pageIndex > 0 ? _previousPage : null,
                     onSkip: _popSave,
-                    nextLabel:
-                        _pageIndex == _pageCount - 1 ? 'Save' : 'Continue',
+                    nextLabel: _pageIndex == _pageCount - 1
+                        ? l.actionSave
+                        : l.actionContinue,
                   ),
                 ),
               ],

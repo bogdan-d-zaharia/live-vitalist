@@ -7,12 +7,14 @@ class EditorStringInput extends StatelessWidget {
   final String value;
   final void Function(String) onChanged;
   final TextEditingController controller;
+  final IconData icon;
 
   const EditorStringInput(
     this.label,
     this.value,
     this.onChanged,
     this.controller, {
+    required this.icon,
     super.key,
   });
 
@@ -40,9 +42,7 @@ class EditorStringInput extends StatelessWidget {
               context,
               hintText: AppLocalizations.of(context)
                   .alimentEditorEnterLabel(label.toLowerCase()),
-              icon: label == 'Name'
-                  ? Icons.restaurant_menu_rounded
-                  : Icons.straighten_rounded,
+              icon: icon,
             ),
           ),
         ],

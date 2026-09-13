@@ -322,6 +322,18 @@ class AppLocalizationsRo extends AppLocalizations {
   String get alimentEditorAmount => 'Cantitate';
 
   @override
+  String get alimentEditorName => 'Nume';
+
+  @override
+  String get alimentEditorUnit => 'Unitate';
+
+  @override
+  String get alimentEditorPerAmount => 'Per cantitate';
+
+  @override
+  String get alimentEditorUnitSynonyms => 'Sinonimele unității';
+
+  @override
   String get alimentEditorAddSynonym => 'Adaugă sinonim';
 
   @override

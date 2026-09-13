@@ -71,6 +71,7 @@ class _TemporaryAlimentEditorState
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final nutrients = ref.watch(nutrientsProvider);
     final selectedNutrients = nutrients.order.where((key) =>
         key != 'kcals' && !nutrients.data[key]!.tags.contains('disabled'));
@@ -82,7 +83,7 @@ class _TemporaryAlimentEditorState
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context).alimentEditorTitle),
+          title: Text(l.alimentEditorTitle),
           actions: [
             JsonEditorButton(
               data: data,
@@ -106,7 +107,7 @@ class _TemporaryAlimentEditorState
                     padding: EdgeInsets.symmetric(horizontal: 24.0),
                     children: [
                       EditorStringInput(
-                        'Name',
+                        l.alimentEditorName,
                         dataName,
                         (value) {
                           setState(() => data = data.copyWith(name: {
@@ -115,6 +116,7 @@ class _TemporaryAlimentEditorState
                               }));
                         },
                         _nameController,
+                        icon: Icons.restaurant_menu_rounded,
                       ),
                       NutrientInput('kcals', nutrients, data),
                       ...selectedNutrients.map(
@@ -129,7 +131,7 @@ class _TemporaryAlimentEditorState
                     width: double.infinity,
                     child: FilledButton(
                       onPressed: _popSave,
-                      child: Text(AppLocalizations.of(context).actionSave),
+                      child: Text(l.actionSave),
                     ),
                   ),
                 ),

@@ -16,6 +16,8 @@ class NewSynonymInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
+
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 6.0),
       child: Row(
@@ -27,7 +29,7 @@ class NewSynonymInput extends StatelessWidget {
               textInputAction: TextInputAction.next,
               decoration: editorInputDecoration(
                 context,
-                hintText: AppLocalizations.of(context).alimentEditorNewUnit,
+                hintText: l.alimentEditorNewUnit,
                 icon: Icons.add_circle_outline_rounded,
               ),
             ),
@@ -42,13 +44,13 @@ class NewSynonymInput extends StatelessWidget {
               onSubmitted: (_) => onAdd(),
               decoration: editorInputDecoration(
                 context,
-                hintText: AppLocalizations.of(context).alimentEditorAmount,
+                hintText: l.alimentEditorAmount,
               ),
             ),
           ),
           SizedBox(width: 8.0),
           IconButton.filled(
-            tooltip: AppLocalizations.of(context).alimentEditorAddSynonym,
+            tooltip: l.alimentEditorAddSynonym,
             icon: Icon(Icons.add_rounded),
             onPressed: onAdd,
           )

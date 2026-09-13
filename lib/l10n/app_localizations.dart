@@ -686,6 +686,30 @@ abstract class AppLocalizations {
   /// **'Amount'**
   String get alimentEditorAmount;
 
+  /// No description provided for @alimentEditorName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get alimentEditorName;
+
+  /// No description provided for @alimentEditorUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit'**
+  String get alimentEditorUnit;
+
+  /// No description provided for @alimentEditorPerAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Per amount'**
+  String get alimentEditorPerAmount;
+
+  /// No description provided for @alimentEditorUnitSynonyms.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit synonyms'**
+  String get alimentEditorUnitSynonyms;
+
   /// No description provided for @alimentEditorAddSynonym.
   ///
   /// In en, this message translates to:

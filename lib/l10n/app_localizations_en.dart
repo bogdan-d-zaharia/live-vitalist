@@ -320,6 +320,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get alimentEditorAmount => 'Amount';
 
   @override
+  String get alimentEditorName => 'Name';
+
+  @override
+  String get alimentEditorUnit => 'Unit';
+
+  @override
+  String get alimentEditorPerAmount => 'Per amount';
+
+  @override
+  String get alimentEditorUnitSynonyms => 'Unit synonyms';
+
+  @override
   String get alimentEditorAddSynonym => 'Add synonym';
 
   @override

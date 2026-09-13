@@ -325,6 +325,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get alimentEditorAmount => 'Quantité';
 
   @override
+  String get alimentEditorName => 'Nom';
+
+  @override
+  String get alimentEditorUnit => 'Unité';
+
+  @override
+  String get alimentEditorPerAmount => 'Pour une quantité de';
+
+  @override
+  String get alimentEditorUnitSynonyms => 'Synonymes d’unités';
+
+  @override
   String get alimentEditorAddSynonym => 'Ajouter un synonyme';
 
   @override

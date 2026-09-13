@@ -319,6 +319,18 @@ class AppLocalizationsTr extends AppLocalizations {
   String get alimentEditorAmount => 'Miktar';
 
   @override
+  String get alimentEditorName => 'Ad';
+
+  @override
+  String get alimentEditorUnit => 'Birim';
+
+  @override
+  String get alimentEditorPerAmount => 'Miktar başına';
+
+  @override
+  String get alimentEditorUnitSynonyms => 'Birim eş anlamlıları';
+
+  @override
   String get alimentEditorAddSynonym => 'Eş anlamlı ekle';
 
   @override
