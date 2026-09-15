@@ -41,9 +41,9 @@ class SuperSearch extends _$SuperSearch {
       dayNotifier.addAliment(date, mealName, item.toInstanced());
     }
 
-    final bankNotifier = ref.read(alimentOrderProvider.notifier);
+    final bankNotifier = ref.read(alimentBankControllerProvider.notifier);
     for (final item in selection.reversed) {
-      bankNotifier.setFirst(item.alimentID);
+      bankNotifier.selectAliment(item.alimentID);
     }
   }
 }

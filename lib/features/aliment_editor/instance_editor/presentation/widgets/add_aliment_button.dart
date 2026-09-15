@@ -6,7 +6,7 @@ import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
 import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class AddAlimentButton extends StatelessWidget {
-  final CustomAliments notifier;
+  final AlimentBankController notifier;
   final Function() onAdded;
 
   const AddAlimentButton({
@@ -18,6 +18,7 @@ class AddAlimentButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
+
     return MiniCard(
       child: InkWell(
         onTap: () async {

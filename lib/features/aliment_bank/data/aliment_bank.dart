@@ -1,8 +1,12 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/features/aliment/domain/aliment.dart';
+import 'package:live_vitalist/features/aliment_bank/data/aliment_bank_state_extensions.dart';
 import 'package:live_vitalist/features/aliment_bank/domain/aliment_bank_state.dart';
 import 'package:live_vitalist/features/aliment_bank/domain/aliment_bank_constants.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
 import 'package:live_vitalist/core/storage/data/storage_provider.dart';
 import 'package:live_vitalist/features/aliment_bank/domain/aliment_catalog.dart';
+import 'package:live_vitalist/features/aliment_bank/domain/last_used_quantities.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'aliment_bank.g.dart';
@@ -14,7 +18,35 @@ class AlimentOrder extends _$AlimentOrder {
 
   void load(AlimentBankState bank) => state = bank.order.toSet();
 
-  void setFirst(String id) async => state = {id, ...state};
+  void _setFirst(String id) async => state = {id, ...state};
+}
+
+@Riverpod(keepAlive: true)
+class LastUsedQuantities extends _$LastUsedQuantities {
+  @override
+  FutureOr<Quantities> build() => _load();
+
+  Future<Quantities> _load() async {
+    final json = await ref
+        .read(storageProvider.notifier)
+        .loadJson(AlimentBankConstants.lastUsedQuantitiesPath);
+    return quantitiesFromJson(json ?? {});
+  }
+
+  Future<void> _save(Quantities quantities) async {
+    final json = quantitiesToJson(quantities);
+    await ref
+        .read(storageProvider.notifier)
+        .saveJson(AlimentBankConstants.lastUsedQuantitiesPath, json);
+  }
+
+  Future<void> _setLUQuantity(String id, Quantity quantity) async {
+    await update((quantities) async {
+      final updatedQuantities = {...quantities, id: quantity};
+      await _save(updatedQuantities);
+      return updatedQuantities;
+    });
+  }
 }
 
 @Riverpod(keepAlive: true)
@@ -22,12 +54,11 @@ class CustomAliments extends _$CustomAliments {
   @override
   Map<String, AlimentData> build() => {};
 
-  void load(AlimentBankState bank) => state = bank.aliments;
+  void _load(AlimentBankState bank) => state = bank.aliments;
 
-  void setAliment(String id, AlimentData data) {
+  void _setAliment(String id, AlimentData data) {
     if (id.split('-').length > 1) return;
     state = {...state, id: data};
-    ref.read(alimentOrderProvider.notifier).setFirst(id);
   }
 }
 
@@ -36,7 +67,7 @@ class AlimentCatalogs extends _$AlimentCatalogs {
   @override
   Map<String, AlimentCatalog> build() => {};
 
-  Future<void> load() async {
+  Future<void> _load() async {
     final storage = ref.read(storageProvider.notifier);
     final catalogs = await _loadCatalogs(storage);
     state = catalogs;
@@ -125,14 +156,14 @@ class AlimentBankController extends _$AlimentBankController {
 
   void setState(AlimentBankState bank) {
     ref.read(alimentOrderProvider.notifier).load(bank);
-    ref.read(customAlimentsProvider.notifier).load(bank);
+    ref.read(customAlimentsProvider.notifier)._load(bank);
   }
 
   Future<void> load() async {
     final jsonFtr = ref
         .read(storageProvider.notifier)
         .loadJson(AlimentBankConstants.alimentBankPath);
-    final catalogFtr = ref.read(alimentCatalogsProvider.notifier).load();
+    final catalogFtr = ref.read(alimentCatalogsProvider.notifier)._load();
 
     final json = await jsonFtr;
     final bank = json != null
@@ -141,6 +172,16 @@ class AlimentBankController extends _$AlimentBankController {
     setState(bank);
 
     await catalogFtr;
+  }
+
+  Future<void> selectAliment(InstancedAliment aliment) async {
+    ref.read(alimentOrderProvider.notifier)._setFirst(aliment.alimentID);
+    // final quantity = Quantity(aliment.servingS, unit)
+    // ref.read(lastUsedQuantitiesProvider.notifier)._setLUQuantity(id, quantity);
+  }
+
+  void setAliment(String id, AlimentData data) {
+    ref.read(customAlimentsProvider.notifier)._setAliment(id, data);
   }
 
   Future<void> saveBank(AlimentBankState bank) async {

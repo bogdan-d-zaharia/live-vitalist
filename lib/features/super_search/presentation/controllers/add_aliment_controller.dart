@@ -70,7 +70,7 @@ class AddAliment extends _$AddAliment {
     if (aliment == null) return;
 
     final id = aliment.hashCode.toString();
-    ref.read(customAlimentsProvider.notifier).setAliment(id, aliment);
+    ref.read(alimentBankControllerProvider.notifier).setAliment(id, aliment);
 
     ref.read(superSearchProvider.notifier).toggle(
           PendingAliment(

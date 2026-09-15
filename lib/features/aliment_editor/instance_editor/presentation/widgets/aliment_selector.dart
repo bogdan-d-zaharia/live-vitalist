@@ -33,7 +33,7 @@ class _SelectorState extends ConsumerState<Selector> {
     final languageCode = ref.watch(localizationProvider);
 
     final bank = ref.watch(alimentBankProvider);
-    final notifier = ref.read(customAlimentsProvider.notifier);
+    final notifier = ref.read(alimentBankControllerProvider.notifier);
 
     final filteredKeys = bank.order.where((id) {
       final name = bank.getAliment(id).readName(languageCode);

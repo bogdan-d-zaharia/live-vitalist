@@ -60,7 +60,7 @@ class _InstanceEditorState extends ConsumerState<InstanceEditor> {
       unit: selected.unit,
     );
 
-    ref.read(alimentOrderProvider.notifier).setFirst(selectedId);
+    ref.read(alimentBankControllerProvider.notifier).selectAliment(selectedId);
   }
 
   @override

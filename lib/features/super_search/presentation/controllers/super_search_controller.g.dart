@@ -41,7 +41,7 @@ final class SuperSearchProvider
   }
 }
 
-String _$superSearchHash() => r'd394760c2aed919e7ee9d83fed444a7466808b3c';
+String _$superSearchHash() => r'0282e0445bf50a651c8e102a9d46d9b827d91865';
 
 abstract class _$SuperSearch extends $Notifier<SuperSearchState> {
   SuperSearchState build();

@@ -41,7 +41,7 @@ final class AddAlimentProvider
   }
 }
 
-String _$addAlimentHash() => r'b18ba106a93fab74100381b7c45145b4310b6632';
+String _$addAlimentHash() => r'138d6d007648185c79a0ccb6f5ea0394b8530c93';
 
 abstract class _$AddAliment extends $Notifier<AddAlimentState> {
   AddAlimentState build();
