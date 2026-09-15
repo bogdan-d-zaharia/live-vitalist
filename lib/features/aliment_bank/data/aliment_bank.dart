@@ -1,6 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment.dart';
-import 'package:live_vitalist/features/aliment_bank/data/aliment_bank_state_extensions.dart';
 import 'package:live_vitalist/features/aliment_bank/domain/aliment_bank_state.dart';
 import 'package:live_vitalist/features/aliment_bank/domain/aliment_bank_constants.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
@@ -175,9 +173,10 @@ class AlimentBankController extends _$AlimentBankController {
   }
 
   Future<void> selectAliment(InstancedAliment aliment) async {
-    ref.read(alimentOrderProvider.notifier)._setFirst(aliment.alimentID);
-    // final quantity = Quantity(aliment.servingS, unit)
-    // ref.read(lastUsedQuantitiesProvider.notifier)._setLUQuantity(id, quantity);
+    final id = aliment.alimentID;
+    ref.read(alimentOrderProvider.notifier)._setFirst(id);
+    final quantity = Quantity(aliment.servingSize, aliment.unit);
+    ref.read(lastUsedQuantitiesProvider.notifier)._setLUQuantity(id, quantity);
   }
 
   void setAliment(String id, AlimentData data) {

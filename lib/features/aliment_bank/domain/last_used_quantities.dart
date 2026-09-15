@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:live_vitalist/features/aliment/domain/aliment.dart';
 
 @immutable
 class Quantity {
@@ -35,10 +34,4 @@ Quantities quantitiesFromJson(Map<String, dynamic> json) {
       MapEntry(id, Quantity.fromJson(Map<String, dynamic>.from(value))));
   quantities.removeWhere((_, quantity) => quantity.unit.isEmpty);
   return quantities;
-}
-
-extension InstanceToQuantity on InstancedAliment {
-  Quantity getQuantity() {
-    return Quantity(servingSize, unit);
-  }
 }

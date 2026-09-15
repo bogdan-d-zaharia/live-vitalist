@@ -43,7 +43,7 @@ class SuperSearch extends _$SuperSearch {
 
     final bankNotifier = ref.read(alimentBankControllerProvider.notifier);
     for (final item in selection.reversed) {
-      bankNotifier.selectAliment(item.alimentID);
+      bankNotifier.selectAliment(item.toInstanced());
     }
   }
 }

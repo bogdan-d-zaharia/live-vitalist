@@ -271,7 +271,7 @@ final class AlimentBankControllerProvider
 }
 
 String _$alimentBankControllerHash() =>
-    r'db47d71083ac1aaa0d24678df61d23b748f6cc09';
+    r'14725fb2af6871067e19e18f0b89516533241569';
 
 abstract class _$AlimentBankController extends $Notifier<void> {
   void build();

@@ -55,12 +55,8 @@ class _InstanceEditorState extends ConsumerState<InstanceEditor> {
     final selected = ref.read(alimentBankProvider).aliments[selectedId];
     if (selected == null) return;
 
-    aliment = aliment.copyWith(
-      alimentID: selectedId,
-      unit: selected.unit,
-    );
-
-    ref.read(alimentBankControllerProvider.notifier).selectAliment(selectedId);
+    aliment = aliment.copyWith(alimentID: selectedId, unit: selected.unit);
+    ref.read(alimentBankControllerProvider.notifier).selectAliment(aliment);
   }
 
   @override
