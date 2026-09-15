@@ -18,12 +18,23 @@ class SuperSearch extends _$SuperSearch {
 
   void setQuery(String query) => state = state.copyWith(query: query);
 
-  void toggle(InstancedAliment aliment) {
+  Future<void> toggle(InstancedAliment aliment) async {
     if (state.isSelected(aliment.alimentID)) {
       remove(aliment.alimentID);
-    } else {
-      state = state.copyWith(selection: [...state.selection, aliment]);
+      return;
     }
+
+    final quantities = await ref.read(lastUsedQuantitiesProvider.future);
+    if (state.isSelected(aliment.alimentID)) return;
+
+    final lastUsedQuantity = quantities[aliment.alimentID];
+    final selectedAliment = lastUsedQuantity == null
+        ? aliment
+        : aliment.copyWith(
+            servingSize: lastUsedQuantity.amount,
+            unit: lastUsedQuantity.unit,
+          );
+    state = state.copyWith(selection: [...state.selection, selectedAliment]);
   }
 
   void updateAliment(InstancedAliment aliment) {
