@@ -39,6 +39,7 @@ class AlimentDetailsScreen extends ConsumerWidget {
       children: [
         FoodImagePicker(
           selectedKey: data.image,
+          fallbackName: data.readName(languageCode),
           onChanged: onImageSelected,
         ),
         EditorStringInput(

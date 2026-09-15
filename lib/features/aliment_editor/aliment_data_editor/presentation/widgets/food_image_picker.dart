@@ -5,21 +5,27 @@ import 'package:live_vitalist/l10n/app_localizations.dart';
 class FoodImagePicker extends StatelessWidget {
   const FoodImagePicker({
     required this.selectedKey,
+    required this.fallbackName,
     required this.onChanged,
     super.key,
   });
 
   final String? selectedKey;
+  final String fallbackName;
   final ValueChanged<String> onChanged;
 
   Future<void> _openPicker(BuildContext context) async {
     FocusManager.instance.primaryFocus?.unfocus();
+    final effectiveSelectedKey =
+        foodImageForKey(selectedKey)?.key ??
+        suggestFoodImageForName(fallbackName)?.key;
     final result = await showModalBottomSheet<String>(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => _FoodImagePickerSheet(selectedKey: selectedKey),
+      builder: (context) =>
+          _FoodImagePickerSheet(selectedKey: effectiveSelectedKey),
     );
 
     if (result != null) onChanged(result);
@@ -29,7 +35,8 @@ class FoodImagePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final l = AppLocalizations.of(context);
-    final selected = foodImageForKey(selectedKey);
+    final selected =
+        foodImageForKey(selectedKey) ?? suggestFoodImageForName(fallbackName);
     final selectedName =
         selected == null ? null : l.alimentImageName(selected.key);
 

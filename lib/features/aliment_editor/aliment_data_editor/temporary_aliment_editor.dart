@@ -114,6 +114,7 @@ class _TemporaryAlimentEditorState
                     children: [
                       FoodImagePicker(
                         selectedKey: data.image,
+                        fallbackName: dataName,
                         onChanged: (image) {
                           setState(() {
                             _imageWasManuallySelected = true;
