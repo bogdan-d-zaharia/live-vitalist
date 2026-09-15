@@ -1,14 +1,14 @@
 // ignore_for_file: annotate_overrides
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:live_vitalist/features/super_search/domain/pending_aliment.dart';
+import 'package:live_vitalist/features/aliment/domain/aliment.dart';
 
 part 'super_search_state.freezed.dart';
 
 @freezed
 class SuperSearchState with _$SuperSearchState {
   final String query;
-  final List<PendingAliment> selection;
+  final List<InstancedAliment> selection;
   final DateTime? date;
   final String? mealName;
 

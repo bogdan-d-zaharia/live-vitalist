@@ -1,6 +1,6 @@
 import 'package:live_vitalist/features/aliment_bank/data/aliment_bank.dart';
+import 'package:live_vitalist/features/aliment/domain/aliment.dart';
 import 'package:live_vitalist/features/day/data/day_provider.dart';
-import 'package:live_vitalist/features/super_search/domain/pending_aliment.dart';
 import 'package:live_vitalist/features/super_search/domain/super_search_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -18,12 +18,20 @@ class SuperSearch extends _$SuperSearch {
 
   void setQuery(String query) => state = state.copyWith(query: query);
 
-  void toggle(PendingAliment aliment) {
+  void toggle(InstancedAliment aliment) {
     if (state.isSelected(aliment.alimentID)) {
       remove(aliment.alimentID);
     } else {
       state = state.copyWith(selection: [...state.selection, aliment]);
     }
+  }
+
+  void updateAliment(InstancedAliment aliment) {
+    state = state.copyWith(
+      selection: state.selection
+          .map((item) => item.alimentID == aliment.alimentID ? aliment : item)
+          .toList(),
+    );
   }
 
   void remove(String alimentID) {
@@ -38,12 +46,12 @@ class SuperSearch extends _$SuperSearch {
     final dayNotifier = ref.read(dayCacheProvider.notifier);
 
     for (final item in selection) {
-      dayNotifier.addAliment(date, mealName, item.toInstanced());
+      dayNotifier.addAliment(date, mealName, item);
     }
 
     final bankNotifier = ref.read(alimentBankControllerProvider.notifier);
     for (final item in selection.reversed) {
-      bankNotifier.selectAliment(item.toInstanced());
+      bankNotifier.selectAliment(item);
     }
   }
 }

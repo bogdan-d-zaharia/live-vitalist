@@ -7,7 +7,6 @@ import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/alimen
 import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/temporary_aliment_editor.dart';
 import 'package:live_vitalist/features/day/data/day_provider.dart';
 import 'package:live_vitalist/features/super_search/data/aliment_generator.dart';
-import 'package:live_vitalist/features/super_search/domain/pending_aliment.dart';
 import 'package:live_vitalist/features/super_search/presentation/controllers/super_search_controller.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/meal_picker_dialog.dart';
 import 'package:live_vitalist/l10n/app_localizations.dart';
@@ -73,7 +72,7 @@ class AddAliment extends _$AddAliment {
     ref.read(alimentBankControllerProvider.notifier).setAliment(id, aliment);
 
     ref.read(superSearchProvider.notifier).toggle(
-          PendingAliment(
+          InstancedAliment(
             alimentID: id,
             servingSize: 1.0,
             unit: aliment.unitSynonyms.isNotEmpty

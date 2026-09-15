@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$SuperSearchState {
   String get query;
-  List<PendingAliment> get selection;
+  List<InstancedAliment> get selection;
   DateTime? get date;
   String? get mealName;
 
@@ -57,7 +57,7 @@ abstract mixin class $SuperSearchStateCopyWith<$Res> {
   @useResult
   $Res call(
       {String query,
-      List<PendingAliment> selection,
+      List<InstancedAliment> selection,
       DateTime? date,
       String? mealName});
 }
@@ -88,7 +88,7 @@ class _$SuperSearchStateCopyWithImpl<$Res>
       selection: null == selection
           ? _self.selection
           : selection // ignore: cast_nullable_to_non_nullable
-              as List<PendingAliment>,
+              as List<InstancedAliment>,
       date: freezed == date
           ? _self.date
           : date // ignore: cast_nullable_to_non_nullable
