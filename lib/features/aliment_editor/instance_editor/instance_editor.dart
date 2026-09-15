@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/core/localization/localization_provider.dart';
+import 'package:live_vitalist/features/aliment/data/aliment_data_extensions.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
 
 import 'package:live_vitalist/features/aliment/domain/aliment.dart';
@@ -53,17 +55,14 @@ class _InstanceEditorState extends ConsumerState<InstanceEditor> {
     final selected = ref.read(alimentBankProvider).aliments[selectedId];
     if (selected == null) return;
 
-    aliment = aliment.copyWith(
-      alimentID: selectedId,
-      unit: selected.unit,
-    );
-
-    ref.read(alimentBankProvider.notifier).setFirst(selectedId);
+    aliment = aliment.copyWith(alimentID: selectedId, unit: selected.unit);
+    ref.read(alimentBankControllerProvider.notifier).selectAliment(aliment);
   }
 
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
+    final languageCode = ref.watch(localizationProvider);
     final data = selectedAliment;
 
     return PopScope(
@@ -84,7 +83,7 @@ class _InstanceEditorState extends ConsumerState<InstanceEditor> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   AlimentPickerField(
-                    alimentName: data?.name,
+                    alimentName: data?.readName(languageCode),
                     onTap: _selectAliment,
                   ),
                   ServedAmountInput(

@@ -15,10 +15,15 @@ class AnnouncementsApi implements IAnnouncementsApi {
 
   @override
   Stream<IAnnouncement> fetchAnnouncements() async* {
-    final requirements = await _legalHandler.fetch() ?? [];
-    if (requirements.isNotEmpty) yield LegalAnnouncement(requirements);
-    final weekReport = await _reportApi.loadLatestWeekReport();
-    if (weekReport != null) yield WeekReportAnnouncement(weekReport);
+    try {
+      final requirements = await _legalHandler.fetch() ?? [];
+      if (requirements.isNotEmpty) yield LegalAnnouncement(requirements);
+    } catch (_) {}
+
+    try {
+      final weekReport = await _reportApi.loadLatestWeekReport();
+      if (weekReport != null) yield WeekReportAnnouncement(weekReport);
+    } catch (_) {}
   }
 }
 

@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
+TextStyle dimStyle(TextStyle style) {
+  return style.copyWith(
+    color: Colors.grey,
+    fontSize: style.fontSize != null ? style.fontSize! - 2.5 : null,
+  );
+}
+
 class DimmedParenthesesText extends StatelessWidget {
   const DimmedParenthesesText({required this.label, this.style, super.key});
 
@@ -22,15 +29,7 @@ class DimmedParenthesesText extends StatelessWidget {
       text: TextSpan(
         children: [
           TextSpan(text: label1, style: effectiveStyle),
-          TextSpan(
-            text: label2,
-            style: effectiveStyle.copyWith(
-              color: Colors.grey,
-              fontSize: effectiveStyle.fontSize != null
-                  ? effectiveStyle.fontSize! - 2.5
-                  : null,
-            ),
-          ),
+          TextSpan(text: label2, style: dimStyle(effectiveStyle)),
         ],
       ),
     );

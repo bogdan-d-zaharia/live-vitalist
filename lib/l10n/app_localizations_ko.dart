@@ -27,6 +27,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get actionRestore => '복원';
 
   @override
+  String get actionIUnderstand => '이해했습니다';
+
+  @override
   String get nutrientKcals => '칼로리';
 
   @override
@@ -308,6 +311,18 @@ class AppLocalizationsKo extends AppLocalizations {
   String get alimentEditorAmount => '수량';
 
   @override
+  String get alimentEditorName => '이름';
+
+  @override
+  String get alimentEditorUnit => '단위';
+
+  @override
+  String get alimentEditorPerAmount => '기준량';
+
+  @override
+  String get alimentEditorUnitSynonyms => '단위 동의어';
+
+  @override
   String get alimentEditorAddSynonym => '동의어 추가';
 
   @override
@@ -456,6 +471,11 @@ class AppLocalizationsKo extends AppLocalizations {
   String get mealsJournalDinner => '저녁 식사';
 
   @override
+  String mealsJournalDefaultMealName(int number) {
+    return '$number번째 식사';
+  }
+
+  @override
   String get mealsJournalAddMeal => '식사 추가';
 
   @override
@@ -520,6 +540,27 @@ class AppLocalizationsKo extends AppLocalizations {
   String get superSearchAddToMeal => '식사에 추가';
 
   @override
+  String get superSearchAiDisclaimerTitle => 'AI로 생성된 식품 데이터';
+
+  @override
+  String get superSearchAiDisclaimerMessage =>
+      '선택한 일부 식품에는 인공지능으로 생성되거나 개선된 데이터가 포함되어 있습니다. 이 정보는 불완전하거나 부정확할 수 있으며 검증된 영양 또는 의료 조언을 대신할 수 없습니다.';
+
+  @override
+  String get superSearchAiDisclaimerAgreeAndDoNotShowAgain => '동의하고 다시 표시하지 않기';
+
+  @override
+  String get superSearchCouldNotGenerateTitle => '생성할 수 없음';
+
+  @override
+  String get superSearchAiUnavailableMessage =>
+      '현재 AI 모델에 요청이 몰려 이 식품을 생성할 수 없습니다. 잠시 후 다시 시도해 주세요.';
+
+  @override
+  String get superSearchAiRequestTimedOutMessage =>
+      'AI 요청을 완료하는 데 너무 오래 걸렸습니다. 다시 시도해 주세요.';
+
+  @override
   String get superSearchWriteAlimentFirst => '먼저 검색창에 식품을 입력해 주세요.';
 
   @override
@@ -552,6 +593,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get nutrientDisplayAddNewNutrient => '새 영양소 추가';
 
   @override
+  String get nutrientDisplayNewNutrient => '새 영양소';
+
+  @override
   String get nutrientDisplayAmount => '양:';
 
   @override
@@ -582,6 +626,39 @@ class AppLocalizationsKo extends AppLocalizations {
   String nutrientDisplayUpperLimitValue(String value) {
     return '상한: $value';
   }
+
+  @override
+  String nutrientDisplayNutrientLeft(String value, String unit) {
+    return '$value $unit 남음';
+  }
+
+  @override
+  String nutrientDisplayNutrientRemaining(String value, String unit) {
+    return '$value $unit 남음';
+  }
+
+  @override
+  String nutrientDisplayNutrientOver(String value, String unit) {
+    return '한도 $value $unit 초과';
+  }
+
+  @override
+  String get nutrientDisplayGoalReached => '목표 달성';
+
+  @override
+  String get nutrientDisplayWithinTarget => '목표 범위 내';
+
+  @override
+  String get nutrientDisplayEditorLabel => '라벨';
+
+  @override
+  String get nutrientDisplayEditorUpperLimit => '상한';
+
+  @override
+  String get nutrientDisplayEditorLowerLimit => '하한';
+
+  @override
+  String get nutrientDisplayEditorUnit => '단위';
 
   @override
   String get ratioBarsTitle => '분포 막대';
@@ -679,6 +756,9 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get settingsShowOmegaBalance => '오메가-3와 오메가-6 균형 표시';
+
+  @override
+  String get settingsShowNutrientProgress => '영양소 잔여량 및 백분율 표시';
 
   @override
   String get settingsAccountDeletion => '계정 삭제';

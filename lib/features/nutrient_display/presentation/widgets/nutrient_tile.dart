@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:live_vitalist/features/aliment/data/aliment_data_extensions.dart';
 import 'package:live_vitalist/features/aliment_bank/domain/aliment_bank_state.dart';
 import 'package:live_vitalist/features/day/domain/day.dart';
 import 'package:live_vitalist/features/day/domain/day_extensions.dart';
@@ -11,6 +12,7 @@ class NutrientTile extends StatelessWidget {
   final String nutrientName;
   final AlimentBankState bank;
   final Day day;
+  final String languageCode;
 
   const NutrientTile({
     super.key,
@@ -18,6 +20,7 @@ class NutrientTile extends StatelessWidget {
     required this.nutrientName,
     required this.bank,
     required this.day,
+    required this.languageCode,
   });
 
   @override
@@ -36,8 +39,8 @@ class NutrientTile extends StatelessWidget {
             builder: (context) {
               return DetailDialog(
                 intake: intake,
-                topSources: topAliments.map((key, value) =>
-                    MapEntry(key.readDataRef(bank).name, value)),
+                topSources: topAliments.map((key, value) => MapEntry(
+                    key.readDataRef(bank).readName(languageCode), value)),
               );
             },
           ),

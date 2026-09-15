@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/features/super_search/presentation/controllers/super_search_controller.dart';
-import 'package:live_vitalist/features/super_search/presentation/utils/add_aliment_actions.dart';
+import 'package:live_vitalist/features/super_search/presentation/controllers/add_aliment_controller.dart';
 import 'package:live_vitalist/features/super_search/presentation/utils/super_search_navigation.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/super_bar.dart';
 
@@ -20,8 +20,7 @@ class SuperSearchBarOverlay extends ConsumerStatefulWidget {
       _SuperSearchBarOverlayState();
 }
 
-class _SuperSearchBarOverlayState
-    extends ConsumerState<SuperSearchBarOverlay> {
+class _SuperSearchBarOverlayState extends ConsumerState<SuperSearchBarOverlay> {
   final TextEditingController _searchController = TextEditingController();
   bool _isOpeningSearch = false;
 
@@ -54,6 +53,9 @@ class _SuperSearchBarOverlayState
   @override
   Widget build(BuildContext context) {
     final isActive = widget.isSearchRoute;
+    final mediaQuery = MediaQuery.of(context);
+    final needsHomeBottomSpacing = mediaQuery.viewPadding.bottom == 0.0 ||
+        mediaQuery.systemGestureInsets.bottom == 0.0;
 
     return SafeArea(
       child: Stack(
@@ -65,7 +67,7 @@ class _SuperSearchBarOverlayState
             right: 12.0,
             bottom: switch (true) {
               _ when isActive => 20.0,
-              _ when widget.isHomeRoute => 0.0,
+              _ when widget.isHomeRoute => needsHomeBottomSpacing ? 20.0 : 0.0,
               _ => -80.0,
             },
             child: TextFieldTapRegion(
@@ -76,20 +78,9 @@ class _SuperSearchBarOverlayState
                 onExit: () => SuperSearchNavigation.close(context),
                 onChanged: (query) =>
                     ref.read(superSearchProvider.notifier).setQuery(query),
-                onAdd: (isTemp, isGen) {
-                  if (isGen) {
-                    AddAlimentActions.addGenerated(
-                      context,
-                      ref,
-                      _searchController.text,
-                      isTemp: isTemp,
-                    );
-                  } else if (isTemp) {
-                    AddAlimentActions.addTemporary(context, ref);
-                  } else {
-                    AddAlimentActions.addInstanced(context, ref);
-                  }
-                },
+                onAdd: () => ref
+                    .read(addAlimentProvider.notifier)
+                    .add(context, _searchController.text),
               ),
             ),
           ),

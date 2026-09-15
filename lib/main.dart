@@ -17,6 +17,7 @@ import 'package:live_vitalist/features/settings/data/settings_data.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await SettingsData.init();
 
   runApp(ProviderScope(child: MyApp()));

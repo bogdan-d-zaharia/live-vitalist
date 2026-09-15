@@ -27,6 +27,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get actionRestore => 'Restaurer';
 
   @override
+  String get actionIUnderstand => 'Je comprends';
+
+  @override
   String get nutrientKcals => 'Calories';
 
   @override
@@ -322,6 +325,18 @@ class AppLocalizationsFr extends AppLocalizations {
   String get alimentEditorAmount => 'Quantité';
 
   @override
+  String get alimentEditorName => 'Nom';
+
+  @override
+  String get alimentEditorUnit => 'Unité';
+
+  @override
+  String get alimentEditorPerAmount => 'Pour une quantité de';
+
+  @override
+  String get alimentEditorUnitSynonyms => 'Synonymes d’unités';
+
+  @override
   String get alimentEditorAddSynonym => 'Ajouter un synonyme';
 
   @override
@@ -477,6 +492,11 @@ class AppLocalizationsFr extends AppLocalizations {
   String get mealsJournalDinner => 'Dîner';
 
   @override
+  String mealsJournalDefaultMealName(int number) {
+    return 'Repas n° $number';
+  }
+
+  @override
   String get mealsJournalAddMeal => 'Ajouter un repas';
 
   @override
@@ -544,6 +564,29 @@ class AppLocalizationsFr extends AppLocalizations {
   String get superSearchAddToMeal => 'Ajouter au repas';
 
   @override
+  String get superSearchAiDisclaimerTitle =>
+      'Données alimentaires créées par IA';
+
+  @override
+  String get superSearchAiDisclaimerMessage =>
+      'Certains aliments sélectionnés contiennent des données générées ou améliorées par l’intelligence artificielle. Ces informations peuvent être incomplètes ou inexactes et ne remplacent pas des conseils nutritionnels ou médicaux vérifiés.';
+
+  @override
+  String get superSearchAiDisclaimerAgreeAndDoNotShowAgain =>
+      'Accepter et ne plus afficher';
+
+  @override
+  String get superSearchCouldNotGenerateTitle => 'Impossible de générer';
+
+  @override
+  String get superSearchAiUnavailableMessage =>
+      'Le modèle d’IA est actuellement très sollicité et ne peut pas générer cet aliment. Veuillez réessayer dans quelques instants.';
+
+  @override
+  String get superSearchAiRequestTimedOutMessage =>
+      'La requête à l’IA a pris trop de temps. Veuillez réessayer.';
+
+  @override
   String get superSearchWriteAlimentFirst =>
       'Saisissez d\'abord l\'aliment dans la barre de recherche.';
 
@@ -577,6 +620,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get nutrientDisplayAddNewNutrient => 'Ajouter un nutriment';
 
   @override
+  String get nutrientDisplayNewNutrient => 'Nouveau nutriment';
+
+  @override
   String get nutrientDisplayAmount => 'Quantité :';
 
   @override
@@ -607,6 +653,39 @@ class AppLocalizationsFr extends AppLocalizations {
   String nutrientDisplayUpperLimitValue(String value) {
     return 'Limite supérieure : $value';
   }
+
+  @override
+  String nutrientDisplayNutrientLeft(String value, String unit) {
+    return '$value $unit restants';
+  }
+
+  @override
+  String nutrientDisplayNutrientRemaining(String value, String unit) {
+    return '$value $unit restants';
+  }
+
+  @override
+  String nutrientDisplayNutrientOver(String value, String unit) {
+    return '$value $unit au-dessus de la limite';
+  }
+
+  @override
+  String get nutrientDisplayGoalReached => 'Objectif atteint';
+
+  @override
+  String get nutrientDisplayWithinTarget => 'Dans l’objectif';
+
+  @override
+  String get nutrientDisplayEditorLabel => 'Libellé';
+
+  @override
+  String get nutrientDisplayEditorUpperLimit => 'Limite supérieure';
+
+  @override
+  String get nutrientDisplayEditorLowerLimit => 'Limite inférieure';
+
+  @override
+  String get nutrientDisplayEditorUnit => 'Unité';
 
   @override
   String get ratioBarsTitle => 'Barres de répartition';
@@ -707,6 +786,10 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get settingsShowOmegaBalance =>
       'Afficher l\'équilibre Oméga-3 / Oméga-6';
+
+  @override
+  String get settingsShowNutrientProgress =>
+      'Afficher la quantité restante et le pourcentage des nutriments';
 
   @override
   String get settingsAccountDeletion => 'Suppression du compte';

@@ -1,11 +1,13 @@
 {
   "@@locale": "tr",
+
   "actionSave": "Kaydet",
   "actionCancel": "İptal",
   "actionDelete": "Sil",
   "actionContinue": "Devam et",
   "actionTryAgain": "Tekrar dene",
   "actionRestore": "Geri yükle",
+  "actionIUnderstand": "Anlıyorum",
   "nutrientKcals": "Kalori",
   "nutrientProtein": "Protein",
   "nutrientCarbs": "Karbonhidrat",
@@ -123,6 +125,10 @@
   "alimentEditorNewUnit": "Yeni birim",
   "alimentEditorUnitName": "Birim adı",
   "alimentEditorAmount": "Miktar",
+  "alimentEditorName": "Ad",
+  "alimentEditorUnit": "Birim",
+  "alimentEditorPerAmount": "Miktar başına",
+  "alimentEditorUnitSynonyms": "Birim eş anlamlıları",
   "alimentEditorAddSynonym": "Eş anlamlı ekle",
   "alimentEditorDeleteSynonym": "Eş anlamlıyı sil",
   "alimentEditorEnterLabel": "{label} girin",
@@ -161,6 +167,7 @@
   "mealsJournalBreakfast": "Kahvaltı",
   "mealsJournalLunch": "Öğle yemeği",
   "mealsJournalDinner": "Akşam yemeği",
+  "mealsJournalDefaultMealName": "{number}. Öğün",
   "mealsJournalAddMeal": "Öğün ekle",
   "mealsJournalAddAliment": "Besin ekle",
   "mealsJournalAddTemporaryAliment": "Geçici besin ekle",
@@ -194,6 +201,12 @@
   "superSearchNoAlimentsFound": "Besin bulunamadı",
   "superSearchTryAnotherName": "Başka bir ad deneyin veya yazımı kontrol edin.",
   "superSearchAddToMeal": "Öğüne ekle",
+  "superSearchAiDisclaimerTitle": "Yapay zekâ üretimi besin verileri",
+  "superSearchAiDisclaimerMessage": "Seçilen bazı besinler yapay zekâ tarafından oluşturulan veya geliştirilen veriler içerir. Bu bilgiler eksik ya da hatalı olabilir ve doğrulanmış beslenme veya tıbbi tavsiyelerin yerini tutmaz.",
+  "superSearchAiDisclaimerAgreeAndDoNotShowAgain": "Kabul et ve tekrar gösterme",
+  "superSearchCouldNotGenerateTitle": "Oluşturulamadı",
+  "superSearchAiUnavailableMessage": "Yapay zekâ modeli şu anda yoğun talep görüyor ve bu besini oluşturamıyor. Lütfen birkaç dakika sonra tekrar deneyin.",
+  "superSearchAiRequestTimedOutMessage": "Yapay zekâ isteğinin tamamlanması çok uzun sürdü. Lütfen tekrar deneyin.",
   "superSearchWriteAlimentFirst": "Önce arama çubuğuna besini yazın.",
   "superSearchAddAliments": "{count, plural, =1{Besin ekle} other{{count} besin ekle}}",
   "@superSearchAddAliments": {
@@ -213,6 +226,7 @@
   },
   "nutrientDisplayTitle": "Besin öğeleri",
   "nutrientDisplayAddNewNutrient": "Yeni besin öğesi ekle",
+  "nutrientDisplayNewNutrient": "Yeni besin öğesi",
   "nutrientDisplayAmount": "Miktar:",
   "nutrientDisplayLowerLimit": "Alt sınır:",
   "nutrientDisplayUpperLimit": "Üst sınır:",
@@ -249,6 +263,28 @@
       }
     }
   },
+  "nutrientDisplayNutrientLeft": "{value} {unit} kaldı",
+  "@nutrientDisplayNutrientLeft": {"placeholders": {
+    "value": {"type": "String"},
+    "unit": {"type": "String"}
+  }},
+  "nutrientDisplayNutrientRemaining": "{value} {unit} kaldı",
+  "@nutrientDisplayNutrientRemaining": {"placeholders": {
+    "value": {"type": "String"},
+    "unit": {"type": "String"}
+  }},
+  "nutrientDisplayNutrientOver": "Sınırın {value} {unit} üzerinde",
+  "@nutrientDisplayNutrientOver": {"placeholders": {
+    "value": {"type": "String"},
+    "unit": {"type": "String"}
+  }},
+  "nutrientDisplayGoalReached": "Hedefe ulaşıldı",
+  "nutrientDisplayWithinTarget": "Hedef aralığında",
+  "nutrientDisplayEditorLabel": "Etiket",
+  "nutrientDisplayEditorUpperLimit": "Üst sınır",
+  "nutrientDisplayEditorLowerLimit": "Alt sınır",
+  "nutrientDisplayEditorUnit": "Birim",
+
   "ratioBarsTitle": "Dağılım çubukları",
   "reportsNoData": "Veri yok",
   "reportsPreviousWeek": "Önceki hafta",
@@ -304,6 +340,7 @@
   "settingsUseComplexCalendar": "Ayrıntılı takvim görünümünü kullan",
   "settingsShowMacroDistribution": "Makro dağılımını göster",
   "settingsShowOmegaBalance": "Omega-3 / Omega-6 dengesini göster",
+  "settingsShowNutrientProgress": "Kalan besin miktarını ve yüzdesini göster",
   "settingsAccountDeletion": "Hesap silme",
   "settingsAccountAndDataDeletion": "Hesap ve veri silme",
   "settingsPermanentlyDeleteOnlineData": "Çevrimiçi verileri kalıcı olarak sil",

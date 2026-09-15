@@ -1,11 +1,14 @@
 {
   "@@locale": "fr",
+
   "actionSave": "Enregistrer",
   "actionCancel": "Annuler",
   "actionDelete": "Supprimer",
   "actionContinue": "Continuer",
   "actionTryAgain": "Réessayer",
   "actionRestore": "Restaurer",
+  "actionIUnderstand": "Je comprends",
+
   "nutrientKcals": "Calories",
   "nutrientProtein": "Protéines",
   "nutrientCarbs": "Glucides",
@@ -123,6 +126,10 @@
   "alimentEditorNewUnit": "Nouvelle unité",
   "alimentEditorUnitName": "Nom de l'unité",
   "alimentEditorAmount": "Quantité",
+  "alimentEditorName": "Nom",
+  "alimentEditorUnit": "Unité",
+  "alimentEditorPerAmount": "Pour une quantité de",
+  "alimentEditorUnitSynonyms": "Synonymes d’unités",
   "alimentEditorAddSynonym": "Ajouter un synonyme",
   "alimentEditorDeleteSynonym": "Supprimer le synonyme",
   "alimentEditorEnterLabel": "Saisir {label}",
@@ -161,6 +168,7 @@
   "mealsJournalBreakfast": "Petit-déjeuner",
   "mealsJournalLunch": "Déjeuner",
   "mealsJournalDinner": "Dîner",
+  "mealsJournalDefaultMealName": "Repas n° {number}",
   "mealsJournalAddMeal": "Ajouter un repas",
   "mealsJournalAddAliment": "Ajouter un aliment",
   "mealsJournalAddTemporaryAliment": "Ajouter un aliment temporaire",
@@ -194,6 +202,12 @@
   "superSearchNoAlimentsFound": "Aucun aliment trouvé",
   "superSearchTryAnotherName": "Essayez un autre nom ou vérifiez l'orthographe.",
   "superSearchAddToMeal": "Ajouter au repas",
+  "superSearchAiDisclaimerTitle": "Données alimentaires créées par IA",
+  "superSearchAiDisclaimerMessage": "Certains aliments sélectionnés contiennent des données générées ou améliorées par l’intelligence artificielle. Ces informations peuvent être incomplètes ou inexactes et ne remplacent pas des conseils nutritionnels ou médicaux vérifiés.",
+  "superSearchAiDisclaimerAgreeAndDoNotShowAgain": "Accepter et ne plus afficher",
+  "superSearchCouldNotGenerateTitle": "Impossible de générer",
+  "superSearchAiUnavailableMessage": "Le modèle d’IA est actuellement très sollicité et ne peut pas générer cet aliment. Veuillez réessayer dans quelques instants.",
+  "superSearchAiRequestTimedOutMessage": "La requête à l’IA a pris trop de temps. Veuillez réessayer.",
   "superSearchWriteAlimentFirst": "Saisissez d'abord l'aliment dans la barre de recherche.",
   "superSearchAddAliments": "{count, plural, =1{Ajouter un aliment} other{Ajouter {count} aliments}}",
   "@superSearchAddAliments": {
@@ -213,6 +227,7 @@
   },
   "nutrientDisplayTitle": "Nutriments",
   "nutrientDisplayAddNewNutrient": "Ajouter un nutriment",
+  "nutrientDisplayNewNutrient": "Nouveau nutriment",
   "nutrientDisplayAmount": "Quantité :",
   "nutrientDisplayLowerLimit": "Limite inférieure :",
   "nutrientDisplayUpperLimit": "Limite supérieure :",
@@ -249,6 +264,45 @@
       }
     }
   },
+  "nutrientDisplayNutrientLeft": "{value} {unit} restants",
+  "@nutrientDisplayNutrientLeft": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "nutrientDisplayNutrientRemaining": "{value} {unit} restants",
+  "@nutrientDisplayNutrientRemaining": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "nutrientDisplayNutrientOver": "{value} {unit} au-dessus de la limite",
+  "@nutrientDisplayNutrientOver": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "nutrientDisplayGoalReached": "Objectif atteint",
+  "nutrientDisplayWithinTarget": "Dans l’objectif",
+  "nutrientDisplayEditorLabel": "Libellé",
+  "nutrientDisplayEditorUpperLimit": "Limite supérieure",
+  "nutrientDisplayEditorLowerLimit": "Limite inférieure",
+  "nutrientDisplayEditorUnit": "Unité",
   "ratioBarsTitle": "Barres de répartition",
   "reportsNoData": "Aucune donnée",
   "reportsPreviousWeek": "Semaine précédente",
@@ -304,6 +358,7 @@
   "settingsUseComplexCalendar": "Utiliser la vue calendrier détaillée",
   "settingsShowMacroDistribution": "Afficher la répartition des macronutriments",
   "settingsShowOmegaBalance": "Afficher l'équilibre Oméga-3 / Oméga-6",
+  "settingsShowNutrientProgress": "Afficher la quantité restante et le pourcentage des nutriments",
   "settingsAccountDeletion": "Suppression du compte",
   "settingsAccountAndDataDeletion": "Suppression du compte et des données",
   "settingsPermanentlyDeleteOnlineData": "Supprimer définitivement les données en ligne",

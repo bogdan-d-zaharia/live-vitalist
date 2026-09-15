@@ -60,13 +60,13 @@ class DayCache extends _$DayCache {
   Future<void> removeMeal(DateTime date, String mealKey) async {
     final day = await load(date);
     final meals = [...day.meals]..removeWhere((e) => e.key == mealKey);
-    _save(date, Day(meals: meals));
+    await _save(date, Day(meals: meals));
   }
 
   Future<void> addMeal(DateTime date, Meal meal) async {
     final day = await load(date);
     final meals = [...day.meals, meal];
-    _save(date, Day(meals: meals));
+    await _save(date, Day(meals: meals));
   }
 
   // TODO: Momentan se muteaza obiectul Meal
@@ -79,7 +79,7 @@ class DayCache extends _$DayCache {
     final meal = day.meals.firstWhere((meal) => meal.key == mealKey);
     meal.aliments.add(aliment);
     final meals = [...day.meals];
-    _save(date, Day(meals: meals));
+    await _save(date, Day(meals: meals));
   }
 
   Future<void> removeAliment(
@@ -88,7 +88,7 @@ class DayCache extends _$DayCache {
     final meal = day.meals.firstWhere((meal) => meal.key == mealKey);
     meal.aliments.remove(aliment);
     final meals = [...day.meals];
-    _save(date, Day(meals: meals));
+    await _save(date, Day(meals: meals));
   }
 
   Future<void> updateAliment(
@@ -104,7 +104,7 @@ class DayCache extends _$DayCache {
       ..removeAt(idx)
       ..insert(idx, newAliment);
     final meals = [...day.meals];
-    _save(date, Day(meals: meals));
+    await _save(date, Day(meals: meals));
   }
 }
 

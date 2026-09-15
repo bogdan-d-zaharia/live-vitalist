@@ -115,7 +115,8 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
                       setState(() => SettingsData.isMonthDay = val);
                     },
                   ),
-                  Text(l.settingsUseMonthDayFormat),
+                  Expanded(child: Text(l.settingsUseMonthDayFormat)),
+                  const SizedBox(width: 12.0),
                 ],
               ),
             ),
@@ -130,7 +131,8 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
                       setState(() => SettingsData.isComplexCalendar = val);
                     },
                   ),
-                  Text(l.settingsUseComplexCalendar),
+                  Expanded(child: Text(l.settingsUseComplexCalendar)),
+                  const SizedBox(width: 12.0),
                 ],
               ),
             ),
@@ -146,7 +148,8 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
                           () => SettingsData.isShowCalorieDistribution = val);
                     },
                   ),
-                  Text(l.settingsShowMacroDistribution),
+                  Expanded(child: Text(l.settingsShowMacroDistribution)),
+                  const SizedBox(width: 12.0),
                 ],
               ),
             ),
@@ -157,12 +160,28 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
                   Checkbox(
                     value: SettingsData.isShowOmegaBalance,
                     onChanged: (val) {
-                      if (val != null) {
-                        setState(() => SettingsData.isShowOmegaBalance = val);
-                      }
+                      if (val == null) return;
+                      setState(() => SettingsData.isShowOmegaBalance = val);
                     },
                   ),
-                  Text(l.settingsShowOmegaBalance),
+                  Expanded(child: Text(l.settingsShowOmegaBalance)),
+                  const SizedBox(width: 12.0),
+                ],
+              ),
+            ),
+            MiniCard(
+              child: Row(
+                children: [
+                  const SizedBox(width: 16.0),
+                  Checkbox(
+                    value: SettingsData.isShowNutrientProgress,
+                    onChanged: (val) {
+                      if (val == null) return;
+                      setState(() => SettingsData.isShowNutrientProgress = val);
+                    },
+                  ),
+                  Expanded(child: Text(l.settingsShowNutrientProgress)),
+                  const SizedBox(width: 12.0),
                 ],
               ),
             ),

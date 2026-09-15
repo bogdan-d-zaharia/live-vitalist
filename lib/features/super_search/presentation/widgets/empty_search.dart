@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class EmptySearch extends StatelessWidget {
-  const EmptySearch({super.key});
+  final VoidCallback onCreateAliment;
+  const EmptySearch({super.key, required this.onCreateAliment});
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +35,12 @@ class EmptySearch extends StatelessWidget {
               style: theme.textTheme.bodyMedium?.copyWith(
                 color: theme.colorScheme.onSurfaceVariant,
               ),
+            ),
+            SizedBox(height: 20.0),
+            FilledButton.icon(
+              onPressed: onCreateAliment,
+              icon: Icon(Icons.add_rounded),
+              label: Text(l.alimentEditorAddAliment),
             ),
           ],
         ),

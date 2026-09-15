@@ -1,11 +1,13 @@
 {
   "@@locale": "ro",
+
   "actionSave": "Salvează",
   "actionCancel": "Anulează",
   "actionDelete": "Șterge",
   "actionContinue": "Continuă",
   "actionTryAgain": "Încearcă din nou",
   "actionRestore": "Restaurează",
+  "actionIUnderstand": "Am înțeles",
   "nutrientKcals": "Calorii",
   "nutrientProtein": "Proteine",
   "nutrientCarbs": "Carbohidrați",
@@ -123,6 +125,10 @@
   "alimentEditorNewUnit": "Unitate nouă",
   "alimentEditorUnitName": "Numele unității",
   "alimentEditorAmount": "Cantitate",
+  "alimentEditorName": "Nume",
+  "alimentEditorUnit": "Unitate",
+  "alimentEditorPerAmount": "Per cantitate",
+  "alimentEditorUnitSynonyms": "Sinonimele unității",
   "alimentEditorAddSynonym": "Adaugă sinonim",
   "alimentEditorDeleteSynonym": "Șterge sinonim",
   "alimentEditorEnterLabel": "Introdu {label}",
@@ -161,6 +167,7 @@
   "mealsJournalBreakfast": "Mic dejun",
   "mealsJournalLunch": "Prânz",
   "mealsJournalDinner": "Cină",
+  "mealsJournalDefaultMealName": "Masa nr. {number}",
   "mealsJournalAddMeal": "Adaugă masă",
   "mealsJournalAddAliment": "Adaugă aliment",
   "mealsJournalAddTemporaryAliment": "Adaugă aliment temporar",
@@ -194,6 +201,12 @@
   "superSearchNoAlimentsFound": "Nu au fost găsite alimente",
   "superSearchTryAnotherName": "Încearcă un alt nume sau verifică ortografia.",
   "superSearchAddToMeal": "Adaugă la masă",
+  "superSearchAiDisclaimerTitle": "Date alimentare generate cu AI",
+  "superSearchAiDisclaimerMessage": "Unele alimente selectate conțin date generate sau îmbunătățite cu ajutorul inteligenței artificiale. Aceste informații pot fi incomplete sau inexacte și nu înlocuiesc recomandările nutriționale sau medicale verificate.",
+  "superSearchAiDisclaimerAgreeAndDoNotShowAgain": "Sunt de acord și nu mai afișa",
+  "superSearchCouldNotGenerateTitle": "Nu s-a putut genera",
+  "superSearchAiUnavailableMessage": "Modelul AI este solicitat intens momentan și nu poate genera acest aliment acum. Încearcă din nou peste câteva momente.",
+  "superSearchAiRequestTimedOutMessage": "Cererea către AI a durat prea mult. Încearcă din nou.",
   "superSearchWriteAlimentFirst": "Scrie mai întâi alimentul în bara de căutare.",
   "superSearchAddAliments": "{count, plural, =1{Adaugă aliment} other{Adaugă {count} alimente}}",
   "@superSearchAddAliments": {
@@ -213,6 +226,7 @@
   },
   "nutrientDisplayTitle": "Nutrienți",
   "nutrientDisplayAddNewNutrient": "Adaugă nutrient nou",
+  "nutrientDisplayNewNutrient": "Nutrient nou",
   "nutrientDisplayAmount": "Cantitate:",
   "nutrientDisplayLowerLimit": "Limită inferioară:",
   "nutrientDisplayUpperLimit": "Limită superioară:",
@@ -249,6 +263,28 @@
       }
     }
   },
+  "nutrientDisplayNutrientLeft": "Mai ai {value} {unit}",
+  "@nutrientDisplayNutrientLeft": {"placeholders": {
+    "value": {"type": "String"},
+    "unit": {"type": "String"}
+  }},
+  "nutrientDisplayNutrientRemaining": "Au rămas {value} {unit}",
+  "@nutrientDisplayNutrientRemaining": {"placeholders": {
+    "value": {"type": "String"},
+    "unit": {"type": "String"}
+  }},
+  "nutrientDisplayNutrientOver": "{value} {unit} peste limită",
+  "@nutrientDisplayNutrientOver": {"placeholders": {
+    "value": {"type": "String"},
+    "unit": {"type": "String"}
+  }},
+  "nutrientDisplayGoalReached": "Obiectiv atins",
+  "nutrientDisplayWithinTarget": "În intervalul țintă",
+  "nutrientDisplayEditorLabel": "Etichetă",
+  "nutrientDisplayEditorUpperLimit": "Limită superioară",
+  "nutrientDisplayEditorLowerLimit": "Limită inferioară",
+  "nutrientDisplayEditorUnit": "Unitate",
+
   "ratioBarsTitle": "Bare de distribuție",
   "reportsNoData": "Fără date",
   "reportsPreviousWeek": "Săptămâna anterioară",
@@ -304,6 +340,7 @@
   "settingsUseComplexCalendar": "Folosește vizualizarea detaliată a calendarului",
   "settingsShowMacroDistribution": "Afișează distribuția macronutrienților",
   "settingsShowOmegaBalance": "Afișează raportul Omega-3/Omega-6",
+  "settingsShowNutrientProgress": "Afișează cantitatea rămasă și procentul nutrienților",
   "settingsAccountDeletion": "Ștergerea contului",
   "settingsAccountAndDataDeletion": "Ștergerea contului și datelor",
   "settingsPermanentlyDeleteOnlineData": "Șterge permanent datele online",

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/core/localization/localization_provider.dart';
+import 'package:live_vitalist/features/aliment/data/aliment_data_extensions.dart';
 import 'package:live_vitalist/features/aliment_bank/data/aliment_bank.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_extensions.dart';
@@ -25,6 +27,8 @@ class AlimentWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final languageCode = ref.watch(localizationProvider);
+
     final model = ref.watch(nutrientsProvider).data;
     final bank = ref.watch(alimentBankProvider);
     final kcalsLabel = model['kcals']?.resolveNutrientLabel(
@@ -36,13 +40,14 @@ class AlimentWidget extends ConsumerWidget {
 
     final values = aliment.readFields(bank);
     final data = aliment.readDataRef(bank);
+    final name = data.readName(languageCode);
     return ElementWidget(
-      title: data.name,
+      title: name,
       subTitle:
           '${values['kcals']?.round() ?? 0} ${kcalsLabel.toLowerCase()}, ${aliment.servingSize} ${aliment.unit}',
       leading: FoodImageThumbnail(
         imageKey: data.image,
-        fallbackName: data.name,
+        fallbackName: name,
       ),
       onTap: onTap,
       onLongPress: onLongPress,

@@ -3,10 +3,13 @@ abstract interface class IStorageHandler {
   Future<Map<String, dynamic>?> loadJson(String path);
 }
 
-abstract interface class ILocalDeletion {
+abstract interface class ILocalHandler {
+  Future<bool> saveLocal(String path, Map<String, dynamic> json);
+  Future<dynamic> loadLocal(String path);
   Future<bool> deleteLocal();
 }
 
-abstract interface class ICloudDeletion {
+abstract interface class ICloudHandler {
+  Future<dynamic> loadCloud(String path);
   Future<bool> deleteAccount();
 }

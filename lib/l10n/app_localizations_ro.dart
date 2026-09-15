@@ -27,6 +27,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get actionRestore => 'Restaurează';
 
   @override
+  String get actionIUnderstand => 'Am înțeles';
+
+  @override
   String get nutrientKcals => 'Calorii';
 
   @override
@@ -319,6 +322,18 @@ class AppLocalizationsRo extends AppLocalizations {
   String get alimentEditorAmount => 'Cantitate';
 
   @override
+  String get alimentEditorName => 'Nume';
+
+  @override
+  String get alimentEditorUnit => 'Unitate';
+
+  @override
+  String get alimentEditorPerAmount => 'Per cantitate';
+
+  @override
+  String get alimentEditorUnitSynonyms => 'Sinonimele unității';
+
+  @override
   String get alimentEditorAddSynonym => 'Adaugă sinonim';
 
   @override
@@ -475,6 +490,11 @@ class AppLocalizationsRo extends AppLocalizations {
   String get mealsJournalDinner => 'Cină';
 
   @override
+  String mealsJournalDefaultMealName(int number) {
+    return 'Masa nr. $number';
+  }
+
+  @override
   String get mealsJournalAddMeal => 'Adaugă masă';
 
   @override
@@ -542,6 +562,28 @@ class AppLocalizationsRo extends AppLocalizations {
   String get superSearchAddToMeal => 'Adaugă la masă';
 
   @override
+  String get superSearchAiDisclaimerTitle => 'Date alimentare generate cu AI';
+
+  @override
+  String get superSearchAiDisclaimerMessage =>
+      'Unele alimente selectate conțin date generate sau îmbunătățite cu ajutorul inteligenței artificiale. Aceste informații pot fi incomplete sau inexacte și nu înlocuiesc recomandările nutriționale sau medicale verificate.';
+
+  @override
+  String get superSearchAiDisclaimerAgreeAndDoNotShowAgain =>
+      'Sunt de acord și nu mai afișa';
+
+  @override
+  String get superSearchCouldNotGenerateTitle => 'Nu s-a putut genera';
+
+  @override
+  String get superSearchAiUnavailableMessage =>
+      'Modelul AI este solicitat intens momentan și nu poate genera acest aliment acum. Încearcă din nou peste câteva momente.';
+
+  @override
+  String get superSearchAiRequestTimedOutMessage =>
+      'Cererea către AI a durat prea mult. Încearcă din nou.';
+
+  @override
   String get superSearchWriteAlimentFirst =>
       'Scrie mai întâi alimentul în bara de căutare.';
 
@@ -575,6 +617,9 @@ class AppLocalizationsRo extends AppLocalizations {
   String get nutrientDisplayAddNewNutrient => 'Adaugă nutrient nou';
 
   @override
+  String get nutrientDisplayNewNutrient => 'Nutrient nou';
+
+  @override
   String get nutrientDisplayAmount => 'Cantitate:';
 
   @override
@@ -605,6 +650,39 @@ class AppLocalizationsRo extends AppLocalizations {
   String nutrientDisplayUpperLimitValue(String value) {
     return 'Limită superioară: $value';
   }
+
+  @override
+  String nutrientDisplayNutrientLeft(String value, String unit) {
+    return 'Mai ai $value $unit';
+  }
+
+  @override
+  String nutrientDisplayNutrientRemaining(String value, String unit) {
+    return 'Au rămas $value $unit';
+  }
+
+  @override
+  String nutrientDisplayNutrientOver(String value, String unit) {
+    return '$value $unit peste limită';
+  }
+
+  @override
+  String get nutrientDisplayGoalReached => 'Obiectiv atins';
+
+  @override
+  String get nutrientDisplayWithinTarget => 'În intervalul țintă';
+
+  @override
+  String get nutrientDisplayEditorLabel => 'Etichetă';
+
+  @override
+  String get nutrientDisplayEditorUpperLimit => 'Limită superioară';
+
+  @override
+  String get nutrientDisplayEditorLowerLimit => 'Limită inferioară';
+
+  @override
+  String get nutrientDisplayEditorUnit => 'Unitate';
 
   @override
   String get ratioBarsTitle => 'Bare de distribuție';
@@ -704,6 +782,10 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get settingsShowOmegaBalance => 'Afișează raportul Omega-3/Omega-6';
+
+  @override
+  String get settingsShowNutrientProgress =>
+      'Afișează cantitatea rămasă și procentul nutrienților';
 
   @override
   String get settingsAccountDeletion => 'Ștergerea contului';

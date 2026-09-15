@@ -9,9 +9,9 @@ class AnimatedNavigationButtons extends StatelessWidget {
   const AnimatedNavigationButtons({
     super.key,
     required this.onNext,
+    required this.nextLabel,
     this.onPrevious,
     this.onSkip,
-    this.nextLabel = 'Continue',
   });
 
   @override

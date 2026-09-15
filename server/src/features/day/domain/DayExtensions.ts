@@ -1,5 +1,5 @@
 import { Aliment, InstancedAliment } from "../../aliment/domain/Aliment";
-import { AlimentBankState } from "../../aliment/domain/AlimentBankState";
+import { AlimentBankState } from "../../aliment_bank/domain/AlimentBankState";
 import {
     readDataRef,
     readField,

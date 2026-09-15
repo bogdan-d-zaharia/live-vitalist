@@ -3,11 +3,16 @@ import 'dart:ui';
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/core/localization/localization_provider.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
+import 'package:live_vitalist/features/aliment/data/aliment_data_extensions.dart';
 import 'package:live_vitalist/features/aliment_bank/data/aliment_bank.dart';
+import 'package:live_vitalist/features/aliment_bank/data/aliment_bank_state_extensions.dart';
 import 'package:live_vitalist/features/day/data/day_provider.dart';
 import 'package:live_vitalist/features/super_search/presentation/controllers/super_search_controller.dart';
+import 'package:live_vitalist/features/super_search/presentation/controllers/add_aliment_controller.dart';
 import 'package:live_vitalist/features/super_search/presentation/utils/super_search_navigation.dart';
+import 'package:live_vitalist/features/super_search/presentation/widgets/ai_aliment_disclaimer_page.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/aliment_result_tile.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/empty_search.dart';
 import 'package:live_vitalist/features/super_search/presentation/widgets/meal_picker_dialog.dart';
@@ -25,6 +30,16 @@ class SearchOverlay extends ConsumerWidget {
     var date = searchState.date;
     var mealName = searchState.mealName;
 
+    final containsAiAliment = searchState.selection.any((aliment) {
+      final idSegments = aliment.alimentID.split('-');
+      return idSegments.length > 1 && idSegments[1] == 'ai';
+    });
+
+    if (containsAiAliment) {
+      final accepted = await showAiAlimentDisclaimer(context);
+      if (!context.mounted || !accepted) return;
+    }
+
     if (date == null || mealName == null) {
       mealName = await showMealPicker(context);
       if (!context.mounted || mealName == null) return;
@@ -41,11 +56,13 @@ class SearchOverlay extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
+    final languageCode = ref.watch(localizationProvider);
+
     final searchState = ref.watch(superSearchProvider);
     final bank = ref.watch(alimentBankProvider);
 
     final filteredKeys = bank.order.where((id) {
-      final name = bank.aliments[id]!.name;
+      final name = bank.getAliment(id).readName(languageCode);
       return removeDiacritics(name.toLowerCase())
           .contains(removeDiacritics(searchState.query.toLowerCase()));
     }).toList();
@@ -92,7 +109,11 @@ class SearchOverlay extends ConsumerWidget {
                           child: AnimatedSwitcher(
                             duration: SuperSearchConstants.overlayFadeDuration,
                             child: filteredKeys.isEmpty
-                                ? EmptySearch()
+                                ? EmptySearch(
+                                    onCreateAliment: () => ref
+                                        .read(addAlimentProvider.notifier)
+                                        .add(context, searchState.query),
+                                  )
                                 : ListView.builder(
                                     key: const ValueKey('search-results'),
                                     padding: EdgeInsets.zero,

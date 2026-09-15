@@ -1,51 +1,208 @@
+import 'package:live_vitalist/features/aliment/domain/aliment.dart';
 import 'package:live_vitalist/features/aliment_bank/domain/aliment_bank_state.dart';
 import 'package:live_vitalist/features/aliment_bank/domain/aliment_bank_constants.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
 import 'package:live_vitalist/core/storage/data/storage_provider.dart';
+import 'package:live_vitalist/features/aliment_bank/domain/aliment_catalog.dart';
+import 'package:live_vitalist/features/aliment_bank/domain/last_used_quantities.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'aliment_bank.g.dart';
 
 @Riverpod(keepAlive: true)
-class AlimentBank extends _$AlimentBank {
+class AlimentOrder extends _$AlimentOrder {
   @override
-  AlimentBankState build() {
-    return AlimentBankState(aliments: {}, order: []);
-  }
+  Set<String> build() => {};
 
-  void setAliment(String id, AlimentData data) {
-    state = AlimentBankState(
-      aliments: {...state.aliments, id: data},
-      order: state.order.contains(id) ? state.order : [id, ...state.order],
-    );
-    save();
-  }
+  void load(AlimentBankState bank) => state = bank.order.toSet();
 
-  void setFirst(String id) {
-    if (state.aliments.keys.contains(id)) {
-      state = AlimentBankState(
-        aliments: state.aliments,
-        order: [id, ...state.order..removeWhere((otherId) => otherId == id)],
-      );
-    }
-    save();
-  }
+  void _setFirst(String id) async => state = {id, ...state};
+}
 
-  Future<void> save() {
-    return ref
+@Riverpod(keepAlive: true)
+class LastUsedQuantities extends _$LastUsedQuantities {
+  @override
+  FutureOr<Quantities> build() => _load();
+
+  Future<Quantities> _load() async {
+    final json = await ref
         .read(storageProvider.notifier)
-        .saveJson(AlimentBankConstants.alimentBankPath, state.toJson());
+        .loadJson(AlimentBankConstants.lastUsedQuantitiesPath);
+    return quantitiesFromJson(json ?? {});
+  }
+
+  Future<void> _save(Quantities quantities) async {
+    final json = quantitiesToJson(quantities);
+    await ref
+        .read(storageProvider.notifier)
+        .saveJson(AlimentBankConstants.lastUsedQuantitiesPath, json);
+  }
+
+  Future<void> _setLUQuantity(String id, Quantity quantity) async {
+    await update((quantities) async {
+      final updatedQuantities = {...quantities, id: quantity};
+      await _save(updatedQuantities);
+      return updatedQuantities;
+    });
+  }
+}
+
+@Riverpod(keepAlive: true)
+class CustomAliments extends _$CustomAliments {
+  @override
+  Map<String, AlimentData> build() => {};
+
+  void _load(AlimentBankState bank) => state = bank.aliments;
+
+  void _setAliment(String id, AlimentData data) {
+    if (id.split('-').length > 1) return;
+    state = {...state, id: data};
+  }
+}
+
+@Riverpod(keepAlive: true)
+class AlimentCatalogs extends _$AlimentCatalogs {
+  @override
+  Map<String, AlimentCatalog> build() => {};
+
+  Future<void> _load() async {
+    final storage = ref.read(storageProvider.notifier);
+    final catalogs = await _loadCatalogs(storage);
+    state = catalogs;
+  }
+
+  Future<MapEntry<String, AlimentCatalog>?> _loadCatalog(
+      String key, Future<Map<String, dynamic>?> future) async {
+    final json = await future;
+    if (json == null) return null;
+    return MapEntry(key, AlimentCatalog.fromJson(json));
+  }
+
+  Future<MapEntry<String, AlimentCatalog>?> _saveCatalog(
+      String key, Future<dynamic> future, Storage storage, String path) async {
+    final obj = await future;
+    final json = Map<String, dynamic>.from(obj ?? {});
+    await storage.saveLocal(path, json);
+    if (obj == null) return null;
+    return MapEntry(key, AlimentCatalog.fromJson(json));
+  }
+
+  /// If a catalog's version is the same, it loads from file.
+  /// If a catalog is updated online, it is downloaded.
+  /// If a catalog is deleted online, it is deleted locally as well.
+  Future<Map<String, AlimentCatalog>> _loadCatalogs(Storage storage) async {
+    final versionsPath = AlimentBankConstants.catalogVersionsPath;
+    final c = storage.loadCloud(versionsPath);
+    final l = storage.loadLocal(versionsPath);
+    final cloudJson = await c;
+    final localJson = await l;
+    final cloudVersions = Map<String, String>.from(cloudJson ?? {});
+    final localVersions = Map<String, String>.from(localJson ?? {});
+    final keys = localVersions.keys.toSet().union(cloudVersions.keys.toSet());
+    final List<Future<MapEntry<String, AlimentCatalog>?>> result = [];
+    for (var key in keys) {
+      final path = '${AlimentBankConstants.catalogsPath}/$key';
+      if (!cloudVersions.containsKey(key)) {
+        _saveCatalog(key, Future.value(null), storage, path);
+        continue;
+      }
+      final catalogEntry = localVersions[key] == cloudVersions[key]
+          ? _loadCatalog(key, storage.loadJson(path))
+          : _saveCatalog(key, storage.loadCloud(path), storage, path);
+      result.add(catalogEntry);
+    }
+    if (cloudJson != null) await storage.saveLocal(versionsPath, cloudVersions);
+    final entriesOrNull = await Future.wait(result);
+    final entries = entriesOrNull.whereType<MapEntry<String, AlimentCatalog>>();
+    return Map.fromEntries(entries);
+  }
+}
+
+@Riverpod(keepAlive: true)
+AlimentBankState alimentBank(Ref ref) {
+  final customAliments = ref.watch(customAlimentsProvider);
+  final order = ref.watch(alimentOrderProvider);
+
+  final catalogs = ref.watch(alimentCatalogsProvider);
+  final catalogAliments = Map.fromEntries(catalogs.values.expand((catalog) => [
+        ...catalog.original.aliments.entries,
+        ...catalog.aiEnhanced.aliments.entries
+      ]));
+
+  final saveData = AlimentBankState(
+    aliments: customAliments,
+    order: order.toList(),
+  );
+  ref.read(alimentBankControllerProvider.notifier).saveBank(saveData);
+
+  final displayAliments = {
+    ...customAliments,
+    ...catalogAliments,
+  };
+  final displayOrder = {
+    ...order.where((id) => displayAliments.containsKey(id)),
+    ...customAliments.keys,
+    ...catalogAliments.keys,
+  }.toList();
+  return AlimentBankState(aliments: displayAliments, order: displayOrder);
+}
+
+@Riverpod(keepAlive: true)
+class AlimentBankController extends _$AlimentBankController {
+  @override
+  void build() {}
+
+  void setState(AlimentBankState bank) {
+    ref.read(alimentOrderProvider.notifier).load(bank);
+    ref.read(customAlimentsProvider.notifier)._load(bank);
   }
 
   Future<void> load() async {
-    final json = await ref
+    final jsonFtr = ref
         .read(storageProvider.notifier)
         .loadJson(AlimentBankConstants.alimentBankPath);
-    if (json != null) state = AlimentBankState.fromJson(json);
+    final catalogFtr = ref.read(alimentCatalogsProvider.notifier)._load();
+
+    final json = await jsonFtr;
+    final bank = json != null
+        ? AlimentBankState.fromJson(json)
+        : AlimentBankState(aliments: {}, order: []);
+    setState(bank);
+
+    await catalogFtr;
   }
 
-  void setState(AlimentBankState newState) {
-    state = newState;
-    save();
+  Future<void> selectAliment(InstancedAliment aliment) async {
+    final id = aliment.alimentID;
+    ref.read(alimentOrderProvider.notifier)._setFirst(id);
+    final quantity = Quantity(aliment.servingSize, aliment.unit);
+    ref.read(lastUsedQuantitiesProvider.notifier)._setLUQuantity(id, quantity);
+  }
+
+  void setAliment(String id, AlimentData data) {
+    ref.read(customAlimentsProvider.notifier)._setAliment(id, data);
+  }
+
+  Future<void> saveBank(AlimentBankState bank) async {
+    await ref
+        .read(storageProvider.notifier)
+        .saveJson(AlimentBankConstants.alimentBankPath, bank.toJson());
+  }
+
+  Future<void> save() async {
+    final customAliments = ref.read(customAlimentsProvider);
+    final order = ref.read(alimentOrderProvider);
+    final saveData = AlimentBankState(
+      aliments: customAliments,
+      order: order.toList(),
+    );
+    return saveBank(saveData);
+  }
+
+  void invalidate() {
+    ref.invalidate(alimentOrderProvider);
+    ref.invalidate(customAlimentsProvider);
+    ref.invalidate(alimentCatalogsProvider);
+    ref.invalidate(alimentBankProvider);
   }
 }

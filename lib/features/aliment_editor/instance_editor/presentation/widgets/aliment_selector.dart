@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/core/localization/localization_provider.dart';
+import 'package:live_vitalist/features/aliment/data/aliment_data_extensions.dart';
+import 'package:live_vitalist/features/aliment_bank/data/aliment_bank_state_extensions.dart';
 import 'package:live_vitalist/l10n/app_localizations.dart';
 import 'package:diacritic/diacritic.dart';
 
@@ -28,11 +31,13 @@ class _SelectorState extends ConsumerState<Selector> {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
+    final languageCode = ref.watch(localizationProvider);
+
     final bank = ref.watch(alimentBankProvider);
-    final notifier = ref.read(alimentBankProvider.notifier);
+    final notifier = ref.read(alimentBankControllerProvider.notifier);
 
     final filteredKeys = bank.order.where((id) {
-      final name = bank.aliments[id]!.name;
+      final name = bank.getAliment(id).readName(languageCode);
       return removeDiacritics(name.toLowerCase())
           .contains(removeDiacritics(searchTerm.toLowerCase()));
     }).toList();
@@ -68,9 +73,10 @@ class _SelectorState extends ConsumerState<Selector> {
             Expanded(
               child: ListView(
                 children: filteredKeys.map((id) {
-                  final aliment = bank.aliments[id]!;
+                  final aliment = bank.getAliment(id);
+                  final name = aliment.readName(languageCode);
                   return _AlimentTile(
-                    name: aliment.name,
+                    name: name,
                     imageKey: aliment.image,
                     onTap: () => Navigator.pop(context, id),
                   );

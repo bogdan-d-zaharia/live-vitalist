@@ -42,12 +42,14 @@ class CustomCard extends StatelessWidget {
                 if (logo != null) logo!,
                 if (logo != null) const SizedBox(width: 8.0),
                 if (title != null)
-                  Text(
-                    title!,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface),
+                  Expanded(
+                    child: Text(
+                      title!,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface),
+                    ),
                   ),
-                const Spacer(),
+                if (title == null) const Spacer(),
                 if (highlightText != null)
                   InkWell(
                     onTap: onHighlightTap,

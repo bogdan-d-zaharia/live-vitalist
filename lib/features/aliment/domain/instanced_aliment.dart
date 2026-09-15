@@ -25,9 +25,7 @@ class InstancedAliment extends Aliment {
       );
 
   @override
-  AlimentData readDataRef(AlimentBankState bank) {
-    return bank.aliments[alimentID]!;
-  }
+  AlimentData readDataRef(AlimentBankState bank) => bank.getAliment(alimentID);
 
   @override
   InstancedAliment copyWith({

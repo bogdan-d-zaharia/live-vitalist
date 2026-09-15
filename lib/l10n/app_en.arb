@@ -7,6 +7,7 @@
   "actionContinue": "Continue",
   "actionTryAgain": "Try again",
   "actionRestore": "Restore",
+  "actionIUnderstand": "I understand",
 
   "nutrientKcals": "Calories",
   "nutrientProtein": "Protein",
@@ -121,19 +122,23 @@
   "calendarLeadingNutrient": "Leading nutrient",
   "calendarMinimum": "Minimum",
 
-  "alimentJsonEditorTitle": "Aliment Json Editor",
+  "alimentJsonEditorTitle": "Food JSON Editor",
 
-  "alimentEditorTitle": "Aliment Editor",
+  "alimentEditorTitle": "Food Editor",
   "alimentEditorGenericTitle": "Editor",
   "alimentEditorSaveChangesTitle": "Save changes?",
-  "alimentEditorSaveChangesMessage": "Do you want to save this aliment?",
-  "alimentEditorAddAliment": "Add Aliment",
-  "alimentEditorSearchAliment": "Search aliment",
+  "alimentEditorSaveChangesMessage": "Do you want to save this food?",
+  "alimentEditorAddAliment": "Add Food",
+  "alimentEditorSearchAliment": "Search food",
   "alimentEditorServedAmount": "Served amount:",
-  "alimentEditorSelectorTitle": "Aliment Selector",
+  "alimentEditorSelectorTitle": "Food Selector",
   "alimentEditorNewUnit": "New unit",
   "alimentEditorUnitName": "Unit name",
   "alimentEditorAmount": "Amount",
+  "alimentEditorName": "Name",
+  "alimentEditorUnit": "Unit",
+  "alimentEditorPerAmount": "Per amount",
+  "alimentEditorUnitSynonyms": "Unit synonyms",
   "alimentEditorAddSynonym": "Add synonym",
   "alimentEditorDeleteSynonym": "Delete synonym",
   "alimentEditorEnterLabel": "Enter {label}",
@@ -169,18 +174,24 @@
   "mealsJournalBreakfast": "Breakfast",
   "mealsJournalLunch": "Lunch",
   "mealsJournalDinner": "Dinner",
+  "mealsJournalDefaultMealName": "Meal #{number}",
+  "@mealsJournalDefaultMealName": {
+    "placeholders": {
+      "number": {"type": "int"}
+    }
+  },
   "mealsJournalAddMeal": "Add Meal",
-  "mealsJournalAddAliment": "Add aliment",
-  "mealsJournalAddTemporaryAliment": "Add temporary aliment",
+  "mealsJournalAddAliment": "Add food",
+  "mealsJournalAddTemporaryAliment": "Add temporary food",
   "mealsJournalShowNotification": "Show Notification",
-  "mealsJournalAliments": "Aliments",
+  "mealsJournalAliments": "Foods",
   "mealsJournalCalories": "{count, plural, =1{1 calorie} other{{count} calories}}",
   "@mealsJournalCalories": {
     "placeholders": {
       "count": {"type": "int"}
     }
   },
-  "mealsJournalNotificationTitle": "{mealName}: {count, plural, =1{1 aliment} other{{count} aliments}}",
+  "mealsJournalNotificationTitle": "{mealName}: {count, plural, =1{1 food} other{{count} foods}}",
   "@mealsJournalNotificationTitle": {
     "placeholders": {
       "mealName": {"type": "String"},
@@ -188,17 +199,23 @@
     }
   },
   "mealsJournalNotificationChannel": "Meal Summary",
-  "mealsJournalNotificationChannelDescription": "Text-based notification with a list of aliments",
+  "mealsJournalNotificationChannelDescription": "Text-based notification with a list of foods",
   "mealsJournalNotificationSummary": "Meal summary",
-  "mealsJournalNotificationBody": "Expand to view aliments",
+  "mealsJournalNotificationBody": "Expand to view foods",
 
-  "superSearchSearchAliments": "Search aliments",
-  "superSearchAliments": "Aliments",
-  "superSearchNoAlimentsFound": "No aliments found",
+  "superSearchSearchAliments": "Search foods",
+  "superSearchAliments": "Foods",
+  "superSearchNoAlimentsFound": "No foods found",
   "superSearchTryAnotherName": "Try another name or check the spelling.",
   "superSearchAddToMeal": "Add to meal",
-  "superSearchWriteAlimentFirst": "Write the aliment in the search bar first.",
-  "superSearchAddAliments": "{count, plural, =1{Add aliment} other{Add {count} aliments}}",
+  "superSearchAiDisclaimerTitle": "AI-generated food data",
+  "superSearchAiDisclaimerMessage": "Some selected foods contain data generated or enhanced by artificial intelligence. This information may be incomplete or inaccurate and should not replace verified nutritional or medical guidance.",
+  "superSearchAiDisclaimerAgreeAndDoNotShowAgain": "Agree and don't show again",
+  "superSearchCouldNotGenerateTitle": "Couldn't generate",
+  "superSearchAiUnavailableMessage": "The AI model is currently experiencing high demand and cannot generate this food right now. Please try again in a few moments.",
+  "superSearchAiRequestTimedOutMessage": "The AI request took too long to complete. Please try again.",
+  "superSearchWriteAlimentFirst": "Write the food in the search bar first.",
+  "superSearchAddAliments": "{count, plural, =1{Add food} other{Add {count} foods}}",
   "@superSearchAddAliments": {
     "placeholders": {
       "count": {
@@ -213,6 +230,7 @@
 
   "nutrientDisplayTitle": "Nutrients",
   "nutrientDisplayAddNewNutrient": "Add new nutrient",
+  "nutrientDisplayNewNutrient": "New nutrient",
   "nutrientDisplayAmount": "Amount:",
   "nutrientDisplayLowerLimit": "Lower Limit:",
   "nutrientDisplayUpperLimit": "Upper Limit:",
@@ -225,6 +243,27 @@
   "@nutrientDisplayLowerLimitValue": {"placeholders": {"value": {"type": "String"}}},
   "nutrientDisplayUpperLimitValue": "Upper Limit: {value}",
   "@nutrientDisplayUpperLimitValue": {"placeholders": {"value": {"type": "String"}}},
+  "nutrientDisplayNutrientLeft": "{value} {unit} left",
+  "@nutrientDisplayNutrientLeft": {"placeholders": {
+    "value": {"type": "String"},
+    "unit": {"type": "String"}
+  }},
+  "nutrientDisplayNutrientRemaining": "{value} {unit} remaining",
+  "@nutrientDisplayNutrientRemaining": {"placeholders": {
+    "value": {"type": "String"},
+    "unit": {"type": "String"}
+  }},
+  "nutrientDisplayNutrientOver": "{value} {unit} over limit",
+  "@nutrientDisplayNutrientOver": {"placeholders": {
+    "value": {"type": "String"},
+    "unit": {"type": "String"}
+  }},
+  "nutrientDisplayGoalReached": "Goal reached",
+  "nutrientDisplayWithinTarget": "Within target",
+  "nutrientDisplayEditorLabel": "Label",
+  "nutrientDisplayEditorUpperLimit": "Upper Limit",
+  "nutrientDisplayEditorLowerLimit": "Lower Limit",
+  "nutrientDisplayEditorUnit": "Unit",
 
   "ratioBarsTitle": "Distribution Bars",
 
@@ -269,10 +308,13 @@
   "settingsDataDeletion": "Data Deletion",
   "settingsConnectWithGoogle": "Connect with Google",
   "settingsGoogleBackupMessage": "Backup your files to cloud or restore your data by connecting with Google.",
+  
   "settingsUseMonthDayFormat": "Use M/D format",
   "settingsUseComplexCalendar": "Use complex calendar view",
   "settingsShowMacroDistribution": "Show macro distribution",
   "settingsShowOmegaBalance": "Show Omega-3 to Omega-6 balance",
+  "settingsShowNutrientProgress": "Show nutrient remaining and percentage",
+  
   "settingsAccountDeletion": "Account Deletion",
   "settingsAccountAndDataDeletion": "Account and data deletion",
   "settingsPermanentlyDeleteOnlineData": "Permanently delete online data",

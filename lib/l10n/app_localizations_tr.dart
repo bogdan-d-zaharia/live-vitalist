@@ -27,6 +27,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get actionRestore => 'Geri yükle';
 
   @override
+  String get actionIUnderstand => 'Anlıyorum';
+
+  @override
   String get nutrientKcals => 'Kalori';
 
   @override
@@ -316,6 +319,18 @@ class AppLocalizationsTr extends AppLocalizations {
   String get alimentEditorAmount => 'Miktar';
 
   @override
+  String get alimentEditorName => 'Ad';
+
+  @override
+  String get alimentEditorUnit => 'Birim';
+
+  @override
+  String get alimentEditorPerAmount => 'Miktar başına';
+
+  @override
+  String get alimentEditorUnitSynonyms => 'Birim eş anlamlıları';
+
+  @override
   String get alimentEditorAddSynonym => 'Eş anlamlı ekle';
 
   @override
@@ -465,6 +480,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get mealsJournalDinner => 'Akşam yemeği';
 
   @override
+  String mealsJournalDefaultMealName(int number) {
+    return '$number. Öğün';
+  }
+
+  @override
   String get mealsJournalAddMeal => 'Öğün ekle';
 
   @override
@@ -531,6 +551,29 @@ class AppLocalizationsTr extends AppLocalizations {
   String get superSearchAddToMeal => 'Öğüne ekle';
 
   @override
+  String get superSearchAiDisclaimerTitle =>
+      'Yapay zekâ üretimi besin verileri';
+
+  @override
+  String get superSearchAiDisclaimerMessage =>
+      'Seçilen bazı besinler yapay zekâ tarafından oluşturulan veya geliştirilen veriler içerir. Bu bilgiler eksik ya da hatalı olabilir ve doğrulanmış beslenme veya tıbbi tavsiyelerin yerini tutmaz.';
+
+  @override
+  String get superSearchAiDisclaimerAgreeAndDoNotShowAgain =>
+      'Kabul et ve tekrar gösterme';
+
+  @override
+  String get superSearchCouldNotGenerateTitle => 'Oluşturulamadı';
+
+  @override
+  String get superSearchAiUnavailableMessage =>
+      'Yapay zekâ modeli şu anda yoğun talep görüyor ve bu besini oluşturamıyor. Lütfen birkaç dakika sonra tekrar deneyin.';
+
+  @override
+  String get superSearchAiRequestTimedOutMessage =>
+      'Yapay zekâ isteğinin tamamlanması çok uzun sürdü. Lütfen tekrar deneyin.';
+
+  @override
   String get superSearchWriteAlimentFirst =>
       'Önce arama çubuğuna besini yazın.';
 
@@ -564,6 +607,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get nutrientDisplayAddNewNutrient => 'Yeni besin öğesi ekle';
 
   @override
+  String get nutrientDisplayNewNutrient => 'Yeni besin öğesi';
+
+  @override
   String get nutrientDisplayAmount => 'Miktar:';
 
   @override
@@ -594,6 +640,39 @@ class AppLocalizationsTr extends AppLocalizations {
   String nutrientDisplayUpperLimitValue(String value) {
     return 'Üst sınır: $value';
   }
+
+  @override
+  String nutrientDisplayNutrientLeft(String value, String unit) {
+    return '$value $unit kaldı';
+  }
+
+  @override
+  String nutrientDisplayNutrientRemaining(String value, String unit) {
+    return '$value $unit kaldı';
+  }
+
+  @override
+  String nutrientDisplayNutrientOver(String value, String unit) {
+    return 'Sınırın $value $unit üzerinde';
+  }
+
+  @override
+  String get nutrientDisplayGoalReached => 'Hedefe ulaşıldı';
+
+  @override
+  String get nutrientDisplayWithinTarget => 'Hedef aralığında';
+
+  @override
+  String get nutrientDisplayEditorLabel => 'Etiket';
+
+  @override
+  String get nutrientDisplayEditorUpperLimit => 'Üst sınır';
+
+  @override
+  String get nutrientDisplayEditorLowerLimit => 'Alt sınır';
+
+  @override
+  String get nutrientDisplayEditorUnit => 'Birim';
 
   @override
   String get ratioBarsTitle => 'Dağılım çubukları';
@@ -691,6 +770,10 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get settingsShowOmegaBalance => 'Omega-3 / Omega-6 dengesini göster';
+
+  @override
+  String get settingsShowNutrientProgress =>
+      'Kalan besin miktarını ve yüzdesini göster';
 
   @override
   String get settingsAccountDeletion => 'Hesap silme';

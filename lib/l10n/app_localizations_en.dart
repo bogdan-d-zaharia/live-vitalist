@@ -27,6 +27,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get actionRestore => 'Restore';
 
   @override
+  String get actionIUnderstand => 'I understand';
+
+  @override
   String get nutrientKcals => 'Calories';
 
   @override
@@ -280,10 +283,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get calendarMinimum => 'Minimum';
 
   @override
-  String get alimentJsonEditorTitle => 'Aliment Json Editor';
+  String get alimentJsonEditorTitle => 'Food JSON Editor';
 
   @override
-  String get alimentEditorTitle => 'Aliment Editor';
+  String get alimentEditorTitle => 'Food Editor';
 
   @override
   String get alimentEditorGenericTitle => 'Editor';
@@ -293,19 +296,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get alimentEditorSaveChangesMessage =>
-      'Do you want to save this aliment?';
+      'Do you want to save this food?';
 
   @override
-  String get alimentEditorAddAliment => 'Add Aliment';
+  String get alimentEditorAddAliment => 'Add Food';
 
   @override
-  String get alimentEditorSearchAliment => 'Search aliment';
+  String get alimentEditorSearchAliment => 'Search food';
 
   @override
   String get alimentEditorServedAmount => 'Served amount:';
 
   @override
-  String get alimentEditorSelectorTitle => 'Aliment Selector';
+  String get alimentEditorSelectorTitle => 'Food Selector';
 
   @override
   String get alimentEditorNewUnit => 'New unit';
@@ -315,6 +318,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get alimentEditorAmount => 'Amount';
+
+  @override
+  String get alimentEditorName => 'Name';
+
+  @override
+  String get alimentEditorUnit => 'Unit';
+
+  @override
+  String get alimentEditorPerAmount => 'Per amount';
+
+  @override
+  String get alimentEditorUnitSynonyms => 'Unit synonyms';
 
   @override
   String get alimentEditorAddSynonym => 'Add synonym';
@@ -472,19 +487,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mealsJournalDinner => 'Dinner';
 
   @override
+  String mealsJournalDefaultMealName(int number) {
+    return 'Meal #$number';
+  }
+
+  @override
   String get mealsJournalAddMeal => 'Add Meal';
 
   @override
-  String get mealsJournalAddAliment => 'Add aliment';
+  String get mealsJournalAddAliment => 'Add food';
 
   @override
-  String get mealsJournalAddTemporaryAliment => 'Add temporary aliment';
+  String get mealsJournalAddTemporaryAliment => 'Add temporary food';
 
   @override
   String get mealsJournalShowNotification => 'Show Notification';
 
   @override
-  String get mealsJournalAliments => 'Aliments';
+  String get mealsJournalAliments => 'Foods';
 
   @override
   String mealsJournalCalories(int count) {
@@ -502,8 +522,8 @@ class AppLocalizationsEn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$count aliments',
-      one: '1 aliment',
+      other: '$count foods',
+      one: '1 food',
     );
     return '$mealName: $_temp0';
   }
@@ -513,22 +533,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mealsJournalNotificationChannelDescription =>
-      'Text-based notification with a list of aliments';
+      'Text-based notification with a list of foods';
 
   @override
   String get mealsJournalNotificationSummary => 'Meal summary';
 
   @override
-  String get mealsJournalNotificationBody => 'Expand to view aliments';
+  String get mealsJournalNotificationBody => 'Expand to view foods';
 
   @override
-  String get superSearchSearchAliments => 'Search aliments';
+  String get superSearchSearchAliments => 'Search foods';
 
   @override
-  String get superSearchAliments => 'Aliments';
+  String get superSearchAliments => 'Foods';
 
   @override
-  String get superSearchNoAlimentsFound => 'No aliments found';
+  String get superSearchNoAlimentsFound => 'No foods found';
 
   @override
   String get superSearchTryAnotherName =>
@@ -538,16 +558,38 @@ class AppLocalizationsEn extends AppLocalizations {
   String get superSearchAddToMeal => 'Add to meal';
 
   @override
+  String get superSearchAiDisclaimerTitle => 'AI-generated food data';
+
+  @override
+  String get superSearchAiDisclaimerMessage =>
+      'Some selected foods contain data generated or enhanced by artificial intelligence. This information may be incomplete or inaccurate and should not replace verified nutritional or medical guidance.';
+
+  @override
+  String get superSearchAiDisclaimerAgreeAndDoNotShowAgain =>
+      'Agree and don\'t show again';
+
+  @override
+  String get superSearchCouldNotGenerateTitle => 'Couldn\'t generate';
+
+  @override
+  String get superSearchAiUnavailableMessage =>
+      'The AI model is currently experiencing high demand and cannot generate this food right now. Please try again in a few moments.';
+
+  @override
+  String get superSearchAiRequestTimedOutMessage =>
+      'The AI request took too long to complete. Please try again.';
+
+  @override
   String get superSearchWriteAlimentFirst =>
-      'Write the aliment in the search bar first.';
+      'Write the food in the search bar first.';
 
   @override
   String superSearchAddAliments(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: 'Add $count aliments',
-      one: 'Add aliment',
+      other: 'Add $count foods',
+      one: 'Add food',
     );
     return '$_temp0';
   }
@@ -569,6 +611,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nutrientDisplayAddNewNutrient => 'Add new nutrient';
+
+  @override
+  String get nutrientDisplayNewNutrient => 'New nutrient';
 
   @override
   String get nutrientDisplayAmount => 'Amount:';
@@ -601,6 +646,39 @@ class AppLocalizationsEn extends AppLocalizations {
   String nutrientDisplayUpperLimitValue(String value) {
     return 'Upper Limit: $value';
   }
+
+  @override
+  String nutrientDisplayNutrientLeft(String value, String unit) {
+    return '$value $unit left';
+  }
+
+  @override
+  String nutrientDisplayNutrientRemaining(String value, String unit) {
+    return '$value $unit remaining';
+  }
+
+  @override
+  String nutrientDisplayNutrientOver(String value, String unit) {
+    return '$value $unit over limit';
+  }
+
+  @override
+  String get nutrientDisplayGoalReached => 'Goal reached';
+
+  @override
+  String get nutrientDisplayWithinTarget => 'Within target';
+
+  @override
+  String get nutrientDisplayEditorLabel => 'Label';
+
+  @override
+  String get nutrientDisplayEditorUpperLimit => 'Upper Limit';
+
+  @override
+  String get nutrientDisplayEditorLowerLimit => 'Lower Limit';
+
+  @override
+  String get nutrientDisplayEditorUnit => 'Unit';
 
   @override
   String get ratioBarsTitle => 'Distribution Bars';
@@ -698,6 +776,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsShowOmegaBalance => 'Show Omega-3 to Omega-6 balance';
+
+  @override
+  String get settingsShowNutrientProgress =>
+      'Show nutrient remaining and percentage';
 
   @override
   String get settingsAccountDeletion => 'Account Deletion';

@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/core/localization/localization_provider.dart';
+import 'package:live_vitalist/features/aliment/data/aliment_data_extensions.dart';
 import 'package:live_vitalist/l10n/app_localizations.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
 import 'package:live_vitalist/features/aliment_editor/aliment_data_editor/presentation/widgets/editor_inputs/editor_string_input.dart';
@@ -25,15 +27,19 @@ class _TemporaryAlimentEditorState
     extends ConsumerState<TemporaryAlimentEditor> {
   AlimentData data = AlimentData.empty;
 
+  late final String languageCode;
   late final TextEditingController _nameController;
   late bool _imageWasManuallySelected;
+
+  String get dataName => data.readName(languageCode);
 
   @override
   void initState() {
     super.initState();
     data = AlimentData.fromJson(widget.initialData.toJson());
+    languageCode = ref.read(localizationProvider);
+    _nameController = TextEditingController(text: dataName);
     _imageWasManuallySelected = data.image != null;
-    _nameController = TextEditingController(text: data.name);
   }
 
   @override
@@ -68,6 +74,7 @@ class _TemporaryAlimentEditorState
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context);
     final nutrients = ref.watch(nutrientsProvider);
     final selectedNutrients = nutrients.order.where((key) =>
         key != 'kcals' && !nutrients.data[key]!.tags.contains('disabled'));
@@ -79,15 +86,16 @@ class _TemporaryAlimentEditorState
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(AppLocalizations.of(context).alimentEditorTitle),
+          title: Text(l.alimentEditorTitle),
           actions: [
             JsonEditorButton(
               data: data,
+              languageCode: languageCode,
               onResult: (newData) {
                 setState(() {
                   data = newData;
                   _imageWasManuallySelected = newData.image != null;
-                  _nameController.text = data.name;
+                  _nameController.text = dataName;
                 });
               },
             ),
@@ -114,20 +122,24 @@ class _TemporaryAlimentEditorState
                         },
                       ),
                       EditorStringInput(
-                        'Name',
-                        data.name,
+                        l.alimentEditorName,
+                        dataName,
                         (value) {
                           final suggestedImage = _imageWasManuallySelected
                               ? data.image
                               : suggestFoodImageForName(value)?.key;
                           setState(() {
                             data = data.copyWith(
-                              name: value,
+                              name: {
+                                ...data.name,
+                                languageCode: value,
+                              },
                               image: suggestedImage,
                             );
                           });
                         },
                         _nameController,
+                        icon: Icons.restaurant_menu_rounded,
                       ),
                       NutrientInput('kcals', nutrients, data),
                       ...selectedNutrients.map(
@@ -142,7 +154,7 @@ class _TemporaryAlimentEditorState
                     width: double.infinity,
                     child: FilledButton(
                       onPressed: _popSave,
-                      child: Text(AppLocalizations.of(context).actionSave),
+                      child: Text(l.actionSave),
                     ),
                   ),
                 ),

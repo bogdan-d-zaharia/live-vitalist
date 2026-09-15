@@ -127,7 +127,17 @@ GoRouter appRouter(Ref ref) {
           routeState.matchedLocation.startsWith('${AppRoutes.home}/');
       final destination = initialization.when(
         loading: () => AppRoutes.root,
-        error: (_, __) => AppRoutes.initializationError,
+        error: (error, stackTrace) {
+          FlutterError.reportError(
+            FlutterErrorDetails(
+              exception: error,
+              stack: stackTrace,
+              context: ErrorDescription('during app initialization'),
+            ),
+          );
+
+          return AppRoutes.initializationError;
+        },
         data: (initializationState) => switch (initializationState) {
           AppInitState.onboarding => AppRoutes.onboarding,
           AppInitState.ready =>

@@ -7,7 +7,7 @@ import 'package:live_vitalist/core/storage/domain/storage_interfaces.dart';
 /// Verifies if the user is connected when used.
 ///
 /// A connected user stays non-null even when there is no internet connection.
-final class FirebaseHandler implements IStorageHandler, ICloudDeletion {
+final class FirebaseHandler implements IStorageHandler, ICloudHandler {
   @override
   Future<bool> saveJson(String path, Map<String, dynamic> json) async {
     final user = FirebaseAuth.instance.currentUser;
@@ -24,21 +24,21 @@ final class FirebaseHandler implements IStorageHandler, ICloudDeletion {
   }
 
   @override
-  Future<Map<String, dynamic>?> loadJson(String path) async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) return null;
-
-    final uid = user.uid;
+  Future<dynamic> loadCloud(String path) async {
     final db = FirebaseDatabase.instance.ref();
+    final snapshot = await db.child(path).get();
+    if (!snapshot.exists) return null;
+    return snapshot.value;
+  }
 
-    final snapshot = await db.child('users/$uid/$path').get();
-
-    if (snapshot.exists && snapshot.value != null) {
-      return (JsonHandler.reverseMapToListRecursive(snapshot.value) as Map)
-          .map<String, dynamic>((key, value) => MapEntry(key as String, value));
-    }
-
-    return null;
+  @override
+  Future<Map<String, dynamic>?> loadJson(String path) async {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
+    if (uid == null) return null;
+    final result = await loadCloud('users/$uid/$path');
+    if (result == null) return null;
+    return (JsonHandler.reverseMapToListRecursive(result) as Map)
+        .map<String, dynamic>((key, value) => MapEntry(key as String, value));
   }
 
   @override

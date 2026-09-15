@@ -5,8 +5,15 @@ import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
 import 'package:live_vitalist/core/utils/json_handler.dart';
 
 extension AlimentJsonExtension on AlimentData {
-  Map<String, dynamic> toExpandedJson(NutrientState nutrients) {
-    final alimentJson = toJson();
+  String readName(String languageCode) {
+    return name[languageCode] ?? name['en'] ?? name.values.first;
+  }
+
+  Map<String, dynamic> toExpandedJson(
+    NutrientState nutrients, {
+    String? languageCode,
+  }) {
+    final alimentJson = toJson(languageCode: languageCode);
     final Map<String, double?> expandedFields =
         Map.fromEntries(nutrients.order.map((key) => MapEntry(key, null)))
           ..removeWhere(
@@ -22,8 +29,14 @@ extension AlimentJsonExtension on AlimentData {
     return alimentJson;
   }
 
-  String toExpandedWithUnitsJson(NutrientState nutrients) {
-    final Map<String, dynamic> expandedJson = toExpandedJson(nutrients);
+  String toExpandedWithUnitsJson(
+    NutrientState nutrients, {
+    String? languageCode,
+  }) {
+    final Map<String, dynamic> expandedJson = toExpandedJson(
+      nutrients,
+      languageCode: languageCode,
+    );
 
     final buffer = StringBuffer();
     buffer.writeln('{');

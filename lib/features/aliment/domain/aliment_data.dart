@@ -1,38 +1,53 @@
 import 'package:flutter/foundation.dart';
 
+// TODO: Use Freezed and remove this
 const _keepExistingImage = Object();
 
 @immutable
 class AlimentData {
-  final String name;
-  final String? image;
+  final Map<String, String> name;
   final String unit;
   final double referenceSize;
   final Map<String, double> referenceFields;
   final Map<String, double> unitSynonyms;
+  final String? image;
 
   const AlimentData({
     required this.name,
-    this.image,
     required this.unit,
     required this.referenceSize,
     required this.referenceFields,
     required this.unitSynonyms,
+    this.image,
   });
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson({String? languageCode}) {
+    if (name.keys.length > 1) name.remove('_');
+    final newName = languageCode == null
+        ? name
+        : name[languageCode] ?? name['en'] ?? name.values.first;
     return {
-      'name': name,
-      if (image != null && image!.isNotEmpty) 'image': image,
+      'name': newName,
       'unit': unit,
       'referenceSize': referenceSize,
       if (referenceFields.isNotEmpty) 'referenceFields': referenceFields,
       if (unitSynonyms.isNotEmpty) 'unitSynonyms': unitSynonyms,
+      if (image != null && image!.isNotEmpty) 'image': image,
     };
   }
 
-  factory AlimentData.fromJson(Map<String, dynamic> json) {
-    final name = json['name'] ?? '';
+  factory AlimentData.fromJson(
+    Map<String, dynamic> json, {
+    String? languageCode,
+  }) {
+    final nameData = json['name'];
+    final Map<String, String> name = switch (nameData) {
+      Map _ => nameData
+          .map((key, value) => MapEntry(key.toString(), value.toString())),
+      String _ => {languageCode ?? '_': nameData},
+      _ => {'_': ''},
+    };
+
     late final String unit;
     final referenceSize = (json['referenceSize'] as num? ?? 0.0).toDouble();
     final Map<String, double> referenceFields =
@@ -57,39 +72,52 @@ class AlimentData {
         ..remove(unit);
     }
 
+    final image = switch (json['image']) {
+      String s => s,
+      _ => null,
+    };
+
     return AlimentData(
       name: name,
-      image: json['image'] as String?,
       unit: unit,
       referenceSize: referenceSize,
       referenceFields: referenceFields,
       unitSynonyms: unitSynonyms,
+      image: image,
     );
   }
 
   AlimentData copyWith({
-    String? name,
-    Object? image = _keepExistingImage,
+    Map<String, String>? name,
     String? unit,
     double? referenceSize,
     Map<String, double>? referenceFields,
     Map<String, double>? unitSynonyms,
+    Object? image = _keepExistingImage,
   }) {
     return AlimentData(
       name: name ?? this.name,
-      image:
-          identical(image, _keepExistingImage) ? this.image : image as String?,
       unit: unit ?? this.unit,
       referenceSize: referenceSize ?? this.referenceSize,
       referenceFields: referenceFields ?? this.referenceFields,
       unitSynonyms: unitSynonyms ?? this.unitSynonyms,
+      image:
+          identical(image, _keepExistingImage) ? this.image : image as String?,
     );
   }
 
   static const empty = AlimentData(
-    name: '',
+    name: {'_': ''},
     unit: 'g',
     referenceSize: 100.0,
+    referenceFields: {},
+    unitSynonyms: {},
+  );
+
+  static const errorPlaceholder = AlimentData(
+    name: {'_': 'ERROR 404'},
+    unit: 'ERROR 404',
+    referenceSize: 404,
     referenceFields: {},
     unitSynonyms: {},
   );

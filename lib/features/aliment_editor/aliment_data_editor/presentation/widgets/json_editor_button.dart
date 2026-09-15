@@ -4,10 +4,12 @@ import 'package:live_vitalist/features/aliment_editor/aliment_json_editor.dart';
 
 class JsonEditorButton extends StatelessWidget {
   final AlimentData data;
+  final String languageCode;
   final void Function(AlimentData) onResult;
 
   const JsonEditorButton({
     required this.data,
+    required this.languageCode,
     required this.onResult,
     super.key,
   });
@@ -19,7 +21,10 @@ class JsonEditorButton extends StatelessWidget {
         final newData = await Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => AlimentJsonEditor(initialData: data),
+            builder: (context) => AlimentJsonEditor(
+              initialData: data,
+              languageCode: languageCode,
+            ),
           ),
         );
         if (newData != null) onResult(newData);

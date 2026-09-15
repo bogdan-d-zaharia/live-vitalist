@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart'
     as ntf;
+import 'package:live_vitalist/features/aliment/data/aliment_data_extensions.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment.dart';
 import 'package:live_vitalist/features/aliment_bank/domain/aliment_bank_state.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -21,8 +22,9 @@ class NotificationHandler {
     await _notificationsPlugin.initialize(settings: initSettings);
   }
 
-  static String _alimentToLine(Aliment e, AlimentBankState bank) {
-    final String name = e.readDataRef(bank).name;
+  static String _alimentToLine(
+      Aliment e, AlimentBankState bank, String languageCode) {
+    final String name = e.readDataRef(bank).readName(languageCode);
     final String servingSize = e.servingSize % 1 == 0
         ? e.servingSize.toInt().toString()
         : e.servingSize.toStringAsFixed(1);
@@ -32,16 +34,18 @@ class NotificationHandler {
   }
 
   static Future<void> showListNotification(
-      List<Aliment> list,
-      AlimentBankState bank,
-      String mealName,
-      AppLocalizations localization) async {
+    List<Aliment> list,
+    AlimentBankState bank,
+    String mealName,
+    AppLocalizations localization,
+    String languageCode,
+  ) async {
     final status = await Permission.notification.status;
     if (status.isDenied || status.isRestricted) {
       await Permission.notification.request();
     }
 
-    String alimentToLine(Aliment e) => _alimentToLine(e, bank);
+    String alimentToLine(Aliment e) => _alimentToLine(e, bank, languageCode);
     List<String> lines = list.map<String>(alimentToLine).toList();
     final title =
         localization.mealsJournalNotificationTitle(mealName, list.length);

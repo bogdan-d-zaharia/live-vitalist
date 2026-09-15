@@ -140,6 +140,12 @@ abstract class AppLocalizations {
   /// **'Restore'**
   String get actionRestore;
 
+  /// No description provided for @actionIUnderstand.
+  ///
+  /// In en, this message translates to:
+  /// **'I understand'**
+  String get actionIUnderstand;
+
   /// No description provided for @nutrientKcals.
   ///
   /// In en, this message translates to:
@@ -611,13 +617,13 @@ abstract class AppLocalizations {
   /// No description provided for @alimentJsonEditorTitle.
   ///
   /// In en, this message translates to:
-  /// **'Aliment Json Editor'**
+  /// **'Food JSON Editor'**
   String get alimentJsonEditorTitle;
 
   /// No description provided for @alimentEditorTitle.
   ///
   /// In en, this message translates to:
-  /// **'Aliment Editor'**
+  /// **'Food Editor'**
   String get alimentEditorTitle;
 
   /// No description provided for @alimentEditorGenericTitle.
@@ -635,19 +641,19 @@ abstract class AppLocalizations {
   /// No description provided for @alimentEditorSaveChangesMessage.
   ///
   /// In en, this message translates to:
-  /// **'Do you want to save this aliment?'**
+  /// **'Do you want to save this food?'**
   String get alimentEditorSaveChangesMessage;
 
   /// No description provided for @alimentEditorAddAliment.
   ///
   /// In en, this message translates to:
-  /// **'Add Aliment'**
+  /// **'Add Food'**
   String get alimentEditorAddAliment;
 
   /// No description provided for @alimentEditorSearchAliment.
   ///
   /// In en, this message translates to:
-  /// **'Search aliment'**
+  /// **'Search food'**
   String get alimentEditorSearchAliment;
 
   /// No description provided for @alimentEditorServedAmount.
@@ -659,7 +665,7 @@ abstract class AppLocalizations {
   /// No description provided for @alimentEditorSelectorTitle.
   ///
   /// In en, this message translates to:
-  /// **'Aliment Selector'**
+  /// **'Food Selector'**
   String get alimentEditorSelectorTitle;
 
   /// No description provided for @alimentEditorNewUnit.
@@ -679,6 +685,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Amount'**
   String get alimentEditorAmount;
+
+  /// No description provided for @alimentEditorName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get alimentEditorName;
+
+  /// No description provided for @alimentEditorUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit'**
+  String get alimentEditorUnit;
+
+  /// No description provided for @alimentEditorPerAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Per amount'**
+  String get alimentEditorPerAmount;
+
+  /// No description provided for @alimentEditorUnitSynonyms.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit synonyms'**
+  String get alimentEditorUnitSynonyms;
 
   /// No description provided for @alimentEditorAddSynonym.
   ///
@@ -794,6 +824,12 @@ abstract class AppLocalizations {
   /// **'Dinner'**
   String get mealsJournalDinner;
 
+  /// No description provided for @mealsJournalDefaultMealName.
+  ///
+  /// In en, this message translates to:
+  /// **'Meal #{number}'**
+  String mealsJournalDefaultMealName(int number);
+
   /// No description provided for @mealsJournalAddMeal.
   ///
   /// In en, this message translates to:
@@ -803,13 +839,13 @@ abstract class AppLocalizations {
   /// No description provided for @mealsJournalAddAliment.
   ///
   /// In en, this message translates to:
-  /// **'Add aliment'**
+  /// **'Add food'**
   String get mealsJournalAddAliment;
 
   /// No description provided for @mealsJournalAddTemporaryAliment.
   ///
   /// In en, this message translates to:
-  /// **'Add temporary aliment'**
+  /// **'Add temporary food'**
   String get mealsJournalAddTemporaryAliment;
 
   /// No description provided for @mealsJournalShowNotification.
@@ -821,7 +857,7 @@ abstract class AppLocalizations {
   /// No description provided for @mealsJournalAliments.
   ///
   /// In en, this message translates to:
-  /// **'Aliments'**
+  /// **'Foods'**
   String get mealsJournalAliments;
 
   /// No description provided for @mealsJournalCalories.
@@ -833,7 +869,7 @@ abstract class AppLocalizations {
   /// No description provided for @mealsJournalNotificationTitle.
   ///
   /// In en, this message translates to:
-  /// **'{mealName}: {count, plural, =1{1 aliment} other{{count} aliments}}'**
+  /// **'{mealName}: {count, plural, =1{1 food} other{{count} foods}}'**
   String mealsJournalNotificationTitle(String mealName, int count);
 
   /// No description provided for @mealsJournalNotificationChannel.
@@ -845,7 +881,7 @@ abstract class AppLocalizations {
   /// No description provided for @mealsJournalNotificationChannelDescription.
   ///
   /// In en, this message translates to:
-  /// **'Text-based notification with a list of aliments'**
+  /// **'Text-based notification with a list of foods'**
   String get mealsJournalNotificationChannelDescription;
 
   /// No description provided for @mealsJournalNotificationSummary.
@@ -857,25 +893,25 @@ abstract class AppLocalizations {
   /// No description provided for @mealsJournalNotificationBody.
   ///
   /// In en, this message translates to:
-  /// **'Expand to view aliments'**
+  /// **'Expand to view foods'**
   String get mealsJournalNotificationBody;
 
   /// No description provided for @superSearchSearchAliments.
   ///
   /// In en, this message translates to:
-  /// **'Search aliments'**
+  /// **'Search foods'**
   String get superSearchSearchAliments;
 
   /// No description provided for @superSearchAliments.
   ///
   /// In en, this message translates to:
-  /// **'Aliments'**
+  /// **'Foods'**
   String get superSearchAliments;
 
   /// No description provided for @superSearchNoAlimentsFound.
   ///
   /// In en, this message translates to:
-  /// **'No aliments found'**
+  /// **'No foods found'**
   String get superSearchNoAlimentsFound;
 
   /// No description provided for @superSearchTryAnotherName.
@@ -890,16 +926,52 @@ abstract class AppLocalizations {
   /// **'Add to meal'**
   String get superSearchAddToMeal;
 
+  /// No description provided for @superSearchAiDisclaimerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AI-generated food data'**
+  String get superSearchAiDisclaimerTitle;
+
+  /// No description provided for @superSearchAiDisclaimerMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Some selected foods contain data generated or enhanced by artificial intelligence. This information may be incomplete or inaccurate and should not replace verified nutritional or medical guidance.'**
+  String get superSearchAiDisclaimerMessage;
+
+  /// No description provided for @superSearchAiDisclaimerAgreeAndDoNotShowAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Agree and don\'t show again'**
+  String get superSearchAiDisclaimerAgreeAndDoNotShowAgain;
+
+  /// No description provided for @superSearchCouldNotGenerateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t generate'**
+  String get superSearchCouldNotGenerateTitle;
+
+  /// No description provided for @superSearchAiUnavailableMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The AI model is currently experiencing high demand and cannot generate this food right now. Please try again in a few moments.'**
+  String get superSearchAiUnavailableMessage;
+
+  /// No description provided for @superSearchAiRequestTimedOutMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The AI request took too long to complete. Please try again.'**
+  String get superSearchAiRequestTimedOutMessage;
+
   /// No description provided for @superSearchWriteAlimentFirst.
   ///
   /// In en, this message translates to:
-  /// **'Write the aliment in the search bar first.'**
+  /// **'Write the food in the search bar first.'**
   String get superSearchWriteAlimentFirst;
 
   /// No description provided for @superSearchAddAliments.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =1{Add aliment} other{Add {count} aliments}}'**
+  /// **'{count, plural, =1{Add food} other{Add {count} foods}}'**
   String superSearchAddAliments(int count);
 
   /// No description provided for @superSearchResultCount.
@@ -919,6 +991,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add new nutrient'**
   String get nutrientDisplayAddNewNutrient;
+
+  /// No description provided for @nutrientDisplayNewNutrient.
+  ///
+  /// In en, this message translates to:
+  /// **'New nutrient'**
+  String get nutrientDisplayNewNutrient;
 
   /// No description provided for @nutrientDisplayAmount.
   ///
@@ -967,6 +1045,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Upper Limit: {value}'**
   String nutrientDisplayUpperLimitValue(String value);
+
+  /// No description provided for @nutrientDisplayNutrientLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} {unit} left'**
+  String nutrientDisplayNutrientLeft(String value, String unit);
+
+  /// No description provided for @nutrientDisplayNutrientRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} {unit} remaining'**
+  String nutrientDisplayNutrientRemaining(String value, String unit);
+
+  /// No description provided for @nutrientDisplayNutrientOver.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} {unit} over limit'**
+  String nutrientDisplayNutrientOver(String value, String unit);
+
+  /// No description provided for @nutrientDisplayGoalReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal reached'**
+  String get nutrientDisplayGoalReached;
+
+  /// No description provided for @nutrientDisplayWithinTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'Within target'**
+  String get nutrientDisplayWithinTarget;
+
+  /// No description provided for @nutrientDisplayEditorLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Label'**
+  String get nutrientDisplayEditorLabel;
+
+  /// No description provided for @nutrientDisplayEditorUpperLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Upper Limit'**
+  String get nutrientDisplayEditorUpperLimit;
+
+  /// No description provided for @nutrientDisplayEditorLowerLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'Lower Limit'**
+  String get nutrientDisplayEditorLowerLimit;
+
+  /// No description provided for @nutrientDisplayEditorUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit'**
+  String get nutrientDisplayEditorUnit;
 
   /// No description provided for @ratioBarsTitle.
   ///
@@ -1135,6 +1267,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show Omega-3 to Omega-6 balance'**
   String get settingsShowOmegaBalance;
+
+  /// No description provided for @settingsShowNutrientProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Show nutrient remaining and percentage'**
+  String get settingsShowNutrientProgress;
 
   /// No description provided for @settingsAccountDeletion.
   ///

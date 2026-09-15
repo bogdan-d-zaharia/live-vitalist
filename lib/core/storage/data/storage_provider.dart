@@ -7,7 +7,7 @@ part 'storage_provider.g.dart';
 
 @riverpod
 class Storage extends _$Storage
-    implements IStorageHandler, ILocalDeletion, ICloudDeletion {
+    implements IStorageHandler, ILocalHandler, ICloudHandler {
   // We don't have to verify if the user is connected,
   // because `FirebaseHandler` verifies that automatically when used.
 
@@ -19,6 +19,10 @@ class Storage extends _$Storage
     _fileHlr = FileHandler();
     _firebaseHlr = FirebaseHandler();
   }
+
+  @override
+  Future<bool> saveLocal(String path, Map<String, dynamic> json) =>
+      _fileHlr.saveLocal(path, json);
 
   @override
   Future<bool> saveJson(String path, Map<String, dynamic> json) async {
@@ -48,5 +52,15 @@ class Storage extends _$Storage
   Future<bool> deleteEverything() async {
     if (!await deleteAccount()) return false;
     return deleteLocal();
+  }
+
+  @override
+  Future<dynamic> loadCloud(String path) {
+    return _firebaseHlr.loadCloud(path);
+  }
+
+  @override
+  Future<dynamic> loadLocal(String path) {
+    return _fileHlr.loadLocal(path);
   }
 }

@@ -24,35 +24,39 @@ class SyncService extends _$SyncService {
   }
 
   List<String> _popLocalOrder() {
-    final localAlimentBank = ref.read(alimentBankProvider);
-    final localOrder = List.of(localAlimentBank.order);
-    ref.read(alimentBankProvider.notifier).setState(
-        AlimentBankState(aliments: localAlimentBank.aliments, order: []));
-    return localOrder;
+    final order = ref.read(alimentOrderProvider);
+    ref
+        .read(alimentOrderProvider.notifier)
+        .load(AlimentBankState(aliments: {}, order: []));
+    return order.toList();
   }
 
   void _pushLocalOrder(List<String> localOrder) {
-    final oldState = ref.read(alimentBankProvider);
-    ref.read(alimentBankProvider.notifier).setState(AlimentBankState(
-          aliments: oldState.aliments,
-          order: [...localOrder, ...oldState.order],
-        ));
+    final oldAliments = ref.read(customAlimentsProvider);
+    final oldOrder = ref.read(alimentOrderProvider);
+    final bank = AlimentBankState(
+      aliments: oldAliments,
+      order: [...localOrder, ...oldOrder],
+    );
+    ref.read(alimentBankControllerProvider.notifier).setState(bank);
   }
 
   Future<void> _saveProviders() async {
-    await ref.read(alimentBankProvider.notifier).save(); // intelligent
+    await ref
+        .read(alimentBankControllerProvider.notifier)
+        .save(); // intelligent
     // TODO: await saveQueuedRecords();                  // brute but granular
     // await ref.read(nutrientsProvider.notifier)        .intelligentSave();
   }
 
-  Future<void> _clearProviders() async {
-    ref.invalidate(alimentBankProvider);
+  void _clearProviders() {
+    ref.read(alimentBankControllerProvider.notifier).invalidate();
     ref.invalidate(nutrientsProvider);
     ref.invalidate(dayCacheProvider);
   }
 
   Future<void> _loadProviders() async {
-    await ref.read(alimentBankProvider.notifier).load();
+    await ref.read(alimentBankControllerProvider.notifier).load();
     // day records load on demand
     await ref.read(nutrientsProvider.notifier).load();
   }
@@ -64,7 +68,7 @@ class SyncService extends _$SyncService {
 
       await _saveProviders(); // (except order)
       await _storageNotifier.deleteLocal();
-      await _clearProviders();
+      _clearProviders();
       // TODO: Make the providers load on build()
       // -> at startup by themselves
       // -> after the invalidation

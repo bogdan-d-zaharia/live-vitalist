@@ -31,6 +31,7 @@ class UnitaryTargetBar extends StatelessWidget {
   static double getAlignment(double l, double u) {
     final m = (l + u) / 2.0;
     final w = u - l;
+    if (w >= 1.0) return 0.0;
     final s = 2.0 / (1.0 - w);
     final d = -0.5 * s;
     final a = s * m + d;

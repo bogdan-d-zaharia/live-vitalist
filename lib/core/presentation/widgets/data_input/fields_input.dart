@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class FieldsInput extends StatefulWidget {
   const FieldsInput({
     required this.fields,
+    this.labels = const {},
     this.hints = const {},
     super.key,
   });
 
   final Map<String, dynamic> fields;
+  final Map<String, String> labels;
   final Map<String, String> hints;
 
   @override
@@ -75,7 +77,10 @@ class _FieldsInputState extends State<FieldsInput> {
                 children: [
                   SizedBox(
                     width: 100.0,
-                    child: Text(editable.keys.elementAt(i)),
+                    child: Text(
+                      widget.labels[editable.keys.elementAt(i)] ??
+                          editable.keys.elementAt(i),
+                    ),
                   ),
                   Expanded(
                     child: TextField(

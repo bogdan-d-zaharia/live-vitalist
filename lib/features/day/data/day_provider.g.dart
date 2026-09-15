@@ -94,7 +94,7 @@ final class DayCacheProvider
   }
 }
 
-String _$dayCacheHash() => r'5c1fcc13718f23217227aa6d9027c6f4524aa03c';
+String _$dayCacheHash() => r'10d3574de4d8978710f407a630551e96552e100c';
 
 /// `Map<DateTime, Day>`
 
