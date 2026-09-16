@@ -13,6 +13,11 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final routerConfig = ref.watch(appRouterProvider);
     final languageCode = ref.watch(localizationProvider);
+    final menuShape = RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(24.0),
+      side: BorderSide.none,
+    );
+    final popupMenuTheme = PopupMenuThemeData(shape: menuShape);
     final border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(24.0),
       borderSide: BorderSide.none,
@@ -27,11 +32,7 @@ class MyApp extends ConsumerWidget {
         border: border,
       ),
       menuStyle: MenuStyle(
-        shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24.0),
-          ),
-        ),
+        shape: WidgetStatePropertyAll(menuShape),
         side: WidgetStatePropertyAll(BorderSide.none),
       ),
     );
@@ -54,6 +55,7 @@ class MyApp extends ConsumerWidget {
           AppTextStylesTheme.light,
         ],
         dropdownMenuTheme: dropDownMenuTheme,
+        popupMenuTheme: popupMenuTheme,
       ),
       darkTheme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
@@ -66,6 +68,7 @@ class MyApp extends ConsumerWidget {
           AppTextStylesTheme.dark,
         ],
         dropdownMenuTheme: dropDownMenuTheme,
+        popupMenuTheme: popupMenuTheme,
       ),
       themeMode: ThemeMode.system,
     );

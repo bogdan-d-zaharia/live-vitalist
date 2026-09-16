@@ -105,9 +105,12 @@ class _NutrientConfigDropdownState
       _ => nutrientConfigName(matching.first, l),
     };
     final dates = [...ref.watch(selectedDatesProvider)];
+    final enabled = !_busy && !headers.isLoading && !selection.isLoading;
     return PopupMenuButton<_ConfigAction>(
       tooltip: l.nutrientConfigTitle,
-      enabled: !_busy && !headers.isLoading && !selection.isLoading,
+      enabled: enabled,
+      position: PopupMenuPosition.under,
+      clipBehavior: Clip.antiAlias,
       onSelected: (action) => _apply(action, dates),
       itemBuilder: (context) => [
         PopupMenuItem(
@@ -153,10 +156,12 @@ class _NutrientConfigDropdownState
         ),
       ],
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8.0),
+        padding: EdgeInsets.symmetric(horizontal: 12.0),
         child: ConstrainedBox(
-          constraints:
-              BoxConstraints(maxWidth: MediaQuery.sizeOf(context).width * 0.35),
+          constraints: BoxConstraints(
+            minHeight: 48.0,
+            maxWidth: MediaQuery.sizeOf(context).width * 0.42,
+          ),
           child: Row(mainAxisSize: MainAxisSize.min, children: [
             Flexible(
                 child:
