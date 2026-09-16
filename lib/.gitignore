@@ -1,3 +1,4 @@
 *.g.dart
+*.freezed.dart
 env.dart
 firebase_options.dart
