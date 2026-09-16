@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/features/nutrient/presentation/widgets/nutrient_async_status.dart';
 import 'package:live_vitalist/features/aliment_bank/data/aliment_bank.dart';
 import 'package:live_vitalist/features/day/data/day_provider.dart';
 import 'package:live_vitalist/features/day/domain/day_extensions.dart';
@@ -23,15 +24,22 @@ class CalendarItem extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final dayMap = ref.watch(dayCacheProvider);
     final bank = ref.watch(alimentBankProvider);
-    final nutrients = ref.watch(nutrientsProvider);
+    final nutrientAsync = ref.watch(dayNutrientsProvider(date));
+    if (nutrientAsync.isLoading ||
+        nutrientAsync.hasError ||
+        !nutrientAsync.hasValue) {
+      return NutrientAsyncStatus(value: nutrientAsync);
+    }
+    final nutrients = nutrientAsync.requireValue;
 
-    final day = dayMap[date];
+    final day = dayMap[date.normalized];
     if (day != null) {
       final intakeById = day.readIntake(bank);
       final intakeByNutrient = <Nutrient, double>{
         /* Makes sure the leading nutrient is first
            to show it specially. */
-        nutrients.data[nutrients.order.first]!: 0.0,
+        if (nutrients.order.isNotEmpty)
+          nutrients.data[nutrients.order.first]!: 0.0,
       };
 
       for (final entry in intakeById.entries) {
@@ -49,7 +57,6 @@ class CalendarItem extends ConsumerWidget {
     }
 
     ref.read(dayCacheProvider.notifier).load(date);
-    return const Center(
-        child: CircularProgressIndicator(strokeCap: StrokeCap.round));
+    return Center(child: CircularProgressIndicator(strokeCap: StrokeCap.round));
   }
 }

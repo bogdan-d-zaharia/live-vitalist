@@ -83,13 +83,19 @@ class AppInitialization extends _$AppInitialization {
   Future<void> _startupPreparation() async {
     await _firebaseFtr;
     await Future.wait([
-      ref.read(nutrientsProvider.notifier).load(),
       ref.read(alimentBankControllerProvider.notifier).load(),
     ]);
   }
   // #endregion
 
   // #region //* ONBOARDING STARTUP *//
+  Future<void> _prepareNutrientConfig(OnboardingData data) async {
+    final headers = await ref.read(nutrientConfigsListProvider.future);
+    await ref
+        .read(nutrientConfigProvider(headers.first.id).notifier)
+        .loadFromOnboarding(data.nutrients);
+  }
+
   Future<bool> finishOnboarding(OnboardingData onboardingData) async {
     bool didAccept;
     try {
@@ -104,9 +110,7 @@ class AppInitialization extends _$AppInitialization {
     state = await AsyncValue.guard(() async {
       await _firebaseFtr;
       await Future.wait([
-        ref
-            .read(nutrientsProvider.notifier)
-            .loadFromOnboarding(onboardingData.nutrients),
+        _prepareNutrientConfig(onboardingData),
         ref.read(alimentBankControllerProvider.notifier).load(),
       ]);
       SettingsData.hasCompletedOnboarding = true;

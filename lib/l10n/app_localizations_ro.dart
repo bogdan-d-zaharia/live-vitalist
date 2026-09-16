@@ -685,6 +685,56 @@ class AppLocalizationsRo extends AppLocalizations {
   String get nutrientDisplayEditorUnit => 'Unitate';
 
   @override
+  String nutrientConfigAuto(String name) {
+    return 'Auto · $name';
+  }
+
+  @override
+  String nutrientConfigMixed(String name) {
+    return 'Mixt · $name';
+  }
+
+  @override
+  String get nutrientConfigTitle => 'Configurație de nutrienți';
+
+  @override
+  String get nutrientConfigRename => 'Redenumește';
+
+  @override
+  String get nutrientConfigDuplicate => 'Duplică';
+
+  @override
+  String get nutrientConfigAdd => 'Adaugă configurație';
+
+  @override
+  String get nutrientConfigUpdateFailed =>
+      'Configurația nu a putut fi actualizată';
+
+  @override
+  String get nutrientConfigDefaultName => 'Implicită';
+
+  @override
+  String get nutrientConfigNewName => 'Configurație nouă';
+
+  @override
+  String nutrientConfigCopyName(String name) {
+    return '$name (copie)';
+  }
+
+  @override
+  String nutrientConfigNotFound(String id) {
+    return 'Configurația de nutrienți nu a fost găsită: $id';
+  }
+
+  @override
+  String get nutrientConfigSelectionChanged =>
+      'Selecția nutrienților s-a schimbat în timpul încărcării';
+
+  @override
+  String get nutrientConfigDayChanged =>
+      'Ziua s-a schimbat în timpul încărcării nutrienților';
+
+  @override
   String get ratioBarsTitle => 'Bare de distribuție';
 
   @override

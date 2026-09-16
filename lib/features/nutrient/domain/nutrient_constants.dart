@@ -1,4 +1,4 @@
-import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
+import 'package:live_vitalist/features/nutrient/domain/nutrient_state.dart';
 
 import 'nutrient.dart';
 

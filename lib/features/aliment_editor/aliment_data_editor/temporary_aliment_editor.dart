@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/features/nutrient/presentation/widgets/nutrient_async_status.dart';
 import 'package:live_vitalist/core/localization/localization_provider.dart';
 import 'package:live_vitalist/features/aliment/data/aliment_data_extensions.dart';
 import 'package:live_vitalist/l10n/app_localizations.dart';
@@ -75,7 +76,13 @@ class _TemporaryAlimentEditorState
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
-    final nutrients = ref.watch(nutrientsProvider);
+    final nutrientAsync = ref.watch(nutrientsProvider);
+    if (nutrientAsync.isLoading ||
+        nutrientAsync.hasError ||
+        !nutrientAsync.hasValue) {
+      return NutrientAsyncStatus(value: nutrientAsync);
+    }
+    final nutrients = nutrientAsync.requireValue;
     final selectedNutrients = nutrients.order.where((key) =>
         key != 'kcals' && !nutrients.data[key]!.tags.contains('disabled'));
 

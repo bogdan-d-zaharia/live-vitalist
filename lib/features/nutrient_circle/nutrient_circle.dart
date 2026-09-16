@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/features/nutrient/presentation/widgets/nutrient_async_status.dart';
 import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
 import 'package:live_vitalist/features/aliment_bank/data/aliment_bank.dart';
 import 'package:live_vitalist/features/day/data/day_provider.dart';
@@ -19,13 +20,21 @@ class NutrientCircle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final nutrientState = ref.watch(nutrientsProvider);
-    final avgDay = ref.watch(syncAverageDayProvider);
+    final nutrientAsync = ref.watch(nutrientsProvider);
+    if (!nutrientAsync.hasValue) {
+      return NutrientAsyncStatus(value: nutrientAsync);
+    }
+    final nutrientState = nutrientAsync.requireValue;
+    final dayAsync = ref.watch(averageDayProvider);
+    if (!dayAsync.hasValue) {
+      return NutrientAsyncStatus(value: dayAsync);
+    }
+    final avgDay = dayAsync.requireValue;
     final bank = ref.watch(alimentBankProvider);
     final localization = AppLocalizations.of(context);
     final localeCode = Localizations.localeOf(context).languageCode;
 
-    if (nutrientState.order.isEmpty) return const SizedBox.shrink();
+    if (nutrientState.order.isEmpty) return SizedBox.shrink();
 
     final key = nutrientState.order.firstWhere(
       (key) => !nutrientState.data[key]!.tags.contains('disabled'),
@@ -46,7 +55,7 @@ class NutrientCircle extends ConsumerWidget {
 
     return CustomCard(
       title: label,
-      logo: const Icon(Icons.pie_chart),
+      logo: Icon(Icons.pie_chart),
       child: Center(
         child: SizedBox(
           width: NutrientCircleConstants.ringSize,

@@ -675,6 +675,55 @@ class AppLocalizationsTr extends AppLocalizations {
   String get nutrientDisplayEditorUnit => 'Birim';
 
   @override
+  String nutrientConfigAuto(String name) {
+    return 'Otomatik · $name';
+  }
+
+  @override
+  String nutrientConfigMixed(String name) {
+    return 'Karma · $name';
+  }
+
+  @override
+  String get nutrientConfigTitle => 'Besin öğesi yapılandırması';
+
+  @override
+  String get nutrientConfigRename => 'Yeniden adlandır';
+
+  @override
+  String get nutrientConfigDuplicate => 'Çoğalt';
+
+  @override
+  String get nutrientConfigAdd => 'Yapılandırma ekle';
+
+  @override
+  String get nutrientConfigUpdateFailed => 'Yapılandırma güncellenemedi';
+
+  @override
+  String get nutrientConfigDefaultName => 'Varsayılan';
+
+  @override
+  String get nutrientConfigNewName => 'Yeni yapılandırma';
+
+  @override
+  String nutrientConfigCopyName(String name) {
+    return '$name (kopya)';
+  }
+
+  @override
+  String nutrientConfigNotFound(String id) {
+    return 'Besin öğesi yapılandırması bulunamadı: $id';
+  }
+
+  @override
+  String get nutrientConfigSelectionChanged =>
+      'Yükleme sırasında besin öğesi seçimi değişti';
+
+  @override
+  String get nutrientConfigDayChanged =>
+      'Besin öğeleri yüklenirken gün değişti';
+
+  @override
   String get ratioBarsTitle => 'Dağılım çubukları';
 
   @override

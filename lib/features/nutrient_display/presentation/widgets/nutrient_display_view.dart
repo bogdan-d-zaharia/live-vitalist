@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/features/nutrient/presentation/widgets/nutrient_async_status.dart';
 import 'package:live_vitalist/core/localization/localization_provider.dart';
 import 'package:live_vitalist/features/aliment_bank/data/aliment_bank.dart';
 import 'package:live_vitalist/features/day/data/day_provider.dart';
 import 'package:live_vitalist/features/day/domain/day_extensions.dart';
 import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
+import 'package:live_vitalist/features/nutrient/domain/nutrient_state.dart';
 import 'package:live_vitalist/features/nutrient_display/presentation/ui_helpers/nutrient_sorting_logic.dart';
 import 'package:live_vitalist/features/nutrient_display/presentation/ui_helpers/nutrient_extensions.dart';
 import 'package:live_vitalist/features/nutrient_display/presentation/widgets/nutrient_tile.dart';
@@ -17,10 +19,18 @@ class NutrientDisplayView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final languageCode = ref.watch(localizationProvider);
 
-    final avgDay = ref.watch(syncAverageDayProvider);
+    final dayAsync = ref.watch(averageDayProvider);
+    if (!dayAsync.hasValue) {
+      return NutrientAsyncStatus(value: dayAsync);
+    }
+    final avgDay = dayAsync.requireValue;
     final bank = ref.watch(alimentBankProvider);
-    // final state = ref.watch(nutrientsProvider);
-    final rawState = ref.watch(nutrientsProvider);
+    final nutrientAsync = ref.watch(nutrientsProvider);
+    if (!nutrientAsync.hasValue) {
+      return NutrientAsyncStatus(value: nutrientAsync);
+    }
+    final rawState = nutrientAsync.requireValue;
+    if (rawState.order.isEmpty) return SizedBox.shrink();
     final state = NutrientState(
       data: {...rawState.data}..remove(rawState.order.first),
       order: rawState.order.sublist(1),

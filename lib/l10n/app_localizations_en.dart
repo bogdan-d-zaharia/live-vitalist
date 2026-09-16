@@ -681,6 +681,54 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nutrientDisplayEditorUnit => 'Unit';
 
   @override
+  String nutrientConfigAuto(String name) {
+    return 'Auto · $name';
+  }
+
+  @override
+  String nutrientConfigMixed(String name) {
+    return 'Mixed · $name';
+  }
+
+  @override
+  String get nutrientConfigTitle => 'Nutrient configuration';
+
+  @override
+  String get nutrientConfigRename => 'Rename';
+
+  @override
+  String get nutrientConfigDuplicate => 'Duplicate';
+
+  @override
+  String get nutrientConfigAdd => 'Add config';
+
+  @override
+  String get nutrientConfigUpdateFailed => 'Could not update configuration';
+
+  @override
+  String get nutrientConfigDefaultName => 'Default';
+
+  @override
+  String get nutrientConfigNewName => 'New config';
+
+  @override
+  String nutrientConfigCopyName(String name) {
+    return '$name (copy)';
+  }
+
+  @override
+  String nutrientConfigNotFound(String id) {
+    return 'Nutrient configuration not found: $id';
+  }
+
+  @override
+  String get nutrientConfigSelectionChanged =>
+      'Nutrient selection changed while loading';
+
+  @override
+  String get nutrientConfigDayChanged => 'Day changed while loading nutrients';
+
+  @override
   String get ratioBarsTitle => 'Distribution Bars';
 
   @override

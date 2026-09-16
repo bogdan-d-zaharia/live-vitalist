@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_code_editor/flutter_code_editor.dart';
 import 'package:flutter_highlight/themes/arta.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/features/nutrient/presentation/widgets/nutrient_async_status.dart';
 import 'package:highlight/languages/json.dart';
 
 import 'package:live_vitalist/features/aliment/domain/aliment_data.dart';
@@ -25,22 +26,13 @@ class AlimentJsonEditor extends ConsumerStatefulWidget {
 }
 
 class _AlimentJsonEditorState extends ConsumerState<AlimentJsonEditor> {
-  late CodeController controller;
+  CodeController? _controller;
+  CodeController get controller => _controller!;
   late String originalText;
 
   @override
-  void initState() {
-    super.initState();
-    originalText = widget.initialData.toExpandedWithUnitsJson(
-      ref.read(nutrientsProvider),
-      languageCode: widget.languageCode,
-    );
-    controller = CodeController(language: json, text: originalText);
-  }
-
-  @override
   void dispose() {
-    controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
@@ -79,6 +71,22 @@ class _AlimentJsonEditorState extends ConsumerState<AlimentJsonEditor> {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
+    final nutrientAsync = ref.watch(nutrientsProvider);
+    if (nutrientAsync.isLoading ||
+        nutrientAsync.hasError ||
+        !nutrientAsync.hasValue) {
+      return Scaffold(
+        appBar: AppBar(title: Text(l.alimentJsonEditorTitle)),
+        body: NutrientAsyncStatus(value: nutrientAsync),
+      );
+    }
+    if (_controller == null) {
+      originalText = widget.initialData.toExpandedWithUnitsJson(
+        nutrientAsync.requireValue,
+        languageCode: widget.languageCode,
+      );
+      _controller = CodeController(language: json, text: originalText);
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(l.alimentJsonEditorTitle),

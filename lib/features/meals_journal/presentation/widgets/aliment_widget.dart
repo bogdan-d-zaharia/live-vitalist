@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/features/nutrient/presentation/widgets/nutrient_async_status.dart';
 import 'package:live_vitalist/core/localization/localization_provider.dart';
 import 'package:live_vitalist/features/aliment/data/aliment_data_extensions.dart';
 import 'package:live_vitalist/features/aliment_bank/data/aliment_bank.dart';
@@ -29,7 +30,13 @@ class AlimentWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final languageCode = ref.watch(localizationProvider);
 
-    final model = ref.watch(nutrientsProvider).data;
+    final nutrientAsync = ref.watch(nutrientsProvider);
+    if (nutrientAsync.isLoading ||
+        nutrientAsync.hasError ||
+        !nutrientAsync.hasValue) {
+      return NutrientAsyncStatus(value: nutrientAsync);
+    }
+    final model = nutrientAsync.requireValue.data;
     final bank = ref.watch(alimentBankProvider);
     final kcalsLabel = model['kcals']?.resolveNutrientLabel(
           localization: AppLocalizations.of(context),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/features/nutrient/presentation/widgets/nutrient_async_status.dart';
 import 'package:live_vitalist/l10n/app_localizations.dart';
 import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
 import 'package:live_vitalist/features/nutrient_display/presentation/ui_helpers/nutrient_extensions.dart';
@@ -12,8 +13,13 @@ class NutrientDisplayEdit extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
-    final nutrientsState = ref.watch(nutrientsProvider);
-    final nutrientsNotifier = ref.read(nutrientsProvider.notifier);
+    final nutrientAsync = ref.watch(nutrientsProvider);
+    if (!nutrientAsync.hasValue) {
+      return NutrientAsyncStatus(value: nutrientAsync);
+    }
+    final nutrientsState = nutrientAsync.requireValue;
+    final nutrientsNotifier =
+        ref.read(nutrientConfigProvider(nutrientsState.configId!).notifier);
     final localization = AppLocalizations.of(context);
     final localeCode = Localizations.localeOf(context).languageCode;
 
@@ -29,11 +35,12 @@ class NutrientDisplayEdit extends ConsumerWidget {
         key: ValueKey(key),
         onTap: () async {
           final updated = await editNutrient(context, nutrient, key);
-          if (updated != null) nutrientsNotifier.update(key, updated);
+          if (updated == null) return;
+          await nutrientsNotifier.updateNutrient(key, updated);
         },
         child: Row(
           children: [
-            const Icon(Icons.drag_indicator_rounded),
+            Icon(Icons.drag_indicator_rounded),
             Expanded(
               child: DimmedParenthesesText(
                 label: label,
@@ -53,11 +60,11 @@ class NutrientDisplayEdit extends ConsumerWidget {
       children: [
         ReorderableListView(
           shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          onReorder: nutrientsNotifier.reorder,
+          physics: NeverScrollableScrollPhysics(),
+          onReorderItem: nutrientsNotifier.reorder,
           children: widgets,
         ),
-        const Divider(),
+        Divider(),
         SizedBox(
           width: double.infinity,
           child: TextButton(

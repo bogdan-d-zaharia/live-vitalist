@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/features/nutrient/presentation/widgets/nutrient_async_status.dart';
 import 'package:intl/intl.dart';
 import 'package:live_vitalist/core/domain/intervals.dart';
 import 'package:live_vitalist/core/presentation/widgets/mini_card.dart';
@@ -26,7 +27,13 @@ class WeekReportOverlay extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l = AppLocalizations.of(context);
-    final nutrients = ref.watch(nutrientsProvider).data;
+    final nutrientAsync = ref.watch(nutrientsProvider);
+    if (nutrientAsync.isLoading ||
+        nutrientAsync.hasError ||
+        !nutrientAsync.hasValue) {
+      return NutrientAsyncStatus(value: nutrientAsync);
+    }
+    final nutrients = nutrientAsync.requireValue.data;
     final localization = l;
     final localeCode = Localizations.localeOf(context).languageCode;
     final intakes = weekReport.currentWeek.averageIntake.map(
@@ -77,7 +84,7 @@ class WeekReportOverlay extends ConsumerWidget {
     final maxHeight = MediaQuery.sizeOf(context).height * 0.9;
     return Dialog(
       backgroundColor: Colors.transparent,
-      insetPadding: const EdgeInsets.all(12.0),
+      insetPadding: EdgeInsets.all(12.0),
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 420.0, maxHeight: maxHeight),
         child: AspectRatio(

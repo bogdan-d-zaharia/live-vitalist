@@ -661,6 +661,53 @@ class AppLocalizationsKo extends AppLocalizations {
   String get nutrientDisplayEditorUnit => '단위';
 
   @override
+  String nutrientConfigAuto(String name) {
+    return '자동 · $name';
+  }
+
+  @override
+  String nutrientConfigMixed(String name) {
+    return '혼합 · $name';
+  }
+
+  @override
+  String get nutrientConfigTitle => '영양소 설정';
+
+  @override
+  String get nutrientConfigRename => '이름 변경';
+
+  @override
+  String get nutrientConfigDuplicate => '복제';
+
+  @override
+  String get nutrientConfigAdd => '설정 추가';
+
+  @override
+  String get nutrientConfigUpdateFailed => '설정을 업데이트할 수 없습니다';
+
+  @override
+  String get nutrientConfigDefaultName => '기본';
+
+  @override
+  String get nutrientConfigNewName => '새 설정';
+
+  @override
+  String nutrientConfigCopyName(String name) {
+    return '$name (복사본)';
+  }
+
+  @override
+  String nutrientConfigNotFound(String id) {
+    return '영양소 설정을 찾을 수 없습니다: $id';
+  }
+
+  @override
+  String get nutrientConfigSelectionChanged => '로딩 중 영양소 선택이 변경되었습니다';
+
+  @override
+  String get nutrientConfigDayChanged => '영양소 로딩 중 날짜가 변경되었습니다';
+
+  @override
   String get ratioBarsTitle => '분포 막대';
 
   @override

@@ -1100,6 +1100,84 @@ abstract class AppLocalizations {
   /// **'Unit'**
   String get nutrientDisplayEditorUnit;
 
+  /// No description provided for @nutrientConfigAuto.
+  ///
+  /// In en, this message translates to:
+  /// **'Auto · {name}'**
+  String nutrientConfigAuto(String name);
+
+  /// No description provided for @nutrientConfigMixed.
+  ///
+  /// In en, this message translates to:
+  /// **'Mixed · {name}'**
+  String nutrientConfigMixed(String name);
+
+  /// No description provided for @nutrientConfigTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nutrient configuration'**
+  String get nutrientConfigTitle;
+
+  /// No description provided for @nutrientConfigRename.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename'**
+  String get nutrientConfigRename;
+
+  /// No description provided for @nutrientConfigDuplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate'**
+  String get nutrientConfigDuplicate;
+
+  /// No description provided for @nutrientConfigAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add config'**
+  String get nutrientConfigAdd;
+
+  /// No description provided for @nutrientConfigUpdateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not update configuration'**
+  String get nutrientConfigUpdateFailed;
+
+  /// No description provided for @nutrientConfigDefaultName.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get nutrientConfigDefaultName;
+
+  /// No description provided for @nutrientConfigNewName.
+  ///
+  /// In en, this message translates to:
+  /// **'New config'**
+  String get nutrientConfigNewName;
+
+  /// No description provided for @nutrientConfigCopyName.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} (copy)'**
+  String nutrientConfigCopyName(String name);
+
+  /// No description provided for @nutrientConfigNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Nutrient configuration not found: {id}'**
+  String nutrientConfigNotFound(String id);
+
+  /// No description provided for @nutrientConfigSelectionChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Nutrient selection changed while loading'**
+  String get nutrientConfigSelectionChanged;
+
+  /// No description provided for @nutrientConfigDayChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Day changed while loading nutrients'**
+  String get nutrientConfigDayChanged;
+
   /// No description provided for @ratioBarsTitle.
   ///
   /// In en, this message translates to:

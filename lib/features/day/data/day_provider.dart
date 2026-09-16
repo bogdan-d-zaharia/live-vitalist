@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart' as intl;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment.dart';
 import 'package:live_vitalist/features/day/domain/day.dart';
 import 'package:live_vitalist/features/day/domain/day_extensions.dart';
@@ -21,8 +22,9 @@ class SelectedDates extends _$SelectedDates {
   @override
   List<DateTime> build() => [DateTime.now().normalized];
 
-  void setSingleDate(DateTime date) => state = [date];
+  void setSingleDate(DateTime date) => state = [date.normalized];
   void toggleDate(DateTime date) {
+    date = date.normalized;
     if (!state.contains(date)) {
       state = [...state, date];
     } else if (state.length > 1) {
@@ -37,7 +39,16 @@ class DayCache extends _$DayCache {
   @override
   Map<DateTime, Day> build() => {};
 
-  Future<Day> load(DateTime date) async {
+  final Map<DateTime, Future<Day>> _loads = {};
+
+  Future<Day> load(DateTime date) {
+    final normalized = date.normalized;
+    if (state.containsKey(normalized)) return Future.value(state[normalized]!);
+    return _loads.putIfAbsent(normalized,
+        () => _load(normalized).whenComplete(() => _loads.remove(normalized)));
+  }
+
+  Future<Day> _load(DateTime date) async {
     final normalized = date.normalized;
     if (state.containsKey(normalized)) {
       return state[normalized]!;
@@ -57,16 +68,23 @@ class DayCache extends _$DayCache {
     await ref.read(storageProvider.notifier).saveJson(path, day.toJson());
   }
 
+  Future<void> setNutrientConfig(List<DateTime> dates, String? id) async {
+    for (final date in dates) {
+      final day = await load(date);
+      await _save(date, Day(meals: day.meals, nutrientConfigId: id));
+    }
+  }
+
   Future<void> removeMeal(DateTime date, String mealKey) async {
     final day = await load(date);
     final meals = [...day.meals]..removeWhere((e) => e.key == mealKey);
-    await _save(date, Day(meals: meals));
+    await _save(date, day.copyWith(meals: meals));
   }
 
   Future<void> addMeal(DateTime date, Meal meal) async {
     final day = await load(date);
     final meals = [...day.meals, meal];
-    await _save(date, Day(meals: meals));
+    await _save(date, day.copyWith(meals: meals));
   }
 
   // TODO: Momentan se muteaza obiectul Meal
@@ -79,7 +97,7 @@ class DayCache extends _$DayCache {
     final meal = day.meals.firstWhere((meal) => meal.key == mealKey);
     meal.aliments.add(aliment);
     final meals = [...day.meals];
-    await _save(date, Day(meals: meals));
+    await _save(date, day.copyWith(meals: meals));
   }
 
   Future<void> removeAliment(
@@ -88,7 +106,7 @@ class DayCache extends _$DayCache {
     final meal = day.meals.firstWhere((meal) => meal.key == mealKey);
     meal.aliments.remove(aliment);
     final meals = [...day.meals];
-    await _save(date, Day(meals: meals));
+    await _save(date, day.copyWith(meals: meals));
   }
 
   Future<void> updateAliment(
@@ -104,7 +122,7 @@ class DayCache extends _$DayCache {
       ..removeAt(idx)
       ..insert(idx, newAliment);
     final meals = [...day.meals];
-    await _save(date, Day(meals: meals));
+    await _save(date, day.copyWith(meals: meals));
   }
 }
 
@@ -128,4 +146,21 @@ List<Day>? syncSelectedDays(Ref ref) {
 Day syncAverageDay(Ref ref) {
   final days = ref.watch(syncSelectedDaysProvider);
   return days?.average() ?? Day();
+}
+
+@riverpod
+Future<Day> dayRecord(Ref ref, DateTime date) {
+  final cached =
+      ref.watch(dayCacheProvider.select((days) => days[date.normalized]));
+  return cached == null
+      ? ref.read(dayCacheProvider.notifier).load(date)
+      : Future.value(cached);
+}
+
+@riverpod
+Future<Day> averageDay(Ref ref) async {
+  final dates = ref.watch(selectedDatesProvider);
+  final days = await Future.wait(
+      dates.map((date) => ref.watch(dayRecordProvider(date).future)));
+  return days.average();
 }

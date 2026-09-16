@@ -11,6 +11,7 @@ import 'package:live_vitalist/features/nutrient_display/nutrient_display.dart';
 import 'package:live_vitalist/features/ratio_bars/ratio_bars_card.dart';
 import 'package:live_vitalist/features/settings/data/settings_data.dart';
 import 'package:live_vitalist/features/nutrient_circle/nutrient_circle.dart';
+import 'package:live_vitalist/features/nutrient/presentation/widgets/nutrient_config_dropdown.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   final Future<void> Function() onOpenSettings;
@@ -59,6 +60,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
         title: Text('Live Vitalist'),
         actions: [
+          NutrientConfigDropdown(),
           Padding(
             padding: EdgeInsets.only(right: 24.0),
             child: SizedBox(

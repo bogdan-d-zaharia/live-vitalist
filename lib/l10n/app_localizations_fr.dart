@@ -688,6 +688,56 @@ class AppLocalizationsFr extends AppLocalizations {
   String get nutrientDisplayEditorUnit => 'Unité';
 
   @override
+  String nutrientConfigAuto(String name) {
+    return 'Auto · $name';
+  }
+
+  @override
+  String nutrientConfigMixed(String name) {
+    return 'Mixtes · $name';
+  }
+
+  @override
+  String get nutrientConfigTitle => 'Configuration des nutriments';
+
+  @override
+  String get nutrientConfigRename => 'Renommer';
+
+  @override
+  String get nutrientConfigDuplicate => 'Dupliquer';
+
+  @override
+  String get nutrientConfigAdd => 'Ajouter une configuration';
+
+  @override
+  String get nutrientConfigUpdateFailed =>
+      'Impossible de modifier la configuration';
+
+  @override
+  String get nutrientConfigDefaultName => 'Par défaut';
+
+  @override
+  String get nutrientConfigNewName => 'Nouvelle configuration';
+
+  @override
+  String nutrientConfigCopyName(String name) {
+    return '$name (copie)';
+  }
+
+  @override
+  String nutrientConfigNotFound(String id) {
+    return 'Configuration des nutriments introuvable : $id';
+  }
+
+  @override
+  String get nutrientConfigSelectionChanged =>
+      'La sélection des nutriments a changé pendant le chargement';
+
+  @override
+  String get nutrientConfigDayChanged =>
+      'Le jour a changé pendant le chargement des nutriments';
+
+  @override
   String get ratioBarsTitle => 'Barres de répartition';
 
   @override
