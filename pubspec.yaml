@@ -80,8 +80,6 @@ dependencies:
 
 dependency_overrides:
   path_provider_linux: null
-  firebase_core: 4.12.1
-  firebase_core_platform_interface: 8.0.0
 
 dev_dependencies:
   flutter_test:
