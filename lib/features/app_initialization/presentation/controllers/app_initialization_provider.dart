@@ -2,7 +2,6 @@ import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:live_vitalist/core/auth/domain/credential_source.dart';
@@ -149,13 +148,7 @@ class AppInitialization extends _$AppInitialization {
 
       await _startupPreparation();
       await ref.read(syncServiceProvider.notifier).lateLogin();
-      final userId = FirebaseAuth.instance.currentUser?.uid;
-      final fcmToken = await FirebaseMessaging.instance.getToken();
-      if (userId == null || fcmToken == null) {
-        throw Exception("CANNOT RETRIEVE NOTIFICATION CREDENTIALS");
-      }
-
-      await ref.read(notificationsApiProvider).saveToken(userId, fcmToken);
+      await ref.read(notificationsApiProvider).registerDevice();
       SettingsData.hasCompletedOnboarding = true;
       state = AsyncData(AppInitState.ready);
       return ConnectionResult.connected;
