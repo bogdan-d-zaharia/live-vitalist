@@ -4,6 +4,8 @@ import 'package:live_vitalist/app/routing/app_router.dart';
 import 'package:live_vitalist/core/localization/localization_provider.dart';
 import 'package:live_vitalist/core/theme/app_colors_theme.dart';
 import 'package:live_vitalist/core/theme/app_text_styles_theme.dart';
+import 'package:live_vitalist/core/theme/long_press_action_menu_theme.dart';
+import 'package:live_vitalist/core/theme/app_menu_button_theme.dart';
 import 'package:live_vitalist/l10n/app_localizations.dart';
 
 class MyApp extends ConsumerWidget {
@@ -13,11 +15,33 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final routerConfig = ref.watch(appRouterProvider);
     final languageCode = ref.watch(localizationProvider);
+    final lightColors = ColorScheme.fromSeed(
+        seedColor: Colors.green, brightness: Brightness.light);
+    final darkColors = ColorScheme.fromSeed(
+        seedColor: Colors.green, brightness: Brightness.dark);
     final menuShape = RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(24.0),
+      borderRadius: BorderRadius.circular(16.0),
       side: BorderSide.none,
     );
-    final popupMenuTheme = PopupMenuThemeData(shape: menuShape);
+    final popupMenuTheme = PopupMenuThemeData(
+      shape: menuShape,
+      elevation: 3.0,
+      surfaceTintColor: Colors.transparent,
+      menuPadding: EdgeInsets.symmetric(vertical: 4.0),
+      textStyle: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400),
+    );
+    PopupMenuThemeData themedMenu(ColorScheme colors) =>
+        popupMenuTheme.copyWith(
+          color: colors.surfaceContainerLow,
+          shadowColor: colors.shadow.withValues(alpha: 0.18),
+          labelTextStyle: WidgetStateProperty.resolveWith((states) => TextStyle(
+                fontSize: 14.0,
+                fontWeight: FontWeight.w400,
+                color: states.contains(WidgetState.disabled)
+                    ? colors.onSurface.withValues(alpha: 0.38)
+                    : colors.onSurface,
+              )),
+        );
     final border = OutlineInputBorder(
       borderRadius: BorderRadius.circular(24.0),
       borderSide: BorderSide.none,
@@ -45,30 +69,28 @@ class MyApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       title: 'Live Vitalist',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.green,
-          brightness: Brightness.light,
-        ),
+        colorScheme: lightColors,
         useMaterial3: true,
         extensions: [
           AppColorsTheme.light,
           AppTextStylesTheme.light,
+          LongPressActionMenuTheme.compact(lightColors),
+          AppMenuButtonTheme.subtle(lightColors),
         ],
         dropdownMenuTheme: dropDownMenuTheme,
-        popupMenuTheme: popupMenuTheme,
+        popupMenuTheme: themedMenu(lightColors),
       ),
       darkTheme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.green,
-          brightness: Brightness.dark,
-        ),
+        colorScheme: darkColors,
         useMaterial3: true,
         extensions: [
           AppColorsTheme.dark,
           AppTextStylesTheme.dark,
+          LongPressActionMenuTheme.compact(darkColors),
+          AppMenuButtonTheme.subtle(darkColors),
         ],
         dropdownMenuTheme: dropDownMenuTheme,
-        popupMenuTheme: popupMenuTheme,
+        popupMenuTheme: themedMenu(darkColors),
       ),
       themeMode: ThemeMode.system,
     );

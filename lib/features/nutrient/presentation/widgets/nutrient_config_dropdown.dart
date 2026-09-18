@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/core/presentation/widgets/custom_alert_dialog.dart';
+import 'package:live_vitalist/core/theme/app_menu_button_theme.dart';
 import 'package:live_vitalist/core/presentation/widgets/long_press_action_menu.dart';
 import 'package:live_vitalist/features/day/data/day_provider.dart';
 import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
@@ -28,6 +29,7 @@ class NutrientConfigDropdown extends ConsumerStatefulWidget {
 class _NutrientConfigDropdownState
     extends ConsumerState<NutrientConfigDropdown> {
   bool _busy = false;
+  final _menuKey = GlobalKey<PopupMenuButtonState<_ConfigAction>>();
 
   Future<void> _apply(_ConfigAction action, List<DateTime> dates) async {
     final l = AppLocalizations.of(context);
@@ -132,6 +134,7 @@ class _NutrientConfigDropdownState
     final dates = [...ref.watch(selectedDatesProvider)];
     final enabled = !_busy && !headers.isLoading && !selection.isLoading;
     return PopupMenuButton<_ConfigAction>(
+      key: _menuKey,
       tooltip: l.nutrientConfigTitle,
       enabled: enabled,
       position: PopupMenuPosition.under,
@@ -140,7 +143,10 @@ class _NutrientConfigDropdownState
       itemBuilder: (context) => [
         PopupMenuItem(
           value: _ConfigAction(_ActionType.select),
-          child: Text(autoLabel, maxLines: 1, overflow: TextOverflow.ellipsis),
+          child: _ConfigMenuLabel(
+            label: autoLabel,
+            isSelected: !selected.isMixed && selected.id == null,
+          ),
         ),
         PopupMenuDivider(),
         ...configs.map((header) => PopupMenuItem<_ConfigAction>(
@@ -148,41 +154,37 @@ class _NutrientConfigDropdownState
               padding: EdgeInsets.zero,
               child: Builder(
                   builder: (itemContext) => LongPressActionMenu<_ConfigAction>(
-                        itemBuilder: (_) => [
-                          PopupMenuItem(
-                              value: _ConfigAction(_ActionType.rename, header),
-                              child: Row(children: [
-                                Icon(Icons.edit_rounded, size: 20.0),
-                                SizedBox(width: 8.0),
-                                Flexible(child: Text(l.nutrientConfigRename)),
-                              ])),
-                          PopupMenuItem(
-                              value:
-                                  _ConfigAction(_ActionType.duplicate, header),
-                              child: Row(children: [
-                                Icon(Icons.copy_rounded, size: 20.0),
-                                SizedBox(width: 8.0),
-                                Flexible(
-                                    child: Text(l.nutrientConfigDuplicate)),
-                              ])),
-                          PopupMenuItem(
-                              value: _ConfigAction(_ActionType.remove, header),
-                              enabled: configs.length > 1,
-                              child: Row(children: [
-                                Icon(Icons.delete_outline_rounded, size: 20.0),
-                                SizedBox(width: 8.0),
-                                Flexible(child: Text(l.actionDelete)),
-                              ])),
+                        itemBuilder: (menuContext) => [
+                          LongPressActionMenuItem(
+                            context: menuContext,
+                            value: _ConfigAction(_ActionType.rename, header),
+                            icon: Icons.edit_rounded,
+                            label: l.nutrientConfigRename,
+                          ),
+                          LongPressActionMenuItem(
+                            context: menuContext,
+                            value: _ConfigAction(_ActionType.duplicate, header),
+                            icon: Icons.copy_rounded,
+                            label: l.nutrientConfigDuplicate,
+                          ),
+                          LongPressActionMenuItem(
+                            context: menuContext,
+                            value: _ConfigAction(_ActionType.remove, header),
+                            icon: Icons.delete_outline_rounded,
+                            label: l.actionDelete,
+                            enabled: configs.length > 1,
+                            isDestructive: true,
+                          ),
                         ],
                         onSelected: (action) =>
                             Navigator.of(itemContext).pop(action),
-                        child: SizedBox(
-                          width: 240.0,
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 16.0, vertical: 12.0),
-                            child: Text(nutrientConfigName(header, l),
-                                maxLines: 1, overflow: TextOverflow.ellipsis),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 12.0),
+                          child: _ConfigMenuLabel(
+                            label: nutrientConfigName(header, l),
+                            isSelected:
+                                !selected.isMixed && selected.id == header.id,
                           ),
                         ),
                       )),
@@ -193,27 +195,53 @@ class _NutrientConfigDropdownState
           child: Row(children: [
             Icon(Icons.add_rounded),
             SizedBox(width: 8.0),
-            Text(l.nutrientConfigAdd)
+            Flexible(child: Text(l.nutrientConfigAdd))
           ]),
         ),
       ],
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12.0),
+        padding: EdgeInsets.symmetric(horizontal: 8.0),
         child: ConstrainedBox(
           constraints: BoxConstraints(
-            minHeight: 48.0,
             maxWidth: MediaQuery.sizeOf(context).width * 0.42,
           ),
-          child: Row(mainAxisSize: MainAxisSize.min, children: [
-            Flexible(
-                child:
-                    Text(label, maxLines: 1, overflow: TextOverflow.ellipsis)),
-            Icon(Icons.arrow_drop_down_rounded),
-          ]),
+          child: TextButton(
+            style: Theme.of(context).extension<AppMenuButtonTheme>()?.style,
+            onPressed:
+                enabled ? () => _menuKey.currentState?.showButtonMenu() : null,
+            child: Row(mainAxisSize: MainAxisSize.min, children: [
+              Flexible(
+                  child: Text(label,
+                      maxLines: 1, overflow: TextOverflow.ellipsis)),
+              SizedBox(width: 6.0),
+              Icon(Icons.expand_more_rounded),
+            ]),
+          ),
         ),
       ),
     );
   }
+}
+
+class _ConfigMenuLabel extends StatelessWidget {
+  final String label;
+  final bool isSelected;
+
+  const _ConfigMenuLabel({required this.label, required this.isSelected});
+
+  @override
+  Widget build(BuildContext context) => Row(children: [
+        Expanded(
+            child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis)),
+        SizedBox(width: 12.0),
+        SizedBox(
+          width: 24.0,
+          child: isSelected
+              ? Icon(Icons.check_rounded,
+                  color: Theme.of(context).colorScheme.primary)
+              : null,
+        ),
+      ]);
 }
 
 class _RenameConfigDialog extends StatefulWidget {

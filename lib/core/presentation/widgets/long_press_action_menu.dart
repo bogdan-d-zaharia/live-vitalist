@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:live_vitalist/core/theme/long_press_action_menu_theme.dart';
 
 class LongPressActionMenu<T> extends StatelessWidget {
   final Widget child;
@@ -23,7 +24,8 @@ class LongPressActionMenu<T> extends StatelessWidget {
             local.dx - 12.0, local.dy - 24.0, local.dx + 12.0, local.dy + 24.0),
         Offset.zero & overlay.size,
       ),
-      constraints: BoxConstraints(minWidth: 140.0, maxWidth: 200.0),
+      constraints: LongPressActionMenuTheme.of(context).constraints,
+      clipBehavior: Clip.antiAlias,
       items: itemBuilder(context),
     );
     if (selected == null || !context.mounted) return;
@@ -31,9 +33,53 @@ class LongPressActionMenu<T> extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) => GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onLongPressStart: (details) => _show(context, details.globalPosition),
-        child: child,
-      );
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final menuTheme = LongPressActionMenuTheme.of(context);
+    return Theme(
+      data: theme.copyWith(popupMenuTheme: menuTheme.menuTheme),
+      child: Builder(
+          builder: (menuContext) => GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onLongPressStart: (details) =>
+                    _show(menuContext, details.globalPosition),
+                child: child,
+              )),
+    );
+  }
+}
+
+class LongPressActionMenuItem<T> extends PopupMenuItem<T> {
+  LongPressActionMenuItem({
+    required BuildContext context,
+    required T value,
+    required IconData icon,
+    required String label,
+    super.enabled = true,
+    bool isDestructive = false,
+    super.key,
+  }) : super(
+          value: value,
+          height: LongPressActionMenuTheme.of(context).itemHeight,
+          padding: LongPressActionMenuTheme.of(context).itemPadding,
+          child: Row(children: [
+            Icon(
+              icon,
+              size: LongPressActionMenuTheme.of(context).iconSize,
+              color: !enabled
+                  ? Theme.of(context).disabledColor
+                  : isDestructive
+                      ? Theme.of(context).colorScheme.error
+                      : Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+            SizedBox(width: LongPressActionMenuTheme.of(context).iconSpacing),
+            Flexible(
+                child: Text(
+              label,
+              style: isDestructive && enabled
+                  ? TextStyle(color: Theme.of(context).colorScheme.error)
+                  : null,
+            )),
+          ]),
+        );
 }
