@@ -282,6 +282,10 @@
   "@nutrientConfigNotFound": {"placeholders": {"id": {"type": "String"}}},
   "nutrientConfigSelectionChanged": "Nutrient selection changed while loading",
   "nutrientConfigDayChanged": "Day changed while loading nutrients",
+  "nutrientConfigDeleteTitle": "Delete configuration",
+  "nutrientConfigDeleteConfirmation": "Delete “{name}”? Days using this configuration will use Auto.",
+  "@nutrientConfigDeleteConfirmation": {"placeholders": {"name": {"type": "String"}}},
+  "nutrientConfigLastConfig": "The only configuration cannot be deleted.",
 
   "ratioBarsTitle": "Distribution Bars",
 

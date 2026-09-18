@@ -738,6 +738,18 @@ class AppLocalizationsFr extends AppLocalizations {
       'Le jour a changé pendant le chargement des nutriments';
 
   @override
+  String get nutrientConfigDeleteTitle => 'Supprimer la configuration';
+
+  @override
+  String nutrientConfigDeleteConfirmation(String name) {
+    return 'Supprimer « $name » ? Les jours utilisant cette configuration passeront en mode Auto.';
+  }
+
+  @override
+  String get nutrientConfigLastConfig =>
+      'La seule configuration ne peut pas être supprimée.';
+
+  @override
   String get ratioBarsTitle => 'Barres de répartition';
 
   @override

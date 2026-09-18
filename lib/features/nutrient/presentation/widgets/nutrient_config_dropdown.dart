@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:live_vitalist/core/presentation/widgets/custom_alert_dialog.dart';
 import 'package:live_vitalist/core/presentation/widgets/long_press_action_menu.dart';
 import 'package:live_vitalist/features/day/data/day_provider.dart';
 import 'package:live_vitalist/features/nutrient/data/nutrient_provider.dart';
@@ -7,7 +8,7 @@ import 'package:live_vitalist/features/nutrient/domain/nutrient_config_header.da
 import 'package:live_vitalist/features/nutrient/presentation/ui_helpers/nutrient_config_labels.dart';
 import 'package:live_vitalist/l10n/app_localizations.dart';
 
-enum _ActionType { select, rename, duplicate, add }
+enum _ActionType { select, rename, duplicate, add, remove }
 
 class _ConfigAction {
   final _ActionType type;
@@ -35,6 +36,30 @@ class _NutrientConfigDropdownState
       final configs = ref.read(nutrientConfigsListProvider.notifier);
       String? id;
       switch (action.type) {
+        case _ActionType.remove:
+          final confirmed = await showDialog<bool>(
+            context: context,
+            builder: (dialogContext) => CustomAlertDialog(
+              icon: Icon(Icons.delete_outline_rounded),
+              title: Text(l.nutrientConfigDeleteTitle),
+              content: Text(l.nutrientConfigDeleteConfirmation(
+                nutrientConfigName(action.header!, l),
+              )),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(dialogContext).pop(false),
+                  child: Text(l.actionCancel),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(dialogContext).pop(true),
+                  child: Text(l.actionDelete),
+                ),
+              ],
+            ),
+          );
+          if (confirmed != true || !mounted) return;
+          await configs.remove(action.header!.id);
+          return;
         case _ActionType.rename:
           final header = action.header!;
           final name = await showDialog<String>(
@@ -126,11 +151,28 @@ class _NutrientConfigDropdownState
                         itemBuilder: (_) => [
                           PopupMenuItem(
                               value: _ConfigAction(_ActionType.rename, header),
-                              child: Text(l.nutrientConfigRename)),
+                              child: Row(children: [
+                                Icon(Icons.edit_rounded, size: 20.0),
+                                SizedBox(width: 8.0),
+                                Flexible(child: Text(l.nutrientConfigRename)),
+                              ])),
                           PopupMenuItem(
                               value:
                                   _ConfigAction(_ActionType.duplicate, header),
-                              child: Text(l.nutrientConfigDuplicate)),
+                              child: Row(children: [
+                                Icon(Icons.copy_rounded, size: 20.0),
+                                SizedBox(width: 8.0),
+                                Flexible(
+                                    child: Text(l.nutrientConfigDuplicate)),
+                              ])),
+                          PopupMenuItem(
+                              value: _ConfigAction(_ActionType.remove, header),
+                              enabled: configs.length > 1,
+                              child: Row(children: [
+                                Icon(Icons.delete_outline_rounded, size: 20.0),
+                                SizedBox(width: 8.0),
+                                Flexible(child: Text(l.actionDelete)),
+                              ])),
                         ],
                         onSelected: (action) =>
                             Navigator.of(itemContext).pop(action),

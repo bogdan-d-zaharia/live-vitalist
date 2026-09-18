@@ -724,6 +724,17 @@ class AppLocalizationsTr extends AppLocalizations {
       'Besin öğeleri yüklenirken gün değişti';
 
   @override
+  String get nutrientConfigDeleteTitle => 'Yapılandırmayı sil';
+
+  @override
+  String nutrientConfigDeleteConfirmation(String name) {
+    return '“$name” silinsin mi? Bu yapılandırmayı kullanan günler Otomatik seçeneğini kullanacaktır.';
+  }
+
+  @override
+  String get nutrientConfigLastConfig => 'Tek yapılandırma silinemez.';
+
+  @override
   String get ratioBarsTitle => 'Dağılım çubukları';
 
   @override

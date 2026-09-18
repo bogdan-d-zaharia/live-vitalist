@@ -302,6 +302,10 @@
   "@nutrientConfigNotFound": {"placeholders": {"id": {"type": "String"}}},
   "nutrientConfigSelectionChanged": "Yükleme sırasında besin öğesi seçimi değişti",
   "nutrientConfigDayChanged": "Besin öğeleri yüklenirken gün değişti",
+  "nutrientConfigDeleteTitle": "Yapılandırmayı sil",
+  "nutrientConfigDeleteConfirmation": "“{name}” silinsin mi? Bu yapılandırmayı kullanan günler Otomatik seçeneğini kullanacaktır.",
+  "@nutrientConfigDeleteConfirmation": {"placeholders": {"name": {"type": "String"}}},
+  "nutrientConfigLastConfig": "Tek yapılandırma silinemez.",
 
   "ratioBarsTitle": "Dağılım çubukları",
   "reportsNoData": "Veri yok",

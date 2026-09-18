@@ -1178,6 +1178,24 @@ abstract class AppLocalizations {
   /// **'Day changed while loading nutrients'**
   String get nutrientConfigDayChanged;
 
+  /// No description provided for @nutrientConfigDeleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete configuration'**
+  String get nutrientConfigDeleteTitle;
+
+  /// No description provided for @nutrientConfigDeleteConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete “{name}”? Days using this configuration will use Auto.'**
+  String nutrientConfigDeleteConfirmation(String name);
+
+  /// No description provided for @nutrientConfigLastConfig.
+  ///
+  /// In en, this message translates to:
+  /// **'The only configuration cannot be deleted.'**
+  String get nutrientConfigLastConfig;
+
   /// No description provided for @ratioBarsTitle.
   ///
   /// In en, this message translates to:

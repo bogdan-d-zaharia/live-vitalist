@@ -302,6 +302,10 @@
   "@nutrientConfigNotFound": {"placeholders": {"id": {"type": "String"}}},
   "nutrientConfigSelectionChanged": "로딩 중 영양소 선택이 변경되었습니다",
   "nutrientConfigDayChanged": "영양소 로딩 중 날짜가 변경되었습니다",
+  "nutrientConfigDeleteTitle": "설정 삭제",
+  "nutrientConfigDeleteConfirmation": "“{name}”을(를) 삭제하시겠습니까? 이 설정을 사용하는 날짜는 자동 설정을 사용합니다.",
+  "@nutrientConfigDeleteConfirmation": {"placeholders": {"name": {"type": "String"}}},
+  "nutrientConfigLastConfig": "유일한 설정은 삭제할 수 없습니다.",
 
   "ratioBarsTitle": "분포 막대",
   "reportsNoData": "데이터 없음",

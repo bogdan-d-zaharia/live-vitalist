@@ -18,5 +18,7 @@ String nutrientConfigError(Object? error, AppLocalizations l) =>
         l.nutrientConfigSelectionChanged,
       NutrientConfigFailure(reason: NutrientConfigFailureReason.dayChanged) =>
         l.nutrientConfigDayChanged,
+      NutrientConfigFailure(reason: NutrientConfigFailureReason.lastConfig) =>
+        l.nutrientConfigLastConfig,
       _ => l.nutrientConfigUpdateFailed,
     };

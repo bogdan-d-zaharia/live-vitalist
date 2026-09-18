@@ -708,6 +708,17 @@ class AppLocalizationsKo extends AppLocalizations {
   String get nutrientConfigDayChanged => '영양소 로딩 중 날짜가 변경되었습니다';
 
   @override
+  String get nutrientConfigDeleteTitle => '설정 삭제';
+
+  @override
+  String nutrientConfigDeleteConfirmation(String name) {
+    return '“$name”을(를) 삭제하시겠습니까? 이 설정을 사용하는 날짜는 자동 설정을 사용합니다.';
+  }
+
+  @override
+  String get nutrientConfigLastConfig => '유일한 설정은 삭제할 수 없습니다.';
+
+  @override
   String get ratioBarsTitle => '분포 막대';
 
   @override

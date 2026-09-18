@@ -83,6 +83,17 @@ class NutrientConfigsList extends _$NutrientConfigsList {
         [...state.requireValue, NutrientConfigHeader(id: id, name: name)]);
     return id;
   }
+
+  Future<void> remove(String id) async {
+    await future;
+    final headers = state.requireValue;
+    if (!headers.any((header) => header.id == id)) return;
+    if (headers.length == 1) {
+      throw NutrientConfigFailure(NutrientConfigFailureReason.lastConfig);
+    }
+    await _save(headers.where((header) => header.id != id).toList());
+    ref.invalidate(nutrientConfigProvider(id));
+  }
 }
 
 @Riverpod(keepAlive: true)
@@ -173,10 +184,16 @@ class NutrientConfigSelection {
 
 @riverpod
 Future<NutrientConfigSelection> nutrientConfigSelection(Ref ref) async {
+  final headersFuture = ref.watch(nutrientConfigsListProvider.future);
   final dates = ref.watch(selectedDatesProvider);
   final days = await Future.wait(
       dates.map((date) => ref.watch(dayRecordProvider(date).future)));
-  final ids = days.map((day) => day.nutrientConfigId).toSet();
+  final headers = await headersFuture;
+  final ids = days
+      .map((day) => headers.any((header) => header.id == day.nutrientConfigId)
+          ? day.nutrientConfigId
+          : null)
+      .toSet();
   return NutrientConfigSelection(
       id: ids.length == 1 ? ids.first : null, isMixed: ids.length > 1);
 }
@@ -203,6 +220,9 @@ Future<NutrientState> dayNutrients(Ref ref, DateTime date) async {
   if (!ref.mounted) {
     throw NutrientConfigFailure(NutrientConfigFailureReason.dayChanged);
   }
-  return ref.watch(
-      nutrientConfigProvider(day.nutrientConfigId ?? headers.first.id).future);
+  final header = headers.firstWhere(
+    (header) => header.id == day.nutrientConfigId,
+    orElse: () => headers.first,
+  );
+  return ref.watch(nutrientConfigProvider(header.id).future);
 }

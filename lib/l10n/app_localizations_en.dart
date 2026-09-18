@@ -729,6 +729,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nutrientConfigDayChanged => 'Day changed while loading nutrients';
 
   @override
+  String get nutrientConfigDeleteTitle => 'Delete configuration';
+
+  @override
+  String nutrientConfigDeleteConfirmation(String name) {
+    return 'Delete “$name”? Days using this configuration will use Auto.';
+  }
+
+  @override
+  String get nutrientConfigLastConfig =>
+      'The only configuration cannot be deleted.';
+
+  @override
   String get ratioBarsTitle => 'Distribution Bars';
 
   @override

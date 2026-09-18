@@ -321,6 +321,10 @@
   "@nutrientConfigNotFound": {"placeholders": {"id": {"type": "String"}}},
   "nutrientConfigSelectionChanged": "La sélection des nutriments a changé pendant le chargement",
   "nutrientConfigDayChanged": "Le jour a changé pendant le chargement des nutriments",
+  "nutrientConfigDeleteTitle": "Supprimer la configuration",
+  "nutrientConfigDeleteConfirmation": "Supprimer « {name} » ? Les jours utilisant cette configuration passeront en mode Auto.",
+  "@nutrientConfigDeleteConfirmation": {"placeholders": {"name": {"type": "String"}}},
+  "nutrientConfigLastConfig": "La seule configuration ne peut pas être supprimée.",
 
   "ratioBarsTitle": "Barres de répartition",
   "reportsNoData": "Aucune donnée",

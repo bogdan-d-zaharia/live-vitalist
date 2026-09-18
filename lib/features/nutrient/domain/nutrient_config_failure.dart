@@ -1,4 +1,9 @@
-enum NutrientConfigFailureReason { notFound, selectionChanged, dayChanged }
+enum NutrientConfigFailureReason {
+  notFound,
+  selectionChanged,
+  dayChanged,
+  lastConfig
+}
 
 class NutrientConfigFailure implements Exception {
   final NutrientConfigFailureReason reason;

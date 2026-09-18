@@ -735,6 +735,18 @@ class AppLocalizationsRo extends AppLocalizations {
       'Ziua s-a schimbat în timpul încărcării nutrienților';
 
   @override
+  String get nutrientConfigDeleteTitle => 'Șterge configurația';
+
+  @override
+  String nutrientConfigDeleteConfirmation(String name) {
+    return 'Ștergi „$name”? Zilele care folosesc această configurație vor folosi Auto.';
+  }
+
+  @override
+  String get nutrientConfigLastConfig =>
+      'Singura configurație nu poate fi ștearsă.';
+
+  @override
   String get ratioBarsTitle => 'Bare de distribuție';
 
   @override
