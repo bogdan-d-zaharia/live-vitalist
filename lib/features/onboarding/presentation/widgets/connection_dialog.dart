@@ -2,26 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
 import 'package:live_vitalist/l10n/app_localizations.dart';
 
-enum GoogleConnectionDialogType {
+enum ConnectionDialogType {
   accountNotFound,
   connectionFailed,
 }
 
-class GoogleConnectionDialog extends StatelessWidget {
-  final GoogleConnectionDialogType type;
-  const GoogleConnectionDialog({super.key, required this.type});
+class ConnectionDialog extends StatelessWidget {
+  final ConnectionDialogType type;
+  final String provider;
+  const ConnectionDialog(
+      {super.key, required this.type, required this.provider});
 
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
     final (title, message) = switch (type) {
-      GoogleConnectionDialogType.accountNotFound => (
-          l.googleConnectionDialogAccountNotFoundTitle,
-          l.googleConnectionDialogAccountNotFoundMessage,
+      ConnectionDialogType.accountNotFound => (
+          l.connectionDialogAccountNotFoundTitle,
+          l.connectionDialogAccountNotFoundMessage(provider),
         ),
-      GoogleConnectionDialogType.connectionFailed => (
-          l.googleConnectionDialogConnectionFailedTitle,
-          l.googleConnectionDialogConnectionFailedMessage,
+      ConnectionDialogType.connectionFailed => (
+          l.connectionDialogConnectionFailedTitle(provider),
+          l.connectionDialogConnectionFailedMessage(provider),
         ),
     };
 
@@ -53,12 +55,13 @@ class GoogleConnectionDialog extends StatelessWidget {
   }
 }
 
-Future<void> showGoogleConnectionDialog(
+Future<void> showConnectionDialog(
   BuildContext context, {
-  required GoogleConnectionDialogType type,
+  required ConnectionDialogType type,
+  required String provider,
 }) async {
   return showDialog(
     context: context,
-    builder: (context) => GoogleConnectionDialog(type: type),
+    builder: (context) => ConnectionDialog(type: type, provider: provider),
   );
 }

@@ -203,19 +203,22 @@ class AppLocalizationsTr extends AppLocalizations {
       'Şartlar ve Koşullarımızı ve Gizlilik Politikamızı kabul etmek için lütfen internete bağlanın.';
 
   @override
-  String get googleConnectionDialogAccountNotFoundTitle => 'Hesap bulunamadı';
+  String get connectionDialogAccountNotFoundTitle => 'Hesap bulunamadı';
 
   @override
-  String get googleConnectionDialogAccountNotFoundMessage =>
-      'Bu Google hesabına bağlı bir Live Vitalist hesabı bulamadık. Lütfen önce kurulumu tamamlayın.';
+  String connectionDialogAccountNotFoundMessage(String provider) {
+    return 'Bu $provider hesabına bağlı bir Live Vitalist hesabı bulamadık. Lütfen önce kurulumu tamamlayın.';
+  }
 
   @override
-  String get googleConnectionDialogConnectionFailedTitle =>
-      'Google bağlantısı başarısız';
+  String connectionDialogConnectionFailedTitle(String provider) {
+    return '$provider bağlantısı başarısız';
+  }
 
   @override
-  String get googleConnectionDialogConnectionFailedMessage =>
-      'Google\'a bağlanamadık. İnternet bağlantınızı kontrol edip tekrar deneyin.';
+  String connectionDialogConnectionFailedMessage(String provider) {
+    return '$provider ile bağlantı kurulamadı. İnternet bağlantınızı kontrol edip tekrar deneyin.';
+  }
 
   @override
   String get welcomeScreenTitle => 'Live Vitalist\'e hoş geldiniz';
@@ -230,7 +233,16 @@ class AppLocalizationsTr extends AppLocalizations {
   }
 
   @override
+  String welcomeScreenExistingAccountWithApple(
+      String googleLink, String appleLink) {
+    return 'Zaten bir hesabınız var mı? $googleLink veya $appleLink ile oturum açın.';
+  }
+
+  @override
   String get welcomeScreenGoogleLink => 'Google ile bağlan';
+
+  @override
+  String get welcomeScreenAppleLink => 'Apple';
 
   @override
   String get termsScreenTitle => 'Her şey hazır';
@@ -816,8 +828,14 @@ class AppLocalizationsTr extends AppLocalizations {
   String get settingsConnectWithGoogle => 'Google ile bağlan';
 
   @override
-  String get settingsGoogleBackupMessage =>
-      'Google ile bağlanarak dosyalarınızı buluta yedekleyin veya verilerinizi geri yükleyin.';
+  String get settingsConnectWithApple => 'Apple ile bağlan';
+
+  @override
+  String get settingsCloudBackup => 'Bulut yedekleme';
+
+  @override
+  String get settingsCloudBackupMessage =>
+      'Oturum açarak dosyalarınızı buluta yedekleyin veya verilerinizi geri yükleyin.';
 
   @override
   String get settingsUseMonthDayFormat => 'Ay/Gün biçimini kullan';
@@ -851,7 +869,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get settingsReauthenticateMessage =>
-      'Google ile ilişkili hesabınızı silmeden önce yeniden kimlik doğrulaması yapmalısınız.';
+      'Hesabınızı silebilmemiz için aynı hesapla yeniden kimlik doğrulamanız gerekir.';
 
   @override
   String get settingsReauthenticateAndDelete => 'Yeniden doğrula ve sil';

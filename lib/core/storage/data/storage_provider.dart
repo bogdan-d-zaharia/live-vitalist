@@ -1,3 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:live_vitalist/core/auth/data/apple_credential_source.dart';
+import 'package:live_vitalist/core/auth/domain/credential_source.dart';
 import 'package:live_vitalist/core/auth/data/google_credential_source.dart';
 import 'package:live_vitalist/core/storage/data/file_handler.dart';
 import 'package:live_vitalist/core/storage/data/firebase_handler.dart';
@@ -18,7 +21,19 @@ class Storage extends _$Storage
   @override
   void build() {
     _fileHlr = FileHandler();
-    _firebaseHlr = FirebaseHandler(ref.read(googleCredentialSourceProvider));
+    _firebaseHlr = FirebaseHandler(_credentialsForUser);
+  }
+
+  CredentialSource _credentialsForUser(User user) {
+    final ids = user.providerData.map((provider) => provider.providerId);
+    return switch (ids) {
+      final ids when ids.contains('apple.com') =>
+        ref.read(appleCredentialSourceProvider),
+      final ids when ids.contains('google.com') =>
+        ref.read(googleCredentialSourceProvider),
+      _ => throw UnsupportedError(
+          'No supported credential source for this account'),
+    };
   }
 
   @override

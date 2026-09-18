@@ -1,3 +1,7 @@
+import 'package:flutter/foundation.dart';
+import 'package:live_vitalist/core/auth/data/apple_credential_source.dart';
+import 'package:live_vitalist/core/auth/domain/credential_source.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:live_vitalist/core/auth/data/google_credential_source.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,16 +22,19 @@ class SettingsScreen extends ConsumerStatefulWidget {
 }
 
 class _SettingsState extends ConsumerState<SettingsScreen> {
-  void _handleGoogleConnection() async {
-    final success = await ref
-        .read(settingsControllerProvider.notifier)
-        .connect(ref.read(googleCredentialSourceProvider));
-    if (success && mounted) setState(() {});
+  bool _isConnecting = false;
+
+  Future<void> _handleConnection(CredentialSource credentials) async {
+    if (_isConnecting) return;
+    setState(() => _isConnecting = true);
+    await ref.read(settingsControllerProvider.notifier).connect(credentials);
+    if (mounted) setState(() => _isConnecting = false);
   }
 
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
+    final showApple = !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
     final isFirebase =
         ref.watch(settingsControllerProvider.notifier).isFirebase;
 
@@ -92,16 +99,27 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
             if (!isFirebase)
               CustomCard(
                 logo: const Icon(Icons.cloud_upload_rounded),
-                title: l.settingsConnectWithGoogle,
+                title: l.settingsCloudBackup,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(l.settingsGoogleBackupMessage),
+                    Text(l.settingsCloudBackupMessage),
                     const SizedBox(height: 12.0),
                     TextButton(
-                      onPressed: _handleGoogleConnection,
+                      onPressed: _isConnecting
+                          ? null
+                          : () => _handleConnection(
+                              ref.read(googleCredentialSourceProvider)),
                       child: Text(l.settingsConnectWithGoogle),
                     ),
+                    if (showApple)
+                      SignInWithAppleButton(
+                        text: l.settingsConnectWithApple,
+                        onPressed: _isConnecting
+                            ? null
+                            : () => _handleConnection(
+                                ref.read(appleCredentialSourceProvider)),
+                      ),
                   ],
                 ),
               ),

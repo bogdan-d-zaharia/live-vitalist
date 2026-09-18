@@ -12,6 +12,9 @@ final class GoogleCredentialSource implements CredentialSource {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   @override
+  String? get authorizationCode => null;
+
+  @override
   Future<AuthCredential?> getCredential() async {
     final account = await _googleSignIn.signIn();
     if (account == null) return null;

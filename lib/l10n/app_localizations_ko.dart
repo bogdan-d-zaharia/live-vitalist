@@ -197,18 +197,22 @@ class AppLocalizationsKo extends AppLocalizations {
       '이용 약관과 개인정보 처리방침에 동의하려면 인터넷에 연결해 주세요.';
 
   @override
-  String get googleConnectionDialogAccountNotFoundTitle => '계정을 찾을 수 없음';
+  String get connectionDialogAccountNotFoundTitle => '계정을 찾을 수 없음';
 
   @override
-  String get googleConnectionDialogAccountNotFoundMessage =>
-      '이 Google 계정에 연결된 Live Vitalist 계정을 찾을 수 없습니다. 먼저 온보딩을 완료해 주세요.';
+  String connectionDialogAccountNotFoundMessage(String provider) {
+    return '이 $provider 계정에 연결된 Live Vitalist 계정을 찾을 수 없습니다. 먼저 온보딩을 완료해 주세요.';
+  }
 
   @override
-  String get googleConnectionDialogConnectionFailedTitle => 'Google 연결 실패';
+  String connectionDialogConnectionFailedTitle(String provider) {
+    return '$provider 연결 실패';
+  }
 
   @override
-  String get googleConnectionDialogConnectionFailedMessage =>
-      'Google에 연결할 수 없습니다. 인터넷 연결을 확인한 후 다시 시도해 주세요.';
+  String connectionDialogConnectionFailedMessage(String provider) {
+    return '$provider에 연결할 수 없습니다. 인터넷 연결을 확인한 후 다시 시도해 주세요.';
+  }
 
   @override
   String get welcomeScreenTitle => 'Live Vitalist에 오신 것을 환영합니다';
@@ -222,7 +226,16 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
+  String welcomeScreenExistingAccountWithApple(
+      String googleLink, String appleLink) {
+    return '이미 계정이 있으신가요? $googleLink 또는 $appleLink 계정으로 로그인하세요.';
+  }
+
+  @override
   String get welcomeScreenGoogleLink => 'Google 계정으로 연결';
+
+  @override
+  String get welcomeScreenAppleLink => 'Apple';
 
   @override
   String get termsScreenTitle => '모든 준비가 완료되었습니다';
@@ -800,8 +813,13 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settingsConnectWithGoogle => 'Google 계정으로 연결';
 
   @override
-  String get settingsGoogleBackupMessage =>
-      'Google에 연결하여 파일을 클라우드에 백업하거나 데이터를 복원하세요.';
+  String get settingsConnectWithApple => 'Apple 계정으로 연결';
+
+  @override
+  String get settingsCloudBackup => '클라우드 백업';
+
+  @override
+  String get settingsCloudBackupMessage => '로그인하여 파일을 클라우드에 백업하거나 데이터를 복원하세요.';
 
   @override
   String get settingsUseMonthDayFormat => '월/일 형식 사용';
@@ -832,7 +850,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get settingsReauthenticateMessage =>
-      'Google과 연결된 계정을 삭제하려면 먼저 다시 인증해야 합니다.';
+      '계정을 삭제하려면 먼저 동일한 계정으로 다시 인증해야 합니다.';
 
   @override
   String get settingsReauthenticateAndDelete => '다시 인증 후 삭제';

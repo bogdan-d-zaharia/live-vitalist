@@ -203,19 +203,22 @@ class AppLocalizationsRo extends AppLocalizations {
       'Conectează-te la internet pentru a accepta Termenii și condițiile și Politica de confidențialitate.';
 
   @override
-  String get googleConnectionDialogAccountNotFoundTitle => 'Cont negăsit';
+  String get connectionDialogAccountNotFoundTitle => 'Cont negăsit';
 
   @override
-  String get googleConnectionDialogAccountNotFoundMessage =>
-      'Nu am găsit un cont Live Vitalist conectat la acest cont Google. Finalizează mai întâi configurarea.';
+  String connectionDialogAccountNotFoundMessage(String provider) {
+    return 'Nu am găsit un cont Live Vitalist conectat la acest cont $provider. Finalizează mai întâi configurarea.';
+  }
 
   @override
-  String get googleConnectionDialogConnectionFailedTitle =>
-      'Conectarea la Google a eșuat';
+  String connectionDialogConnectionFailedTitle(String provider) {
+    return 'Conectarea la $provider a eșuat';
+  }
 
   @override
-  String get googleConnectionDialogConnectionFailedMessage =>
-      'Nu ne-am putut conecta la Google. Verifică conexiunea la internet și încearcă din nou.';
+  String connectionDialogConnectionFailedMessage(String provider) {
+    return 'Nu ne-am putut conecta la $provider. Verifică conexiunea la internet și încearcă din nou.';
+  }
 
   @override
   String get welcomeScreenTitle => 'Bine ai venit la Live Vitalist';
@@ -230,7 +233,16 @@ class AppLocalizationsRo extends AppLocalizations {
   }
 
   @override
+  String welcomeScreenExistingAccountWithApple(
+      String googleLink, String appleLink) {
+    return 'Ai deja un cont? Conectează-te cu $googleLink sau cu $appleLink.';
+  }
+
+  @override
   String get welcomeScreenGoogleLink => 'Conectează-te cu Google';
+
+  @override
+  String get welcomeScreenAppleLink => 'Apple';
 
   @override
   String get termsScreenTitle => 'Totul este pregătit';
@@ -828,8 +840,14 @@ class AppLocalizationsRo extends AppLocalizations {
   String get settingsConnectWithGoogle => 'Conectează-te cu Google';
 
   @override
-  String get settingsGoogleBackupMessage =>
-      'Salvează copii de siguranță ale fișierelor în cloud sau restaurează datele conectându-te cu Google.';
+  String get settingsConnectWithApple => 'Conectează-te cu Apple';
+
+  @override
+  String get settingsCloudBackup => 'Copie de siguranță în cloud';
+
+  @override
+  String get settingsCloudBackupMessage =>
+      'Salvează copii de siguranță ale fișierelor în cloud sau restaurează datele autentificându-te.';
 
   @override
   String get settingsUseMonthDayFormat => 'Folosește formatul lună/zi';
@@ -865,7 +883,7 @@ class AppLocalizationsRo extends AppLocalizations {
 
   @override
   String get settingsReauthenticateMessage =>
-      'Trebuie să te autentifici din nou înainte de a putea șterge contul asociat cu Google.';
+      'Trebuie să te autentifici din nou cu același cont înainte de a-l putea șterge.';
 
   @override
   String get settingsReauthenticateAndDelete => 'Reautentifică-te și șterge';

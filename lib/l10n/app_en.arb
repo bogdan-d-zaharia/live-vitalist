@@ -69,10 +69,31 @@
   "noConnectionDialogTitle": "No internet access",
   "noConnectionDialogMessage": "Please connect to the internet in order to accept our Terms and Conditions, and with our Privacy Policy.",
 
-  "googleConnectionDialogAccountNotFoundTitle": "Account not found",
-  "googleConnectionDialogAccountNotFoundMessage": "We could not find a Live Vitalist account connected to this Google account. Please complete the onboarding first.",
-  "googleConnectionDialogConnectionFailedTitle": "Google connection failed",
-  "googleConnectionDialogConnectionFailedMessage": "We could not connect with Google. Please check your internet connection and try again.",
+  "connectionDialogAccountNotFoundTitle": "Account not found",
+  "connectionDialogAccountNotFoundMessage": "We could not find a Live Vitalist account connected to this {provider} account. Please complete the onboarding first.",
+  "@connectionDialogAccountNotFoundMessage": {
+    "placeholders": {
+      "provider": {
+        "type": "String"
+      }
+    }
+  },
+  "connectionDialogConnectionFailedTitle": "{provider} connection failed",
+  "@connectionDialogConnectionFailedTitle": {
+    "placeholders": {
+      "provider": {
+        "type": "String"
+      }
+    }
+  },
+  "connectionDialogConnectionFailedMessage": "We could not connect with {provider}. Please check your internet connection and try again.",
+  "@connectionDialogConnectionFailedMessage": {
+    "placeholders": {
+      "provider": {
+        "type": "String"
+      }
+    }
+  },
 
   "welcomeScreenTitle": "Welcome to Live Vitalist",
   "welcomeScreenSubtitle": "Let's set up your profile so we can tailor your nutrition and fitness journey to you.",
@@ -84,7 +105,19 @@
       }
     }
   },
+  "welcomeScreenExistingAccountWithApple": "Have an account? Sign in with {googleLink} or {appleLink}.",
+  "@welcomeScreenExistingAccountWithApple": {
+    "placeholders": {
+      "googleLink": {
+        "type": "String"
+      },
+      "appleLink": {
+        "type": "String"
+      }
+    }
+  },
   "welcomeScreenGoogleLink": "Connect with Google",
+  "welcomeScreenAppleLink": "Apple",
 
   "termsScreenTitle": "You're all set",
   "termsScreenAgreement": "If you continue, you agree with our {termsLink} and {privacyLink}.",
@@ -329,7 +362,9 @@
   "settingsSendFeedback": "Send Feedback",
   "settingsDataDeletion": "Data Deletion",
   "settingsConnectWithGoogle": "Connect with Google",
-  "settingsGoogleBackupMessage": "Backup your files to cloud or restore your data by connecting with Google.",
+  "settingsConnectWithApple": "Connect with Apple",
+  "settingsCloudBackup": "Cloud backup",
+  "settingsCloudBackupMessage": "Back up your files to the cloud or restore your data by signing in.",
   
   "settingsUseMonthDayFormat": "Use M/D format",
   "settingsUseComplexCalendar": "Use complex calendar view",
@@ -341,7 +376,7 @@
   "settingsAccountAndDataDeletion": "Account and data deletion",
   "settingsPermanentlyDeleteOnlineData": "Permanently delete online data",
   "settingsPermanentlyDeleteAllData": "Permanently delete all data",
-  "settingsReauthenticateMessage": "You must authenticate first before we can delete your account associated with Google.",
+  "settingsReauthenticateMessage": "You must authenticate again with the same account before we can delete it.",
   "settingsReauthenticateAndDelete": "Re-authenticate and delete",
   "settingsDeleteAllDescription": "You can delete your account and all data stored both online and on your device by using the button below. This will permanently remove everything linked to your account and reset the app.",
   "settingsDeleteAllConfirmation": "Are you sure you want to delete your account and all associated data? This will erase your online data and local storage. This action is permanent and cannot be undone.",

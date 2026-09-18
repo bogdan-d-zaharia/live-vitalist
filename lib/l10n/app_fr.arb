@@ -64,10 +64,31 @@
   "onboardingStreakOptionHideFooter": "Suivez simplement mes progrès",
   "noConnectionDialogTitle": "Pas d'accès à Internet",
   "noConnectionDialogMessage": "Veuillez vous connecter à Internet afin d'accepter nos Conditions générales et notre Politique de confidentialité.",
-  "googleConnectionDialogAccountNotFoundTitle": "Compte introuvable",
-  "googleConnectionDialogAccountNotFoundMessage": "Nous n’avons trouvé aucun compte Live Vitalist associé à ce compte Google. Veuillez d’abord terminer la configuration initiale.",
-  "googleConnectionDialogConnectionFailedTitle": "Échec de la connexion à Google",
-  "googleConnectionDialogConnectionFailedMessage": "Nous n'avons pas pu nous connecter à Google. Vérifiez votre connexion Internet et réessayez.",
+  "connectionDialogAccountNotFoundTitle": "Compte introuvable",
+  "connectionDialogAccountNotFoundMessage": "Nous n’avons trouvé aucun compte Live Vitalist associé à ce compte {provider}. Veuillez d’abord terminer la configuration initiale.",
+  "@connectionDialogAccountNotFoundMessage": {
+    "placeholders": {
+      "provider": {
+        "type": "String"
+      }
+    }
+  },
+  "connectionDialogConnectionFailedTitle": "Échec de la connexion à {provider}",
+  "@connectionDialogConnectionFailedTitle": {
+    "placeholders": {
+      "provider": {
+        "type": "String"
+      }
+    }
+  },
+  "connectionDialogConnectionFailedMessage": "Nous n’avons pas pu nous connecter à {provider}. Vérifiez votre connexion Internet et réessayez.",
+  "@connectionDialogConnectionFailedMessage": {
+    "placeholders": {
+      "provider": {
+        "type": "String"
+      }
+    }
+  },
   "welcomeScreenTitle": "Bienvenue sur Live Vitalist",
   "welcomeScreenSubtitle": "Configurons votre profil afin de personnaliser votre parcours nutrition et fitness.",
   "welcomeScreenExistingAccount": "Vous avez déjà un compte ? {googleLink}.",
@@ -78,7 +99,19 @@
       }
     }
   },
+  "welcomeScreenExistingAccountWithApple": "Vous avez déjà un compte ? Connectez-vous avec {googleLink} ou {appleLink}.",
+  "@welcomeScreenExistingAccountWithApple": {
+    "placeholders": {
+      "googleLink": {
+        "type": "String"
+      },
+      "appleLink": {
+        "type": "String"
+      }
+    }
+  },
   "welcomeScreenGoogleLink": "Se connecter avec Google",
+  "welcomeScreenAppleLink": "Apple",
   "termsScreenTitle": "Tout est prêt",
   "termsScreenAgreement": "En continuant, vous acceptez nos {termsLink} et notre {privacyLink}.",
   "@termsScreenAgreement": {
@@ -376,7 +409,9 @@
   "settingsSendFeedback": "Envoyer des commentaires",
   "settingsDataDeletion": "Suppression des données",
   "settingsConnectWithGoogle": "Se connecter avec Google",
-  "settingsGoogleBackupMessage": "Sauvegardez vos fichiers dans le cloud ou restaurez vos données en vous connectant à Google.",
+  "settingsConnectWithApple": "Se connecter avec Apple",
+  "settingsCloudBackup": "Sauvegarde dans le cloud",
+  "settingsCloudBackupMessage": "Sauvegardez vos fichiers dans le cloud ou restaurez vos données en vous connectant.",
   "settingsUseMonthDayFormat": "Utiliser le format mois/jour",
   "settingsUseComplexCalendar": "Utiliser la vue calendrier détaillée",
   "settingsShowMacroDistribution": "Afficher la répartition des macronutriments",
@@ -386,7 +421,7 @@
   "settingsAccountAndDataDeletion": "Suppression du compte et des données",
   "settingsPermanentlyDeleteOnlineData": "Supprimer définitivement les données en ligne",
   "settingsPermanentlyDeleteAllData": "Supprimer définitivement toutes les données",
-  "settingsReauthenticateMessage": "Vous devez d'abord vous authentifier à nouveau avant de pouvoir supprimer votre compte associé à Google.",
+  "settingsReauthenticateMessage": "Vous devez vous authentifier à nouveau avec le même compte avant de pouvoir le supprimer.",
   "settingsReauthenticateAndDelete": "Se réauthentifier et supprimer",
   "settingsDeleteAllDescription": "Vous pouvez supprimer votre compte et toutes les données stockées en ligne et sur votre appareil à l'aide du bouton ci-dessous. Cette action supprimera définitivement tout ce qui est lié à votre compte et réinitialisera l'application.",
   "settingsDeleteAllConfirmation": "Voulez-vous vraiment supprimer votre compte et toutes les données associées ? Vos données en ligne et votre stockage local seront effacés. Cette action est définitive et irréversible.",

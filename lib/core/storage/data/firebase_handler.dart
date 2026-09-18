@@ -10,7 +10,7 @@ import 'package:live_vitalist/core/storage/domain/storage_interfaces.dart';
 final class FirebaseHandler implements IStorageHandler, ICloudHandler {
   FirebaseHandler(this._credentials);
 
-  final CredentialSource _credentials;
+  final CredentialSource Function(User user) _credentials;
 
   @override
   Future<bool> saveJson(String path, Map<String, dynamic> json) async {
@@ -51,12 +51,23 @@ final class FirebaseHandler implements IStorageHandler, ICloudHandler {
     if (user == null) return true;
 
     try {
-      final credential = await _credentials.getCredential();
+      final credentials = _credentials(user);
+      final credential = await credentials.getCredential();
       if (credential == null) return false;
 
       await user.reauthenticateWithCredential(credential);
+      final authorizationCode = credentials.authorizationCode;
+      if (authorizationCode != null) {
+        await FirebaseAuth.instance
+            .revokeTokenWithAuthorizationCode(authorizationCode);
+      }
       await FirebaseDatabase.instance.ref('users/${user.uid}').remove();
       await user.delete();
+      try {
+        await credentials.signOut();
+      } catch (_) {
+        // The account is already deleted; provider cleanup cannot undo that.
+      }
 
       return true;
     } catch (e) {

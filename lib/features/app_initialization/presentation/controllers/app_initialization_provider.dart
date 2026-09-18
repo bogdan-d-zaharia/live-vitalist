@@ -132,6 +132,11 @@ class AppInitialization extends _$AppInitialization {
 
       if (userCredential.additionalUserInfo?.isNewUser == true) {
         try {
+          final authorizationCode = credentials.authorizationCode;
+          if (authorizationCode != null) {
+            await FirebaseAuth.instance
+                .revokeTokenWithAuthorizationCode(authorizationCode);
+          }
           await userCredential.user?.delete();
         } catch (error, stackTrace) {
           _reportConnectionError(error, stackTrace);
