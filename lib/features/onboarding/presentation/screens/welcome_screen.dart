@@ -1,3 +1,4 @@
+import 'package:live_vitalist/core/auth/data/google_credential_source.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,21 +24,21 @@ class _WelcomeScreenState extends ConsumerState<WelcomeScreen> {
 
     final result = await ref
         .read(appInitializationProvider.notifier)
-        .connectWithGoogle();
+        .connect(ref.read(googleCredentialSourceProvider));
     _isConnectingWithGoogle = false;
     if (!mounted) return;
 
     switch (result) {
-      case GoogleConnectionResult.connected:
-      case GoogleConnectionResult.cancelled:
+      case ConnectionResult.connected:
+      case ConnectionResult.cancelled:
         return;
-      case GoogleConnectionResult.accountNotFound:
+      case ConnectionResult.accountNotFound:
         await showGoogleConnectionDialog(
           context,
           type: GoogleConnectionDialogType.accountNotFound,
         );
         return;
-      case GoogleConnectionResult.failed:
+      case ConnectionResult.failed:
         await showGoogleConnectionDialog(
           context,
           type: GoogleConnectionDialogType.connectionFailed,

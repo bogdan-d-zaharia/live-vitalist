@@ -5,7 +5,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:live_vitalist/core/auth/domain/credential_source.dart';
 import 'package:live_vitalist/core/storage/data/sync_service.dart';
 import 'package:live_vitalist/features/aliment_bank/data/aliment_bank.dart';
 import 'package:live_vitalist/features/app_initialization/domain/app_initialization_state.dart';
@@ -20,7 +20,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'app_initialization_provider.g.dart';
 
-enum GoogleConnectionResult {
+enum ConnectionResult {
   connected,
   cancelled,
   accountNotFound,
@@ -121,20 +121,12 @@ class AppInitialization extends _$AppInitialization {
   }
   // #endregion
 
-  // #region //* CONNECT WITH GOOGLE STARTUP *//
-  Future<GoogleConnectionResult> connectWithGoogle() async {
-    final googleSignIn = GoogleSignIn();
-
+  // #region //* CONNECT STARTUP *//
+  Future<ConnectionResult> connect(CredentialSource credentials) async {
     try {
-      await googleSignIn.signOut();
-      final googleUser = await googleSignIn.signIn();
-      if (googleUser == null) return GoogleConnectionResult.cancelled;
-
-      final googleAuth = await googleUser.authentication;
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
+      await credentials.signOut();
+      final credential = await credentials.getCredential();
+      if (credential == null) return ConnectionResult.cancelled;
       final userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
 
@@ -142,12 +134,12 @@ class AppInitialization extends _$AppInitialization {
         try {
           await userCredential.user?.delete();
         } catch (error, stackTrace) {
-          _reportGoogleConnectionError(error, stackTrace);
-          await _disconnectFromGoogle(googleSignIn);
-          return GoogleConnectionResult.failed;
+          _reportConnectionError(error, stackTrace);
+          await _disconnect(credentials);
+          return ConnectionResult.failed;
         }
-        await _disconnectFromGoogle(googleSignIn);
-        return GoogleConnectionResult.accountNotFound;
+        await _disconnect(credentials);
+        return ConnectionResult.accountNotFound;
       }
 
       await _startupPreparation();
@@ -161,26 +153,26 @@ class AppInitialization extends _$AppInitialization {
       await ref.read(notificationsApiProvider).saveToken(userId, fcmToken);
       SettingsData.hasCompletedOnboarding = true;
       state = AsyncData(AppInitState.ready);
-      return GoogleConnectionResult.connected;
+      return ConnectionResult.connected;
     } catch (error, stackTrace) {
-      _reportGoogleConnectionError(error, stackTrace);
-      await _disconnectFromGoogle(googleSignIn);
-      return GoogleConnectionResult.failed;
+      _reportConnectionError(error, stackTrace);
+      await _disconnect(credentials);
+      return ConnectionResult.failed;
     }
   }
 
-  void _reportGoogleConnectionError(Object error, StackTrace stackTrace) {
-    debugPrint('Google connection failed: $error');
+  void _reportConnectionError(Object error, StackTrace stackTrace) {
+    debugPrint('Connection failed: $error');
     debugPrintStack(stackTrace: stackTrace);
   }
 
-  Future<void> _disconnectFromGoogle(GoogleSignIn googleSignIn) async {
+  Future<void> _disconnect(CredentialSource credentials) async {
     try {
       await FirebaseAuth.instance.signOut();
     } catch (_) {}
 
     try {
-      await googleSignIn.signOut();
+      await credentials.signOut();
     } catch (_) {}
   }
   // #endregion

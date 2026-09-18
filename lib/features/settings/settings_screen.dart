@@ -1,3 +1,4 @@
+import 'package:live_vitalist/core/auth/data/google_credential_source.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
@@ -18,8 +19,9 @@ class SettingsScreen extends ConsumerStatefulWidget {
 
 class _SettingsState extends ConsumerState<SettingsScreen> {
   void _handleGoogleConnection() async {
-    final success =
-        await ref.read(settingsControllerProvider.notifier).connectWithGoogle();
+    final success = await ref
+        .read(settingsControllerProvider.notifier)
+        .connect(ref.read(googleCredentialSourceProvider));
     if (success && mounted) setState(() {});
   }
 

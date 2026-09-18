@@ -1,3 +1,4 @@
+import 'package:live_vitalist/core/auth/data/google_credential_source.dart';
 import 'package:live_vitalist/core/storage/data/file_handler.dart';
 import 'package:live_vitalist/core/storage/data/firebase_handler.dart';
 import 'package:live_vitalist/core/storage/domain/storage_interfaces.dart';
@@ -17,7 +18,7 @@ class Storage extends _$Storage
   @override
   void build() {
     _fileHlr = FileHandler();
-    _firebaseHlr = FirebaseHandler();
+    _firebaseHlr = FirebaseHandler(ref.read(googleCredentialSourceProvider));
   }
 
   @override
