@@ -40,8 +40,14 @@ class AppInitialization extends _$AppInitialization {
 
       await SchedulerBinding.instance.endOfFrame;
       if (!SettingsData.hasCompletedOnboarding) {
-        await Future.delayed(Duration(seconds: 2));
-        return AppInitState.onboarding;
+        final delayFtr = Future.delayed(Duration(seconds: 2));
+        await _firebaseFtr;
+        if (FirebaseAuth.instance.currentUser == null) {
+          await delayFtr;
+          return AppInitState.onboarding;
+        } else {
+          SettingsData.hasCompletedOnboarding = true;
+        }
       }
 
       await _startupPreparation();
