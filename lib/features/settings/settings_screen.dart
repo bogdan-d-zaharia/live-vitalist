@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:live_vitalist/core/auth/data/apple_credential_source.dart';
 import 'package:live_vitalist/core/auth/domain/credential_source.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:live_vitalist/core/auth/data/google_credential_source.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -37,6 +36,27 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
     final showApple = !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
     final isFirebase =
         ref.watch(settingsControllerProvider.notifier).isFirebase;
+
+    final googleButton = TextButton(
+      onPressed: _isConnecting
+          ? null
+          : () => _handleConnection(ref.read(googleCredentialSourceProvider)),
+      child: Text(l.settingsConnectWithGoogle),
+    );
+    final connectWidget = !showApple
+        ? googleButton
+        : Wrap(
+            children: [
+              googleButton,
+              TextButton(
+                onPressed: _isConnecting
+                    ? null
+                    : () => _handleConnection(
+                        ref.read(appleCredentialSourceProvider)),
+                child: Text(l.settingsConnectWithApple),
+              ),
+            ],
+          );
 
     return Scaffold(
       appBar: AppBar(
@@ -105,21 +125,7 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
                   children: [
                     Text(l.settingsCloudBackupMessage),
                     const SizedBox(height: 12.0),
-                    TextButton(
-                      onPressed: _isConnecting
-                          ? null
-                          : () => _handleConnection(
-                              ref.read(googleCredentialSourceProvider)),
-                      child: Text(l.settingsConnectWithGoogle),
-                    ),
-                    if (showApple)
-                      SignInWithAppleButton(
-                        text: l.settingsConnectWithApple,
-                        onPressed: _isConnecting
-                            ? null
-                            : () => _handleConnection(
-                                ref.read(appleCredentialSourceProvider)),
-                      ),
+                    connectWidget,
                   ],
                 ),
               ),
