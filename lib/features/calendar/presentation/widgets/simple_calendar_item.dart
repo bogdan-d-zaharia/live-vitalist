@@ -59,51 +59,53 @@ class SimpleCalendarItem extends StatelessWidget {
       return (minim ?? 0.0, maxim ?? 0.0, avg ?? 0.0);
     }
 
-    Widget? bars;
-    if (intake.values.every((v) => v == 0.0)) {
-      bars = null;
-    } else {
-      final (minim, maxim, _) = forceMinMaxAverage(intake);
-      final kcalRatio = kcals?.getRatio(intake[kcals]);
+    final (minim, maxim, _) = forceMinMaxAverage(intake);
+    final kcalRatio = kcals?.getRatio(intake[kcals]);
+    final duration = Duration(milliseconds: 250);
 
-      bars = Container(
-        margin: const EdgeInsets.only(bottom: CalendarConstants.labelHeight),
-        width: 12.0,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(6.0)),
-        clipBehavior: Clip.hardEdge,
-        child: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            if (SettingsData.isComplexCalendar)
-              FractionallySizedBox(
-                heightFactor: (maxim / 1.5).clamp(0.0, 1.0),
-                child:
-                    Container(color: Colors.lightGreen.withValues(alpha: 0.4)),
-              ),
-            FractionallySizedBox(
-              heightFactor: ((kcalRatio ?? 0.0) / 1.5).clamp(0.0, 1.0),
-              child: Container(color: Colors.lightGreen),
+    final bars = Container(
+      margin: const EdgeInsets.only(bottom: CalendarConstants.labelHeight),
+      width: 12.0,
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(6.0)),
+      clipBehavior: Clip.hardEdge,
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          if (SettingsData.isComplexCalendar)
+            AnimatedFractionallySizedBox(
+              duration: duration,
+              curve: Curves.easeOutCubic,
+              heightFactor: (maxim / 1.5).clamp(0.0, 1.0),
+              child: Container(color: Colors.lightGreen.withValues(alpha: 0.4)),
             ),
-            if (SettingsData.isComplexCalendar)
-              FractionallySizedBox(
-                heightFactor: (minim / 1.5).clamp(0.0, 1.0),
-                child: Container(color: Colors.green),
-              ),
-          ],
-        ),
-      );
-    }
+          AnimatedFractionallySizedBox(
+            duration: duration,
+            curve: Curves.easeOutCubic,
+            heightFactor: ((kcalRatio ?? 0.0) / 1.5).clamp(0.0, 1.0),
+            child: Container(color: Colors.lightGreen),
+          ),
+          if (SettingsData.isComplexCalendar)
+            AnimatedFractionallySizedBox(
+              duration: duration,
+              curve: Curves.easeOutCubic,
+              heightFactor: (minim / 1.5).clamp(0.0, 1.0),
+              child: Container(color: Colors.green),
+            ),
+        ],
+      ),
+    );
 
     return SizedBox(
       width: 36.0,
       child: Stack(
         alignment: Alignment.bottomCenter,
         children: [
-          if (bars != null) bars,
+          bars,
           Padding(
             padding: const EdgeInsets.only(bottom: 6.0),
-            child: Text(
-              title,
+            child: AnimatedDefaultTextStyle(
+              duration: duration,
+              curve: Curves.easeOutCubic,
               style: isSelected
                   ? _itemStyle.copyWith(
                       color: Theme.of(context).colorScheme.onSurface,
@@ -118,6 +120,7 @@ class SimpleCalendarItem extends StatelessWidget {
                   : _itemStyle.copyWith(
                       color: Colors.grey.withValues(alpha: 0.8),
                     ),
+              child: Text(title),
             ),
           ),
         ],

@@ -25,9 +25,7 @@ class CalendarItem extends ConsumerWidget {
     final dayMap = ref.watch(dayCacheProvider);
     final bank = ref.watch(alimentBankProvider);
     final nutrientAsync = ref.watch(dayNutrientsProvider(date));
-    if (nutrientAsync.isLoading ||
-        nutrientAsync.hasError ||
-        !nutrientAsync.hasValue) {
+    if (nutrientAsync.hasError || !nutrientAsync.hasValue) {
       return NutrientAsyncStatus(value: nutrientAsync);
     }
     final nutrients = nutrientAsync.requireValue;
