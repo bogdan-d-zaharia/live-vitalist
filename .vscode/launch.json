@@ -61,6 +61,17 @@
                 "--flavor",
                 "experimental"
             ]
-        }
+        },
+        {
+            "name": "LV (ios, experimental)",
+            "request": "launch",
+            "type": "dart",
+        },
+        {
+            "name": "LV (ios, release)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release",
+        },
     ]
 }

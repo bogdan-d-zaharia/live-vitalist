@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart'
     as ntf;
 import 'package:live_vitalist/features/aliment/data/aliment_data_extensions.dart';
 import 'package:live_vitalist/features/aliment/domain/aliment.dart';
 import 'package:live_vitalist/features/aliment_bank/domain/aliment_bank_state.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:live_vitalist/l10n/app_localizations.dart';
 
 typedef NotifPlugin = ntf.FlutterLocalNotificationsPlugin;
@@ -15,11 +15,41 @@ typedef AndroidDetails = ntf.AndroidNotificationDetails;
 
 class NotificationHandler {
   static final _notificationsPlugin = NotifPlugin();
+  static Future<void>? _initialization;
 
-  static Future<void> initialize() async {
+  static Future<void> initialize() => _initialization ??= _initialize();
+
+  static Future<void> _initialize() async {
     const androidInitSettings = AndroidSettings('ic_notification');
-    const initSettings = InitSettings(android: androidInitSettings);
+    const iosInitSettings = ntf.DarwinInitializationSettings(
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
+    );
+    const initSettings = InitSettings(
+      android: androidInitSettings,
+      iOS: iosInitSettings,
+    );
     await _notificationsPlugin.initialize(settings: initSettings);
+  }
+
+  static Future<bool> _requestPermission() async {
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      final plugin = _notificationsPlugin.resolvePlatformSpecificImplementation<
+          ntf.IOSFlutterLocalNotificationsPlugin>();
+      return await plugin?.requestPermissions(
+            alert: true,
+            badge: true,
+            sound: true,
+          ) ??
+          false;
+    }
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      final plugin = _notificationsPlugin.resolvePlatformSpecificImplementation<
+          ntf.AndroidFlutterLocalNotificationsPlugin>();
+      return await plugin?.requestNotificationsPermission() ?? false;
+    }
+    return false;
   }
 
   static String _alimentToLine(
@@ -40,10 +70,8 @@ class NotificationHandler {
     AppLocalizations localization,
     String languageCode,
   ) async {
-    final status = await Permission.notification.status;
-    if (status.isDenied || status.isRestricted) {
-      await Permission.notification.request();
-    }
+    await initialize();
+    if (!await _requestPermission()) return;
 
     String alimentToLine(Aliment e) => _alimentToLine(e, bank, languageCode);
     List<String> lines = list.map<String>(alimentToLine).toList();
@@ -67,12 +95,25 @@ class NotificationHandler {
       ),
     );
 
-    final notificationDetails = NotifDetails(android: androidDetails);
+    final iosDetails = ntf.DarwinNotificationDetails(
+      presentAlert: true,
+      presentBanner: true,
+      presentList: true,
+      presentSound: true,
+      subtitle: localization.mealsJournalNotificationSummary,
+      threadIdentifier: 'meal_summary',
+    );
+    final notificationDetails = NotifDetails(
+      android: androidDetails,
+      iOS: iosDetails,
+    );
 
     await _notificationsPlugin.show(
       id: 0,
       title: title,
-      body: localization.mealsJournalNotificationBody,
+      body: defaultTargetPlatform == TargetPlatform.iOS && lines.isNotEmpty
+          ? lines.join('\n')
+          : localization.mealsJournalNotificationBody,
       notificationDetails: notificationDetails,
     );
   }
