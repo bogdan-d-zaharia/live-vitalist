@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:live_vitalist/core/auth/domain/credential_source.dart';
 import 'package:live_vitalist/features/notifications/data/notifications_api.dart';
 import 'package:live_vitalist/features/settings/data/settings_data.dart';
 import 'package:live_vitalist/core/storage/data/storage_provider.dart';
@@ -16,28 +15,14 @@ class SettingsController extends _$SettingsController {
 
   bool get isFirebase => FirebaseAuth.instance.currentUser != null;
 
-  Future<bool> connectWithGoogle() async {
+  Future<bool> connect(CredentialSource credentials) async {
     try {
-      final googleUser = await GoogleSignIn().signIn();
-      if (googleUser == null) return false;
-
-      final googleAuth = await googleUser.authentication;
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
+      final credential = await credentials.getCredential();
+      if (credential == null) return false;
       await FirebaseAuth.instance.signInWithCredential(credential);
 
       await ref.read(syncServiceProvider.notifier).lateLogin();
-      final userId = FirebaseAuth.instance.currentUser?.uid;
-
-      final String? fcmToken = await FirebaseMessaging.instance.getToken();
-      if (fcmToken != null && userId != null) {
-        final api = ref.read(notificationsApiProvider);
-        await api.saveToken(userId, fcmToken);
-      } else {
-        throw Exception("CANNOT RETRIEVE NOTIFICATION CREDENTIALS");
-      }
+      await ref.read(notificationsApiProvider).registerDevice();
 
       return true;
     } catch (e) {

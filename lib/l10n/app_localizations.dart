@@ -476,29 +476,29 @@ abstract class AppLocalizations {
   /// **'Please connect to the internet in order to accept our Terms and Conditions, and with our Privacy Policy.'**
   String get noConnectionDialogMessage;
 
-  /// No description provided for @googleConnectionDialogAccountNotFoundTitle.
+  /// No description provided for @connectionDialogAccountNotFoundTitle.
   ///
   /// In en, this message translates to:
   /// **'Account not found'**
-  String get googleConnectionDialogAccountNotFoundTitle;
+  String get connectionDialogAccountNotFoundTitle;
 
-  /// No description provided for @googleConnectionDialogAccountNotFoundMessage.
+  /// No description provided for @connectionDialogAccountNotFoundMessage.
   ///
   /// In en, this message translates to:
-  /// **'We could not find a Live Vitalist account connected to this Google account. Please complete the onboarding first.'**
-  String get googleConnectionDialogAccountNotFoundMessage;
+  /// **'We could not find a Live Vitalist account connected to this {provider} account. Please complete the onboarding first.'**
+  String connectionDialogAccountNotFoundMessage(String provider);
 
-  /// No description provided for @googleConnectionDialogConnectionFailedTitle.
+  /// No description provided for @connectionDialogConnectionFailedTitle.
   ///
   /// In en, this message translates to:
-  /// **'Google connection failed'**
-  String get googleConnectionDialogConnectionFailedTitle;
+  /// **'{provider} connection failed'**
+  String connectionDialogConnectionFailedTitle(String provider);
 
-  /// No description provided for @googleConnectionDialogConnectionFailedMessage.
+  /// No description provided for @connectionDialogConnectionFailedMessage.
   ///
   /// In en, this message translates to:
-  /// **'We could not connect with Google. Please check your internet connection and try again.'**
-  String get googleConnectionDialogConnectionFailedMessage;
+  /// **'We could not connect with {provider}. Please check your internet connection and try again.'**
+  String connectionDialogConnectionFailedMessage(String provider);
 
   /// No description provided for @welcomeScreenTitle.
   ///
@@ -518,11 +518,24 @@ abstract class AppLocalizations {
   /// **'Have an account? {googleLink} instead.'**
   String welcomeScreenExistingAccount(String googleLink);
 
+  /// No description provided for @welcomeScreenExistingAccountWithApple.
+  ///
+  /// In en, this message translates to:
+  /// **'Have an account? Sign in with {googleLink} or {appleLink}.'**
+  String welcomeScreenExistingAccountWithApple(
+      String googleLink, String appleLink);
+
   /// No description provided for @welcomeScreenGoogleLink.
   ///
   /// In en, this message translates to:
   /// **'Connect with Google'**
   String get welcomeScreenGoogleLink;
+
+  /// No description provided for @welcomeScreenAppleLink.
+  ///
+  /// In en, this message translates to:
+  /// **'Apple'**
+  String get welcomeScreenAppleLink;
 
   /// No description provided for @termsScreenTitle.
   ///
@@ -1334,11 +1347,23 @@ abstract class AppLocalizations {
   /// **'Connect with Google'**
   String get settingsConnectWithGoogle;
 
-  /// No description provided for @settingsGoogleBackupMessage.
+  /// No description provided for @settingsConnectWithApple.
   ///
   /// In en, this message translates to:
-  /// **'Backup your files to cloud or restore your data by connecting with Google.'**
-  String get settingsGoogleBackupMessage;
+  /// **'Connect with Apple'**
+  String get settingsConnectWithApple;
+
+  /// No description provided for @settingsCloudBackup.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud backup'**
+  String get settingsCloudBackup;
+
+  /// No description provided for @settingsCloudBackupMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Back up your files to the cloud or restore your data by signing in.'**
+  String get settingsCloudBackupMessage;
 
   /// No description provided for @settingsUseMonthDayFormat.
   ///
@@ -1397,7 +1422,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsReauthenticateMessage.
   ///
   /// In en, this message translates to:
-  /// **'You must authenticate first before we can delete your account associated with Google.'**
+  /// **'You must authenticate again with the same account before we can delete it.'**
   String get settingsReauthenticateMessage;
 
   /// No description provided for @settingsReauthenticateAndDelete.

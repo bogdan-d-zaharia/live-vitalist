@@ -201,19 +201,22 @@ class AppLocalizationsEn extends AppLocalizations {
       'Please connect to the internet in order to accept our Terms and Conditions, and with our Privacy Policy.';
 
   @override
-  String get googleConnectionDialogAccountNotFoundTitle => 'Account not found';
+  String get connectionDialogAccountNotFoundTitle => 'Account not found';
 
   @override
-  String get googleConnectionDialogAccountNotFoundMessage =>
-      'We could not find a Live Vitalist account connected to this Google account. Please complete the onboarding first.';
+  String connectionDialogAccountNotFoundMessage(String provider) {
+    return 'We could not find a Live Vitalist account connected to this $provider account. Please complete the onboarding first.';
+  }
 
   @override
-  String get googleConnectionDialogConnectionFailedTitle =>
-      'Google connection failed';
+  String connectionDialogConnectionFailedTitle(String provider) {
+    return '$provider connection failed';
+  }
 
   @override
-  String get googleConnectionDialogConnectionFailedMessage =>
-      'We could not connect with Google. Please check your internet connection and try again.';
+  String connectionDialogConnectionFailedMessage(String provider) {
+    return 'We could not connect with $provider. Please check your internet connection and try again.';
+  }
 
   @override
   String get welcomeScreenTitle => 'Welcome to Live Vitalist';
@@ -228,7 +231,16 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String welcomeScreenExistingAccountWithApple(
+      String googleLink, String appleLink) {
+    return 'Have an account? Sign in with $googleLink or $appleLink.';
+  }
+
+  @override
   String get welcomeScreenGoogleLink => 'Connect with Google';
+
+  @override
+  String get welcomeScreenAppleLink => 'Apple';
 
   @override
   String get termsScreenTitle => 'You\'re all set';
@@ -822,8 +834,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsConnectWithGoogle => 'Connect with Google';
 
   @override
-  String get settingsGoogleBackupMessage =>
-      'Backup your files to cloud or restore your data by connecting with Google.';
+  String get settingsConnectWithApple => 'Connect with Apple';
+
+  @override
+  String get settingsCloudBackup => 'Cloud backup';
+
+  @override
+  String get settingsCloudBackupMessage =>
+      'Back up your files to the cloud or restore your data by signing in.';
 
   @override
   String get settingsUseMonthDayFormat => 'Use M/D format';
@@ -856,7 +874,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsReauthenticateMessage =>
-      'You must authenticate first before we can delete your account associated with Google.';
+      'You must authenticate again with the same account before we can delete it.';
 
   @override
   String get settingsReauthenticateAndDelete => 'Re-authenticate and delete';

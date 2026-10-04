@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:live_vitalist/core/auth/domain/credential_source.dart';
 import 'package:live_vitalist/core/utils/json_handler.dart';
 import 'package:live_vitalist/core/storage/domain/storage_interfaces.dart';
 
@@ -8,6 +8,10 @@ import 'package:live_vitalist/core/storage/domain/storage_interfaces.dart';
 ///
 /// A connected user stays non-null even when there is no internet connection.
 final class FirebaseHandler implements IStorageHandler, ICloudHandler {
+  FirebaseHandler(this._credentials);
+
+  final CredentialSource Function(User user) _credentials;
+
   @override
   Future<bool> saveJson(String path, Map<String, dynamic> json) async {
     final user = FirebaseAuth.instance.currentUser;
@@ -47,17 +51,23 @@ final class FirebaseHandler implements IStorageHandler, ICloudHandler {
     if (user == null) return true;
 
     try {
-      final googleUser = await GoogleSignIn().signIn();
-      final googleAuth = await googleUser?.authentication;
-
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth?.accessToken,
-        idToken: googleAuth?.idToken,
-      );
+      final credentials = _credentials(user);
+      final credential = await credentials.getCredential();
+      if (credential == null) return false;
 
       await user.reauthenticateWithCredential(credential);
+      final authorizationCode = credentials.authorizationCode;
+      if (authorizationCode != null) {
+        await FirebaseAuth.instance
+            .revokeTokenWithAuthorizationCode(authorizationCode);
+      }
       await FirebaseDatabase.instance.ref('users/${user.uid}').remove();
       await user.delete();
+      try {
+        await credentials.signOut();
+      } catch (_) {
+        // The account is already deleted; provider cleanup cannot undo that.
+      }
 
       return true;
     } catch (e) {

@@ -206,19 +206,22 @@ class AppLocalizationsFr extends AppLocalizations {
       'Veuillez vous connecter à Internet afin d\'accepter nos Conditions générales et notre Politique de confidentialité.';
 
   @override
-  String get googleConnectionDialogAccountNotFoundTitle => 'Compte introuvable';
+  String get connectionDialogAccountNotFoundTitle => 'Compte introuvable';
 
   @override
-  String get googleConnectionDialogAccountNotFoundMessage =>
-      'Nous n’avons trouvé aucun compte Live Vitalist associé à ce compte Google. Veuillez d’abord terminer la configuration initiale.';
+  String connectionDialogAccountNotFoundMessage(String provider) {
+    return 'Nous n’avons trouvé aucun compte Live Vitalist associé à ce compte $provider. Veuillez d’abord terminer la configuration initiale.';
+  }
 
   @override
-  String get googleConnectionDialogConnectionFailedTitle =>
-      'Échec de la connexion à Google';
+  String connectionDialogConnectionFailedTitle(String provider) {
+    return 'Échec de la connexion à $provider';
+  }
 
   @override
-  String get googleConnectionDialogConnectionFailedMessage =>
-      'Nous n\'avons pas pu nous connecter à Google. Vérifiez votre connexion Internet et réessayez.';
+  String connectionDialogConnectionFailedMessage(String provider) {
+    return 'Nous n’avons pas pu nous connecter à $provider. Vérifiez votre connexion Internet et réessayez.';
+  }
 
   @override
   String get welcomeScreenTitle => 'Bienvenue sur Live Vitalist';
@@ -233,7 +236,16 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
+  String welcomeScreenExistingAccountWithApple(
+      String googleLink, String appleLink) {
+    return 'Vous avez déjà un compte ? Connectez-vous avec $googleLink ou $appleLink.';
+  }
+
+  @override
   String get welcomeScreenGoogleLink => 'Se connecter avec Google';
+
+  @override
+  String get welcomeScreenAppleLink => 'Apple';
 
   @override
   String get termsScreenTitle => 'Tout est prêt';
@@ -831,8 +843,14 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsConnectWithGoogle => 'Se connecter avec Google';
 
   @override
-  String get settingsGoogleBackupMessage =>
-      'Sauvegardez vos fichiers dans le cloud ou restaurez vos données en vous connectant à Google.';
+  String get settingsConnectWithApple => 'Se connecter avec Apple';
+
+  @override
+  String get settingsCloudBackup => 'Sauvegarde dans le cloud';
+
+  @override
+  String get settingsCloudBackupMessage =>
+      'Sauvegardez vos fichiers dans le cloud ou restaurez vos données en vous connectant.';
 
   @override
   String get settingsUseMonthDayFormat => 'Utiliser le format mois/jour';
@@ -870,7 +888,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get settingsReauthenticateMessage =>
-      'Vous devez d\'abord vous authentifier à nouveau avant de pouvoir supprimer votre compte associé à Google.';
+      'Vous devez vous authentifier à nouveau avec le même compte avant de pouvoir le supprimer.';
 
   @override
   String get settingsReauthenticateAndDelete =>

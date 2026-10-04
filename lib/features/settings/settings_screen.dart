@@ -1,3 +1,7 @@
+import 'package:flutter/foundation.dart';
+import 'package:live_vitalist/core/auth/data/apple_credential_source.dart';
+import 'package:live_vitalist/core/auth/domain/credential_source.dart';
+import 'package:live_vitalist/core/auth/data/google_credential_source.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:live_vitalist/core/presentation/widgets/custom_card.dart';
@@ -17,17 +21,42 @@ class SettingsScreen extends ConsumerStatefulWidget {
 }
 
 class _SettingsState extends ConsumerState<SettingsScreen> {
-  void _handleGoogleConnection() async {
-    final success =
-        await ref.read(settingsControllerProvider.notifier).connectWithGoogle();
-    if (success && mounted) setState(() {});
+  bool _isConnecting = false;
+
+  Future<void> _handleConnection(CredentialSource credentials) async {
+    if (_isConnecting) return;
+    setState(() => _isConnecting = true);
+    await ref.read(settingsControllerProvider.notifier).connect(credentials);
+    if (mounted) setState(() => _isConnecting = false);
   }
 
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context);
+    final showApple = !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
     final isFirebase =
         ref.watch(settingsControllerProvider.notifier).isFirebase;
+
+    final googleButton = TextButton(
+      onPressed: _isConnecting
+          ? null
+          : () => _handleConnection(ref.read(googleCredentialSourceProvider)),
+      child: Text(l.settingsConnectWithGoogle),
+    );
+    final connectWidget = !showApple
+        ? googleButton
+        : Wrap(
+            children: [
+              googleButton,
+              TextButton(
+                onPressed: _isConnecting
+                    ? null
+                    : () => _handleConnection(
+                        ref.read(appleCredentialSourceProvider)),
+                child: Text(l.settingsConnectWithApple),
+              ),
+            ],
+          );
 
     return Scaffold(
       appBar: AppBar(
@@ -90,16 +119,13 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
             if (!isFirebase)
               CustomCard(
                 logo: const Icon(Icons.cloud_upload_rounded),
-                title: l.settingsConnectWithGoogle,
+                title: l.settingsCloudBackup,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(l.settingsGoogleBackupMessage),
+                    Text(l.settingsCloudBackupMessage),
                     const SizedBox(height: 12.0),
-                    TextButton(
-                      onPressed: _handleGoogleConnection,
-                      child: Text(l.settingsConnectWithGoogle),
-                    ),
+                    connectWidget,
                   ],
                 ),
               ),
