@@ -26,6 +26,7 @@ class NumberInput extends StatefulWidget {
 
 class _NumberInputState extends State<NumberInput> {
   late TextEditingController _controller;
+  late FocusNode _focusNode;
 
   double get number => widget.getValue();
   set number(double val) => widget.setValue(val);
@@ -33,13 +34,32 @@ class _NumberInputState extends State<NumberInput> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController();
+    _controller = TextEditingController(
+      text: widget.isEmpty ? '' : number.toString(),
+    );
+    _focusNode = FocusNode()..addListener(_handleFocusChanged);
   }
 
   @override
   void dispose() {
+    _focusNode
+      ..removeListener(_handleFocusChanged)
+      ..dispose();
     _controller.dispose();
     super.dispose();
+  }
+
+  void _handleFocusChanged() {
+    if (!_focusNode.hasFocus) setState(() {});
+  }
+
+  void _setNumber(double value) {
+    number = value;
+    final text = value.toString();
+    _controller.value = TextEditingValue(
+      text: text,
+      selection: TextSelection.collapsed(offset: text.length),
+    );
   }
 
   Widget divider({double indent = 4.0, Color? color}) {
@@ -55,7 +75,15 @@ class _NumberInputState extends State<NumberInput> {
   Widget build(BuildContext context) {
     final double height = 42.0;
 
-    _controller.text = widget.isEmpty ? '' : number.toString();
+    if (!_focusNode.hasFocus) {
+      final text = widget.isEmpty ? '' : number.toString();
+      if (_controller.text != text) {
+        _controller.value = TextEditingValue(
+          text: text,
+          selection: TextSelection.collapsed(offset: text.length),
+        );
+      }
+    }
 
     return Container(
       height: height,
@@ -75,7 +103,7 @@ class _NumberInputState extends State<NumberInput> {
                 child: InkWell(
                   child: Center(child: Icon(Icons.remove_rounded)),
                   onTap: () => setState(() {
-                    number = number - 1.0;
+                    _setNumber(number - 1.0);
                   }),
                 ),
               ),
@@ -95,6 +123,7 @@ class _NumberInputState extends State<NumberInput> {
                     keyboardType:
                         TextInputType.numberWithOptions(decimal: true),
                     controller: _controller,
+                    focusNode: _focusNode,
                     decoration: InputDecoration(border: InputBorder.none),
                     onChanged: (value) {
                       final double? v = double.tryParse(value);
@@ -113,7 +142,7 @@ class _NumberInputState extends State<NumberInput> {
                 child: InkWell(
                   child: Center(child: Icon(Icons.add_rounded)),
                   onTap: () => setState(() {
-                    number = number + 1.0;
+                    _setNumber(number + 1.0);
                   }),
                 ),
               ),
